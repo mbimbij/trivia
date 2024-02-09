@@ -65,7 +65,7 @@ public class Game {
     }
 
     private void printCurrentCategory() {
-        System.out.println("The category is " + currentCategory());
+        System.out.println("The category is " + currentPlayer().getQuestionCategory());
     }
 
     private void printCurrentPlayersLocation() {
@@ -79,22 +79,14 @@ public class Game {
     }
 
     private void askQuestion() {
-        if (currentCategory() == "Pop")
+        if (currentPlayer().getQuestionCategory() == "Pop")
             System.out.println(popQuestions.removeFirst());
-        if (currentCategory() == "Science")
+        if (currentPlayer().getQuestionCategory() == "Science")
             System.out.println(scienceQuestions.removeFirst());
-        if (currentCategory() == "Sports")
+        if (currentPlayer().getQuestionCategory() == "Sports")
             System.out.println(sportsQuestions.removeFirst());
-        if (currentCategory() == "Rock")
+        if (currentPlayer().getQuestionCategory() == "Rock")
             System.out.println(rockQuestions.removeFirst());
-    }
-
-
-    private String currentCategory() {
-        if (currentPlayer().getLocation() % 4 == 0) return "Pop";
-        if (currentPlayer().getLocation() % 4 == 1) return "Science";
-        if (currentPlayer().getLocation() % 4 == 2) return "Sports";
-        return "Rock";
     }
 
     public boolean wasCorrectlyAnswered() {

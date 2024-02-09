@@ -52,4 +52,11 @@ public class Player {
     public void stayInPenaltyBox() {
         isGettingOutOfPenaltyBox = false;
     }
+
+    public String getQuestionCategory() {
+        if (location % 4 == 0) return "Pop";
+        if (location % 4 == 1) return "Science";
+        if (location % 4 == 2) return "Sports";
+        return "Rock";
+    }
 }
