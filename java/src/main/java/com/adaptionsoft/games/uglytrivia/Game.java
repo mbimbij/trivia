@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Game {
-    public Players players = new Players();
+    ArrayList<Player> players = new ArrayList<>();
 
     LinkedList popQuestions = new LinkedList();
     LinkedList scienceQuestions = new LinkedList();
     LinkedList sportsQuestions = new LinkedList();
     LinkedList rockQuestions = new LinkedList();
+
+    int currentPlayerIndex = 0;
 
     public Game() {
         for (int i = 0; i < 50; i++) {
@@ -22,6 +24,13 @@ public class Game {
 
     public String createRockQuestion(int index) {
         return "Rock Question " + index;
+    }
+
+    public boolean add(String playerName) {
+        players.add(new Player(playerName));
+        System.out.println(playerName + " was added");
+        System.out.println("They are player number " + players.size());
+        return true;
     }
 
     public void roll(int roll) {
@@ -45,7 +54,7 @@ public class Game {
     }
 
     private Player currentPlayer() {
-        return players.getCurrentPlayer();
+        return players.get(currentPlayerIndex);
     }
 
     private void advanceCurrentPlayer(int roll) {
@@ -134,15 +143,11 @@ public class Game {
     }
 
     private void goToNextPlayer() {
-        players.goToNextPlayer();
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     }
 
 
     private boolean hasPlayerWon() {
         return (currentPlayer().getCoinCount() == 6);
-    }
-
-    public void add(String playerName) {
-        players.add(playerName);
     }
 }
