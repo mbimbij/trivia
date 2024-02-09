@@ -30,10 +30,6 @@ public class Game {
         return "Rock Question " + index;
     }
 
-    public boolean isPlayable() {
-        return (nbOfPlayers() >= 2);
-    }
-
     public boolean add(String playerName) {
 
 
@@ -57,27 +53,29 @@ public class Game {
 
         if (inPenaltyBox[currentPlayer]) {
             if (roll % 2 != 0) {
-                isGettingOutOfPenaltyBox = true;
-
+                getOutOfJail();
                 System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-
                 advanceCurrentPlayer(roll);
-                printCurrentPlayersLocation();
-                printCurrentCategory();
-                askQuestion();
             } else {
                 System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
             }
 
         } else {
-
             advanceCurrentPlayer(roll);
-            printCurrentPlayersLocation();
-            printCurrentCategory();
-            askQuestion();
         }
 
+    }
+
+    private void getOutOfJail() {
+        isGettingOutOfPenaltyBox = true;
+    }
+
+    private void advanceCurrentPlayer(int roll) {
+        changePlayersPosition(roll);
+        printCurrentPlayersLocation();
+        printCurrentCategory();
+        askQuestion();
     }
 
     private void printCurrentCategory() {
@@ -90,7 +88,7 @@ public class Game {
                            + places[currentPlayer]);
     }
 
-    private void advanceCurrentPlayer(int roll) {
+    private void changePlayersPosition(int roll) {
         places[currentPlayer] = (places[currentPlayer] + roll) % 12;
     }
 
@@ -107,15 +105,9 @@ public class Game {
 
 
     private String currentCategory() {
-        if (places[currentPlayer] == 0) return "Pop";
-        if (places[currentPlayer] == 4) return "Pop";
-        if (places[currentPlayer] == 8) return "Pop";
-        if (places[currentPlayer] == 1) return "Science";
-        if (places[currentPlayer] == 5) return "Science";
-        if (places[currentPlayer] == 9) return "Science";
-        if (places[currentPlayer] == 2) return "Sports";
-        if (places[currentPlayer] == 6) return "Sports";
-        if (places[currentPlayer] == 10) return "Sports";
+        if (places[currentPlayer] %4 == 0) return "Pop";
+        if (places[currentPlayer] %4 == 1) return "Science";
+        if (places[currentPlayer] %4 == 2) return "Sports";
         return "Rock";
     }
 

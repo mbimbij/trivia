@@ -28,6 +28,8 @@ public class GameRunner {
 		aGame.add("Chet");
 		aGame.add("Pat");
 		aGame.add("Sue");
+		aGame.add("Joe");
+		aGame.add("Vlad");
 
 		do {
 

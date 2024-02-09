@@ -20,7 +20,7 @@ public class SomeTest {
     @Test
     public void should_not_differ_from_golden() throws IOException {
         // GIVEN
-        int seed = 777;
+        int seed = 0;
         System.setOut(new PrintStream("src/test/resources/lead.txt"));
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
 
