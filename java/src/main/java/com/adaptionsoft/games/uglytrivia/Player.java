@@ -2,7 +2,8 @@ package com.adaptionsoft.games.uglytrivia;
 
 public class Player {
     private final String name;
-    private boolean inPenaltyBox;
+    private boolean isInPenaltyBox;
+    private boolean isGettingOutOfPenaltyBox;
     private int coinCount;
     private int location;
 
@@ -10,7 +11,6 @@ public class Player {
         this.name = name;
         this.location = 0;
         this.coinCount = 0;
-        this.inPenaltyBox = false;
     }
 
     public String getName() {
@@ -34,10 +34,22 @@ public class Player {
     }
 
     public boolean isInPenaltyBox() {
-        return inPenaltyBox;
+        return isInPenaltyBox;
     }
 
     public void goToPenaltyBox() {
-        inPenaltyBox = true;
+        isInPenaltyBox = true;
+    }
+
+    public boolean isGettingOutOfPenaltyBox() {
+        return isGettingOutOfPenaltyBox;
+    }
+
+    public void getOutOfPenaltyBox() {
+        isGettingOutOfPenaltyBox = true;
+    }
+
+    public void stayInPenaltyBox() {
+        isGettingOutOfPenaltyBox = false;
     }
 }
