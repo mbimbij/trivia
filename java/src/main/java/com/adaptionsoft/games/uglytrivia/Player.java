@@ -53,10 +53,14 @@ public class Player {
         isGettingOutOfPenaltyBox = false;
     }
 
-    public String getQuestionCategory() {
-        if (location % 4 == 0) return "Pop";
-        if (location % 4 == 1) return "Science";
-        if (location % 4 == 2) return "Sports";
-        return "Rock";
+    public Questions getQuestionCategory() {
+        if (location % 4 == 0) return Questions.POP;
+        if (location % 4 == 1) return Questions.SCIENCE;
+        if (location % 4 == 2) return Questions.SPORTS;
+        return Questions.ROCK;
+    }
+
+    void askQuestion() {
+        System.out.println(getQuestionCategory().drawCard());
     }
 }
