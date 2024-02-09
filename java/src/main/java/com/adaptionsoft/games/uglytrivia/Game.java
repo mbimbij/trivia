@@ -33,7 +33,7 @@ public class Game {
     public boolean add(String playerName) {
         players.add(new Player(playerName));
 
-        places[nbOfPlayers()] = 0;
+//        places[nbOfPlayers()] = 0;
         purses[nbOfPlayers()] = 0;
         inPenaltyBox[nbOfPlayers()] = false;
 
@@ -88,11 +88,11 @@ public class Game {
     private void printCurrentPlayersLocation() {
         System.out.println(currentPlayer().getName()
                            + "'s new location is "
-                           + places[currentPlayerIndex]);
+                           + currentPlayer().getLocation());
     }
 
     private void changePlayersPosition(int roll) {
-        places[currentPlayerIndex] = (places[currentPlayerIndex] + roll) % 12;
+        currentPlayer().advanceLocation(roll);
     }
 
     private void askQuestion() {
@@ -108,9 +108,9 @@ public class Game {
 
 
     private String currentCategory() {
-        if (places[currentPlayerIndex] % 4 == 0) return "Pop";
-        if (places[currentPlayerIndex] % 4 == 1) return "Science";
-        if (places[currentPlayerIndex] % 4 == 2) return "Sports";
+        if (currentPlayer().getLocation() % 4 == 0) return "Pop";
+        if (currentPlayer().getLocation() % 4 == 1) return "Science";
+        if (currentPlayer().getLocation() % 4 == 2) return "Sports";
         return "Rock";
     }
 
