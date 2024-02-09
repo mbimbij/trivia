@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Game {
-    ArrayList<Player> players = new ArrayList<>();
+    public Players players = new Players();
 
     LinkedList popQuestions = new LinkedList();
     LinkedList scienceQuestions = new LinkedList();
     LinkedList sportsQuestions = new LinkedList();
     LinkedList rockQuestions = new LinkedList();
-
-    int currentPlayerIndex = 0;
 
     public Game() {
         for (int i = 0; i < 50; i++) {
@@ -26,20 +24,13 @@ public class Game {
         return "Rock Question " + index;
     }
 
-    public boolean add(String playerName) {
-        players.add(new Player(playerName));
-        System.out.println(playerName + " was added");
-        System.out.println("They are player number " + players.size());
-        return true;
-    }
-
     public void roll(int roll) {
         System.out.println(currentPlayer().getName() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
         if (currentPlayer().isInPenaltyBox()) {
             if (roll % 2 != 0) {
-                getOutOfJail();
+                currentPlayer().getOutOfPenaltyBox();
                 System.out.println(currentPlayer().getName() + " is getting out of the penalty box");
                 advanceCurrentPlayer(roll);
             } else {
@@ -54,11 +45,7 @@ public class Game {
     }
 
     private Player currentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
-
-    private void getOutOfJail() {
-        currentPlayer().getOutOfPenaltyBox();
+        return players.getCurrentPlayer();
     }
 
     private void advanceCurrentPlayer(int roll) {
@@ -147,11 +134,15 @@ public class Game {
     }
 
     private void goToNextPlayer() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        players.goToNextPlayer();
     }
 
 
     private boolean hasPlayerWon() {
         return (currentPlayer().getCoinCount() == 6);
+    }
+
+    public void add(String playerName) {
+        players.add(playerName);
     }
 }
