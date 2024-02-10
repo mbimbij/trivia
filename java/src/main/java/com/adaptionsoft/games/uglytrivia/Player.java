@@ -3,7 +3,6 @@ package com.adaptionsoft.games.uglytrivia;
 public class Player {
     private final String name;
     private boolean isInPenaltyBox;
-    private boolean isGettingOutOfPenaltyBox;
     private int coinCount;
     private int location;
 
@@ -41,16 +40,10 @@ public class Player {
         isInPenaltyBox = true;
     }
 
-    public boolean isGettingOutOfPenaltyBox() {
-        return isGettingOutOfPenaltyBox;
-    }
-
     public void getOutOfPenaltyBox() {
-        isGettingOutOfPenaltyBox = true;
     }
 
     public void stayInPenaltyBox() {
-        isGettingOutOfPenaltyBox = false;
     }
 
     public Questions getQuestionCategory() {

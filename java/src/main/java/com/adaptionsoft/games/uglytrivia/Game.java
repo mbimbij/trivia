@@ -1,14 +1,10 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class Game {
-    List<Player> players = new ArrayList<>();
+    final Players players;
 
-    int currentPlayerIndex = 0;
     private final Random rand;
     private boolean isGameInProgress = true;
     private Player currentPlayer;
@@ -20,20 +16,14 @@ public class Game {
     // do not call directly, unless in a testing context
     public Game(Random rand, String... playersNames) {
         this.rand = rand;
-        Arrays.stream(playersNames).forEach(this::addPlayer);
+        players = new Players(playersNames);
+        currentPlayer = players.getCurrent();
         for (int i = 0; i < 50; i++) {
             Questions.POP.stackCard("Pop Question " + i);
             Questions.SCIENCE.stackCard("Science Question " + i);
             Questions.SPORTS.stackCard("Sports Question " + i);
             Questions.ROCK.stackCard("Rock Question " + i);
         }
-        currentPlayer = players.getFirst();
-    }
-
-    private void addPlayer(String playerName) {
-        players.add(new Player(playerName));
-        System.out.println(playerName + " was added");
-        System.out.println("They are player number " + players.size());
     }
 
     public void play() {
@@ -71,6 +61,10 @@ public class Game {
         }
     }
 
+    private boolean isPair(int roll) {
+        return roll % 2 != 0;
+    }
+
     private void playRegularTurn(int roll) {
         changePlayersPosition(roll);
         askQuestionToCurrentPlayer();
@@ -81,8 +75,8 @@ public class Game {
     }
 
     private void goToNextPlayer() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        currentPlayer = players.get(currentPlayerIndex);
+        players.goToNext();
+        currentPlayer = players.getCurrent();
     }
 
     private void askQuestionToCurrentPlayer() {
@@ -97,10 +91,6 @@ public class Game {
             currentPlayer.addCoin();
             System.out.printf("%s now has %d Gold Coins.%n", currentPlayer.getName(), currentPlayer.getCoinCount());
         }
-    }
-
-    private boolean isPair(int roll) {
-        return roll % 2 != 0;
     }
 
     private void printCurrentCategory() {
