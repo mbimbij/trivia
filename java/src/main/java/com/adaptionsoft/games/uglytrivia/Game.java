@@ -28,95 +28,76 @@ public class Game {
         }
     }
 
+    public void play() {
+        do {
+            displayCurrentPlayer();
+            int roll = rollDice();
+            if (currentPlayer().isInPenaltyBox()) {
+                playTurnFromPenaltyBox(roll);
+            } else {
+                playRegularTurn(roll);
+            }
+            endGameIfCurrentPlayerWon();
+            goToNextPlayer();
+        } while (isGameInProgress);
+    }
+
     private void addPlayer(String playerName) {
         players.add(new Player(playerName));
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
     }
 
-    public void play() {
-        do {
-            rollDice();
-            answerQuestion();
-        } while (isGameInProgress);
-    }
-
-    private void answerQuestion() {
-        if (this.rand.nextInt(9) == 7) {
-            answerIncorrectly();
-        } else {
-            answerCorrectlyIfNotInJail();
-        }
-    }
-
-    private void rollDice() {
-        int roll = getDiceRoll();
+    private void displayCurrentPlayer() {
         System.out.println(currentPlayer().getName() + " is the current player");
+    }
+
+    private int rollDice() {
+        int roll = this.rand.nextInt(5) + 1;
         System.out.println("They have rolled a " + roll);
-
-        if (currentPlayer().isInPenaltyBox()) {
-            rollFromPenaltyBox(roll);
-        } else {
-            advanceCurrentPlayer(roll);
-        }
+        return roll;
     }
 
-    private int getDiceRoll() {
-        return this.rand.nextInt(5) + 1;
-    }
-
-    private void answerIncorrectly() {
-        System.out.println("Question was incorrectly answered");
-        System.out.println(currentPlayer().getName() + " was sent to the penalty box");
-        currentPlayer().goToPenaltyBox();
-
-        goToNextPlayer();
-    }
-
-    private void answerCorrectlyIfNotInJail() {
-        if (!currentPlayer().isInPenaltyBox() || currentPlayer().isGettingOutOfPenaltyBox()) {
-            answerCorrectly();
-        } else {
-            goToNextPlayer();
-        }
-    }
-
-    private void answerCorrectly() {
-        System.out.println("Answer was correct!!!!");
-        currentPlayer().addCoin();
-        System.out.printf("%s now has %d Gold Coins.%n", currentPlayer().getName(), currentPlayer().getCoinCount());
-        endGameIfPlayerWon();
-        goToNextPlayer();
-    }
-
-    private void endGameIfPlayerWon() {
-        this.isGameInProgress = !hasPlayerWon();
-    }
-
-    private void goToNextPlayer() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-    }
-
-    private void rollFromPenaltyBox(int roll) {
+    private void playTurnFromPenaltyBox(int roll) {
         if (isPair(roll)) {
             currentPlayer().getOutOfPenaltyBox();
             System.out.println(currentPlayer().getName() + " is getting out of the penalty box");
-            advanceCurrentPlayer(roll);
+            playRegularTurn(roll);
         } else {
             System.out.println(currentPlayer().getName() + " is not getting out of the penalty box");
             currentPlayer().stayInPenaltyBox();
         }
     }
 
-    private static boolean isPair(int roll) {
-        return roll % 2 != 0;
+    private void playRegularTurn(int roll) {
+        changePlayersPosition(roll);
+        askQuestionToCurrentPlayer();
     }
 
-    private void advanceCurrentPlayer(int roll) {
-        changePlayersPosition(roll);
-        printCurrentPlayersLocation();
+    private void askQuestionToCurrentPlayer() {
         printCurrentCategory();
         currentPlayer().askQuestion();
+        if (this.rand.nextInt(9) == 7) {
+            System.out.println("Question was incorrectly answered");
+            System.out.printf("%s was sent to the penalty box%n", currentPlayer().getName());
+            currentPlayer().goToPenaltyBox();
+        } else {
+            System.out.println("Answer was correct!!!!");
+            currentPlayer().addCoin();
+            System.out.printf("%s now has %d Gold Coins.%n", currentPlayer().getName(), currentPlayer().getCoinCount());
+        }
+    }
+
+    private void endGameIfCurrentPlayerWon() {
+        this.isGameInProgress = !hasCurrentPlayerWon();
+    }
+
+    private void goToNextPlayer() {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    }
+
+    private boolean isPair(int roll) {
+        return roll % 2 != 0;
     }
 
     private Player currentPlayer() {
@@ -127,7 +108,7 @@ public class Game {
         System.out.println("The category is " + currentPlayer().getQuestionCategory());
     }
 
-    private void printCurrentPlayersLocation() {
+    private void printCurrentPlayerLocation() {
         System.out.println(currentPlayer().getName()
                            + "'s new location is "
                            + currentPlayer().getLocation());
@@ -135,10 +116,11 @@ public class Game {
 
     private void changePlayersPosition(int roll) {
         currentPlayer().advanceLocation(roll);
+        printCurrentPlayerLocation();
     }
 
 
-    private boolean hasPlayerWon() {
+    private boolean hasCurrentPlayerWon() {
         return (currentPlayer().getCoinCount() == 6);
     }
 }
