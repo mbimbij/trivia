@@ -8,6 +8,7 @@ public enum Questions {
     SCIENCE("Science"),
     SPORTS("Sports"),
     ROCK("Rock"),
+    GEOGRAPHY("Geography"),
     ;
     private final Queue<String> cards = new ArrayDeque<>();
     private final String value;
