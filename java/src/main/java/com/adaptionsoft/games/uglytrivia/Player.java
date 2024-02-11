@@ -40,14 +40,4 @@ public class Player {
         isInPenaltyBox = true;
     }
 
-    public Questions getQuestionCategory() {
-        if (location % 4 == 0) return Questions.POP;
-        if (location % 4 == 1) return Questions.SCIENCE;
-        if (location % 4 == 2) return Questions.SPORTS;
-        return Questions.ROCK;
-    }
-
-    void askQuestion() {
-        System.out.println(getQuestionCategory().drawCard());
-    }
 }

@@ -6,6 +6,7 @@ public class Game {
     final Players players;
 
     private final Random rand;
+    private final Board board;
     private boolean isGameInProgress = true;
     private Player currentPlayer;
 
@@ -18,12 +19,7 @@ public class Game {
         this.rand = rand;
         players = new Players(playersNames);
         currentPlayer = players.getCurrent();
-        for (int i = 0; i < 50; i++) {
-            Questions.POP.stackCard("Pop Question " + i);
-            Questions.SCIENCE.stackCard("Science Question " + i);
-            Questions.SPORTS.stackCard("Sports Question " + i);
-            Questions.ROCK.stackCard("Rock Question " + i);
-        }
+        board = new Board();
     }
 
     public void play() {
@@ -79,7 +75,7 @@ public class Game {
 
     private void askQuestionToCurrentPlayer() {
         printCurrentCategory();
-        currentPlayer.askQuestion();
+        board.drawQuestion(currentPlayer.getLocation());
         if (this.rand.nextInt(9) == 7) {
             System.out.println("Question was incorrectly answered");
             System.out.printf("%s was sent to the penalty box%n", currentPlayer.getName());
@@ -92,7 +88,7 @@ public class Game {
     }
 
     private void printCurrentCategory() {
-        System.out.println("The category is " + currentPlayer.getQuestionCategory());
+        System.out.println("The category is " + board.getQuestionCategory(currentPlayer.getLocation()));
     }
 
     private void printCurrentPlayerLocation() {
