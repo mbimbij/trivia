@@ -9,6 +9,9 @@ public class Players {
     int currentPlayerIndex = 0;
 
     public Players(String... playersNames) {
+        if (playersNames.length > 6){
+            throw new InvalidNumberOfPlayersException();
+        }
         Arrays.stream(playersNames).forEach(this::addPlayer);
     }
 
@@ -24,5 +27,12 @@ public class Players {
 
     Player getCurrent() {
         return players.get(currentPlayerIndex);
+    }
+
+    public int size() {
+        return players.size();
+    }
+
+    public static class InvalidNumberOfPlayersException extends RuntimeException {
     }
 }

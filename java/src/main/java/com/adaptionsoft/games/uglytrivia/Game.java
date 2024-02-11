@@ -102,4 +102,5 @@ public class Game {
     private boolean hasCurrentPlayerWon() {
         return (currentPlayer.getCoinCount() == 6);
     }
+
 }
