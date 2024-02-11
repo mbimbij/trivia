@@ -9,7 +9,10 @@ class DummyQuestionInitializationStrategy implements QuestionInitializationStrat
     @Override
     public void run() {
         Arrays.stream(Questions.values())
-                .forEach(this::stackCards);
+                .forEach(questionsCategory -> {
+                    questionsCategory.clear();
+                    stackCards(questionsCategory);
+                });
     }
 
     private void stackCards(Questions questionsCategory) {

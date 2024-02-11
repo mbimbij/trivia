@@ -7,7 +7,7 @@ import com.adaptionsoft.games.uglytrivia.GameFactory;
 
 public class GameRunner {
     public static void main(String[] args) {
-        Game game = GameFactory.createDefault( "Chet", "Pat", "Sue", "Joe", "Vlad");
+        Game game = GameFactory.create( "Chet", "Pat", "Sue", "Joe", "Vlad");
         game.play();
     }
 }

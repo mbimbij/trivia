@@ -29,4 +29,8 @@ enum Questions {
     public String toString() {
         return value;
     }
+
+    public void clear() {
+        cards.clear();
+    }
 }
