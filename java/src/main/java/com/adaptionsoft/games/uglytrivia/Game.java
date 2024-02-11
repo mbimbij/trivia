@@ -52,12 +52,10 @@ public class Game {
 
     private void playTurnFromPenaltyBox(int roll) {
         if (isPair(roll)) {
-            currentPlayer.getOutOfPenaltyBox();
             System.out.println(currentPlayer.getName() + " is getting out of the penalty box");
             playRegularTurn(roll);
         } else {
             System.out.println(currentPlayer.getName() + " is not getting out of the penalty box");
-            currentPlayer.stayInPenaltyBox();
         }
     }
 

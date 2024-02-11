@@ -40,12 +40,6 @@ public class Player {
         isInPenaltyBox = true;
     }
 
-    public void getOutOfPenaltyBox() {
-    }
-
-    public void stayInPenaltyBox() {
-    }
-
     public Questions getQuestionCategory() {
         if (location % 4 == 0) return Questions.POP;
         if (location % 4 == 1) return Questions.SCIENCE;
