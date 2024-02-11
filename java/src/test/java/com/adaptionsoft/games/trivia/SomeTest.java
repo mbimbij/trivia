@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia;
 
 
 import com.adaptionsoft.games.uglytrivia.Game;
+import com.adaptionsoft.games.uglytrivia.GameFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class SomeTest {
         System.setOut(new PrintStream("src/test/resources/lead.txt"));
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
         int seed = 0;
-        Game game = new Game(new Random(seed), "Chet", "Pat", "Sue", "Joe", "Vlad");
+        Game game = GameFactory.createWithSeed(new Random(seed), "Chet", "Pat", "Sue", "Joe", "Vlad");
 
         // WHEN
         game.play();
@@ -29,4 +30,5 @@ public class SomeTest {
         String lead = Files.readString(Paths.get("src/test/resources/lead.txt"));
         assertEquals(gold, lead);
     }
+
 }

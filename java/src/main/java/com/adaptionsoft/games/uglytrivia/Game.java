@@ -10,16 +10,12 @@ public class Game {
     private boolean isGameInProgress = true;
     private Player currentPlayer;
 
-    public Game(String... playersNames) {
-        this(new Random(), playersNames);
-    }
-
     // do not call directly, unless in a testing context
-    public Game(Random rand, String... playersNames) {
+    Game(Random rand, Board board, Players players) {
         this.rand = rand;
-        players = new Players(playersNames);
-        currentPlayer = players.getCurrent();
-        board = new Board();
+        this.players = players;
+        currentPlayer = this.players.getCurrent();
+        this.board = board;
     }
 
     public void play() {
