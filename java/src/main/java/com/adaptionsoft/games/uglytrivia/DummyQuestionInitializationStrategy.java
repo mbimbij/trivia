@@ -2,7 +2,7 @@ package com.adaptionsoft.games.uglytrivia;
 
 import java.util.Arrays;
 
-public class DummyQuestionInitializationStrategy implements QuestionInitializationStrategy {
+class DummyQuestionInitializationStrategy implements QuestionInitializationStrategy {
 
     private static final int QUESTIONS_PER_CATEGORY_COUNT = 50;
 

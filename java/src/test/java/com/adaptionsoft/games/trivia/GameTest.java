@@ -2,8 +2,8 @@ package com.adaptionsoft.games.trivia;
 
 
 import com.adaptionsoft.games.uglytrivia.Game;
-import com.adaptionsoft.games.uglytrivia.Players.InvalidNumberOfPlayersException;
 import com.adaptionsoft.games.uglytrivia.GameFactory;
+import com.adaptionsoft.games.uglytrivia.InvalidNumberOfPlayersException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -51,6 +51,16 @@ public class GameTest {
                         "player5",
                         "player6",
                         "player7"
+                )
+        );
+    }
+
+    @Test
+    void cannot_have_less_than_2_players() {
+        assertThrows(
+                InvalidNumberOfPlayersException.class,
+                () -> GameFactory.createDefault(
+                        "player1"
                 )
         );
     }

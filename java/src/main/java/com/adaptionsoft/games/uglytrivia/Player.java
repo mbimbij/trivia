@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.uglytrivia;
 
-public class Player {
+class Player {
     private final String name;
     private boolean isInPenaltyBox;
     private int coinCount;

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Players {
+class Players {
     List<Player> players = new ArrayList<>();
     int currentPlayerIndex = 0;
 
     public Players(String... playersNames) {
-        if (playersNames.length > 6){
-            throw new InvalidNumberOfPlayersException();
+        if (playersNames.length < 2 || playersNames.length > 6){
+            throw new InvalidNumberOfPlayersException(playersNames.length);
         }
         Arrays.stream(playersNames).forEach(this::addPlayer);
     }
@@ -33,6 +33,4 @@ public class Players {
         return players.size();
     }
 
-    public static class InvalidNumberOfPlayersException extends RuntimeException {
-    }
 }
