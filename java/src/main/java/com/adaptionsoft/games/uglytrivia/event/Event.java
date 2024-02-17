@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.uglytrivia;
+package com.adaptionsoft.games.uglytrivia.event;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

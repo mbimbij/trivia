@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import com.adaptionsoft.games.uglytrivia.event.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Random;
 
 public class Game {
     final Players players;
+    private final EventPublisher eventPublisher;
 
     private final Random rand;
     private final Board board;
@@ -15,17 +17,21 @@ public class Game {
     @Getter
     private Player currentPlayer;
     @Getter
-    private List<Event> uncommittedEvents = new ArrayList<>();
+    private final List<Event> uncommittedEvents = new ArrayList<>();
     int turn = 1;
 
     // do not call directly, unless in a testing context
-    Game(Random rand, Board board, Players players) {
+    Game(Random rand, Board board, Players players, EventPublisher eventPublisher) {
         this.rand = rand;
         this.players = players;
+        this.eventPublisher = eventPublisher;
         currentPlayer = this.players.getCurrent();
         this.board = board;
-        uncommittedEvents.addAll(players.getUncommittedEvents());
-        uncommittedEvents.add(new GameCreatedEvent());
+        publish(new GameCreatedEvent());
+    }
+
+    private void publish(Event... events) {
+        eventPublisher.publish(events);
     }
 
     public void play() {
@@ -35,7 +41,7 @@ public class Game {
     }
 
     public void performGameTurn() {
-        displayCurrentPlayer();
+        publish(new PlayerTurnStartedEvent(currentPlayer, turn));
         int roll = rollDice();
         if (currentPlayer.isInPenaltyBox()) {
             playTurnFromPenaltyBox(roll);
@@ -46,22 +52,18 @@ public class Game {
         endTurn();
     }
 
-    private void displayCurrentPlayer() {
-        System.out.println(currentPlayer.getName() + " is the current player");
-    }
-
     private int rollDice() {
         int roll = this.rand.nextInt(5) + 1;
-        System.out.println("They have rolled a " + roll);
+        publish(new PlayerRolledDiceEvent(currentPlayer, turn, roll));
         return roll;
     }
 
     private void playTurnFromPenaltyBox(int roll) {
         if (isPair(roll)) {
-            System.out.println(currentPlayer.getName() + " is getting out of the penalty box");
+            publish(new PlayerGotOutOfPenaltyBoxEvent(currentPlayer, turn));
             playRegularTurn(roll);
         } else {
-            System.out.println(currentPlayer.getName() + " is not getting out of the penalty box");
+            publish(new PlayerStayedInPenaltyBoxEvent(currentPlayer, turn));
         }
     }
 
@@ -70,8 +72,16 @@ public class Game {
     }
 
     private void playRegularTurn(int roll) {
-        changePlayersPosition(roll);
+        advancePlayerLocation(roll);
         askQuestionToCurrentPlayer();
+    }
+
+    private void advancePlayerLocation(int roll) {
+        currentPlayer.advanceLocation(roll);
+        Questions questionCategory = board.getQuestionCategory(currentPlayer.getLocation());
+        publish(new PlayerChangedLocationEvent(currentPlayer,
+                turn,
+                questionCategory));
     }
 
     private void endGameIfCurrentPlayerWon() {
@@ -85,8 +95,7 @@ public class Game {
     }
 
     public void askQuestionToCurrentPlayer() {
-        printCurrentCategory();
-        board.drawQuestion(currentPlayer.getLocation());
+        askQuestion();
         if (currentPlayer.isAnsweringCorrectly()) {
             answerCorrectly();
         } else {
@@ -96,7 +105,7 @@ public class Game {
     }
 
     private void askSecondQuestionAfterFirstIncorrectAnswer() {
-        board.drawQuestion(currentPlayer.getLocation());
+        askQuestion();
         if (currentPlayer.isAnsweringCorrectly()) {
             answerCorrectly();
         } else {
@@ -105,37 +114,25 @@ public class Game {
         }
     }
 
+    private void askQuestion() {
+        String question = board.drawQuestion(currentPlayer.getLocation());
+        publish(new QuestionAskedToPlayerEvent(currentPlayer, turn, question));
+    }
+
     private void answerCorrectly() {
-        System.out.println("Answer was correct!!!!");
         currentPlayer.addCoin();
-        System.out.printf("%s now has %d Gold Coins.%n", currentPlayer.getName(), currentPlayer.getCoinCount());
-        uncommittedEvents.add(new PlayerAnsweredCorrectlyEvent(currentPlayer, turn));
+        publish(new PlayerAnsweredCorrectlyEvent(currentPlayer, turn),
+                new CoinAddedToPlayerEvent(currentPlayer, turn)
+        );
     }
 
     private void answerIncorrectly() {
-        System.out.println("Question was incorrectly answered");
-        uncommittedEvents.add(new PlayerAnsweredIncorrectlyEvent(currentPlayer, turn));
+        publish(new PlayerAnsweredIncorrectlyEvent(currentPlayer, turn));
     }
 
     private void goToPenaltyBox() {
-        System.out.printf("%s was sent to the penalty box%n", currentPlayer.getName());
         currentPlayer.goToPenaltyBox();
-        uncommittedEvents.add(new PlayerSentToPenaltyBoxEvent(currentPlayer, turn));
-    }
-
-    private void printCurrentCategory() {
-        System.out.println("The category is " + board.getQuestionCategory(currentPlayer.getLocation()));
-    }
-
-    private void printCurrentPlayerLocation() {
-        System.out.println(currentPlayer.getName()
-                           + "'s new location is "
-                           + currentPlayer.getLocation());
-    }
-
-    private void changePlayersPosition(int roll) {
-        currentPlayer.advanceLocation(roll);
-        printCurrentPlayerLocation();
+        publish(new PlayerSentToPenaltyBoxEvent(currentPlayer, turn));
     }
 
 

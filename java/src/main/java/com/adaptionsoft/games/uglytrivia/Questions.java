@@ -3,7 +3,7 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-enum Questions {
+public enum Questions {
     POP("Pop"),
     SCIENCE("Science"),
     SPORTS("Sports"),

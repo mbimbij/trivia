@@ -1,6 +1,8 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import lombok.Getter;
+import com.adaptionsoft.games.uglytrivia.event.Event;
+import com.adaptionsoft.games.uglytrivia.event.EventPublisher;
+import com.adaptionsoft.games.uglytrivia.event.PlayerAddedEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +15,10 @@ public class Players {
     public static final int MAX_PLAYER_COUNT = 6;
     List<Player> players = new ArrayList<>();
     int currentPlayerIndex = 0;
+    private final EventPublisher eventPublisher;
 
-    @Getter
-    private List<Event> uncommittedEvents = new ArrayList<>();
-
-    public Players(Player... players) {
+    public Players(EventPublisher eventPublisher, Player... players) {
+        this.eventPublisher = eventPublisher;
         if (players.length < MIN_PLAYER_COUNT || players.length > MAX_PLAYER_COUNT) {
             throw new InvalidNumberOfPlayersException(players.length);
         }
@@ -30,9 +31,12 @@ public class Players {
 
     private void addPlayer(Player player) {
         players.add(player);
-        uncommittedEvents.add(new PlayerAddedEvent(player));
-        System.out.println(player.getName() + " was added");
-        System.out.println("They are player number " + players.size());
+        PlayerAddedEvent event = new PlayerAddedEvent(player, players.size());
+        publish(event);
+    }
+
+    private void publish(Event event) {
+        eventPublisher.publish(event);
     }
 
     private boolean findDuplicates(Player[] players) {

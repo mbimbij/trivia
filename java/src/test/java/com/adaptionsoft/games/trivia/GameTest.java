@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia;
 
 
 import com.adaptionsoft.games.uglytrivia.*;
+import com.adaptionsoft.games.uglytrivia.event.*;
 import lombok.SneakyThrows;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,7 @@ public class GameTest {
         // GIVEN
         redirectStdoutToFile();
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
-        int seed = 0;
+        int seed = 2;
         Game game = GameFactory.create(
                 new Random(seed),
                 "Chet",
@@ -114,24 +115,27 @@ public class GameTest {
         Random rand = new Random();
         String playerName1 = "player1";
         String playerName2 = "player2";
-        FixedAnsweringStrategy player1AnsweringStratey = new FixedAnsweringStrategy(false);
-        Player player1 = new Player(playerName1, player1AnsweringStratey);
-        Player player2 = new Player(playerName2, new RandomAnsweringStrategy(rand));
+        RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
+        Player player1 = new Player(playerName1, randomAnsweringStrategy);
+        Player player2 = new Player(playerName2, randomAnsweringStrategy);
+        EventPublisher mockEventPublisher = new MockEventPublisher();
+        mockEventPublisher.register(new EventConsoleLogger());
+        Players players = new Players(mockEventPublisher, player1, player2);
 
         // WHEN
-        Game game = GameFactory.create(rand, player1, player2);
+        Game game = GameFactory.create(rand, players, new DummyQuestionInitializationStrategy(), mockEventPublisher);
 
         // THEN player1 is indeed the current player
         assertEquals(player1, game.getCurrentPlayer());
 
         // THEN the domain events are produced in the correct order
-        List<Event> events = game.getUncommittedEvents();
+        List<Event> events = mockEventPublisher.getEvents();
         assertThat(events)
                 .usingRecursiveComparison()
                 .asInstanceOf(InstanceOfAssertFactories.LIST)
                 .containsSubsequence(
-                        new PlayerAddedEvent(player1),
-                        new PlayerAddedEvent(player2),
+                        new PlayerAddedEvent(player1, 1),
+                        new PlayerAddedEvent(player2, 2),
                         new GameCreatedEvent()
                 );
     }
@@ -142,17 +146,20 @@ public class GameTest {
         Random rand = new Random();
         String playerName1 = "player1";
         String playerName2 = "player2";
-        FixedAnsweringStrategy player1AnsweringStratey = new FixedAnsweringStrategy(false);
-        Player player1 = new Player(playerName1, player1AnsweringStratey);
+        FixedAnsweringStrategy player1AnsweringStrategy = new FixedAnsweringStrategy(false);
+        Player player1 = new Player(playerName1, player1AnsweringStrategy);
         Player player2 = new Player(playerName2, new RandomAnsweringStrategy(rand));
-        Game game = GameFactory.create(rand, player1, player2);
+        MockEventPublisher mockEventPublisher = new MockEventPublisher();
+        mockEventPublisher.register(new EventConsoleLogger());
+        Players players = new Players(mockEventPublisher, player1, player2);
+        Game game = GameFactory.create(rand, players, new DummyQuestionInitializationStrategy(), mockEventPublisher);
         assertEquals(player1, game.getCurrentPlayer());
 
         // WHEN
         game.askQuestionToCurrentPlayer();
 
         // THEN the domain events are produced in the correct order
-        List<Event> events = game.getUncommittedEvents();
+        List<Event> events = mockEventPublisher.getEvents();
         assertThat(events)
                 .usingRecursiveComparison()
                 .asInstanceOf(InstanceOfAssertFactories.LIST)

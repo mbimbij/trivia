@@ -1,8 +1,10 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import java.util.ArrayList;
+import com.adaptionsoft.games.uglytrivia.event.EventConsoleLogger;
+import com.adaptionsoft.games.uglytrivia.event.EventPublisher;
+import com.adaptionsoft.games.uglytrivia.event.MockEventPublisher;
+
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class GameFactory {
@@ -17,22 +19,21 @@ public class GameFactory {
     public static Game create(Random rand, String... playersNames){
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
         Player[] playersArray = Arrays.stream(playersNames).map(playersName -> new Player(playersName, randomAnsweringStrategy)).toArray(Player[]::new);
+        MockEventPublisher eventPublisher = new MockEventPublisher();
+        eventPublisher.register(new EventConsoleLogger());
+        Players playersWrapper = new Players(eventPublisher, playersArray);
         return create(rand,
+                playersWrapper,
                 new DummyQuestionInitializationStrategy(),
-                playersArray);
-    }
-
-    public static Game create(Random random, Player... players) {
-        return create(random,
-                new DummyQuestionInitializationStrategy(),
-                players);
+                eventPublisher
+        );
     }
 
     public static Game create(Random rand,
+                              Players players,
                               QuestionInitializationStrategy questionInitializationStrategy,
-                              Player... players){
+                              EventPublisher eventPublisher){
         questionInitializationStrategy.run();
-        Players playersWrapper = new Players(players);
-        return new Game(rand, new Board(), playersWrapper);
+        return new Game(rand, new Board(), players, eventPublisher);
     }
 }
