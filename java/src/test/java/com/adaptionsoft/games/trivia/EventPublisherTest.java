@@ -11,8 +11,8 @@ class EventPublisherTest {
     @Test
     void should_notify_listeners__when_event_published() {
         // GIVEN
-        MockEventPublisher eventPublisher = new MockEventPublisher();
         MockEventListener eventListener = new MockEventListener();
+        MockEventPublisher eventPublisher = new MockEventPublisher();
         eventPublisher.register(eventListener);
 
         // WHEN

@@ -6,7 +6,6 @@ import com.adaptionsoft.games.uglytrivia.event.*;
 import lombok.SneakyThrows;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,23 +21,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GameTest {
+class GameTest {
 
     private static final PrintStream stdout = System.out;
+    private final MockEventPublisher eventPublisher = new MockEventPublisher();
+    private final GameFactory gameFactory = new GameFactory(eventPublisher);
 
     @BeforeEach
     void setUp() {
         System.setOut(stdout);
+        eventPublisher.clearEvents();
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void should_not_differ_from_golden() throws IOException {
         // GIVEN
         redirectStdoutToFile();
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
         int seed = 2;
-        Game game = GameFactory.create(
+        Game game = gameFactory.create(
                 new Random(seed),
                 "Chet",
                 "Pat",
@@ -63,7 +65,7 @@ public class GameTest {
     void cannot_have_more_than_6_players() {
         assertThrows(
                 Players.InvalidNumberOfPlayersException.class,
-                () -> GameFactory.create(
+                () -> gameFactory.create(
                         "player1",
                         "player2",
                         "player3",
@@ -78,7 +80,7 @@ public class GameTest {
     @Test
     void cannot_have_less_than_2_players() {
         assertThrows(Players.InvalidNumberOfPlayersException.class,
-                () -> GameFactory.create("player1"));
+                () -> gameFactory.create("player1"));
     }
 
     @Test
@@ -86,7 +88,9 @@ public class GameTest {
         Random random = new Random();
         for (int i = 0; i < 100; i++) {
             int duplicatesCount = random.nextInt(1, Players.MAX_PLAYER_COUNT) + 1;
-            expectDuplicatePlayerNameException(generatePlayersNamesWithDuplicates(duplicatesCount));
+            String[] playersNames = generatePlayersNamesWithDuplicates(duplicatesCount);
+            System.out.println(Arrays.toString(playersNames));
+            assertThrows(Players.DuplicatePlayerNameException.class, () -> gameFactory.create(playersNames));
         }
     }
 
@@ -106,19 +110,14 @@ public class GameTest {
         return playersNames.toArray(new String[0]);
     }
 
-    private void expectDuplicatePlayerNameException(String... playersNames) {
-        System.out.println(Arrays.toString(playersNames));
-        assertThrows(Players.DuplicatePlayerNameException.class, () -> GameFactory.create(playersNames));
-    }
-
     @Test
-    void game_creation__should_produce_player_added_event() {
+    void game_creation_through_constructor__should_not_raise_player_added_event() {
         // GIVEN
         Random rand = new Random();
         String playerName1 = "player1";
         String playerName2 = "player2";
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
-        MockEventPublisher mockEventPublisher = new MockEventPublisher();
+        MockEventPublisher mockEventPublisher = eventPublisher;
         Board board = new Board();
         Player player1 = new Player(playerName1, randomAnsweringStrategy, mockEventPublisher, board);
         Player player2 = new Player(playerName2, randomAnsweringStrategy, mockEventPublisher, board);
@@ -126,10 +125,29 @@ public class GameTest {
         Players players = new Players(mockEventPublisher, player1, player2);
 
         // WHEN
-        Game game = GameFactory.create(rand, board, players, new DummyQuestionInitializationStrategy(), mockEventPublisher);
+        new Game(rand, board, players, mockEventPublisher);
 
-        // THEN player1 is indeed the current player
-        assertEquals(player1, game.getCurrentPlayer());
+        // THEN no domain events are produced
+        List<Event> events = mockEventPublisher.getEvents();
+        assertThat(events).isEmpty();
+    }
+
+    @Test
+    void game_creation_through_factory__should_raise_player_added_event() {
+        // GIVEN
+        Random rand = new Random();
+        String playerName1 = "player1";
+        String playerName2 = "player2";
+        RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
+        MockEventPublisher mockEventPublisher = eventPublisher;
+        Board board = new Board();
+        Player player1 = new Player(playerName1, randomAnsweringStrategy, mockEventPublisher, board);
+        Player player2 = new Player(playerName2, randomAnsweringStrategy, mockEventPublisher, board);
+        mockEventPublisher.register(new EventConsoleLogger());
+        Players players = new Players(mockEventPublisher, player1, player2);
+
+        // WHEN
+        Game game = gameFactory.create(rand, playerName1, playerName2);
 
         // THEN the domain events are produced in the correct order
         List<Event> events = mockEventPublisher.getEvents();

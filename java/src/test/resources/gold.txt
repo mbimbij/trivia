@@ -91,101 +91,184 @@ Pat's new location is 11
 The category is Science
 Science Question 3
 Question was incorrectly answered
+Pat was sent to the penalty box
+Sue is the current player
+They have rolled a 2
+Sue's new location is 0
+The category is Pop
+Pop Question 3
+Answer was correct!!!!
+Sue now has 3 Gold Coins.
+Joe is the current player
+They have rolled a 3
+Joe's new location is 8
+The category is Rock
+Rock Question 1
+Answer was correct!!!!
+Joe now has 3 Gold Coins.
+Vlad is the current player
+They have rolled a 4
+Vlad's new location is 8
+The category is Rock
+Rock Question 2
+Answer was correct!!!!
+Vlad now has 3 Gold Coins.
+Chet is the current player
+They have rolled a 5
+Chet's new location is 6
+The category is Science
 Science Question 4
+Answer was correct!!!!
+Chet now has 5 Gold Coins.
+Pat is the current player
+They have rolled a 3
+Pat is getting out of the penalty box
+Pat's new location is 2
+The category is Sports
+Sports Question 1
+Answer was correct!!!!
+Pat now has 3 Gold Coins.
+Sue is the current player
+They have rolled a 1
+Sue's new location is 1
+The category is Science
+Science Question 5
+Answer was correct!!!!
+Sue now has 5 Gold Coins.
+Joe is the current player
+They have rolled a 3
+Joe's new location is 11
+The category is Science
+Science Question 6
+Question was incorrectly answered
+Vlad is the current player
+They have rolled a 3
+Vlad's new location is 11
+The category is Science
+Science Question 7
+Answer was correct!!!!
+Vlad now has 5 Gold Coins.
+Chet is the current player
+They have rolled a 3
+Chet's new location is 9
+The category is Geography
+Geography Question 3
+Question was incorrectly answered
+Pat is the current player
+They have rolled a 4
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 5
+Sue's new location is 6
+The category is Science
+Science Question 8
+Answer was correct!!!!
+Sue now has 7 Gold Coins.
+Joe is the current player
+They have rolled a 1
+Joe's new location is 0
+The category is Pop
+Pop Question 4
+Answer was correct!!!!
+Joe now has 4 Gold Coins.
+Vlad is the current player
+They have rolled a 4
+Vlad's new location is 3
+The category is Rock
+Rock Question 3
+Answer was correct!!!!
+Vlad now has 7 Gold Coins.
+Chet is the current player
+They have rolled a 3
+Chet's new location is 0
+The category is Pop
+Pop Question 5
+Answer was correct!!!!
+Chet now has 6 Gold Coins.
+Pat is the current player
+They have rolled a 2
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 4
+Sue's new location is 10
+The category is Pop
+Pop Question 6
+Question was incorrectly answered
+Joe is the current player
+They have rolled a 5
+Joe's new location is 5
+The category is Pop
+Pop Question 7
+Question was incorrectly answered
+Joe was sent to the penalty box
+Vlad is the current player
+They have rolled a 4
+Vlad's new location is 7
+The category is Sports
+Sports Question 2
+Answer was correct!!!!
+Vlad now has 9 Gold Coins.
+Chet is the current player
+They have rolled a 1
+Chet's new location is 1
+The category is Science
+Science Question 9
+Answer was correct!!!!
+Chet now has 7 Gold Coins.
+Pat is the current player
+They have rolled a 5
+Pat is getting out of the penalty box
+Pat's new location is 7
+The category is Sports
+Sports Question 3
 Question was incorrectly answered
 Pat was sent to the penalty box
 Sue is the current player
 They have rolled a 5
 Sue's new location is 3
 The category is Rock
-Rock Question 1
-Question was incorrectly answered
-Rock Question 2
+Rock Question 4
 Answer was correct!!!!
-Sue now has 3 Gold Coins.
+Sue now has 8 Gold Coins.
 Joe is the current player
-They have rolled a 4
-Joe's new location is 9
-The category is Geography
-Geography Question 3
-Answer was correct!!!!
-Joe now has 3 Gold Coins.
-Vlad is the current player
 They have rolled a 5
-Vlad's new location is 9
-The category is Geography
-Geography Question 4
-Answer was correct!!!!
-Vlad now has 3 Gold Coins.
-Chet is the current player
-They have rolled a 3
-Chet's new location is 4
-The category is Geography
-Geography Question 5
-Answer was correct!!!!
-Chet now has 5 Gold Coins.
-Pat is the current player
-They have rolled a 1
-Pat is getting out of the penalty box
-Pat's new location is 0
+Joe is getting out of the penalty box
+Joe's new location is 10
 The category is Pop
-Pop Question 3
-Answer was correct!!!!
-Pat now has 3 Gold Coins.
-Sue is the current player
-They have rolled a 3
-Sue's new location is 6
-The category is Science
-Science Question 5
-Question was incorrectly answered
-Science Question 6
-Question was incorrectly answered
-Sue was sent to the penalty box
-Joe is the current player
-They have rolled a 4
-Joe's new location is 1
-The category is Science
-Science Question 7
+Pop Question 8
 Answer was correct!!!!
 Joe now has 5 Gold Coins.
 Vlad is the current player
-They have rolled a 1
-Vlad's new location is 10
-The category is Pop
-Pop Question 4
+They have rolled a 4
+Vlad's new location is 11
+The category is Science
+Science Question 10
 Answer was correct!!!!
-Vlad now has 5 Gold Coins.
+Vlad now has 11 Gold Coins.
 Chet is the current player
 They have rolled a 5
-Chet's new location is 9
-The category is Geography
-Geography Question 6
-Answer was correct!!!!
-Chet now has 7 Gold Coins.
-Pat is the current player
-They have rolled a 1
-Pat is getting out of the penalty box
-Pat's new location is 1
+Chet's new location is 6
 The category is Science
-Science Question 8
+Science Question 11
 Answer was correct!!!!
-Pat now has 4 Gold Coins.
-Sue is the current player
-They have rolled a 4
-Sue is not getting out of the penalty box
-Joe is the current player
+Chet now has 8 Gold Coins.
+Pat is the current player
 They have rolled a 2
-Joe's new location is 3
-The category is Rock
-Rock Question 3
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 2
+Sue's new location is 5
+The category is Pop
+Pop Question 9
 Answer was correct!!!!
-Joe now has 7 Gold Coins.
+Sue now has 9 Gold Coins.
+Joe is the current player
+They have rolled a 4
+Joe is not getting out of the penalty box
 Vlad is the current player
-They have rolled a 5
+They have rolled a 4
 Vlad's new location is 3
 The category is Rock
-Rock Question 4
-Question was incorrectly answered
 Rock Question 5
 Answer was correct!!!!
-Vlad now has 6 Gold Coins.
+Vlad now has 13 Gold Coins.

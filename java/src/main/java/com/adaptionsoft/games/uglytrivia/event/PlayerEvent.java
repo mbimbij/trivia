@@ -13,9 +13,9 @@ public abstract class PlayerEvent extends Event {
      */
     protected final int turn;
 
-    public PlayerEvent(Player player, int turn, String stringValue) {
+    public PlayerEvent(Player player, String stringValue) {
         super(stringValue);
         this.playerName = player.getName();
-        this.turn = turn;
+        this.turn = player.getTurn();
     }
 }

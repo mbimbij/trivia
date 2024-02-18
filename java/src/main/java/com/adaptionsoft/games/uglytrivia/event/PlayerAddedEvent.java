@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class PlayerAddedEvent extends PlayerEvent {
     public PlayerAddedEvent(Player player, int playersCount) {
-        super(player, 0, buildStringValue(player, playersCount));
+        super(player, buildStringValue(player, playersCount));
     }
 
     private static String buildStringValue(Player player, int playersCount) {

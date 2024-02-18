@@ -4,8 +4,8 @@ import com.adaptionsoft.games.uglytrivia.Player;
 import com.adaptionsoft.games.uglytrivia.QuestionCategory;
 
 public class PlayerChangedLocationEvent extends PlayerEvent {
-    public PlayerChangedLocationEvent(Player player, int turn, QuestionCategory questionCategory) {
-        super(player, turn, buildMessage(player, questionCategory));
+    public PlayerChangedLocationEvent(Player player, QuestionCategory questionCategory) {
+        super(player, buildMessage(player, questionCategory));
     }
 
     private static String buildMessage(Player player, QuestionCategory questionCategory) {

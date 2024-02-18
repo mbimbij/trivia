@@ -1,9 +1,24 @@
 # sprint
-- feature #3
+- noter les sources d'illisibilité dans mon code, potentiellement liées à la violation de la Loi de Déméter (ou autre)
+  - df
+- revenir au modèle de la collection interne pour stocker les events de l'aggrégat
 - refacto factory de question initialization strategy et voir si je peux faire des trucs avec les sealed classes
 
 # backlog
 - property-based testing pour vérifier qu'il n'y a pas de joueurs avec un même nom
+
+# difficultés rencontrées
+- gestion de l'augmentation des attributs et params du constructeur de `Game`, `Players`, `Player`
+  - pas réussi à résoudre ça avec une factory, comment faire mieux ?
+- Design des factories et construction d'objets par défaut
+- Introduction d'un mock dans l'arbo profonde d'une grappe d'objets issue d'une méthode de factory par défaut
+- obtenir un code ergonomique à tester
+  - setups bien plus complexes que nécessaire 
+- introduction de nouvelles fonctionnalités
+- répartition des responsabilités entre `Game` et `Player`
+  - duplication implicite de logique `answerIncorrectly` rendant mes tests pas pertinents
+  - difficultés à tester 
+- ennui, burnout et "timeout de refacto" -> j'ai épuisé mes réserves d'idées et d'énergie mais le code est toujours en vrac et je n'ai pas d'idée claire: du design en cours, du design désiré, sinon de comment passer de l'un à l'autre. C'est un problème, c'est mon problème, et c'est encore plus un problème dans le contexte de travail d'équipe, et encore encore plus si on attend de moi que je le lead à terme, ou que je sois un "senior". 
 
 # breakdown
 

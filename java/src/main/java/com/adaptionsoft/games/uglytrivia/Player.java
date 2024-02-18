@@ -3,9 +3,13 @@ package com.adaptionsoft.games.uglytrivia;
 import com.adaptionsoft.games.uglytrivia.event.*;
 import lombok.*;
 
-@Getter
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
+@Getter
 public class Player {
     @EqualsAndHashCode.Include
     private final String name;
@@ -15,10 +19,10 @@ public class Player {
     private int coinCount;
     private int location;
     private final EventPublisher eventPublisher;
+    private final List<Event> uncommittedEvents = new ArrayList<>();
     private int turn = 1;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
-    private int consecutiveIncorrectAnswersCount;
     private final Board board;
 
     public Player(String name, AnsweringStrategy answeringStrategy, EventPublisher eventPublisher, Board board) {
@@ -42,34 +46,28 @@ public class Player {
     }
 
     void answerCorrectly() {
-        consecutiveIncorrectAnswersCount = 0;
-        if (isOnAWinningStreak()) {
+        if (isOnACorrectAnswersStreak()) {
             addCoin();
         }
 
         addCoin();
-        publish(new PlayerAnsweredCorrectlyEvent(this, turn),
-                new CoinAddedToPlayerEvent(this, turn)
+        publish(new PlayerAnsweredCorrectlyEvent(this),
+                new CoinAddedToPlayerEvent(this)
         );
-        increaseStreakForSubsequentCorrectAnswers();
-    }
-
-    private void increaseStreakForSubsequentCorrectAnswers() {
         consecutiveCorrectAnswersCount++;
     }
 
     void answerIncorrectly() {
-        consecutiveCorrectAnswersCount = 0;
-        consecutiveIncorrectAnswersCount++;
-        publish(new PlayerAnsweredIncorrectlyEvent(this, turn));
-        if (consecutiveIncorrectAnswersCount >= 2) {
+        publish(new PlayerAnsweredIncorrectlyEvent(this));
+        if(!isOnACorrectAnswersStreak()){
             goToPenaltyBox();
-            publish(new PlayerSentToPenaltyBoxEvent(this, turn));
+            publish(new PlayerSentToPenaltyBoxEvent(this));
         }
+        consecutiveCorrectAnswersCount = 0;
     }
 
     private void publish(Event... events) {
-        eventPublisher.publish(events);
+        uncommittedEvents.addAll(Arrays.asList(events));
     }
 
     public void incrementTurn() {
@@ -77,31 +75,34 @@ public class Player {
     }
 
 
-    public boolean isOnAWinningStreak() {
+    public boolean isOnACorrectAnswersStreak() {
         return consecutiveCorrectAnswersCount >= 3;
     }
 
     void drawQuestion() {
-        String question = board.drawQuestion(getLocation());
-        publish(new QuestionAskedToPlayerEvent(this, turn, question));
-    }
-
-    public void askQuestion() {
-        drawQuestion();
-        if (answeringStrategy.isAnsweringCorrectly()) {
-            answerCorrectly();
-        } else {
-            answerIncorrectly();
-            drawQuestion();
-            if (answeringStrategy.isAnsweringCorrectly()) {
-                answerCorrectly();
-            } else {
-                answerIncorrectly();
-            }
-        }
+        String question = board.drawQuestion(location);
+        publish(new QuestionAskedToPlayerEvent(this, question));
     }
 
     boolean isWinning() {
-        return (getCoinCount() >= 12);
+        return (coinCount >= 12);
+    }
+
+    boolean isAnsweringCorrectly() {
+        return answeringStrategy.isAnsweringCorrectly();
+    }
+
+    void answerQuestion() {
+        if (isAnsweringCorrectly()) {
+            answerCorrectly();
+        } else {
+            answerIncorrectly();
+        }
+    }
+
+    public List<Event> getUncommittedEventsAndClear() {
+        List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
+        uncommittedEvents.clear();
+        return eventsCopy;
     }
 }

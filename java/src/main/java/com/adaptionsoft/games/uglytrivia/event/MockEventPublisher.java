@@ -31,4 +31,8 @@ public class MockEventPublisher implements EventPublisher {
     public void register(EventListener listener) {
         this.listeners.add(listener);
     }
+
+    public void clearEvents() {
+        events.clear();
+    }
 }

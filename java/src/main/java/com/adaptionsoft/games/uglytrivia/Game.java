@@ -4,6 +4,7 @@ import com.adaptionsoft.games.uglytrivia.event.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -14,24 +15,21 @@ public class Game {
     private final Random rand;
     private final Board board;
     private boolean isGameInProgress = true;
-    @Getter
     public Player currentPlayer;
-    @Getter
     private final List<Event> uncommittedEvents = new ArrayList<>();
     int turn = 1;
 
     // do not call directly, unless in a testing context
-    Game(Random rand, Board board, Players players, EventPublisher eventPublisher) {
+    public Game(Random rand, Board board, Players players, EventPublisher eventPublisher) {
         this.rand = rand;
         this.players = players;
         this.eventPublisher = eventPublisher;
         currentPlayer = this.players.getCurrent();
         this.board = board;
-        publish(new GameCreatedEvent());
     }
 
     private void publish(Event... events) {
-        eventPublisher.publish(events);
+        uncommittedEvents.addAll(Arrays.asList(events));
     }
 
     public void play() {
@@ -41,7 +39,7 @@ public class Game {
     }
 
     public void performGameTurn() {
-        publish(new PlayerTurnStartedEvent(currentPlayer, turn));
+        publish(new PlayerTurnStartedEvent(currentPlayer));
         int roll = rollDice();
         if (currentPlayer.isInPenaltyBox()) {
             playTurnFromPenaltyBox(roll);
@@ -54,16 +52,16 @@ public class Game {
 
     private int rollDice() {
         int roll = this.rand.nextInt(5) + 1;
-        publish(new PlayerRolledDiceEvent(currentPlayer, turn, roll));
+        publish(new PlayerRolledDiceEvent(currentPlayer, roll));
         return roll;
     }
 
     private void playTurnFromPenaltyBox(int roll) {
         if (isPair(roll)) {
-            publish(new PlayerGotOutOfPenaltyBoxEvent(currentPlayer, turn));
+            publish(new PlayerGotOutOfPenaltyBoxEvent(currentPlayer));
             playRegularTurn(roll);
         } else {
-            publish(new PlayerStayedInPenaltyBoxEvent(currentPlayer, turn));
+            publish(new PlayerStayedInPenaltyBoxEvent(currentPlayer));
         }
     }
 
@@ -73,14 +71,13 @@ public class Game {
 
     private void playRegularTurn(int roll) {
         advancePlayerLocation(roll);
-        currentPlayer.askQuestion();
+        currentPlayer.drawQuestion();
+        currentPlayer.answerQuestion();
     }
-
     private void advancePlayerLocation(int roll) {
         currentPlayer.advanceLocation(roll);
         QuestionCategory questionCategory = board.getQuestionCategory(currentPlayer.getLocation());
         publish(new PlayerChangedLocationEvent(currentPlayer,
-                turn,
                 questionCategory));
     }
 
@@ -88,7 +85,16 @@ public class Game {
         this.isGameInProgress = !currentPlayer.isWinning();
     }
 
+    private List<Event> getUncommittedEventsAndClear() {
+        List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
+        uncommittedEvents.clear();
+        return eventsCopy;
+    }
+
     private void endTurn() {
+        eventPublisher.publish(getUncommittedEventsAndClear());
+        eventPublisher.publish(currentPlayer.getUncommittedEventsAndClear());
+
         players.goToNextPlayerTurn();
         currentPlayer = players.getCurrent();
         turn++;

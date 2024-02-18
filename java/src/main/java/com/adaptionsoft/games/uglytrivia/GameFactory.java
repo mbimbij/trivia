@@ -2,7 +2,7 @@ package com.adaptionsoft.games.uglytrivia;
 
 import com.adaptionsoft.games.uglytrivia.event.EventConsoleLogger;
 import com.adaptionsoft.games.uglytrivia.event.EventPublisher;
-import com.adaptionsoft.games.uglytrivia.event.MockEventPublisher;
+import com.adaptionsoft.games.uglytrivia.event.GameCreatedEvent;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -11,16 +11,18 @@ import static com.adaptionsoft.games.uglytrivia.QuestionInitializationStrategyFa
 
 public class GameFactory {
 
-    private GameFactory() {
+    private final EventPublisher eventPublisher;
+
+    public GameFactory(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
-    public static Game create(String... playersNames) {
+    public Game create(String... playersNames) {
         return create(new Random(), playersNames);
     }
 
-    public static Game create(Random rand, String... playersNames) {
+    public Game create(Random rand, String... playersNames) {
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
-        EventPublisher eventPublisher = new MockEventPublisher();
         Board board = new Board();
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(playersName -> new Player(playersName,
@@ -29,20 +31,16 @@ public class GameFactory {
                         board))
                 .toArray(Player[]::new);
         eventPublisher.register(new EventConsoleLogger());
-        Players playersWrapper = new Players(eventPublisher, playersArray);
-        return create(rand,
+        Players playersWrapper = PlayersFactory.create(eventPublisher, playersArray);
+        QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES).run();
+
+        Game game = new Game(rand,
                 board,
                 playersWrapper,
-                QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES),
                 eventPublisher
         );
-    }
 
-    public static Game create(Random rand,
-                              Board board, Players players,
-                              QuestionInitializationStrategy questionInitializationStrategy,
-                              EventPublisher eventPublisher) {
-        questionInitializationStrategy.run();
-        return new Game(rand, board, players, eventPublisher);
+        eventPublisher.publish(new GameCreatedEvent());
+        return game;
     }
 }

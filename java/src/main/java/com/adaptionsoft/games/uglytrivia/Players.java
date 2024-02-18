@@ -3,6 +3,7 @@ package com.adaptionsoft.games.uglytrivia;
 import com.adaptionsoft.games.uglytrivia.event.Event;
 import com.adaptionsoft.games.uglytrivia.event.EventPublisher;
 import com.adaptionsoft.games.uglytrivia.event.PlayerAddedEvent;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,9 @@ public class Players {
     List<Player> players = new ArrayList<>();
     int currentPlayerIndex = 0;
     private final EventPublisher eventPublisher;
+    @Getter
+    private final List<Event> uncommittedEvents = new ArrayList<>();
+
 
     public Players(EventPublisher eventPublisher, Player... players) {
         this.eventPublisher = eventPublisher;
@@ -26,17 +30,15 @@ public class Players {
             throw new DuplicatePlayerNameException(players);
         }
 
-        Arrays.stream(players).forEach(this::addPlayer);
-    }
-
-    private void addPlayer(Player player) {
-        players.add(player);
-        PlayerAddedEvent event = new PlayerAddedEvent(player, players.size());
-        publish(event);
+        Arrays.stream(players).forEach(player -> {
+            this.players.add(player);
+            PlayerAddedEvent event = new PlayerAddedEvent(player, this.players.size());
+            publish(event);
+        });
     }
 
     private void publish(Event event) {
-        eventPublisher.publish(event);
+        uncommittedEvents.add(event);
     }
 
     private boolean findDuplicates(Player[] players) {
