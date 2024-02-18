@@ -78,7 +78,7 @@ public class Game {
 
     private void advancePlayerLocation(int roll) {
         currentPlayer.advanceLocation(roll);
-        Questions questionCategory = board.getQuestionCategory(currentPlayer.getLocation());
+        QuestionCategory questionCategory = board.getQuestionCategory(currentPlayer.getLocation());
         publish(new PlayerChangedLocationEvent(currentPlayer,
                 turn,
                 questionCategory));

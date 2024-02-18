@@ -6,9 +6,9 @@ class Board {
         return getQuestionCategory(playerLocation).drawCard();
     }
 
-    public Questions getQuestionCategory(int playerLocation) {
-        int categoriesCount = Questions.values().length;
-        return Questions.values()[playerLocation % categoriesCount];
+    public QuestionCategory getQuestionCategory(int playerLocation) {
+        int categoriesCount = QuestionCategory.values().length;
+        return QuestionCategory.values()[playerLocation % categoriesCount];
     }
 
 }

@@ -7,6 +7,9 @@ import com.adaptionsoft.games.uglytrivia.event.MockEventPublisher;
 import java.util.Arrays;
 import java.util.Random;
 
+import static com.adaptionsoft.games.uglytrivia.QuestionInitializationStrategyFactory.Types.DUMMY;
+import static com.adaptionsoft.games.uglytrivia.QuestionInitializationStrategyFactory.Types.PROPERTIES_FILES;
+
 public class GameFactory {
 
     private GameFactory() {
@@ -24,7 +27,7 @@ public class GameFactory {
         Players playersWrapper = new Players(eventPublisher, playersArray);
         return create(rand,
                 playersWrapper,
-                new DummyQuestionInitializationStrategy(),
+                QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES),
                 eventPublisher
         );
     }

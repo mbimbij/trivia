@@ -1,9 +1,11 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Queue;
 
-public enum Questions {
+public enum QuestionCategory {
     POP("Pop"),
     SCIENCE("Science"),
     SPORTS("Sports"),
@@ -13,8 +15,22 @@ public enum Questions {
     private final Queue<String> cards = new ArrayDeque<>();
     private final String value;
 
-    Questions(String value) {
+    QuestionCategory(String value) {
         this.value = value;
+    }
+
+    static QuestionCategory fromString(String text) {
+        for (QuestionCategory category : QuestionCategory.values()) {
+            if(category.value.equalsIgnoreCase(text)){
+                return category;
+            }
+        }
+        return null;
+    }
+
+    static void clearDeck() {
+        Arrays.stream(values())
+                .forEach(QuestionCategory::clear);
     }
 
     public void stackCard(String content) {
