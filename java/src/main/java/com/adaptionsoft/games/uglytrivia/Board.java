@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.uglytrivia;
 
-class Board {
+public class Board {
 
     String drawQuestion(int playerLocation) {
         return getQuestionCategory(playerLocation).drawCard();

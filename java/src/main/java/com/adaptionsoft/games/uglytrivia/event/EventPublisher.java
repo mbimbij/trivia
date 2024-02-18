@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface EventPublisher {
-    List<Event> getEvents();
 
     void publish(Event... events);
 

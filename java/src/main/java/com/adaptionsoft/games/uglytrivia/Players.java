@@ -57,6 +57,7 @@ public class Players {
 
     public void goToNextPlayerTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        players.forEach(Player::incrementTurn);
     }
 
     public Player getCurrent() {

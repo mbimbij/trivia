@@ -7,7 +7,6 @@ import com.adaptionsoft.games.uglytrivia.event.MockEventPublisher;
 import java.util.Arrays;
 import java.util.Random;
 
-import static com.adaptionsoft.games.uglytrivia.QuestionInitializationStrategyFactory.Types.DUMMY;
 import static com.adaptionsoft.games.uglytrivia.QuestionInitializationStrategyFactory.Types.PROPERTIES_FILES;
 
 public class GameFactory {
@@ -15,17 +14,24 @@ public class GameFactory {
     private GameFactory() {
     }
 
-    public static Game create(String... playersNames){
+    public static Game create(String... playersNames) {
         return create(new Random(), playersNames);
     }
 
-    public static Game create(Random rand, String... playersNames){
+    public static Game create(Random rand, String... playersNames) {
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
-        Player[] playersArray = Arrays.stream(playersNames).map(playersName -> new Player(playersName, randomAnsweringStrategy)).toArray(Player[]::new);
-        MockEventPublisher eventPublisher = new MockEventPublisher();
+        EventPublisher eventPublisher = new MockEventPublisher();
+        Board board = new Board();
+        Player[] playersArray = Arrays.stream(playersNames)
+                .map(playersName -> new Player(playersName,
+                        randomAnsweringStrategy,
+                        eventPublisher,
+                        board))
+                .toArray(Player[]::new);
         eventPublisher.register(new EventConsoleLogger());
         Players playersWrapper = new Players(eventPublisher, playersArray);
         return create(rand,
+                board,
                 playersWrapper,
                 QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES),
                 eventPublisher
@@ -33,10 +39,10 @@ public class GameFactory {
     }
 
     public static Game create(Random rand,
-                              Players players,
+                              Board board, Players players,
                               QuestionInitializationStrategy questionInitializationStrategy,
-                              EventPublisher eventPublisher){
+                              EventPublisher eventPublisher) {
         questionInitializationStrategy.run();
-        return new Game(rand, new Board(), players, eventPublisher);
+        return new Game(rand, board, players, eventPublisher);
     }
 }

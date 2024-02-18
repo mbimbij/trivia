@@ -15,7 +15,7 @@ public class Game {
     private final Board board;
     private boolean isGameInProgress = true;
     @Getter
-    private Player currentPlayer;
+    public Player currentPlayer;
     @Getter
     private final List<Event> uncommittedEvents = new ArrayList<>();
     int turn = 1;
@@ -73,7 +73,7 @@ public class Game {
 
     private void playRegularTurn(int roll) {
         advancePlayerLocation(roll);
-        askQuestionToCurrentPlayer();
+        currentPlayer.askQuestion();
     }
 
     private void advancePlayerLocation(int roll) {
@@ -85,7 +85,7 @@ public class Game {
     }
 
     private void endGameIfCurrentPlayerWon() {
-        this.isGameInProgress = !hasCurrentPlayerWon();
+        this.isGameInProgress = !currentPlayer.isWinning();
     }
 
     private void endTurn() {
@@ -93,51 +93,4 @@ public class Game {
         currentPlayer = players.getCurrent();
         turn++;
     }
-
-    public void askQuestionToCurrentPlayer() {
-        askQuestion();
-        if (currentPlayer.isAnsweringCorrectly()) {
-            answerCorrectly();
-        } else {
-            answerIncorrectly();
-            askSecondQuestionAfterFirstIncorrectAnswer();
-        }
-    }
-
-    private void askSecondQuestionAfterFirstIncorrectAnswer() {
-        askQuestion();
-        if (currentPlayer.isAnsweringCorrectly()) {
-            answerCorrectly();
-        } else {
-            answerIncorrectly();
-            goToPenaltyBox();
-        }
-    }
-
-    private void askQuestion() {
-        String question = board.drawQuestion(currentPlayer.getLocation());
-        publish(new QuestionAskedToPlayerEvent(currentPlayer, turn, question));
-    }
-
-    private void answerCorrectly() {
-        currentPlayer.addCoin();
-        publish(new PlayerAnsweredCorrectlyEvent(currentPlayer, turn),
-                new CoinAddedToPlayerEvent(currentPlayer, turn)
-        );
-    }
-
-    private void answerIncorrectly() {
-        publish(new PlayerAnsweredIncorrectlyEvent(currentPlayer, turn));
-    }
-
-    private void goToPenaltyBox() {
-        currentPlayer.goToPenaltyBox();
-        publish(new PlayerSentToPenaltyBoxEvent(currentPlayer, turn));
-    }
-
-
-    private boolean hasCurrentPlayerWon() {
-        return (currentPlayer.getCoinCount() == 6);
-    }
-
 }

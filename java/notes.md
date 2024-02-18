@@ -1,7 +1,6 @@
 # sprint
-- refacto event-driven
-- feature #2
 - feature #3
+- refacto factory de question initialization strategy et voir si je peux faire des trucs avec les sealed classes
 
 # backlog
 - property-based testing pour vérifier qu'il n'y a pas de joueurs avec un même nom
