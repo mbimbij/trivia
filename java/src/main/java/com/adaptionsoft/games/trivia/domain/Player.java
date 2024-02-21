@@ -6,18 +6,25 @@ import lombok.*;
 
 import java.util.Random;
 
+import static lombok.AccessLevel.PACKAGE;
+import static lombok.AccessLevel.PUBLIC;
+
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @AllArgsConstructor
-@Getter
 public class Player extends Entity {
     @EqualsAndHashCode.Include
+    @Getter(PUBLIC)
     private final String name;
-    private final AnsweringStrategy answeringStrategy;
-    private boolean isInPenaltyBox;
     @With // for testing purposes only
+    @Getter(PUBLIC)
     private int coinCount;
+    @Getter(PUBLIC)
     private int location;
+    @Getter(PUBLIC)
     private int turn = 1;
+    private final AnsweringStrategy answeringStrategy;
+    @Getter(PACKAGE)
+    private boolean isInPenaltyBox;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
     private final Board board;
@@ -30,88 +37,25 @@ public class Player extends Entity {
         this.rand = rand;
     }
 
-    void advanceLocation(int roll) {
-        this.location = (this.location + roll) % board.getSquaresCount();
-    }
-
-    void addCoin() {
-        coinCount++;
-    }
-
-    void goToPenaltyBox() {
-        isInPenaltyBox = true;
-    }
-
-    void answerCorrectly() {
-        if (isOnACorrectAnswersStreak()) {
-            addCoin();
-        }
-
-        addCoin();
-        raise(new PlayerAnsweredCorrectlyEvent(this),
-                new CoinAddedToPlayerEvent(this)
-        );
-        consecutiveCorrectAnswersCount++;
-    }
-
-    void answerIncorrectly() {
-        raise(new PlayerAnsweredIncorrectlyEvent(this));
-        if (!isOnACorrectAnswersStreak()) {
-            goToPenaltyBox();
-            raise(new PlayerSentToPenaltyBoxEvent(this));
-        }
-        consecutiveCorrectAnswersCount = 0;
-    }
-
     void incrementTurn() {
         turn++;
-    }
-
-    boolean isOnACorrectAnswersStreak() {
-        return consecutiveCorrectAnswersCount >= 3;
-    }
-
-    void drawQuestion() {
-        String question = board.drawQuestion(location);
-        raise(new QuestionAskedToPlayerEvent(this, question));
     }
 
     boolean isWinning() {
         return (coinCount >= 12);
     }
 
-    boolean isAnsweringCorrectly() {
-        return answeringStrategy.isAnsweringCorrectly();
-    }
-
-    void answerQuestion() {
-        if (isAnsweringCorrectly()) {
-            answerCorrectly();
+    void playTurn() {
+        raise(new PlayerTurnStartedEvent(this));
+        int roll = rollDice();
+        if (isInPenaltyBox) {
+            playTurnFromPenaltyBox(roll);
         } else {
-            answerIncorrectly();
+            playRegularTurn(roll);
         }
     }
 
-    int rollDice() {
-        int roll = rand.nextInt(5) + 1;
-        raise(new PlayerRolledDiceEvent(this, roll));
-        return roll;
-    }
-
-    void advancePlayerLocation(int roll) {
-        advanceLocation(roll);
-        QuestionCategory questionCategory = board.getQuestionCategory(getLocation());
-        raise(new PlayerChangedLocationEvent(this,
-                questionCategory));
-    }
-
-    void playRegularTurn(int roll) {
-        advancePlayerLocation(roll);
-        drawQuestion();
-        answerQuestion();
-    }
-
-    void playTurnFromPenaltyBox(int roll) {
+    private void playTurnFromPenaltyBox(int roll) {
         if (isPair(roll)) {
             raise(new PlayerGotOutOfPenaltyBoxEvent(this));
             playRegularTurn(roll);
@@ -120,18 +64,81 @@ public class Player extends Entity {
         }
     }
 
+    private int rollDice() {
+        int roll = rand.nextInt(5) + 1;
+        raise(new PlayerRolledDiceEvent(this, roll));
+        return roll;
+    }
 
     private boolean isPair(int roll) {
         return roll % 2 != 0;
     }
 
-    void playTurn() {
-        raise(new PlayerTurnStartedEvent(this));
-        int roll = rollDice();
-        if (isInPenaltyBox()) {
-            playTurnFromPenaltyBox(roll);
+    private void playRegularTurn(int roll) {
+        advancePlayerLocation(roll);
+        drawQuestion();
+        if (answeringStrategy.isAnsweringCorrectly()) {
+            answerCorrectly();
         } else {
-            playRegularTurn(roll);
+            answerIncorrectly();
         }
+    }
+
+    private void advancePlayerLocation(int roll) {
+        updateLocation(roll);
+        PlayerChangedLocationEvent event = new PlayerChangedLocationEvent(this,
+                board.getQuestionCategory(getLocation()));
+        raise(event);
+    }
+
+    private void updateLocation(int roll) {
+        this.location = (this.location + roll) % board.getSquaresCount();
+    }
+
+    private void drawQuestion() {
+        String question = board.drawQuestion(location);
+        raise(new QuestionAskedToPlayerEvent(this, question));
+    }
+
+    /**
+     * Used externally by tests ONLY
+     */
+    void answerCorrectly() {
+        if (isOnAStreak()) {
+            addCoin();
+        }
+
+        addCoin();
+        consecutiveCorrectAnswersCount++;
+        raise(new PlayerAnsweredCorrectlyEvent(this),
+                new CoinAddedToPlayerEvent(this)
+        );
+    }
+
+    /**
+     * Used externally by tests ONLY
+     */
+    boolean isOnAStreak() {
+        return consecutiveCorrectAnswersCount >= 3;
+    }
+
+    private void addCoin() {
+        coinCount++;
+    }
+
+    /**
+     * Used externally by tests ONLY
+     */
+    void answerIncorrectly() {
+        raise(new PlayerAnsweredIncorrectlyEvent(this));
+        if (!isOnAStreak()) {
+            goToPenaltyBox();
+        }
+        consecutiveCorrectAnswersCount = 0;
+    }
+
+    private void goToPenaltyBox() {
+        isInPenaltyBox = true;
+        raise(new PlayerSentToPenaltyBoxEvent(this));
     }
 }
