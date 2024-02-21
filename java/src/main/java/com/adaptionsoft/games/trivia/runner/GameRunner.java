@@ -1,10 +1,10 @@
 
 package com.adaptionsoft.games.trivia.runner;
 
-import com.adaptionsoft.games.uglytrivia.Game;
-import com.adaptionsoft.games.uglytrivia.GameFactory;
-import com.adaptionsoft.games.uglytrivia.PlayersFactory;
-import com.adaptionsoft.games.uglytrivia.event.MockEventPublisher;
+import com.adaptionsoft.games.trivia.domain.Game;
+import com.adaptionsoft.games.trivia.domain.GameFactory;
+import com.adaptionsoft.games.trivia.domain.PlayersFactory;
+import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
 
 
 public class GameRunner {
