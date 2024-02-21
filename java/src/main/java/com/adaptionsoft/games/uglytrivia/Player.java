@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
@@ -18,22 +19,22 @@ public class Player {
     @With // for testing purposes only
     private int coinCount;
     private int location;
-    private final EventPublisher eventPublisher;
     private final List<Event> uncommittedEvents = new ArrayList<>();
     private int turn = 1;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
     private final Board board;
+    private final Random rand;
 
-    public Player(String name, AnsweringStrategy answeringStrategy, EventPublisher eventPublisher, Board board) {
+    public Player(String name, AnsweringStrategy answeringStrategy, Board board, Random rand) {
         this.name = name;
         this.answeringStrategy = answeringStrategy;
-        this.eventPublisher = eventPublisher;
         this.board = board;
+        this.rand = rand;
     }
 
     public void advanceLocation(int roll) {
-        this.location = (this.location + roll) % 12;
+        this.location = (this.location + roll) % board.getSquaresCount();
     }
 
     public void addCoin() {
@@ -51,22 +52,22 @@ public class Player {
         }
 
         addCoin();
-        publish(new PlayerAnsweredCorrectlyEvent(this),
+        raise(new PlayerAnsweredCorrectlyEvent(this),
                 new CoinAddedToPlayerEvent(this)
         );
         consecutiveCorrectAnswersCount++;
     }
 
     void answerIncorrectly() {
-        publish(new PlayerAnsweredIncorrectlyEvent(this));
+        raise(new PlayerAnsweredIncorrectlyEvent(this));
         if(!isOnACorrectAnswersStreak()){
             goToPenaltyBox();
-            publish(new PlayerSentToPenaltyBoxEvent(this));
+            raise(new PlayerSentToPenaltyBoxEvent(this));
         }
         consecutiveCorrectAnswersCount = 0;
     }
 
-    private void publish(Event... events) {
+    private void raise(Event... events) {
         uncommittedEvents.addAll(Arrays.asList(events));
     }
 
@@ -81,7 +82,7 @@ public class Player {
 
     void drawQuestion() {
         String question = board.drawQuestion(location);
-        publish(new QuestionAskedToPlayerEvent(this, question));
+        raise(new QuestionAskedToPlayerEvent(this, question));
     }
 
     boolean isWinning() {
@@ -100,9 +101,15 @@ public class Player {
         }
     }
 
-    public List<Event> getUncommittedEventsAndClear() {
+    List<Event> getUncommittedEventsAndClear() {
         List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
         uncommittedEvents.clear();
         return eventsCopy;
+    }
+
+    int rollDice() {
+        int roll = rand.nextInt(5) + 1;
+        raise(new PlayerRolledDiceEvent(this, roll));
+        return roll;
     }
 }

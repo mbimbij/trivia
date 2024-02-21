@@ -2,6 +2,12 @@ package com.adaptionsoft.games.uglytrivia;
 
 public class Board {
 
+    private final int squaresCount;
+
+    public Board(int squaresCount) {
+        this.squaresCount = squaresCount;
+    }
+
     String drawQuestion(int playerLocation) {
         return getQuestionCategory(playerLocation).drawCard();
     }
@@ -11,4 +17,7 @@ public class Board {
         return QuestionCategory.values()[playerLocation % categoriesCount];
     }
 
+    int getSquaresCount() {
+        return squaresCount;
+    }
 }

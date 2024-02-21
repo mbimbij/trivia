@@ -118,18 +118,17 @@ class GameTest {
         String playerName2 = "player2";
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
         MockEventPublisher mockEventPublisher = eventPublisher;
-        Board board = new Board();
-        Player player1 = new Player(playerName1, randomAnsweringStrategy, mockEventPublisher, board);
-        Player player2 = new Player(playerName2, randomAnsweringStrategy, mockEventPublisher, board);
+        Board board = new Board(12);
+        Player player1 = new Player(playerName1, randomAnsweringStrategy, board, null);
+        Player player2 = new Player(playerName2, randomAnsweringStrategy, board, null);
         mockEventPublisher.register(new EventConsoleLogger());
         Players players = new Players(mockEventPublisher, player1, player2);
 
         // WHEN
-        new Game(rand, board, players, mockEventPublisher);
+        new Game(board, players, mockEventPublisher);
 
         // THEN no domain events are produced
-        List<Event> events = mockEventPublisher.getEvents();
-        assertThat(events).isEmpty();
+        assertThat(mockEventPublisher.getEvents()).isEmpty();
     }
 
     @Test
@@ -140,14 +139,12 @@ class GameTest {
         String playerName2 = "player2";
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
         MockEventPublisher mockEventPublisher = eventPublisher;
-        Board board = new Board();
-        Player player1 = new Player(playerName1, randomAnsweringStrategy, mockEventPublisher, board);
-        Player player2 = new Player(playerName2, randomAnsweringStrategy, mockEventPublisher, board);
-        mockEventPublisher.register(new EventConsoleLogger());
-        Players players = new Players(mockEventPublisher, player1, player2);
+        Board board = new Board(12);
+        Player player1 = new Player(playerName1, randomAnsweringStrategy, board, null);
+        Player player2 = new Player(playerName2, randomAnsweringStrategy, board, null);
 
         // WHEN
-        Game game = gameFactory.create(rand, playerName1, playerName2);
+        gameFactory.create(rand, playerName1, playerName2);
 
         // THEN the domain events are produced in the correct order
         List<Event> events = mockEventPublisher.getEvents();

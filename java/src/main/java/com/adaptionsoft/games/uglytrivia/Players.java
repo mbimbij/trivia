@@ -33,11 +33,11 @@ public class Players {
         Arrays.stream(players).forEach(player -> {
             this.players.add(player);
             PlayerAddedEvent event = new PlayerAddedEvent(player, this.players.size());
-            publish(event);
+            raise(event);
         });
     }
 
-    private void publish(Event event) {
+    private void raise(Event event) {
         uncommittedEvents.add(event);
     }
 
@@ -90,5 +90,11 @@ public class Players {
         public InvalidNumberOfPlayersException(int playersCount) {
             super("number of players must be between 2 and 6, but was: %d".formatted(playersCount));
         }
+    }
+
+    List<Event> getUncommittedEventsAndClear() {
+        List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
+        uncommittedEvents.clear();
+        return eventsCopy;
     }
 }

@@ -1,11 +1,13 @@
 # sprint
 - noter les sources d'illisibilité dans mon code, potentiellement liées à la violation de la Loi de Déméter (ou autre)
-  - df
+  - des events purement liés au `Player` sont créés et produits dans `Game`, et d'autres dans `Player` ce qui est incohérent. Où devraient-ils être créés, il ya de bonnes raisons de le faire dans l'un ou l'autre 
 - revenir au modèle de la collection interne pour stocker les events de l'aggrégat
 - refacto factory de question initialization strategy et voir si je peux faire des trucs avec les sealed classes
 
 # backlog
 - property-based testing pour vérifier qu'il n'y a pas de joueurs avec un même nom
+- où et comment produire des events liés à une inner entity ?
+- comment reconstituer un aggrégat, et particulièrement des (deep) nested entities à partir d'events ?
 
 # difficultés rencontrées
 - gestion de l'augmentation des attributs et params du constructeur de `Game`, `Players`, `Player`

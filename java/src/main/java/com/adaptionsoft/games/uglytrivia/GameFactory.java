@@ -23,24 +23,24 @@ public class GameFactory {
 
     public Game create(Random rand, String... playersNames) {
         RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
-        Board board = new Board();
+        Board board = new Board(12);
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(playersName -> new Player(playersName,
                         randomAnsweringStrategy,
-                        eventPublisher,
-                        board))
+                        board,
+                        rand))
                 .toArray(Player[]::new);
         eventPublisher.register(new EventConsoleLogger());
         Players playersWrapper = PlayersFactory.create(eventPublisher, playersArray);
         QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES).run();
 
-        Game game = new Game(rand,
+        Game game = new Game(
                 board,
                 playersWrapper,
                 eventPublisher
         );
 
-        eventPublisher.publish(new GameCreatedEvent());
+        eventPublisher.raise(new GameCreatedEvent());
         return game;
     }
 }
