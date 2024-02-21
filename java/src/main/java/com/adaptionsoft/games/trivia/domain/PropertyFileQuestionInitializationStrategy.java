@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PropertyFileQuestionInitializationStrategy implements QuestionInitializationStrategy {
+class PropertyFileQuestionInitializationStrategy implements QuestionInitializationStrategy {
     @Override
     public void run() {
         QuestionCategory.clearDeck();

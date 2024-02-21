@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.trivia.domain;
 
-public class QuestionInitializationStrategyFactory {
+class QuestionInitializationStrategyFactory {
     public enum Types{
         DUMMY,
         PROPERTIES_FILES

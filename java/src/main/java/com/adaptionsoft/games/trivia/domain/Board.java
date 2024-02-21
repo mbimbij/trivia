@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.trivia.domain;
 
-public class Board {
+class Board {
 
     private final int squaresCount;
 

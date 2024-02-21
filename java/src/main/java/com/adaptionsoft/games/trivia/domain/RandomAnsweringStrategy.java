@@ -2,7 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import java.util.Random;
 
-public class RandomAnsweringStrategy implements AnsweringStrategy {
+class RandomAnsweringStrategy implements AnsweringStrategy {
     private final Random rand;
 
 
