@@ -25,7 +25,7 @@ class GameTest {
 
     private static final PrintStream stdout = System.out;
     private final MockEventPublisher eventPublisher = new MockEventPublisher();
-    private final GameFactory gameFactory = new GameFactory(eventPublisher);
+    private final GameFactory gameFactory = new GameFactory(eventPublisher, new PlayersFactory(eventPublisher));
 
     @BeforeEach
     void setUp() {
@@ -122,10 +122,10 @@ class GameTest {
         Player player1 = new Player(playerName1, randomAnsweringStrategy, board, null);
         Player player2 = new Player(playerName2, randomAnsweringStrategy, board, null);
         mockEventPublisher.register(new EventConsoleLogger());
-        Players players = new Players(mockEventPublisher, player1, player2);
+        Players players = new Players(player1, player2);
 
         // WHEN
-        new Game(board, players, mockEventPublisher);
+        new Game(players, mockEventPublisher);
 
         // THEN no domain events are produced
         assertThat(mockEventPublisher.getEvents()).isEmpty();

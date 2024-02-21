@@ -11,18 +11,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Players {
+public class Players extends Entity {
     public static final int MIN_PLAYER_COUNT = 2;
     public static final int MAX_PLAYER_COUNT = 6;
     List<Player> players = new ArrayList<>();
     int currentPlayerIndex = 0;
-    private final EventPublisher eventPublisher;
-    @Getter
-    private final List<Event> uncommittedEvents = new ArrayList<>();
 
 
-    public Players(EventPublisher eventPublisher, Player... players) {
-        this.eventPublisher = eventPublisher;
+    public Players(Player... players) {
         if (players.length < MIN_PLAYER_COUNT || players.length > MAX_PLAYER_COUNT) {
             throw new InvalidNumberOfPlayersException(players.length);
         }
@@ -35,10 +31,6 @@ public class Players {
             PlayerAddedEvent event = new PlayerAddedEvent(player, this.players.size());
             raise(event);
         });
-    }
-
-    private void raise(Event event) {
-        uncommittedEvents.add(event);
     }
 
     private boolean findDuplicates(Player[] players) {
@@ -70,15 +62,7 @@ public class Players {
         return players.size();
     }
 
-    public Player getByName(String playerName) {
-        return players.stream().filter(p -> p.getName().equals(playerName)).findFirst().orElseThrow();
-    }
-
     public static class DuplicatePlayerNameException extends RuntimeException {
-        public DuplicatePlayerNameException(String... playersNames) {
-            super("duplicate player names in %s".formatted(Arrays.toString(playersNames)));
-        }
-
         public DuplicatePlayerNameException(Player[] players) {
             super("duplicate player names in %s".formatted(Arrays.stream(players)
                     .map(Player::getName)
@@ -90,11 +74,5 @@ public class Players {
         public InvalidNumberOfPlayersException(int playersCount) {
             super("number of players must be between 2 and 6, but was: %d".formatted(playersCount));
         }
-    }
-
-    List<Event> getUncommittedEventsAndClear() {
-        List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
-        uncommittedEvents.clear();
-        return eventsCopy;
     }
 }

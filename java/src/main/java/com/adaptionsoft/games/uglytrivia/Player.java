@@ -4,14 +4,13 @@ import com.adaptionsoft.games.uglytrivia.event.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @AllArgsConstructor
 @Getter
-public class Player {
+public class Player extends Entity {
     @EqualsAndHashCode.Include
     private final String name;
     private final AnsweringStrategy answeringStrategy;
@@ -19,7 +18,6 @@ public class Player {
     @With // for testing purposes only
     private int coinCount;
     private int location;
-    private final List<Event> uncommittedEvents = new ArrayList<>();
     private int turn = 1;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
@@ -33,16 +31,15 @@ public class Player {
         this.rand = rand;
     }
 
-    public void advanceLocation(int roll) {
+    void advanceLocation(int roll) {
         this.location = (this.location + roll) % board.getSquaresCount();
     }
 
-    public void addCoin() {
+    void addCoin() {
         coinCount++;
     }
 
-
-    public void goToPenaltyBox() {
+    void goToPenaltyBox() {
         isInPenaltyBox = true;
     }
 
@@ -60,23 +57,18 @@ public class Player {
 
     void answerIncorrectly() {
         raise(new PlayerAnsweredIncorrectlyEvent(this));
-        if(!isOnACorrectAnswersStreak()){
+        if (!isOnACorrectAnswersStreak()) {
             goToPenaltyBox();
             raise(new PlayerSentToPenaltyBoxEvent(this));
         }
         consecutiveCorrectAnswersCount = 0;
     }
 
-    private void raise(Event... events) {
-        uncommittedEvents.addAll(Arrays.asList(events));
-    }
-
-    public void incrementTurn() {
+    void incrementTurn() {
         turn++;
     }
 
-
-    public boolean isOnACorrectAnswersStreak() {
+    boolean isOnACorrectAnswersStreak() {
         return consecutiveCorrectAnswersCount >= 3;
     }
 
@@ -101,15 +93,46 @@ public class Player {
         }
     }
 
-    List<Event> getUncommittedEventsAndClear() {
-        List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
-        uncommittedEvents.clear();
-        return eventsCopy;
-    }
-
     int rollDice() {
         int roll = rand.nextInt(5) + 1;
         raise(new PlayerRolledDiceEvent(this, roll));
         return roll;
+    }
+
+    void advancePlayerLocation(int roll) {
+        advanceLocation(roll);
+        QuestionCategory questionCategory = board.getQuestionCategory(getLocation());
+        raise(new PlayerChangedLocationEvent(this,
+                questionCategory));
+    }
+
+    void playRegularTurn(int roll) {
+        advancePlayerLocation(roll);
+        drawQuestion();
+        answerQuestion();
+    }
+
+    void playTurnFromPenaltyBox(int roll) {
+        if (isPair(roll)) {
+            raise(new PlayerGotOutOfPenaltyBoxEvent(this));
+            playRegularTurn(roll);
+        } else {
+            raise(new PlayerStayedInPenaltyBoxEvent(this));
+        }
+    }
+
+
+    private boolean isPair(int roll) {
+        return roll % 2 != 0;
+    }
+
+    void playTurn() {
+        raise(new PlayerTurnStartedEvent(this));
+        int roll = rollDice();
+        if (isInPenaltyBox()) {
+            playTurnFromPenaltyBox(roll);
+        } else {
+            playRegularTurn(roll);
+        }
     }
 }

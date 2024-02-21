@@ -4,9 +4,15 @@ import com.adaptionsoft.games.uglytrivia.event.EventPublisher;
 
 public class PlayersFactory {
 
-    public static Players create(EventPublisher eventPublisher, Player... playersArray) {
-        Players players = new Players(eventPublisher, playersArray);
-        players.getUncommittedEvents().forEach(eventPublisher::raise);
+    private final EventPublisher eventPublisher;
+
+    public PlayersFactory(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+    }
+
+    public Players create(Player... playersArray) {
+        Players players = new Players(playersArray);
+        eventPublisher.raise(players.getUncommittedEventsAndClear());
         return players;
     }
 }
