@@ -13,11 +13,8 @@ public class GameFactory {
 
     private final EventPublisher eventPublisher;
 
-    private final PlayersFactory playersFactory;
-
-    public GameFactory(EventPublisher eventPublisher, PlayersFactory playersFactory) {
+    public GameFactory(EventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
-        this.playersFactory = playersFactory;
     }
 
     public Game create(String... playersNames) {
@@ -34,11 +31,12 @@ public class GameFactory {
                         rand))
                 .toArray(Player[]::new);
         eventPublisher.register(new EventConsoleLogger());
-        Players playersWrapper = playersFactory.create(playersArray);
+        Players players = new Players(playersArray);
+        eventPublisher.raise(players.getAndClearUncommittedEvents());
         QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES).run();
 
         Game game = new Game(
-                playersWrapper,
+                players,
                 eventPublisher
         );
 

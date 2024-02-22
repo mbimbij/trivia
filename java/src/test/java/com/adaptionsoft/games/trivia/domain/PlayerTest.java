@@ -2,8 +2,13 @@ package com.adaptionsoft.games.trivia.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.util.Random;
+
+import static com.adaptionsoft.games.trivia.domain.QuestionInitializationStrategyFactory.Types.DUMMY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 class PlayerTest {
 
@@ -68,18 +73,6 @@ class PlayerTest {
     }
 
     @Test
-    void should_go_to_penalty_box__when_incorrect_answer__given_no_streak() {
-        // GIVEN a player NOT on a winning streak
-        assertThat(player.isOnAStreak()).isFalse();
-
-        // WHEN
-        player.answerIncorrectly();
-
-        // THEN
-        assertThat(player.isInPenaltyBox()).isTrue();
-    }
-
-    @Test
     void should_win_after_collecting_12_coins() {
         assertThat(player.withCoinCount(6).isWinning()).isFalse();
         assertThat(player.withCoinCount(10).isWinning()).isFalse();
@@ -87,4 +80,71 @@ class PlayerTest {
         assertThat(player.withCoinCount(20).isWinning()).isTrue();
     }
 
+    @Test
+    void should_go_to_penalty_box_only_after_2_consecutive_wrong_answers() {
+        // WHEN 1st incorrect answer
+        player.answerIncorrectly();
+
+        // THEN not in penalty box
+        assertThat(player.isInPenaltyBox()).isFalse();
+
+        // WHEN 2nd incorrect answer
+        player.answerIncorrectly();
+
+        // THEN not in penalty box
+        assertThat(player.isInPenaltyBox()).isTrue();
+    }
+
+    @Test
+    void should_not_go_to_penalty_box_after_1_wrong_answer_followed_by_correct_answer() {
+        // WHEN 1st incorrect answer
+        player.answerIncorrectly();
+
+        // THEN not in penalty box
+        assertThat(player.isInPenaltyBox()).isFalse();
+
+        // WHEN 2nd incorrect answer
+        player.answerCorrectly();
+
+        // THEN not in penalty box
+        assertThat(player.isInPenaltyBox()).isFalse();
+    }
+
+    @Test
+    void should_ask_2_questions__when_incorrect_answers() {
+        // GIVEN
+        AnsweringStrategy answeringStrategy = mock(AnsweringStrategy.class);
+        when(answeringStrategy.isAnsweringCorrectly())
+                .thenReturn(false);
+        Player spiedPlayer = Mockito.spy(new Player("name",
+                answeringStrategy,
+                new Board(12),
+                new Random()));
+        QuestionInitializationStrategyFactory.getInstance(DUMMY).run();
+
+        // WHEN
+        spiedPlayer.playTurn();
+
+        // THEN
+        verify(spiedPlayer, times(2)).drawQuestion();
+    }
+
+    @Test
+    void should_ask_only_1_question__when_correct_answer() {
+        // GIVEN
+        AnsweringStrategy answeringStrategy = mock(AnsweringStrategy.class);
+        when(answeringStrategy.isAnsweringCorrectly())
+                .thenReturn(true);
+        Player spiedPlayer = Mockito.spy(new Player("name",
+                answeringStrategy,
+                new Board(12),
+                new Random()));
+        QuestionInitializationStrategyFactory.getInstance(DUMMY).run();
+
+        // WHEN
+        spiedPlayer.askQuestion();
+
+        // THEN
+        verify(spiedPlayer).drawQuestion();
+    }
 }

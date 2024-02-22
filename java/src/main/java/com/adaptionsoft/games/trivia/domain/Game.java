@@ -42,7 +42,7 @@ public class Game extends Entity {
     }
 
     private void publishDomainEvents() {
-        eventPublisher.raise(getUncommittedEventsAndClear());
-        eventPublisher.raise(currentPlayer.getUncommittedEventsAndClear());
+        eventPublisher.raise(getAndClearUncommittedEvents());
+        eventPublisher.raise(currentPlayer.getAndClearUncommittedEvents());
     }
 }

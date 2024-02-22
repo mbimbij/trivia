@@ -5,11 +5,6 @@ import java.util.Random;
 class RandomAnsweringStrategy implements AnsweringStrategy {
     private final Random rand;
 
-
-    public RandomAnsweringStrategy() {
-        this.rand = new Random();
-    }
-
     public RandomAnsweringStrategy(Random rand) {
         this.rand = rand;
     }

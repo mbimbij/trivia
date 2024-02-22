@@ -15,7 +15,7 @@ public class Entity {
         uncommittedEvents.addAll(Arrays.asList(events));
     }
 
-    public List<Event> getUncommittedEventsAndClear() {
+    public List<Event> getAndClearUncommittedEvents() {
         List<Event> eventsCopy = new ArrayList<>(uncommittedEvents);
         uncommittedEvents.clear();
         return eventsCopy;

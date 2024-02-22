@@ -15,6 +15,7 @@ public class Player extends Entity {
     @EqualsAndHashCode.Include
     @Getter(PUBLIC)
     private final String name;
+    private final int MAX_CONSECUTIVE_INCORRECT_QUESTIONS_ALLOWED = 2;
     @With // for testing purposes only
     @Getter(PUBLIC)
     private int coinCount;
@@ -22,11 +23,12 @@ public class Player extends Entity {
     private int location;
     @Getter(PUBLIC)
     private int turn = 1;
-    private final AnsweringStrategy answeringStrategy;
+    private AnsweringStrategy answeringStrategy;
     @Getter(PACKAGE)
     private boolean isInPenaltyBox;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
+    private int consecutiveIncorrectAnswersCount;
     private final Board board;
     private final Random rand;
 
@@ -76,14 +78,8 @@ public class Player extends Entity {
 
     private void playRegularTurn(int roll) {
         advancePlayerLocation(roll);
-        drawQuestion();
-        if (answeringStrategy.isAnsweringCorrectly()) {
-            answerCorrectly();
-        } else {
-            answerIncorrectly();
-        }
+        askQuestion();
     }
-
     private void advancePlayerLocation(int roll) {
         updateLocation(roll);
         PlayerChangedLocationEvent event = new PlayerChangedLocationEvent(this,
@@ -95,7 +91,36 @@ public class Player extends Entity {
         this.location = (this.location + roll) % board.getSquaresCount();
     }
 
-    private void drawQuestion() {
+    /**
+     * Used externally by tests ONLY
+     */
+    void askQuestion() {
+        boolean isAnswerCorrect;
+        do {
+            isAnswerCorrect = doAskQuestion();
+        } while (!isAnswerCorrect && canContinueAfterIncorrectAnswer());
+    }
+
+    private boolean canContinueAfterIncorrectAnswer() {
+        return consecutiveIncorrectAnswersCount < MAX_CONSECUTIVE_INCORRECT_QUESTIONS_ALLOWED;
+    }
+
+    private boolean doAskQuestion() {
+        drawQuestion();
+        boolean isAnswerCorrect = false;
+        if (answeringStrategy.isAnsweringCorrectly()) {
+            answerCorrectly();
+            isAnswerCorrect = true;
+        } else {
+            answerIncorrectly();
+        }
+        return isAnswerCorrect;
+    }
+
+    /**
+     * Used externally by tests ONLY
+     */
+    void drawQuestion() {
         String question = board.drawQuestion(location);
         raise(new QuestionAskedToPlayerEvent(this, question));
     }
@@ -131,7 +156,8 @@ public class Player extends Entity {
      */
     void answerIncorrectly() {
         raise(new PlayerAnsweredIncorrectlyEvent(this));
-        if (!isOnAStreak()) {
+        consecutiveIncorrectAnswersCount++;
+        if (consecutiveIncorrectAnswersCount >= 2) {
             goToPenaltyBox();
         }
         consecutiveCorrectAnswersCount = 0;
