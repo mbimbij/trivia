@@ -22,11 +22,12 @@ public class GameFactory {
 
     public Game create(Random rand, String... playersNames) {
         Questions questions = buildQuestions();
-        Board board = new Board(12, questions);
+        int squaresCount = 12;
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(playersName -> new Player(playersName,
-                        board,
-                        rand))
+                        questions,
+                        rand,
+                        squaresCount))
                 .toArray(Player[]::new);
         eventPublisher.register(new EventConsoleLogger());
         Players players = new Players(playersArray);

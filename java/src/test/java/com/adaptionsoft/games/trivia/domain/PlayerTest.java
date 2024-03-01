@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Collections;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +17,8 @@ class PlayerTest {
     void setUp() {
         player = new Player("name",
                 null,
-                null);
+                null,
+                12);
     }
 
     @Test
@@ -142,10 +142,10 @@ class PlayerTest {
     private Player getTestPlayer() {
         Questions mockQuestionsDeck = mock(Questions.class);
         doReturn("mock question").when(mockQuestionsDeck).drawQuestion(any());
-        Board board = new Board(12, mockQuestionsDeck);
         Player player = Mockito.spy(new Player("name",
-                board,
-                new Random()));
+                mockQuestionsDeck,
+                new Random(),
+                12));
         return player;
     }
 }

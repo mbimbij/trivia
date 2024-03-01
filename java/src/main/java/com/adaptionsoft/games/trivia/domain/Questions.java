@@ -37,6 +37,11 @@ public class Questions {
             return null;
         }
 
+        static Category getQuestionCategory(int playerLocation) {
+            int categoriesCount = values().length;
+            return values()[playerLocation % categoriesCount];
+        }
+
         @Override
         public String toString() {
             return value;

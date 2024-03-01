@@ -10,6 +10,7 @@ public class Game extends Entity {
     private Player currentPlayer;
     int turn = 1;
 
+
     // do not call directly, unless in a testing context
     public Game(Players players, EventPublisher eventPublisher) {
         this.players = players;
@@ -45,4 +46,5 @@ public class Game extends Entity {
         eventPublisher.raise(getAndClearUncommittedEvents());
         eventPublisher.raise(currentPlayer.getAndClearUncommittedEvents());
     }
+
 }

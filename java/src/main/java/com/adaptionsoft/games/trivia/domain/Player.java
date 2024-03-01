@@ -15,7 +15,17 @@ public class Player extends Entity {
     @EqualsAndHashCode.Include
     @Getter(PUBLIC)
     private final String name;
-    private final int MAX_CONSECUTIVE_INCORRECT_QUESTIONS_ALLOWED = 2;
+    private final Questions questions;
+    private final Random rand;
+    private final int squaresCount;
+
+    public Player(String name, Questions questions, Random rand, int squaresCount) {
+        this.name = name;
+        this.questions = questions;
+        this.rand = rand;
+        this.squaresCount = squaresCount;
+    }
+
     @With // for testing purposes only
     @Getter(PUBLIC)
     private int coinCount;
@@ -28,14 +38,6 @@ public class Player extends Entity {
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
     private int consecutiveIncorrectAnswersCount;
-    private final Board board;
-    private final Random rand;
-
-    public Player(String name, Board board, Random rand) {
-        this.name = name;
-        this.board = board;
-        this.rand = rand;
-    }
 
     void incrementTurn() {
         turn++;
@@ -81,12 +83,12 @@ public class Player extends Entity {
     private void advancePlayerLocation(int roll) {
         updateLocation(roll);
         PlayerChangedLocationEvent event = new PlayerChangedLocationEvent(this,
-                board.getQuestionCategory(getLocation()));
+                Questions.Category.getQuestionCategory(getLocation()));
         raise(event);
     }
 
     private void updateLocation(int roll) {
-        this.location = (this.location + roll) % board.getSquaresCount();
+        this.location = (this.location + roll) % squaresCount;
     }
 
     /**
@@ -100,7 +102,8 @@ public class Player extends Entity {
     }
 
     private boolean canContinueAfterIncorrectAnswer() {
-        return consecutiveIncorrectAnswersCount < MAX_CONSECUTIVE_INCORRECT_QUESTIONS_ALLOWED;
+        int maxAllowed = 2;
+        return consecutiveIncorrectAnswersCount < maxAllowed;
     }
 
     private boolean doAskQuestion() {
@@ -119,7 +122,7 @@ public class Player extends Entity {
      * Used externally by tests ONLY
      */
     void drawQuestion() {
-        String question = board.drawQuestion(location);
+        String question = drawQuestion(location);
         raise(new QuestionAskedToPlayerEvent(this, question));
     }
 
@@ -167,5 +170,10 @@ public class Player extends Entity {
     }
     boolean isAnsweringCorrectly() {
         return rand.nextInt(9) != 7;
+    }
+
+    String drawQuestion(int playerLocation) {
+        Questions.Category category = Questions.Category.getQuestionCategory(playerLocation);
+        return questions.drawQuestion(category);
     }
 }
