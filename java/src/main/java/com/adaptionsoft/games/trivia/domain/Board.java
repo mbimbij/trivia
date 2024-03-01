@@ -4,17 +4,20 @@ class Board {
 
     private final int squaresCount;
 
-    Board(int squaresCount) {
+    private final Questions questions;
+
+    Board(int squaresCount, Questions questions) {
         this.squaresCount = squaresCount;
+        this.questions = questions;
     }
 
     String drawQuestion(int playerLocation) {
-        return getQuestionCategory(playerLocation).drawCard();
+        return questions.drawQuestion(getQuestionCategory(playerLocation));
     }
 
-    QuestionCategory getQuestionCategory(int playerLocation) {
-        int categoriesCount = QuestionCategory.values().length;
-        return QuestionCategory.values()[playerLocation % categoriesCount];
+    Questions.Category getQuestionCategory(int playerLocation) {
+        int categoriesCount = Questions.Category.values().length;
+        return Questions.Category.values()[playerLocation % categoriesCount];
     }
 
     int getSquaresCount() {

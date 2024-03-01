@@ -4,14 +4,13 @@ import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
-import static com.adaptionsoft.games.trivia.domain.QuestionInitializationStrategyFactory.Types.PROPERTIES_FILES;
 
 public class GameFactory {
 
     private final EventPublisher eventPublisher;
+    private final QuestionsLoader questionsLoader = new QuestionsLoader();
 
     public GameFactory(EventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
@@ -22,7 +21,8 @@ public class GameFactory {
     }
 
     public Game create(Random rand, String... playersNames) {
-        Board board = new Board(12);
+        Questions questions = buildQuestions();
+        Board board = new Board(12, questions);
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(playersName -> new Player(playersName,
                         board,
@@ -31,7 +31,6 @@ public class GameFactory {
         eventPublisher.register(new EventConsoleLogger());
         Players players = new Players(playersArray);
         eventPublisher.raise(players.getAndClearUncommittedEvents());
-        QuestionInitializationStrategyFactory.getInstance(PROPERTIES_FILES).run();
 
         Game game = new Game(
                 players,
@@ -40,5 +39,11 @@ public class GameFactory {
 
         eventPublisher.raise(new GameCreatedEvent());
         return game;
+    }
+
+    private Questions buildQuestions() {
+        String questionsPath = "src/main/resources/questions";
+        Map<Questions.Category, Queue<String>> questionsByCategory = questionsLoader.loadQuestionsFromDirectory(questionsPath);
+        return new Questions(questionsByCategory);
     }
 }

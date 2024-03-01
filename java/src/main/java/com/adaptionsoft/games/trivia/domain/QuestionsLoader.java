@@ -6,26 +6,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class PropertyFileQuestionInitializationStrategy implements QuestionInitializationStrategy {
-    @Override
-    public void run() {
-        QuestionCategory.clearDeck();
-        Map<QuestionCategory, List<String>> questions = loadQuestionsFromDirectory("src/main/resources/questions");
-        questions.entrySet()
-                .stream()
-                .forEach(entry -> entry.getValue()
-                        .forEach(question -> entry.getKey().stackCard(question))
-                );
-    }
+class QuestionsLoader {
 
     @SneakyThrows
-    public Map<QuestionCategory, List<String>> loadQuestionsFromDirectory(String directoryPathString) {
+    public Map<Questions.Category, Queue<String>> loadQuestionsFromDirectory(String directoryPathString) {
         Path directoryPath = Paths.get(directoryPathString);
         try (Stream<Path> files = Files.list(directoryPath)) {
             return files.map(this::loadQuestionsFromFile)
@@ -34,11 +22,11 @@ class PropertyFileQuestionInitializationStrategy implements QuestionInitializati
     }
 
     @SneakyThrows
-    private Map.Entry<QuestionCategory, List<String>> loadQuestionsFromFile(Path filePath) {
+    private Map.Entry<Questions.Category, Queue<String>> loadQuestionsFromFile(Path filePath) {
         try (Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
-            List<String> questions = lines.toList();
+            Queue<String> questions = new ArrayDeque<>(lines.toList());
             String categoryName = categoryNameFromFilePath(filePath);
-            QuestionCategory questionCategory = Objects.requireNonNull(QuestionCategory.fromString(categoryName));
+            Questions.Category questionCategory = Objects.requireNonNull(Questions.Category.fromString(categoryName));
             return Map.entry(questionCategory, questions);
         }
     }

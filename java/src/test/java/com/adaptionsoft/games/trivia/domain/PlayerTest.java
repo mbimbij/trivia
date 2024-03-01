@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Collections;
 import java.util.Random;
 
-import static com.adaptionsoft.games.trivia.domain.QuestionInitializationStrategyFactory.Types.DUMMY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -112,13 +112,10 @@ class PlayerTest {
     @Test
     void should_ask_2_questions__when_incorrect_answers() {
         // GIVEN
-        Player player = Mockito.spy(new Player("name",
-                new Board(12),
-                new Random()));
+        Player player = getTestPlayer();
         doReturn(false)
                 .when(player)
                 .isAnsweringCorrectly();
-        QuestionInitializationStrategyFactory.getInstance(DUMMY).run();
 
         // WHEN
         player.playTurn();
@@ -130,18 +127,25 @@ class PlayerTest {
     @Test
     void should_ask_only_1_question__when_correct_answer() {
         // GIVEN
-        Player player = Mockito.spy(new Player("name",
-                new Board(12),
-                new Random()));
+        Player player = getTestPlayer();
         doReturn(true)
                 .when(player)
                 .isAnsweringCorrectly();
-        QuestionInitializationStrategyFactory.getInstance(DUMMY).run();
 
         // WHEN
         player.askQuestion();
 
         // THEN
         verify(player).drawQuestion();
+    }
+
+    private Player getTestPlayer() {
+        Questions mockQuestionsDeck = mock(Questions.class);
+        doReturn("mock question").when(mockQuestionsDeck).drawQuestion(any());
+        Board board = new Board(12, mockQuestionsDeck);
+        Player player = Mockito.spy(new Player("name",
+                board,
+                new Random()));
+        return player;
     }
 }
