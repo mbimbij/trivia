@@ -23,7 +23,6 @@ public class Player extends Entity {
     private int location;
     @Getter(PUBLIC)
     private int turn = 1;
-    private AnsweringStrategy answeringStrategy;
     @Getter(PACKAGE)
     private boolean isInPenaltyBox;
     @Setter // for testing purposes only
@@ -32,9 +31,8 @@ public class Player extends Entity {
     private final Board board;
     private final Random rand;
 
-    public Player(String name, AnsweringStrategy answeringStrategy, Board board, Random rand) {
+    public Player(String name, Board board, Random rand) {
         this.name = name;
-        this.answeringStrategy = answeringStrategy;
         this.board = board;
         this.rand = rand;
     }
@@ -108,7 +106,7 @@ public class Player extends Entity {
     private boolean doAskQuestion() {
         drawQuestion();
         boolean isAnswerCorrect = false;
-        if (answeringStrategy.isAnsweringCorrectly()) {
+        if (isAnsweringCorrectly()) {
             answerCorrectly();
             isAnswerCorrect = true;
         } else {
@@ -166,5 +164,8 @@ public class Player extends Entity {
     private void goToPenaltyBox() {
         isInPenaltyBox = true;
         raise(new PlayerSentToPenaltyBoxEvent(this));
+    }
+    boolean isAnsweringCorrectly() {
+        return rand.nextInt(9) != 7;
     }
 }

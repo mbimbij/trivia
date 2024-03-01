@@ -124,8 +124,8 @@ class GameTest {
         // GIVEN
         String playerName1 = "player1";
         String playerName2 = "player2";
-        Player player1 = new Player(playerName1, null, null, null);
-        Player player2 = new Player(playerName2, null, null, null);
+        Player player1 = new Player(playerName1, null, null);
+        Player player2 = new Player(playerName2, null, null);
         Players players = new Players(player1, player2);
 
         // WHEN
@@ -140,8 +140,8 @@ class GameTest {
         // GIVEN
         String playerName1 = "player1";
         String playerName2 = "player2";
-        Player player1 = new Player(playerName1, null, null, null);
-        Player player2 = new Player(playerName2, null, null, null);
+        Player player1 = new Player(playerName1, null, null);
+        Player player2 = new Player(playerName2, null, null);
 
         // WHEN
         gameFactory.create(playerName1, playerName2);

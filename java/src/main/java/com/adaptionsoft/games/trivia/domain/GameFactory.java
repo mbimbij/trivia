@@ -22,11 +22,9 @@ public class GameFactory {
     }
 
     public Game create(Random rand, String... playersNames) {
-        RandomAnsweringStrategy randomAnsweringStrategy = new RandomAnsweringStrategy(rand);
         Board board = new Board(12);
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(playersName -> new Player(playersName,
-                        randomAnsweringStrategy,
                         board,
                         rand))
                 .toArray(Player[]::new);

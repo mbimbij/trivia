@@ -18,7 +18,6 @@ class PlayerTest {
     void setUp() {
         player = new Player("name",
                 null,
-                null,
                 null);
     }
 
@@ -113,38 +112,36 @@ class PlayerTest {
     @Test
     void should_ask_2_questions__when_incorrect_answers() {
         // GIVEN
-        AnsweringStrategy answeringStrategy = mock(AnsweringStrategy.class);
-        when(answeringStrategy.isAnsweringCorrectly())
-                .thenReturn(false);
-        Player spiedPlayer = Mockito.spy(new Player("name",
-                answeringStrategy,
+        Player player = Mockito.spy(new Player("name",
                 new Board(12),
                 new Random()));
+        doReturn(false)
+                .when(player)
+                .isAnsweringCorrectly();
         QuestionInitializationStrategyFactory.getInstance(DUMMY).run();
 
         // WHEN
-        spiedPlayer.playTurn();
+        player.playTurn();
 
         // THEN
-        verify(spiedPlayer, times(2)).drawQuestion();
+        verify(player, times(2)).drawQuestion();
     }
 
     @Test
     void should_ask_only_1_question__when_correct_answer() {
         // GIVEN
-        AnsweringStrategy answeringStrategy = mock(AnsweringStrategy.class);
-        when(answeringStrategy.isAnsweringCorrectly())
-                .thenReturn(true);
-        Player spiedPlayer = Mockito.spy(new Player("name",
-                answeringStrategy,
+        Player player = Mockito.spy(new Player("name",
                 new Board(12),
                 new Random()));
+        doReturn(true)
+                .when(player)
+                .isAnsweringCorrectly();
         QuestionInitializationStrategyFactory.getInstance(DUMMY).run();
 
         // WHEN
-        spiedPlayer.askQuestion();
+        player.askQuestion();
 
         // THEN
-        verify(spiedPlayer).drawQuestion();
+        verify(player).drawQuestion();
     }
 }

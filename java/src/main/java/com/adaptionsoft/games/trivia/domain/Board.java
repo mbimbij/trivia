@@ -4,7 +4,7 @@ class Board {
 
     private final int squaresCount;
 
-    public Board(int squaresCount) {
+    Board(int squaresCount) {
         this.squaresCount = squaresCount;
     }
 
@@ -12,7 +12,7 @@ class Board {
         return getQuestionCategory(playerLocation).drawCard();
     }
 
-    public QuestionCategory getQuestionCategory(int playerLocation) {
+    QuestionCategory getQuestionCategory(int playerLocation) {
         int categoriesCount = QuestionCategory.values().length;
         return QuestionCategory.values()[playerLocation % categoriesCount];
     }
