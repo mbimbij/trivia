@@ -57,6 +57,12 @@ public class Player extends Entity {
         }
     }
 
+    private int rollDice() {
+        int roll = rand.nextInt(5) + 1;
+        raise(new PlayerRolledDiceEvent(this, roll));
+        return roll;
+    }
+
     private void playTurnFromPenaltyBox(int roll) {
         if (isPair(roll)) {
             raise(new PlayerGotOutOfPenaltyBoxEvent(this));
@@ -64,12 +70,6 @@ public class Player extends Entity {
         } else {
             raise(new PlayerStayedInPenaltyBoxEvent(this));
         }
-    }
-
-    private int rollDice() {
-        int roll = rand.nextInt(5) + 1;
-        raise(new PlayerRolledDiceEvent(this, roll));
-        return roll;
     }
 
     private boolean isPair(int roll) {
@@ -122,7 +122,8 @@ public class Player extends Entity {
      * Used externally by tests ONLY
      */
     void drawQuestion() {
-        String question = drawQuestion(location);
+        Questions.Category category = Questions.Category.getQuestionCategory(location);
+        String question = questions.drawQuestion(category);
         raise(new QuestionAskedToPlayerEvent(this, question));
     }
 
@@ -172,8 +173,4 @@ public class Player extends Entity {
         return rand.nextInt(9) != 7;
     }
 
-    String drawQuestion(int playerLocation) {
-        Questions.Category category = Questions.Category.getQuestionCategory(playerLocation);
-        return questions.drawQuestion(category);
-    }
 }
