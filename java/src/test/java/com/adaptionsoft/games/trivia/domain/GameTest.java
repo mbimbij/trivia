@@ -5,6 +5,7 @@ import com.adaptionsoft.games.trivia.domain.event.Event;
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
 import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
+import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,13 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class GameTest {
 
     private static final PrintStream stdout = System.out;
-    private final MockEventPublisher eventPublisher = new MockEventPublisher();
-    private final GameFactory gameFactory = new GameFactory(eventPublisher);
+    private MockEventPublisher eventPublisher;
+    private GameFactory gameFactory;
 
     @BeforeEach
     void setUp() {
         System.setOut(stdout);
+        eventPublisher = new MockEventPublisher();
+        eventPublisher.register(new EventConsoleLogger());
         eventPublisher.clearEvents();
+        gameFactory = new GameFactory(eventPublisher);
     }
 
     @Test

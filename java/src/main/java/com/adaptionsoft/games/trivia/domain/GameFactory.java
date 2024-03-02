@@ -23,13 +23,13 @@ public class GameFactory {
     public Game create(Random rand, String... playersNames) {
         Questions questions = buildQuestions();
         int squaresCount = 12;
+
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(playersName -> new Player(playersName,
                         questions,
                         rand,
                         squaresCount))
                 .toArray(Player[]::new);
-        eventPublisher.register(new EventConsoleLogger());
         Players players = new Players(playersArray);
         eventPublisher.raise(players.getAndClearUncommittedEvents());
 
