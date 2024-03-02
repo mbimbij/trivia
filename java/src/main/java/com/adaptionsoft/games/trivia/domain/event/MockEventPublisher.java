@@ -15,12 +15,12 @@ public class MockEventPublisher implements EventPublisher {
     private final List<EventListener> listeners = new ArrayList<>();
 
     @Override
-    public void raise(Event... events) {
-        raise(Arrays.asList(events));
+    public void publish(Event... events) {
+        publish(Arrays.asList(events));
     }
 
     @Override
-    public void raise(Collection<Event> events) {
+    public void publish(Collection<Event> events) {
         this.events.addAll(events);
         events.forEach(event ->
                 listeners.stream()

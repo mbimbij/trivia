@@ -1,13 +1,16 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
-import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 
-public class Game extends Entity {
+public class Game extends EventRaiser {
     private final EventPublisher eventPublisher;
+
     private final Players players;
     private final Questions questions;
     private final Random rand;
@@ -20,9 +23,9 @@ public class Game extends Entity {
 
 
     // do not call directly, unless in a testing context
-    public Game(Players players, EventPublisher eventPublisher, Questions questions, int squaresCount, Random rand) {
-        this.players = players;
+    public Game(EventPublisher eventPublisher, Players players, Questions questions, int squaresCount, Random rand) {
         this.eventPublisher = eventPublisher;
+        this.players = players;
         currentPlayer = players.getCurrent();
         this.questions = questions;
         this.squaresCount = squaresCount;
@@ -112,8 +115,10 @@ public class Game extends Entity {
     }
 
     private void publishDomainEvents() {
-        eventPublisher.raise(getAndClearUncommittedEvents());
-        eventPublisher.raise(currentPlayer.getAndClearUncommittedEvents());
+        List<Event> aggregatedEvents = getAndClearUncommittedEvents();
+        aggregatedEvents.addAll(currentPlayer.getAndClearUncommittedEvents());
+        aggregatedEvents.sort(Comparator.comparingInt(Event::getOrderNumber));
+        eventPublisher.publish(aggregatedEvents);
     }
 
     private boolean isPair(int roll) {

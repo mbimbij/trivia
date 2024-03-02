@@ -1,17 +1,15 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
-import com.adaptionsoft.games.trivia.microarchitecture.Entity;
+import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.*;
-
-import java.util.Random;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PUBLIC;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @AllArgsConstructor
-public class Player extends Entity {
+public class Player extends EventRaiser {
     @EqualsAndHashCode.Include
     @Getter(PUBLIC)
     private final String name;

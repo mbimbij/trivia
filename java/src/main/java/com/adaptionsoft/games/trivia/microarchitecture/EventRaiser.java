@@ -5,14 +5,21 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Entity {
-    @Getter
+@Getter
+public class EventRaiser {
+
     protected final List<Event> uncommittedEvents = new ArrayList<>();
 
     protected void raise(Event... events) {
-        uncommittedEvents.addAll(Arrays.asList(events));
+        raise(Arrays.asList(events));
+    }
+
+    protected void raise(Collection<Event> events) {
+        uncommittedEvents.addAll(events);
     }
 
     public List<Event> getAndClearUncommittedEvents() {

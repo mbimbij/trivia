@@ -27,21 +27,20 @@ public class GameFactory {
         int squaresCount = 12;
 
         Player[] playersArray = Arrays.stream(playersNames)
-                .map(playersName -> new Player(playersName
-                ))
+                .map(Player::new)
                 .toArray(Player[]::new);
         Players players = new Players(playersArray);
-        eventPublisher.raise(players.getAndClearUncommittedEvents());
+        eventPublisher.publish(players.getAndClearUncommittedEvents());
 
         Game game = new Game(
-                players,
                 eventPublisher,
+                players,
                 questions,
                 squaresCount,
                 rand
         );
 
-        eventPublisher.raise(new GameCreatedEvent());
+        eventPublisher.publish(new GameCreatedEvent());
         return game;
     }
 

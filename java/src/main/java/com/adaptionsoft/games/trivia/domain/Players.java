@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
-import com.adaptionsoft.games.trivia.microarchitecture.Entity;
+import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Players extends Entity {
+public class Players extends EventRaiser {
     public static final int MIN_PLAYER_COUNT = 2;
     public static final int MAX_PLAYER_COUNT = 6;
     List<Player> players = new ArrayList<>();

@@ -8,6 +8,8 @@ import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,8 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -136,10 +137,11 @@ class GameTest {
         Players players = new Players(player1, player2);
 
         // WHEN
-        new Game(players, eventPublisher, null, 1, null);
+        Game game = new Game(eventPublisher, players, null, 1, null);
 
         // THEN no domain events are produced
         assertThat(eventPublisher.getEvents()).isEmpty();
+        assertThat(game.getAndClearUncommittedEvents()).isEmpty();
     }
 
     @Test
@@ -155,14 +157,9 @@ class GameTest {
 
         // THEN the domain events are produced in the correct order
         List<Event> events = eventPublisher.getEvents();
-        assertThat(events)
-                .usingRecursiveComparison()
-                .asInstanceOf(InstanceOfAssertFactories.LIST)
-                .containsSubsequence(
-                        new PlayerAddedEvent(player1, 1),
-                        new PlayerAddedEvent(player2, 2),
-                        new GameCreatedEvent()
-                );
+        Assertions.assertArrayEquals(events.toArray(), new Event[]{new PlayerAddedEvent(player1, 1),
+                new PlayerAddedEvent(player2, 2),
+                new GameCreatedEvent()});
     }
 
     @Test
