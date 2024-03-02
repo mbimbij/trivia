@@ -9,6 +9,7 @@ import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.util.Random;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 class GameTest {
 
@@ -128,12 +131,12 @@ class GameTest {
         // GIVEN
         String playerName1 = "player1";
         String playerName2 = "player2";
-        Player player1 = new Player(playerName1, null, null, 12);
-        Player player2 = new Player(playerName2, null, null, 12);
+        Player player1 = new Player(playerName1);
+        Player player2 = new Player(playerName2);
         Players players = new Players(player1, player2);
 
         // WHEN
-        new Game(players, eventPublisher);
+        new Game(players, eventPublisher, null, 1, null);
 
         // THEN no domain events are produced
         assertThat(eventPublisher.getEvents()).isEmpty();
@@ -144,8 +147,8 @@ class GameTest {
         // GIVEN
         String playerName1 = "player1";
         String playerName2 = "player2";
-        Player player1 = new Player(playerName1, null, null, 12);
-        Player player2 = new Player(playerName2, null, null, 12);
+        Player player1 = new Player(playerName1);
+        Player player2 = new Player(playerName2);
 
         // WHEN
         gameFactory.create(playerName1, playerName2);
@@ -162,4 +165,22 @@ class GameTest {
                 );
     }
 
+    @Test
+    @Disabled
+    void should_ask_only_1_question__when_correct_answer() {
+//        // GIVEN
+//        String playerName1 = "player1";
+//        String playerName2 = "player2";
+//        Player player1 = new Player(playerName1);
+//        Player player2 = new Player(playerName2);
+//
+//        // WHEN
+//        Game game = gameFactory.create(playerName1, playerName2);
+//
+//        // WHEN
+//        game
+//
+//        // THEN
+//        verify(player).drawQuestion();
+    }
 }

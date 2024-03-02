@@ -11,7 +11,8 @@ public class Questions {
         this.questionsByCategory = questionsByCategory;
     }
 
-    public String drawQuestion(Category category) {
+    String drawQuestion(int playerLocation) {
+        Category category = Category.getQuestionCategory(playerLocation);
         return questionsByCategory.get(category).remove();
     }
 

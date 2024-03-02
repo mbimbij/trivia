@@ -15,21 +15,16 @@ public class Player extends Entity {
     @EqualsAndHashCode.Include
     @Getter(PUBLIC)
     private final String name;
-    private final Questions questions;
-    private final Random rand;
-    private final int squaresCount;
 
-    public Player(String name, Questions questions, Random rand, int squaresCount) {
+    public Player(String name) {
         this.name = name;
-        this.questions = questions;
-        this.rand = rand;
-        this.squaresCount = squaresCount;
     }
 
     @With // for testing purposes only
     @Getter(PUBLIC)
     private int coinCount;
     @Getter(PUBLIC)
+    @Setter
     private int location;
     @Getter(PUBLIC)
     private int turn = 1;
@@ -47,84 +42,9 @@ public class Player extends Entity {
         return (coinCount >= 12);
     }
 
-    void playTurn() {
-        raise(new PlayerTurnStartedEvent(this));
-        int roll = rollDice();
-        if (isInPenaltyBox) {
-            playTurnFromPenaltyBox(roll);
-        } else {
-            playRegularTurn(roll);
-        }
-    }
-
-    private int rollDice() {
-        int roll = rand.nextInt(5) + 1;
-        raise(new PlayerRolledDiceEvent(this, roll));
-        return roll;
-    }
-
-    private void playTurnFromPenaltyBox(int roll) {
-        if (isPair(roll)) {
-            raise(new PlayerGotOutOfPenaltyBoxEvent(this));
-            playRegularTurn(roll);
-        } else {
-            raise(new PlayerStayedInPenaltyBoxEvent(this));
-        }
-    }
-
-    private boolean isPair(int roll) {
-        return roll % 2 != 0;
-    }
-
-    private void playRegularTurn(int roll) {
-        advancePlayerLocation(roll);
-        askQuestion();
-    }
-    private void advancePlayerLocation(int roll) {
-        updateLocation(roll);
-        PlayerChangedLocationEvent event = new PlayerChangedLocationEvent(this,
-                Questions.Category.getQuestionCategory(getLocation()));
-        raise(event);
-    }
-
-    private void updateLocation(int roll) {
-        this.location = (this.location + roll) % squaresCount;
-    }
-
-    /**
-     * Used externally by tests ONLY
-     */
-    void askQuestion() {
-        boolean isAnswerCorrect;
-        do {
-            isAnswerCorrect = doAskQuestion();
-        } while (!isAnswerCorrect && canContinueAfterIncorrectAnswer());
-    }
-
-    private boolean canContinueAfterIncorrectAnswer() {
+    boolean canContinueAfterIncorrectAnswer() {
         int maxAllowed = 2;
         return consecutiveIncorrectAnswersCount < maxAllowed;
-    }
-
-    private boolean doAskQuestion() {
-        drawQuestion();
-        boolean isAnswerCorrect = false;
-        if (isAnsweringCorrectly()) {
-            answerCorrectly();
-            isAnswerCorrect = true;
-        } else {
-            answerIncorrectly();
-        }
-        return isAnswerCorrect;
-    }
-
-    /**
-     * Used externally by tests ONLY
-     */
-    void drawQuestion() {
-        Questions.Category category = Questions.Category.getQuestionCategory(location);
-        String question = questions.drawQuestion(category);
-        raise(new QuestionAskedToPlayerEvent(this, question));
     }
 
     /**
@@ -169,8 +89,10 @@ public class Player extends Entity {
         isInPenaltyBox = true;
         raise(new PlayerSentToPenaltyBoxEvent(this));
     }
-    boolean isAnsweringCorrectly() {
-        return rand.nextInt(9) != 7;
-    }
 
+    void updateLocation(int newLocation) {
+        setLocation(newLocation);
+        Questions.Category category = Questions.Category.getQuestionCategory(getLocation());
+        raise(new PlayerChangedLocationEvent(this,category));
+    }
 }

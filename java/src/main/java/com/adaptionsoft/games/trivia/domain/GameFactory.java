@@ -1,10 +1,12 @@
 package com.adaptionsoft.games.trivia.domain;
 
-import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
-import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Random;
 
 
 public class GameFactory {
@@ -25,17 +27,18 @@ public class GameFactory {
         int squaresCount = 12;
 
         Player[] playersArray = Arrays.stream(playersNames)
-                .map(playersName -> new Player(playersName,
-                        questions,
-                        rand,
-                        squaresCount))
+                .map(playersName -> new Player(playersName
+                ))
                 .toArray(Player[]::new);
         Players players = new Players(playersArray);
         eventPublisher.raise(players.getAndClearUncommittedEvents());
 
         Game game = new Game(
                 players,
-                eventPublisher
+                eventPublisher,
+                questions,
+                squaresCount,
+                rand
         );
 
         eventPublisher.raise(new GameCreatedEvent());
