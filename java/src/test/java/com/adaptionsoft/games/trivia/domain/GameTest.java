@@ -9,7 +9,6 @@ import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,9 +21,8 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GameTest {
 
@@ -160,22 +158,4 @@ class GameTest {
                 new GameCreatedEvent()});
     }
 
-    @Test
-    @Disabled
-    void should_ask_only_1_question__when_correct_answer() {
-//        // GIVEN
-//        String playerName1 = "player1";
-//        String playerName2 = "player2";
-//        Player player1 = new Player(playerName1);
-//        Player player2 = new Player(playerName2);
-//
-//        // WHEN
-//        Game game = gameFactory.create(playerName1, playerName2);
-//
-//        // WHEN
-//        game
-//
-//        // THEN
-//        verify(player).drawQuestion();
-    }
 }

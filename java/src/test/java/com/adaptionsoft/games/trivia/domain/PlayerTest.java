@@ -105,32 +105,4 @@ class PlayerTest {
         // THEN not in penalty box
         assertThat(player.isInPenaltyBox()).isFalse();
     }
-
-    @Test
-    @Disabled
-    void should_ask_2_questions__when_incorrect_answers() {
-//        // GIVEN
-//        Player player = getTestPlayer();
-//        doReturn(false)
-//                .when(player)
-//                .isAnsweringCorrectly();
-//
-//        // WHEN
-//        player.raise(new PlayerTurnStartedEvent(player));
-//        int roll = player.rollDice();
-//        if (player.isInPenaltyBox) {
-//            player.playTurnFromPenaltyBox(roll);
-//        } else {
-//            player.playRegularTurn(roll);
-//        }
-//
-//        // THEN
-//        verify(player, times(2)).drawQuestion();
-    }
-
-    private Player getTestPlayer() {
-//        Questions mockQuestionsDeck = mock(Questions.class);
-//        doReturn("mock question").when(mockQuestionsDeck).drawQuestion(any());
-        return Mockito.spy(new Player("name"));
-    }
 }
