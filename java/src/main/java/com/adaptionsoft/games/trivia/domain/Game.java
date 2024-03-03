@@ -15,7 +15,7 @@ public class Game extends EventRaiser {
     private final Questions questions;
     private final Random rand;
 
-    private final int squaresCount;
+    private final Board board;
 
     private Player currentPlayer;
     private boolean isGameInProgress = true;
@@ -23,13 +23,17 @@ public class Game extends EventRaiser {
 
 
     // do not call directly, unless in a testing context
-    public Game(EventPublisher eventPublisher, Players players, Questions questions, int squaresCount, Random rand) {
+    public Game(EventPublisher eventPublisher, Players players, Questions questions, Random rand, Board board) {
         this.eventPublisher = eventPublisher;
         this.players = players;
         currentPlayer = players.getCurrent();
         this.questions = questions;
-        this.squaresCount = squaresCount;
+        this.board = board;
         this.rand = rand;
+    }
+
+    private int getSquaresCount() {
+        return board.getSquaresCount();
     }
 
     public void play() {
@@ -100,8 +104,9 @@ public class Game extends EventRaiser {
         raise(new QuestionAskedToPlayerEvent(currentPlayer, question));
     }
 
+
     private int computeNewPlayerLocation(int roll) {
-        return (currentPlayer.getLocation() + roll) % squaresCount;
+        return (currentPlayer.getLocation() + roll) % board.getSquaresCount();
     }
 
     private void endGameIfCurrentPlayerWon() {

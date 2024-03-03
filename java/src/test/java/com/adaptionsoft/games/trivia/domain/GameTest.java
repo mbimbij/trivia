@@ -7,8 +7,6 @@ import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
-import org.assertj.core.api.InstanceOfAssertFactories;
-import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -137,7 +135,7 @@ class GameTest {
         Players players = new Players(player1, player2);
 
         // WHEN
-        Game game = new Game(eventPublisher, players, null, 1, null);
+        Game game = new Game(eventPublisher, players, null, null, null);
 
         // THEN no domain events are produced
         assertThat(eventPublisher.getEvents()).isEmpty();
