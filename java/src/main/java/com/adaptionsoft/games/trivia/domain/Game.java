@@ -40,7 +40,7 @@ public class Game extends EventRaiser {
         } while (isGameInProgress);
     }
 
-    public void performGameTurn() {
+    private void performGameTurn() {
         playerTurnOrchestrator.performTurn(currentPlayer);
         endGameIfCurrentPlayerWon();
         publishDomainEvents();

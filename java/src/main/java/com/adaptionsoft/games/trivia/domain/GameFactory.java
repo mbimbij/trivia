@@ -12,10 +12,11 @@ import java.util.Random;
 public class GameFactory {
 
     private final EventPublisher eventPublisher;
-    private final QuestionsLoader questionsLoader = new QuestionsLoader();
+    private final QuestionsLoader questionsLoader;
 
-    public GameFactory(EventPublisher eventPublisher) {
+    public GameFactory(EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
         this.eventPublisher = eventPublisher;
+        this.questionsLoader = questionsLoader;
     }
 
     public Game create(String... playersNames) {

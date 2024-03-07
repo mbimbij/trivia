@@ -1,0 +1,12 @@
+{
+  "id": 123,
+  "name": "ma partie de Trivia",
+  "state": "created",
+  "players": [
+    {"id": 1, "name": "joueur1"}
+  ],
+  "links": {
+    "start": "POST /game/123/start",
+    "delete": "POST /game/123/delete"
+  }
+}

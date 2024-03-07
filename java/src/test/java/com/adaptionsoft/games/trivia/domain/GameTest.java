@@ -36,7 +36,7 @@ class GameTest {
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         eventPublisher.clearEvents();
-        gameFactory = new GameFactory(eventPublisher);
+        gameFactory = new GameFactory(eventPublisher, new QuestionsLoader());
     }
 
     @Test

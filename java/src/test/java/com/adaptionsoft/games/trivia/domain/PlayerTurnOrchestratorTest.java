@@ -3,7 +3,6 @@ package com.adaptionsoft.games.trivia.domain;
 import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

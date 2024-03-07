@@ -1,0 +1,16 @@
+[
+  {
+    "id": 123,
+    "name": "game name / title",
+    "state": "created",
+    "players": [
+      {"id": 1, "name": "Chet"},
+      {"id": 2, "name": "Pat"}
+    ],
+    "links": {
+      "join": "POST /game/123/join",
+      "watch": "POST /game/123/watch"
+    }
+  },
+  {}
+]

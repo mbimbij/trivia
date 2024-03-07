@@ -2,7 +2,6 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
-import lombok.Setter;
 
 import java.util.Random;
 
@@ -10,7 +9,6 @@ public class PlayerTurnOrchestrator extends EventRaiser {
     private final Questions questions;
     private final Random rand;
     private final Board board;
-    @Setter
     private Player currentPlayer;
 
     public PlayerTurnOrchestrator(Questions questions, Random rand, Board board) {
@@ -58,7 +56,8 @@ public class PlayerTurnOrchestrator extends EventRaiser {
     }
 
     boolean doAskQuestion() {
-        drawQuestion();
+        String question = questions.drawQuestion(currentPlayer.getLocation());
+        raise(new QuestionAskedToPlayerEvent(currentPlayer, question));
         if (isAnsweringCorrectly()) {
             currentPlayer.answerCorrectly();
             return true;
@@ -66,11 +65,6 @@ public class PlayerTurnOrchestrator extends EventRaiser {
             currentPlayer.answerIncorrectly();
             return false;
         }
-    }
-
-    void drawQuestion() {
-        String question = questions.drawQuestion(currentPlayer.getLocation());
-        raise(new QuestionAskedToPlayerEvent(currentPlayer, question));
     }
 
     int computeNewPlayerLocation(int roll) {

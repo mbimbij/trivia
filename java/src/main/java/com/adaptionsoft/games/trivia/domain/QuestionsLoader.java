@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class QuestionsLoader {
+public class QuestionsLoader {
 
     @SneakyThrows
     public Map<Questions.Category, Queue<String>> loadQuestionsFromDirectory(String directoryPathString) {

@@ -7,7 +7,17 @@
 # backlog
 - property-based testing pour vérifier qu'il n'y a pas de joueurs avec un même nom
 - où et comment produire des events liés à une inner entity ?
+  - les inner entities les produisent eux-mêmes
+  - l'aggregate root les produit
+  - problématique: conservation de l'ordre des events
 - comment reconstituer un aggrégat, et particulièrement des (deep) nested entities à partir d'events ?
+- rollDice -> "extract class" Dice ?
+- isPair -> "extract class" Roll ?
+- isAnsweringCorrectly -> "extract class" AnswerVerifier ?
+- écrire un test pour vérifier mon hypothèse sur nécessité de remettre à zéro le compteur de mauvaise réponse à la fun du tour d'un joueur
+  - si 2 mauvaises réponses consécutives -> prison
+  - au prochain tour, si le joueur sort de prison et donne une mauvaise réponse, il est envoyé directement en prison, sans 2e chance, car son compteur n'est pas réinitialisé
+- Jouer avec différentes implémentations de "maintien de l'ordre" des events dans l'aggégat Game
 
 # difficultés rencontrées
 - gestion de l'augmentation des attributs et params du constructeur de `Game`, `Players`, `Player`
