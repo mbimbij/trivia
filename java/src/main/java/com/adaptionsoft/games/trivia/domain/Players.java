@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,21 +13,26 @@ import java.util.stream.Collectors;
 public class Players extends EventRaiser {
     public static final int MIN_PLAYER_COUNT = 2;
     public static final int MAX_PLAYER_COUNT = 6;
-    List<Player> players = new ArrayList<>();
-    int currentPlayerIndex = 0;
+    @Getter
+    private final Player creator;
+    @Getter
+    private List<Player> individualPlayers = new ArrayList<>();
+    private int currentPlayerIndex = 0;
 
 
-    public Players(Player... players) {
-        if (players.length < MIN_PLAYER_COUNT || players.length > MAX_PLAYER_COUNT) {
-            throw new InvalidNumberOfPlayersException(players.length);
+    public Players(Player... individualPlayers) {
+        if (individualPlayers.length < MIN_PLAYER_COUNT || individualPlayers.length > MAX_PLAYER_COUNT) {
+            throw new InvalidNumberOfPlayersException(individualPlayers.length);
         }
-        if (findDuplicates(players)) {
-            throw new DuplicatePlayerNameException(players);
+        if (findDuplicates(individualPlayers)) {
+            throw new DuplicatePlayerNameException(individualPlayers);
         }
 
-        Arrays.stream(players).forEach(player -> {
-            this.players.add(player);
-            PlayerAddedEvent event = new PlayerAddedEvent(player, this.players.size());
+        creator = individualPlayers[0];
+
+        Arrays.stream(individualPlayers).forEach(player -> {
+            this.individualPlayers.add(player);
+            PlayerAddedEvent event = new PlayerAddedEvent(player, this.individualPlayers.size());
             raise(event);
         });
     }
@@ -48,16 +54,16 @@ public class Players extends EventRaiser {
     }
 
     public void goToNextPlayerTurn() {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        players.forEach(Player::incrementTurn);
+        currentPlayerIndex = (currentPlayerIndex + 1) % individualPlayers.size();
+        individualPlayers.forEach(Player::incrementTurn);
     }
 
     public Player getCurrent() {
-        return players.get(currentPlayerIndex);
+        return individualPlayers.get(currentPlayerIndex);
     }
 
     public int size() {
-        return players.size();
+        return individualPlayers.size();
     }
 
     public static class DuplicatePlayerNameException extends RuntimeException {

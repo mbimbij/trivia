@@ -133,7 +133,7 @@ class GameTest {
         Players players = new Players(player1, player2);
 
         // WHEN
-        Game game = new Game(eventPublisher, players, null, null, null);
+        Game game = new Game("game name", eventPublisher, players, null, null, null);
 
         // THEN no domain events are produced
         assertThat(eventPublisher.getEvents()).isEmpty();

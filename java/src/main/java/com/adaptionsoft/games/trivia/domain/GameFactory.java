@@ -35,6 +35,7 @@ public class GameFactory {
         Board board = new Board(squaresCount);
 
         Game game = new Game(
+                "game",
                 eventPublisher,
                 players,
                 questions,

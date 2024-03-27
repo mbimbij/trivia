@@ -2,6 +2,7 @@
   "id": 123,
   "name": "ma partie de Trivia",
   "state": "created",
+  "creator": {"id": 1, "name": "joueur1"},
   "players": [
     {"id": 1, "name": "joueur1"}
   ],

@@ -17,7 +17,7 @@ public class PlayerTurnOrchestrator extends EventRaiser {
         this.board = board;
     }
 
-    void performTurn(Player player) {
+    public void performTurn(Player player) {
         currentPlayer = player;
         raise(new PlayerTurnStartedEvent(currentPlayer));
         int roll = rollDice();

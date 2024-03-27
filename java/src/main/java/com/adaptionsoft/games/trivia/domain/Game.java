@@ -1,16 +1,24 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.Event;
+import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
+import lombok.Getter;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public class Game extends EventRaiser {
+import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
+
+public class Game extends Entity {
+
+    @Getter
+    private final String name;
     private final EventPublisher eventPublisher;
 
+    @Getter
     private final Players players;
 
     private final Questions questions;
@@ -21,10 +29,13 @@ public class Game extends EventRaiser {
     int turn = 1;
     private Player currentPlayer;
     private PlayerTurnOrchestrator playerTurnOrchestrator;
+    @Getter
+    private State state;
 
 
     // do not call directly, unless in a testing context
-    public Game(EventPublisher eventPublisher, Players players, Questions questions, Random rand, Board board) {
+    public Game(String name, EventPublisher eventPublisher, Players players, Questions questions, Random rand, Board board) {
+        this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
         this.questions = questions;
@@ -32,6 +43,7 @@ public class Game extends EventRaiser {
         this.board = board;
         currentPlayer = players.getCurrent();
         playerTurnOrchestrator = new PlayerTurnOrchestrator(questions, rand, board);
+        state = CREATED;
     }
 
     public void play() {
@@ -63,5 +75,23 @@ public class Game extends EventRaiser {
         aggregatedEvents.addAll(playerTurnOrchestrator.getAndClearUncommittedEvents());
         aggregatedEvents.sort(Comparator.comparingInt(Event::getOrderNumber));
         eventPublisher.publish(aggregatedEvents);
+    }
+
+    public enum State {
+        CREATED("created"),
+        STARTED("started"),
+        ENDED("ended"),
+        ;
+
+        private final String value;
+
+        State(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
     }
 }
