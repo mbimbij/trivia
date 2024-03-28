@@ -70,7 +70,7 @@ class TriviaApplicationShould {
         String responseString = mvcResult.getResponse().getContentAsString();
         Collection<GameDto> response = new ObjectMapper().readValue(responseString, new TypeReference<>() {
         });
-        assertThat(response).hasSize(1)
+        assertThat(response)
                 .singleElement()
                 .usingRecursiveComparison()
                 .isEqualTo(GameDto.from(existingGame));
