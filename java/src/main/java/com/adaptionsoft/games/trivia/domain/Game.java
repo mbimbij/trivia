@@ -5,13 +5,13 @@ import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
-import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
 
 @EqualsAndHashCode(callSuper = true)
 public class Game extends Entity {
@@ -32,6 +32,7 @@ public class Game extends Entity {
     private Player currentPlayer;
     private PlayerTurnOrchestrator playerTurnOrchestrator;
     @Getter
+    @Setter // for testing purposes only
     private State state;
 
 
@@ -79,6 +80,13 @@ public class Game extends Entity {
         eventPublisher.publish(aggregatedEvents);
     }
 
+    public void addPlayer(Player player) {
+        if(!state.equals(CREATED)){
+            throw new AddPlayerInvalidStateException(this);
+        }
+        players.addAfterCreationTime(player);
+    }
+
     public enum State {
         CREATED("created"),
         STARTED("started"),
@@ -94,6 +102,12 @@ public class Game extends Entity {
         @Override
         public String toString() {
             return value;
+        }
+    }
+
+    public static class AddPlayerInvalidStateException extends RuntimeException{
+        public AddPlayerInvalidStateException(Game game) {
+            super("Tried to add player for game=%d with state='%s'".formatted(game.getId(), game.getState()));
         }
     }
 }

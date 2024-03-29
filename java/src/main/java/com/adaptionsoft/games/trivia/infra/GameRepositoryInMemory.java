@@ -14,7 +14,9 @@ public class GameRepositoryInMemory implements GameRepository {
 
     @Override
     public void save(Game game) {
-        game.setId(idGenerator.nextId());
+        if(game.getId() == null) {
+            game.setId(idGenerator.nextId());
+        }
         games.add(game);
     }
 
