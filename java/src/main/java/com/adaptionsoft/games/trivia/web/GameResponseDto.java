@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 @With
-public record GameDto(
+public record GameResponseDto(
         Integer id,
         String name,
         String state,
@@ -15,9 +15,9 @@ public record GameDto(
         Collection<UserDto> players
 
 ) {
-    public static GameDto from(Game game) {
+    public static GameResponseDto from(Game game) {
         List<UserDto> players = game.getPlayers().getIndividualPlayers().stream().map(UserDto::from).toList();
         UserDto creator = UserDto.from(game.getPlayers().getCreator());
-        return new GameDto(game.getId(), game.getName(), game.getState().toString(), creator, players);
+        return new GameResponseDto(game.getId(), game.getName(), game.getState().toString(), creator, players);
     }
 }

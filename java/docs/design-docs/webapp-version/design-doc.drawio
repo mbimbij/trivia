@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-03-27T09:58:53.841Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="4x9VT0J6Dds2ff3_a7Xf" version="21.2.1" type="device" pages="4">
+<mxfile host="Electron" modified="2024-03-29T00:26:57.139Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="fUuWj7V1azHvYqQcqztZ" version="21.2.1" type="device" pages="4">
   <diagram name="use-cases" id="77HFBJ6ivWY5QbAFfbBi">
     <mxGraphModel dx="1434" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -58,7 +58,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="lvYP2CSVNsZ3WXuTUXcc" name="REST interface">
-    <mxGraphModel dx="1434" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="880" dy="546" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -81,7 +81,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="8yDBRH8GD4w4LT29cAe8" name="use-cases-details-1">
-    <mxGraphModel dx="1434" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1035" dy="642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -89,33 +89,33 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-2" value="joueur1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="565" y="1590" width="30" height="60" as="geometry" />
+          <mxGeometry x="575" y="1650" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-3" value="game started" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.3333333333333333;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;exitX=0.01;exitY=0.7;exitDx=0;exitDy=0;exitPerimeter=0;labelBackgroundColor=none;" parent="1" source="wybfsSVACQAIyUd5e9ox-12" target="wybfsSVACQAIyUd5e9ox-11" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="840" y="1380" as="sourcePoint" />
+            <mxPoint x="850" y="1440" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="JlIHS9DkQh-C_NmVd3RG-5" value="&quot;joueur2&quot; joined the game" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;labelBackgroundColor=none;" parent="1" source="wybfsSVACQAIyUd5e9ox-4" target="JlIHS9DkQh-C_NmVd3RG-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-4" value="Trivia webapp" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="835" y="1620" width="120" height="260" as="geometry" />
+          <mxGeometry x="845" y="1680" width="120" height="260" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-5" value="join" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=none;" parent="1" source="wybfsSVACQAIyUd5e9ox-6" target="wybfsSVACQAIyUd5e9ox-4" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-6" value="joueur2" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="565" y="1720" width="30" height="60" as="geometry" />
+          <mxGeometry x="575" y="1780" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-7" value="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;labelBackgroundColor=none;" parent="1" source="wybfsSVACQAIyUd5e9ox-8" target="wybfsSVACQAIyUd5e9ox-12" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-8" value="joueur1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="565" y="1360" width="30" height="60" as="geometry" />
+          <mxGeometry x="575" y="1420" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-9" value="" style="group;labelBackgroundColor=none;" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="565" y="1465" width="40" height="70" as="geometry" />
+          <mxGeometry x="575" y="1525" width="40" height="70" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-10" value="joueur1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="wybfsSVACQAIyUd5e9ox-9" vertex="1">
           <mxGeometry width="30" height="60" as="geometry" />
@@ -124,13 +124,13 @@
           <mxGeometry x="10" y="10" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="wybfsSVACQAIyUd5e9ox-12" value="Trivia webapp" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="830" y="1390" width="120" height="100" as="geometry" />
+          <mxGeometry x="840" y="1450" width="120" height="100" as="geometry" />
         </mxCell>
         <mxCell id="JlIHS9DkQh-C_NmVd3RG-1" value="" style="group;labelBackgroundColor=none;" parent="1" vertex="1" connectable="0">
           <mxGeometry x="560" y="1830" width="40" height="70" as="geometry" />
         </mxCell>
         <mxCell id="JlIHS9DkQh-C_NmVd3RG-2" value="joueur1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="JlIHS9DkQh-C_NmVd3RG-1" vertex="1">
-          <mxGeometry width="30" height="60" as="geometry" />
+          <mxGeometry x="10" y="60" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="JlIHS9DkQh-C_NmVd3RG-3" value="joueur2" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="JlIHS9DkQh-C_NmVd3RG-1" vertex="1">
           <mxGeometry x="10" y="10" width="30" height="60" as="geometry" />
@@ -163,7 +163,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="jMsDWZPk2A0QhHEbCboZ-11" value="&lt;h1&gt;2 - Create a Game&lt;/h1&gt;&lt;p&gt;AS A (logged in ?) user&amp;nbsp;&lt;br&gt;&lt;/p&gt;&lt;p&gt;I CAN list games&lt;/p&gt;&lt;p&gt;SO THAT i can join or watch one of them&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="40" y="580" width="260" height="140" as="geometry" />
+          <mxGeometry x="50" y="640" width="260" height="140" as="geometry" />
         </mxCell>
         <mxCell id="jMsDWZPk2A0QhHEbCboZ-12" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;b&gt;1.&lt;/b&gt;&lt;/font&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="1175" y="60" width="60" height="30" as="geometry" />
@@ -255,52 +255,52 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-47" value="&lt;h1&gt;Questions, alt cases, extensions&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Supprimer une partie non-démarrée, est-ce équivalent à une partie terminée en cours de route, avant la fin ?&lt;/li&gt;&lt;ol&gt;&lt;li&gt;Spontanément je dirais non (ne serait-ce qu&#39;à des fins d&#39;analytics / forensics, on veut pouvoir distinguer les différents cas)&lt;/li&gt;&lt;/ol&gt;&lt;/ol&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="40" y="820" width="390" height="230" as="geometry" />
+          <mxGeometry x="50" y="880" width="390" height="230" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-48" value="created game" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;exitX=0.01;exitY=0.7;exitDx=0;exitDy=0;exitPerimeter=0;labelBackgroundColor=none;" parent="1" source="Uyk14K-dBhHiSNH-FseH-51" target="Uyk14K-dBhHiSNH-FseH-50" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="788" y="580" as="sourcePoint" />
-            <mxPoint x="553" y="695" as="targetPoint" />
+            <mxPoint x="798" y="640" as="sourcePoint" />
+            <mxPoint x="563" y="755" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-49" value="create game" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitX=0.75;exitY=0.1;exitDx=0;exitDy=0;exitPerimeter=0;labelBackgroundColor=none;" parent="1" source="Uyk14K-dBhHiSNH-FseH-50" target="Uyk14K-dBhHiSNH-FseH-51" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-50" value="utilisateur" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="510" y="610" width="30" height="60" as="geometry" />
+          <mxGeometry x="520" y="670" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-51" value="Trivia webapp" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="778" y="590" width="120" height="100" as="geometry" />
+          <mxGeometry x="788" y="650" width="120" height="100" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-52" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;b&gt;2.&lt;/b&gt;&lt;/font&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="635" y="670" width="60" height="30" as="geometry" />
+          <mxGeometry x="645" y="730" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-53" value="&lt;div style=&quot;color: rgb(188, 190, 196);&quot;&gt;&lt;pre style=&quot;font-family: &amp;quot;JetBrains Mono&amp;quot;, monospace; font-size: 9pt;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;pre style=&quot;font-family: &amp;quot;JetBrains Mono&amp;quot;, monospace; font-size: 9pt;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;pre style=&quot;font-family: &amp;quot;JetBrains Mono&amp;quot;, monospace; font-size: 9pt;&quot;&gt;&lt;div style=&quot;background-color: rgb(30, 31, 34);&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9.0pt;&quot;&gt;{&lt;br&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span style=&quot;color:#2aacb8;&quot;&gt;123&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;ma partie de Trivia&quot;&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;state&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;created&quot;&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;creator&quot;&lt;/span&gt;: &lt;span style=&quot;color:#54a857;&quot;&gt;{&lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span style=&quot;color:#2aacb8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;joueur1&quot;&lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;}&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;players&quot;&lt;/span&gt;: &lt;span style=&quot;color:#54a857;&quot;&gt;[&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color:#359ff4;&quot;&gt;{&lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span style=&quot;color:#2aacb8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;joueur1&quot;&lt;/span&gt;&lt;span style=&quot;color:#359ff4;&quot;&gt;}&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#359ff4;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;]&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;links&quot;&lt;/span&gt;: &lt;span style=&quot;color:#54a857;&quot;&gt;{&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;start&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;POST /game/123/start&quot;&lt;/span&gt;,&lt;br&gt;    &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;delete&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;POST /game/123/delete&quot;&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;}&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;}&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="565" y="720" width="325" height="210" as="geometry" />
+          <mxGeometry x="575" y="780" width="325" height="210" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-54" value="&lt;font color=&quot;#ff0000&quot;&gt;&lt;b&gt;1.&lt;/b&gt;&lt;/font&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="635" y="570" width="60" height="30" as="geometry" />
+          <mxGeometry x="645" y="630" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;labelBackgroundColor=none;" parent="1" source="Uyk14K-dBhHiSNH-FseH-56" target="Uyk14K-dBhHiSNH-FseH-59" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-56" value="REST controller" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1210" y="590" width="120" height="100" as="geometry" />
+          <mxGeometry x="1220" y="650" width="120" height="100" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=none;" parent="1" source="Uyk14K-dBhHiSNH-FseH-58" target="Uyk14K-dBhHiSNH-FseH-56" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-58" value="utilisateur" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1050" y="610" width="30" height="60" as="geometry" />
+          <mxGeometry x="1060" y="670" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-59" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1460" y="600" width="60" height="80" as="geometry" />
+          <mxGeometry x="1470" y="660" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;labelBackgroundColor=none;" parent="1" source="Uyk14K-dBhHiSNH-FseH-68" target="Uyk14K-dBhHiSNH-FseH-71" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-61" value="Game" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=16;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1130" y="730" width="80" height="190" as="geometry" />
+          <mxGeometry x="1140" y="790" width="80" height="190" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-62" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" parent="Uyk14K-dBhHiSNH-FseH-61" vertex="1">
           <mxGeometry y="30" width="80" height="40" as="geometry" />
@@ -335,7 +335,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-70" value="User" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;strokeColor=default;fontSize=16;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1330" y="730" width="130" height="150" as="geometry" />
+          <mxGeometry x="1340" y="790" width="130" height="150" as="geometry" />
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-71" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" parent="Uyk14K-dBhHiSNH-FseH-70" vertex="1">
           <mxGeometry y="30" width="130" height="40" as="geometry" />
@@ -363,15 +363,18 @@
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-77" value="" style="endArrow=none;dashed=1;html=1;rounded=0;labelBackgroundColor=none;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint y="1050" as="sourcePoint" />
-            <mxPoint x="1702.3529411764705" y="1050" as="targetPoint" />
+            <mxPoint x="10" y="1110" as="sourcePoint" />
+            <mxPoint x="1712.3529411764705" y="1110" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="Uyk14K-dBhHiSNH-FseH-78" value="&lt;h1&gt;3 - Join a Game&lt;/h1&gt;&lt;p&gt;AS A (logged in ?) user&amp;nbsp;&lt;br&gt;&lt;/p&gt;&lt;p&gt;I CAN list games&lt;/p&gt;&lt;p&gt;SO THAT i can join or watch one of them&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="40" y="1100" width="260" height="140" as="geometry" />
+          <mxGeometry x="50" y="1160" width="260" height="140" as="geometry" />
         </mxCell>
         <mxCell id="KBgqvPoJ5v4j4OErj5XM-1" value="&lt;h1&gt;Acceptance Tests - short&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;&quot;&gt;user can list games&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" vertex="1" parent="1">
           <mxGeometry x="490" y="60" width="320" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="LbWc2eEGQ-V19_7KZgVz-2" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9.0pt;&quot;&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;{&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;ma partie de Trivia&quot;&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;creator&quot;&lt;/span&gt;: &lt;span style=&quot;color:#54a857;&quot;&gt;{&lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span style=&quot;color:#2aacb8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;joueur1&quot;&lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;}&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;}&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="575" y="540" width="330" height="110" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

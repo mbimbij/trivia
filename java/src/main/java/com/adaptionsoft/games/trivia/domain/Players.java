@@ -21,9 +21,6 @@ public class Players extends EventRaiser {
 
 
     public Players(Player... individualPlayers) {
-        if (individualPlayers.length < MIN_PLAYER_COUNT || individualPlayers.length > MAX_PLAYER_COUNT) {
-            throw new InvalidNumberOfPlayersException(individualPlayers.length);
-        }
         if (findDuplicates(individualPlayers)) {
             throw new DuplicatePlayerNameException(individualPlayers);
         }
@@ -35,6 +32,12 @@ public class Players extends EventRaiser {
             PlayerAddedEvent event = new PlayerAddedEvent(player, this.individualPlayers.size());
             raise(event);
         });
+    }
+
+    private void validatePlayerCount(Player[] individualPlayers) {
+        if (individualPlayers.length < MIN_PLAYER_COUNT || individualPlayers.length > MAX_PLAYER_COUNT) {
+            throw new InvalidNumberOfPlayersException(individualPlayers.length);
+        }
     }
 
     private boolean findDuplicates(Player[] players) {

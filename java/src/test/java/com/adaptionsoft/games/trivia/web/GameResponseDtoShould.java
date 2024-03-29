@@ -9,24 +9,24 @@ import java.util.List;
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GameDtoShould {
+class GameResponseDtoShould {
 
     @Test
     void convertDomainObjectProperly() {
         // GIVEN
         Game actualGame = TestFixtures.a2playersGame();
-        GameDto expectedGameDto = buildExpectedGameDto(actualGame);
+        GameResponseDto expectedGameDto = buildExpectedGameDto(actualGame);
 
         // WHEN
-        GameDto actualGameDto = GameDto.from(actualGame);
+        GameResponseDto actualGameDto = GameResponseDto.from(actualGame);
 
         // THEN
         assertThat(actualGameDto).usingRecursiveComparison().isEqualTo(expectedGameDto);
     }
 
-    private GameDto buildExpectedGameDto(Game game) {
+    private GameResponseDto buildExpectedGameDto(Game game) {
         UserDto player1 = UserDto.from(game.getPlayers().getCreator());
         List<UserDto> players = game.getPlayers().getIndividualPlayers().stream().map(UserDto::from).toList();
-        return new GameDto(null, game.getName(), CREATED.toString(), player1, players);
+        return new GameResponseDto(null, game.getName(), CREATED.toString(), player1, players);
     }
 }
