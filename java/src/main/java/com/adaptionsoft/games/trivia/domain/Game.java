@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.domain;
 import com.adaptionsoft.games.trivia.domain.event.Event;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.Comparator;
@@ -12,6 +13,7 @@ import java.util.Random;
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
 
+@EqualsAndHashCode(callSuper = true)
 public class Game extends Entity {
 
     @Getter

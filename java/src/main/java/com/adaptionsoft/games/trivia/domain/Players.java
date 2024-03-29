@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class Players extends EventRaiser {
     public static final int MIN_PLAYER_COUNT = 2;
     public static final int MAX_PLAYER_COUNT = 6;
+    private static final int MIN_PLAYER_COUNT_CREATION_TIME = 1;
     @Getter
     private final Player creator;
     @Getter
@@ -21,6 +22,7 @@ public class Players extends EventRaiser {
 
 
     public Players(Player... individualPlayers) {
+        validatePlayerCountAtCreationTime(individualPlayers);
         if (findDuplicates(individualPlayers)) {
             throw new DuplicatePlayerNameException(individualPlayers);
         }
@@ -32,6 +34,12 @@ public class Players extends EventRaiser {
             PlayerAddedEvent event = new PlayerAddedEvent(player, this.individualPlayers.size());
             raise(event);
         });
+    }
+
+    private void validatePlayerCountAtCreationTime(Player[] individualPlayers) {
+        if (individualPlayers.length < MIN_PLAYER_COUNT_CREATION_TIME || individualPlayers.length > MAX_PLAYER_COUNT) {
+            throw new InvalidNumberOfPlayersAtCreationTimeException(individualPlayers.length);
+        }
     }
 
     private void validatePlayerCount(Player[] individualPlayers) {
@@ -74,6 +82,12 @@ public class Players extends EventRaiser {
             super("duplicate player names in %s".formatted(Arrays.stream(players)
                     .map(Player::getName)
                     .collect(Collectors.joining(","))));
+        }
+    }
+
+    public static class InvalidNumberOfPlayersAtCreationTimeException extends RuntimeException {
+        public InvalidNumberOfPlayersAtCreationTimeException(int playersCount) {
+            super("number of players at creation time must be between 1 and 6, but was: %d".formatted(playersCount));
         }
     }
 

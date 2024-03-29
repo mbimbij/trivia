@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
+import com.adaptionsoft.games.trivia.domain.Player;
 import com.adaptionsoft.games.trivia.domain.TestFixtures;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
@@ -10,6 +11,8 @@ import com.adaptionsoft.games.trivia.web.UserDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.condition.AllOf;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,6 +31,7 @@ import java.util.List;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.condition.AllOf.allOf;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -107,9 +111,14 @@ class TriviaApplicationShould {
         @Test
         void can_create_game() {
             // GIVEN a request
+            int creatorId = 1;
+            String creatorName = "player name";
+            UserDto creatorDto = new UserDto(creatorId, creatorName);
+
             String gameName = "game name";
-            UserDto creator = new UserDto(1, "player name");
-            CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, creator);
+            CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, creatorDto);
+
+            // AND a set id generation strategy
             int gameId = 2;
             Mockito.doReturn(gameId).when(idGenerator).nextId();
 
@@ -125,10 +134,18 @@ class TriviaApplicationShould {
                     statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                     new TypeReference<>() {
                     });
-            GameResponseDto expectedResponseDto = new GameResponseDto(gameId, gameName, CREATED.toString(), creator, List.of(creator));
+            GameResponseDto expectedResponseDto = new GameResponseDto(gameId, gameName, CREATED.toString(), creatorDto, List.of(creatorDto));
             assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
             // AND the game is created
+            assertThat(gameRepository.getById(gameId))
+                    .hasValueSatisfying(game -> {
+                        assertThat(game.getId()).isEqualTo(gameId);
+                        assertThat(game.getName()).isEqualTo(gameName);
+                        Player expectedCreator = new Player(creatorId, creatorName);
+                        assertThat(game.getPlayers().getCreator()).isEqualTo(expectedCreator);
+                        assertThat(game.getPlayers().getIndividualPlayers()).containsExactly(expectedCreator);
+                    });
         }
     }
 

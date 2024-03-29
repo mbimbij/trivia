@@ -93,6 +93,23 @@ class GameTest {
     }
 
     @Test
+    void cannot_create_game_without_any_player() {
+        assertThrows(Players.InvalidNumberOfPlayersAtCreationTimeException.class, () -> gameFactory.create("game", new String[0]));
+    }
+
+    @Test
+    void cannot_create_game_with_more_than_6_players() {
+        String[] playersNames = {"player1",
+                "player2",
+                "player3",
+                "player4",
+                "player5",
+                "player6",
+                "player7"};
+        assertThrows(Players.InvalidNumberOfPlayersAtCreationTimeException.class, () -> gameFactory.create("game", playersNames));
+    }
+
+    @Test
     void can_create_game_with_1_player() {
         assertThatCode(() -> gameFactory.create("game", "player1")).doesNotThrowAnyException();
     }

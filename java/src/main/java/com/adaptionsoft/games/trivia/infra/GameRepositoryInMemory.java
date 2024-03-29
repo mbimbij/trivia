@@ -5,9 +5,7 @@ import com.adaptionsoft.games.trivia.domain.GameRepository;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class GameRepositoryInMemory implements GameRepository {
@@ -28,5 +26,12 @@ public class GameRepositoryInMemory implements GameRepository {
     @Override
     public void deleteAll() {
         games.clear();
+    }
+
+    @Override
+    public Optional<Game> getById(int gameId) {
+        return games.stream()
+                .filter(game -> Objects.equals(gameId, game.getId()))
+                .findAny();
     }
 }
