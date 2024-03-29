@@ -19,23 +19,31 @@ public class GameFactory {
         this.questionsLoader = questionsLoader;
     }
 
-    public Game create(String... playersNames) {
-        return create(new Random(), playersNames);
+    public Game create(String gameName, String... playersNames) {
+        return create(new Random(), gameName, playersNames);
     }
 
-    public Game create(Random rand, String... playersNames) {
-        Questions questions = buildQuestions();
+    public Game create(String gameName, Player... players) {
+        return create(new Random(), gameName, players);
+    }
 
+    public Game create(Random rand, String gameName, String... playersNames) {
         Player[] playersArray = Arrays.stream(playersNames)
                 .map(Player::new)
                 .toArray(Player[]::new);
-        Players players = new Players(playersArray);
+
+        return create(rand, gameName, playersArray);
+    }
+
+    public Game create(Random rand, String gameName, Player... playersArg) {
+        Questions questions = buildQuestions();
+        Players players = new Players(playersArg);
 
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
         Game game = new Game(
-                "game",
+                gameName,
                 eventPublisher,
                 players,
                 questions,
@@ -47,6 +55,7 @@ public class GameFactory {
         eventPublisher.publish(new GameCreatedEvent());
         return game;
     }
+
 
     private Questions buildQuestions() {
         String questionsPath = "src/main/resources/questions";

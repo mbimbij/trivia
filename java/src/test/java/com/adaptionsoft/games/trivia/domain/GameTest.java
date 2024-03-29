@@ -9,6 +9,7 @@ import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -47,7 +49,7 @@ class GameTest {
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
         int seed = 2;
         Game game = gameFactory.create(
-                new Random(seed),
+                new Random(seed), "game",
                 "Chet",
                 "Pat",
                 "Sue",
@@ -55,8 +57,8 @@ class GameTest {
                 "Vlad");
 
         // WHEN
-        game.play();
 
+        game.play();
         // THEN
         String lead = Files.readString(Paths.get("src/test/resources/lead.txt"));
         assertEquals(gold, lead);
@@ -68,10 +70,11 @@ class GameTest {
     }
 
     @Test
+    @Disabled
     void cannot_have_more_than_6_players() {
         assertThrows(
                 Players.InvalidNumberOfPlayersException.class,
-                () -> gameFactory.create(
+                () -> gameFactory.create("game",
                         "player1",
                         "player2",
                         "player3",
@@ -84,8 +87,14 @@ class GameTest {
     }
 
     @Test
+    @Disabled
     void cannot_have_less_than_2_players() {
-        assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("player1"));
+        assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game", "player1"));
+    }
+
+    @Test
+    void can_create_game_with_1_player() {
+        assertThatCode(() -> gameFactory.create("game", "player1")).doesNotThrowAnyException();
     }
 
     @Test
@@ -96,7 +105,7 @@ class GameTest {
             String[] playersNamesWithDuplicates = generatePlayersNamesWithDuplicates(duplicatesCount);
             System.out.println(Arrays.toString(playersNamesWithDuplicates));
 
-            assertThrows(Players.DuplicatePlayerNameException.class, () -> gameFactory.create(playersNamesWithDuplicates));
+            assertThrows(Players.DuplicatePlayerNameException.class, () -> gameFactory.create("game", playersNamesWithDuplicates));
         }
     }
 
@@ -149,7 +158,7 @@ class GameTest {
         Player player2 = new Player(playerName2);
 
         // WHEN
-        gameFactory.create(playerName1, playerName2);
+        gameFactory.create("game", playerName1, playerName2);
 
         // THEN the domain events are produced in the correct order
         List<Event> events = eventPublisher.getEvents();

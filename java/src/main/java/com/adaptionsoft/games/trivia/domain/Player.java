@@ -19,6 +19,11 @@ public class Player extends Entity {
         this.name = name;
     }
 
+    public Player(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @With // for testing purposes only
     @Getter(PUBLIC)
     private int coinCount;

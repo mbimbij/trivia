@@ -15,7 +15,7 @@ public class GameRunner {
         eventPublisher.register(new EventConsoleLogger());
         QuestionsLoader questionsLoader = new QuestionsLoader();
         GameFactory gameFactory = new GameFactory(eventPublisher, questionsLoader);
-        Game game = gameFactory.create( "Chet", "Pat", "Sue", "Joe", "Vlad");
+        Game game = gameFactory.create("game name", "Chet", "Pat", "Sue", "Joe", "Vlad");
         game.play();
     }
 }
