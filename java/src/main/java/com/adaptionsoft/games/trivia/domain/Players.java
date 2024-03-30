@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
+import com.adaptionsoft.games.trivia.microarchitecture.BusinessException;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.Getter;
 
@@ -84,7 +85,7 @@ public class Players extends EventRaiser {
         return individualPlayers.size();
     }
 
-    public static class DuplicatePlayerNameException extends RuntimeException {
+    public static class DuplicatePlayerNameException extends BusinessException {
         private DuplicatePlayerNameException(String message) {
             super(message);
         }
@@ -106,7 +107,7 @@ public class Players extends EventRaiser {
         }
     }
 
-    public static class InvalidNumberOfPlayersException extends RuntimeException {
+    public static class InvalidNumberOfPlayersException extends BusinessException {
         private InvalidNumberOfPlayersException(String message) {
             super(message);
         }

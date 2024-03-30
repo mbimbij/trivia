@@ -4,19 +4,19 @@ import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.web.TriviaController;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,15 +26,13 @@ import java.util.List;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = MOCK)
-@AutoConfigureMockMvc
-//@WebMvcTest(TriviaController.class)
+@WebMvcTest(TriviaController.class)
+@ActiveProfiles("test")
 class TriviaApplicationShould {
 
     @Autowired
@@ -100,7 +98,7 @@ class TriviaApplicationShould {
 
     @SneakyThrows
     @Test
-    void can_create_game() {
+    void user_can_create_game() {
         // GIVEN a request
         int creatorId = 1;
         String creatorName = "player name";
@@ -141,16 +139,17 @@ class TriviaApplicationShould {
 
     @SneakyThrows
     @Test
-    void player_can_join_game() {
+    void user_can_join_game() {
         // GIVEN an existing game
         Player creator = new Player(1, "creator");
         Game game = gameFactory.create("game name", creator);
         gameRepository.save(game);
 
         // WHEN a new player joins the game
-        UserDto newPlayerDto = new UserDto(2, "new player");
+        int newPlayerId = 2;
+        UserDto newPlayerDto = new UserDto(newPlayerId, "new player");
         ResultActions resultActions = mvc.perform(
-                post("/game/{gameId}/player/{playerId}/join", game.getId(), 2)
+                post("/game/{gameId}/player/{playerId}/join", game.getId(), newPlayerId)
                         .content(mapper.writeValueAsString(newPlayerDto))
                         .contentType(MediaType.APPLICATION_JSON)
         );

@@ -1,11 +1,14 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.Event;
+import com.adaptionsoft.games.trivia.microarchitecture.BusinessException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Comparator;
 import java.util.List;
@@ -82,7 +85,7 @@ public class Game extends Entity {
 
     public void addPlayer(Player player) {
         if(!state.equals(CREATED)){
-            throw new AddPlayerInvalidStateException(this);
+            throw new AddPlayerInvalidStateException(this.getId(), this.getState());
         }
         players.addAfterCreationTime(player);
     }
@@ -105,9 +108,9 @@ public class Game extends Entity {
         }
     }
 
-    public static class AddPlayerInvalidStateException extends RuntimeException{
-        public AddPlayerInvalidStateException(Game game) {
-            super("Tried to add player for game=%d with state='%s'".formatted(game.getId(), game.getState()));
+    public static class AddPlayerInvalidStateException extends BusinessException {
+        public AddPlayerInvalidStateException(Integer gameId, State gameState) {
+            super("Tried to add player for game=%d with state='%s'".formatted(gameId, gameState));
         }
     }
 }
