@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -140,7 +141,7 @@ class GameTest {
             Players players = new Players(player1, player2);
 
             // WHEN
-            Game game = new Game("game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null));
+            Game game = new Game("game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();

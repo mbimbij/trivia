@@ -3,6 +3,8 @@ package com.adaptionsoft.games.trivia.domain;
 import java.util.Map;
 import java.util.Queue;
 
+import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+
 public class TestFixtures {
 
     public static Questions questions(){
@@ -20,7 +22,7 @@ public class TestFixtures {
         Players players = new Players(
                 new Player("player1")
         );
-        return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null));
+        return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
     }
 
     public static Game a2playersGame() {
@@ -28,7 +30,7 @@ public class TestFixtures {
                 new Player("player1"),
                 new Player("player2")
         );
-        return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null));
+        return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
     }
 
     public static Game a6playersGame() {
@@ -40,6 +42,6 @@ public class TestFixtures {
                 new Player("player5"),
                 new Player("player6")
         );
-        return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null));
+        return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
     }
 }

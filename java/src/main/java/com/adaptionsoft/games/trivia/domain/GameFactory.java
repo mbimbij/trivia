@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+
 
 public class GameFactory {
 
@@ -46,7 +48,7 @@ public class GameFactory {
                 gameName,
                 eventPublisher,
                 players,
-                new PlayerTurnOrchestrator(questions, rand, board)
+                new PlayerTurnOrchestrator(questions, rand, board), players.getCurrent(), CREATED
         );
 
         eventPublisher.publish(players.getAndClearUncommittedEvents());

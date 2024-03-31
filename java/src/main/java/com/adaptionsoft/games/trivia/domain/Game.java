@@ -36,14 +36,13 @@ public class Game extends Entity {
 
 
     // do not call directly, unless in a testing context
-    public Game(String name, EventPublisher eventPublisher, Players players, PlayerTurnOrchestrator playerTurnOrchestrator) {
+    public Game(String name, EventPublisher eventPublisher, Players players, PlayerTurnOrchestrator playerTurnOrchestrator, Player currentPlayer, State state) {
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
         this.playerTurnOrchestrator = playerTurnOrchestrator;
-        // TODO injecter directement currentPlayer et state, et déplacer la logique de calcul vers l'appelant, factory ou test
-        currentPlayer = players.getCurrent();
-        state = CREATED;
+        this.currentPlayer = currentPlayer;
+        this.state = state;
     }
 
     public void play() {
