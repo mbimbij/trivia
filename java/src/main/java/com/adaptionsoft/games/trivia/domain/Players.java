@@ -20,6 +20,7 @@ public class Players extends EventRaiser {
 
 
     public Players(Player... individualPlayers) {
+        // TODO déplacer la logique vers une factory.
         if (individualPlayers.length < MIN_PLAYER_COUNT_AT_CREATION_TIME || individualPlayers.length > MAX_PLAYER_COUNT) {
             throw InvalidNumberOfPlayersException.onCreation(individualPlayers.length);
         }

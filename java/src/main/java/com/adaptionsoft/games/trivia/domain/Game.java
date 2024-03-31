@@ -8,6 +8,8 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.*;
 
@@ -24,10 +26,6 @@ public class Game extends Entity {
     @Getter
     private final Players players;
 
-    private final Questions questions;
-    private final Random rand;
-    private final Board board;
-
     private boolean isGameInProgress = true;
     int turn = 1;
     private Player currentPlayer;
@@ -38,26 +36,27 @@ public class Game extends Entity {
 
 
     // do not call directly, unless in a testing context
-    public Game(String name, EventPublisher eventPublisher, Players players, Questions questions, Random rand, Board board) {
+    public Game(String name, EventPublisher eventPublisher, Players players, PlayerTurnOrchestrator playerTurnOrchestrator) {
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
-        this.questions = questions;
-        this.rand = rand;
-        this.board = board;
+        this.playerTurnOrchestrator = playerTurnOrchestrator;
+        // TODO injecter directement currentPlayer et state, et déplacer la logique de calcul vers l'appelant, factory ou test
         currentPlayer = players.getCurrent();
-        playerTurnOrchestrator = new PlayerTurnOrchestrator(questions, rand, board);
         state = CREATED;
     }
 
     public void play() {
         do {
-            performGameTurn();
+            playTurnBy(currentPlayer);
         } while (isGameInProgress);
     }
 
-    private void performGameTurn() {
-        playerTurnOrchestrator.performTurn(currentPlayer);
+    public void playTurnBy(Player player) {
+        if(!Objects.equals(player, currentPlayer)){
+            throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
+        }
+        playerTurnOrchestrator.performTurn(player);
         endGameIfCurrentPlayerWon();
         publishDomainEvents();
         endCurrentPlayerTurn();
@@ -156,6 +155,18 @@ public class Game extends Entity {
                     Players.MIN_PLAYER_COUNT_AT_START_TIME,
                     Players.MAX_PLAYER_COUNT,
                     numberOfPlayers));
+        }
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public static class PlayTurnException extends PlayerException {
+        private PlayTurnException(Integer gameId, Integer playerId, String message) {
+            super(gameId, playerId, message);
+        }
+
+        public static PlayTurnException notCurrentPlayerException(Integer gameId, Integer playerId, Integer currentPlayerId) {
+            String message = "game id=%d, player id=%d tried to play but it is not its turn. Current player is id=%d".formatted(gameId, playerId, currentPlayerId);
+            return new PlayTurnException(gameId, playerId, message);
         }
     }
 }

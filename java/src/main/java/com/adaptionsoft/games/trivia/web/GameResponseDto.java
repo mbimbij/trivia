@@ -5,6 +5,7 @@ import lombok.With;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @With
 public record GameResponseDto(
@@ -12,12 +13,21 @@ public record GameResponseDto(
         String name,
         String state,
         UserDto creator,
-        Collection<UserDto> players
+        Collection<UserDto> players,
+        UserDto currentPlayer
 
-) {
+        ) {
     public static GameResponseDto from(Game game) {
         List<UserDto> players = game.getPlayers().getIndividualPlayers().stream().map(UserDto::from).toList();
         UserDto creator = UserDto.from(game.getPlayers().getCreator());
-        return new GameResponseDto(game.getId(), game.getName(), game.getState().toString(), creator, players);
+        UserDto currentPlayerDto = Optional.ofNullable(game.getPlayers().getCurrent())
+                .map(UserDto::from)
+                .orElse(null);
+        return new GameResponseDto(game.getId(),
+                game.getName(),
+                game.getState().toString(),
+                creator,
+                players,
+                currentPlayerDto);
     }
 }

@@ -125,7 +125,13 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        GameResponseDto expectedResponseDto = new GameResponseDto(gameId, gameName, CREATED.toString(), creatorDto, List.of(creatorDto));
+        GameResponseDto expectedResponseDto = new GameResponseDto(gameId,
+                gameName,
+                CREATED.toString(),
+                creatorDto,
+                List.of(creatorDto),
+                creatorDto
+        );
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the game is created
@@ -163,7 +169,12 @@ class TriviaApplicationShould {
                 new TypeReference<>() {
                 });
         UserDto creatorDto = UserDto.from(creator);
-        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(), game.getName(), CREATED.toString(), creatorDto, List.of(creatorDto, newPlayerDto));
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
+                game.getName(),
+                CREATED.toString(),
+                creatorDto,
+                List.of(creatorDto, newPlayerDto),
+                creatorDto);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the player is added to the game
@@ -186,8 +197,7 @@ class TriviaApplicationShould {
         // WHEN the creator starts the game
         ResultActions resultActions = mvc.perform(
                 post("/game/{gameId}/player/{playerId}/start", game.getId(), creator.getId())
-        )
-                ;
+        );
 
         // THEN the response status is ok
         ResultActions statusVerifyResultActions = resultActions.andExpect(status().isOk());
@@ -199,7 +209,46 @@ class TriviaApplicationShould {
                 });
         UserDto creatorDto = UserDto.from(creator);
         UserDto player2Dto = UserDto.from(player2);
-        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(), game.getName(), STARTED.toString(), creatorDto, List.of(creatorDto, player2Dto));
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
+                game.getName(),
+                STARTED.toString(),
+                creatorDto,
+                List.of(creatorDto, player2Dto),
+                creatorDto);
+        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
+    }
+
+    @SneakyThrows
+    @Test
+    void let_current_player_play_turn() {
+        // GIVEN an existing started game
+        Player creator = new Player(1, "creator");
+        Player player2 = new Player(2, "player2");
+        Game game = gameFactory.create("game name", creator, player2);
+        gameRepository.save(game);
+        game.startBy(creator);
+
+        // WHEN the current player (creator) starts the game
+        ResultActions resultActions = mvc.perform(
+                post("/game/{gameId}/player/{playerId}/playTurn", game.getId(), creator.getId())
+        );
+
+        // THEN response status is ok
+        ResultActions statusVerifyResultActions = resultActions.andExpect(status().isOk());
+
+        // AND the response body is as expected
+        GameResponseDto actualResponseDto = mapper.readValue(
+                statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
+                new TypeReference<>() {
+                });
+        UserDto creatorDto = UserDto.from(creator);
+        UserDto otherPlayerDto = UserDto.from(player2);
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
+                game.getName(),
+                STARTED.toString(),
+                creatorDto,
+                List.of(creatorDto, otherPlayerDto),
+                otherPlayerDto);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
 }
