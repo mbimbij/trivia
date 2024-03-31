@@ -7,7 +7,7 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 
 public class TestFixtures {
 
-    public static Questions questions(){
+    public static Questions questions() {
         String pathString = "src/test/resources/questions-test";
         return questions(pathString);
     }
@@ -19,23 +19,20 @@ public class TestFixtures {
     }
 
     public static Game a1playerGame() {
-        Players players = new Players(
-                new Player("player1")
-        );
+        final Player player = new Player("player1");
+        Players players = new Players(player);
         return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
     }
 
     public static Game a2playersGame() {
-        Players players = new Players(
-                new Player("player1"),
-                new Player("player2")
-        );
+        final Player player = new Player("player1");
+        Players players = new Players(player, new Player("player2"));
         return new Game("game name", null, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
     }
 
     public static Game a6playersGame() {
-        Players players = new Players(
-                new Player("player1"),
+        final Player player = new Player("player1");
+        Players players = new Players(player,
                 new Player("player2"),
                 new Player("player3"),
                 new Player("player4"),

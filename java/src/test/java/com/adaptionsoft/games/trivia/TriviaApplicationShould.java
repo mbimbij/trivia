@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +149,7 @@ class TriviaApplicationShould {
     void user_can_join_game() {
         // GIVEN an existing game
         Player creator = new Player(1, "creator");
+        final Player[] players = new Player[]{creator};
         Game game = gameFactory.create("game name", creator);
         gameRepository.save(game);
 
@@ -191,6 +191,7 @@ class TriviaApplicationShould {
         // GIVEN an existing game
         Player creator = new Player(1, "creator");
         Player player2 = new Player(2, "player2");
+        final Player[] players = new Player[]{creator, player2};
         Game game = gameFactory.create("game name", creator, player2);
         gameRepository.save(game);
 
@@ -224,6 +225,7 @@ class TriviaApplicationShould {
         // GIVEN an existing started game
         Player creator = new Player(1, "creator");
         Player player2 = new Player(2, "player2");
+        final Player[] players = new Player[]{creator, player2};
         Game game = gameFactory.create("game name", creator, player2);
         gameRepository.save(game);
         game.startBy(creator);

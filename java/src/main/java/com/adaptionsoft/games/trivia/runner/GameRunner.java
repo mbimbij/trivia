@@ -15,7 +15,11 @@ public class GameRunner {
         eventPublisher.register(new EventConsoleLogger());
         QuestionsLoader questionsLoader = new QuestionsLoader();
         GameFactory gameFactory = new GameFactory(eventPublisher, questionsLoader);
-        Game game = gameFactory.create("game name", "Chet", "Pat", "Sue", "Joe", "Vlad");
+        final String[] strings = new String[]{"Chet", "Pat", "Sue", "Joe", "Vlad"};
+        final String string = strings[0];
+        final String[] strings1 = new String[]{string, "Chet", "Pat", "Sue", "Joe", "Vlad"};
+        final String s = strings1[0];
+        Game game = gameFactory.create("game name", s, string, "Chet", "Pat", "Sue", "Joe", "Vlad");
         game.play();
     }
 }
