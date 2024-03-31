@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 
+import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.Event;
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
 import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,8 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -42,7 +44,6 @@ class GameTest {
     }
 
     @Test
-//    @Disabled
     public void should_not_differ_from_golden_master() throws IOException {
         // GIVEN
         redirectStdoutToFile();
@@ -90,6 +91,23 @@ class GameTest {
     @Disabled
     void cannot_have_less_than_2_players() {
         assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game", "player1"));
+    }
+
+    @Test
+    void cannot_create_game_without_any_player() {
+        assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game", new String[0]));
+    }
+
+    @Test
+    void cannot_create_game_with_more_than_6_players() {
+        String[] playersNames = {"player1",
+                "player2",
+                "player3",
+                "player4",
+                "player5",
+                "player6",
+                "player7"};
+        assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game", playersNames));
     }
 
     @Test
@@ -167,4 +185,37 @@ class GameTest {
                 new GameCreatedEvent()});
     }
 
+    @ParameterizedTest
+    @EnumSource(value = State.class, names = {"STARTED", "ENDED"})
+    void cannot_join_game__when_state_is_not_CREATED(State state) {
+        // GIVEN
+        Game game = TestFixtures.a1playerGame();
+        game.setState(state);
+
+        // WHEN
+        assertThatThrownBy(() -> game.addPlayer(new Player("new player")))
+                .isInstanceOf(Game.AddPlayerInvalidStateException.class)
+                .hasMessage("Tried to add player for game=%d with state='%s'".formatted(game.getId(), game.getState()));
+    }
+
+    @Test
+    void cannot_join_game__when_existing_player_with_same_name() {
+        // GIVEN
+        Game game = TestFixtures.a1playerGame();
+
+        // WHEN
+        assertThatThrownBy(() -> game.addPlayer(new Player("player1")))
+                .isInstanceOf(Players.DuplicatePlayerNameException.class)
+                .hasMessageStartingWith("duplicate player name on player join");
+    }
+
+    @Test
+    void cannot_join_game__when_max_player_count_reached() {
+        // GIVEN
+        Game game = TestFixtures.a6playersGame();
+
+        // WHEN
+        assertThatThrownBy(() -> game.addPlayer(new Player("player7")))
+                .isInstanceOf(Players.InvalidNumberOfPlayersException.class);
+    }
 }

@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-03-29T00:26:57.139Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="fUuWj7V1azHvYqQcqztZ" version="21.2.1" type="device" pages="4">
+<mxfile host="Electron" modified="2024-03-29T14:39:05.434Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="_16P2_rzZyL78LT-pbSH" version="21.2.1" type="device" pages="4">
   <diagram name="use-cases" id="77HFBJ6ivWY5QbAFfbBi">
-    <mxGraphModel dx="1434" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="880" dy="546" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -47,11 +47,11 @@
     </mxGraphModel>
   </diagram>
   <diagram id="wk3tFKMeF174GdLRc1kF" name="déroulement-partie">
-    <mxGraphModel dx="1434" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="880" dy="546" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="WYsJ-pL2YdOEIRFuersi-1" value="&lt;h1&gt;Résumé&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Un utilisateur accède à la page principal&lt;/li&gt;&lt;li&gt;(optionel) il crée un compte / s&#39;authentifie (ou pas)&lt;/li&gt;&lt;li&gt;il décide de cliquer sur un bouton &quot;créer une partie&quot;&lt;/li&gt;&lt;li&gt;(optionel)&amp;nbsp;Il renseigne un ensemble de paramètres pour la partie à créer&lt;/li&gt;&lt;ol&gt;&lt;li&gt;Il confirme la création de la partie&lt;/li&gt;&lt;/ol&gt;&lt;li&gt;Il attend que des joueurs rejoignent la partie&lt;/li&gt;&lt;li&gt;Une fois que suffisamment de joueurs ont rejoint la partie, il clique sur &quot;démarrer la partie&quot;&lt;/li&gt;&lt;li&gt;le jeu détermine un ordre entre les joueurs&lt;/li&gt;&lt;li&gt;(loop) jusqu&#39;à la fin de la partie&lt;/li&gt;&lt;ol&gt;&lt;li&gt;le jeu demande à chaque joueur de jouer, chacun leur tour, et attend l&#39;action du joueur en question&lt;/li&gt;&lt;li&gt;le joueur joue&amp;nbsp;&lt;/li&gt;&lt;/ol&gt;&lt;li&gt;une fois la partie terminée, le jeu affiche un écran de fin de jeu, invitant à rejouer ou à quitter la partie&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+        <mxCell id="WYsJ-pL2YdOEIRFuersi-1" value="&lt;h1&gt;Résumé&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Un utilisateur accède à la page principal&lt;/li&gt;&lt;li&gt;(optionel) il crée un compte / s&#39;authentifie (ou pas)&lt;/li&gt;&lt;li&gt;il décide de cliquer sur un bouton &quot;créer une partie&quot;&lt;/li&gt;&lt;li&gt;(optionel)&amp;nbsp;Il renseigne un ensemble de paramètres pour la partie à créer&lt;/li&gt;&lt;ol&gt;&lt;li&gt;Il confirme la création de la partie&lt;/li&gt;&lt;/ol&gt;&lt;li&gt;Il attend que des joueurs rejoignent la partie&lt;/li&gt;&lt;li&gt;Une fois que suffisamment de joueurs ont rejoint la partie, il clique sur &quot;démarrer la partie&quot;&lt;/li&gt;&lt;li&gt;le jeu détermine un ordre entre les joueurs&lt;/li&gt;&lt;li&gt;(loop) jusqu&#39;à la fin de la partie&lt;/li&gt;&lt;ol&gt;&lt;li&gt;le jeu demande à chaque joueur de jouer, chacun leur tour, et attend l&#39;action du joueur en question&lt;/li&gt;&lt;li&gt;le joueur joue&amp;nbsp;&lt;/li&gt;&lt;/ol&gt;&lt;li&gt;une fois la partie terminée, le jeu affiche un écran de fin de jeu, invitant à rejouer ou à quitter la partie&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="30" y="40" width="700" height="230" as="geometry" />
         </mxCell>
       </root>
@@ -74,14 +74,14 @@
         <mxCell id="Ye4WM8QqTV87G6o1D3ah-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="Ye4WM8QqTV87G6o1D3ah-1" target="y4SUWB5g9YvCQ-q2SpbT-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Ye4WM8QqTV87G6o1D3ah-1" value="&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;GET /game&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;POST /game/{gameId}/join&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;POST /game/{gameId}/leave&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;POST /game/{gameId}/player/{playerId}/playTurn&lt;br&gt;&lt;/li&gt;&lt;/ol&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="30" y="160" width="320" height="80" as="geometry" />
+        <mxCell id="Ye4WM8QqTV87G6o1D3ah-1" value="&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;GET /game&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;POST /game/{gameId}/player/{playerName}/join&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;POST /game/{gameId}/player/{playerName}/leave&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;POST /game/{gameId}/player/{playerName}/playTurn&lt;br&gt;&lt;/li&gt;&lt;/ol&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="10" y="160" width="340" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="8yDBRH8GD4w4LT29cAe8" name="use-cases-details-1">
-    <mxGraphModel dx="1035" dy="642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="880" dy="546" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -370,10 +370,10 @@
         <mxCell id="Uyk14K-dBhHiSNH-FseH-78" value="&lt;h1&gt;3 - Join a Game&lt;/h1&gt;&lt;p&gt;AS A (logged in ?) user&amp;nbsp;&lt;br&gt;&lt;/p&gt;&lt;p&gt;I CAN list games&lt;/p&gt;&lt;p&gt;SO THAT i can join or watch one of them&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="50" y="1160" width="260" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="KBgqvPoJ5v4j4OErj5XM-1" value="&lt;h1&gt;Acceptance Tests - short&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;&quot;&gt;user can list games&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" vertex="1" parent="1">
+        <mxCell id="KBgqvPoJ5v4j4OErj5XM-1" value="&lt;h1&gt;Acceptance Tests - short&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;&lt;ol&gt;&lt;li&gt;&lt;span style=&quot;&quot;&gt;user can list games&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="490" y="60" width="320" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="LbWc2eEGQ-V19_7KZgVz-2" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9.0pt;&quot;&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;{&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;ma partie de Trivia&quot;&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;creator&quot;&lt;/span&gt;: &lt;span style=&quot;color:#54a857;&quot;&gt;{&lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span style=&quot;color:#2aacb8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;joueur1&quot;&lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;}&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;}&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="LbWc2eEGQ-V19_7KZgVz-2" value="&lt;div style=&quot;background-color:#1e1f22;color:#bcbec4&quot;&gt;&lt;pre style=&quot;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9.0pt;&quot;&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;{&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;ma partie de Trivia&quot;&lt;/span&gt;,&lt;br&gt;  &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;creator&quot;&lt;/span&gt;: &lt;span style=&quot;color:#54a857;&quot;&gt;{&lt;/span&gt;&lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span style=&quot;color:#2aacb8;&quot;&gt;1&lt;/span&gt;, &lt;span style=&quot;color:#c77dbb;&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span style=&quot;color:#6aab73;&quot;&gt;&quot;joueur1&quot;&lt;/span&gt;&lt;span style=&quot;color:#54a857;&quot;&gt;}&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;color:#e8ba36;&quot;&gt;}&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="575" y="540" width="330" height="110" as="geometry" />
         </mxCell>
       </root>

@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.web;
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameFactory;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
+import com.adaptionsoft.games.trivia.domain.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,4 +30,16 @@ public class TriviaController {
         gameRepository.save(game);
         return GameResponseDto.from(game);
     }
+
+    @PostMapping
+    @RequestMapping("/{gameId}/player/{playerId}/join")
+    @ResponseStatus(HttpStatus.CREATED)
+    public GameResponseDto addPlayerToGame(@PathVariable("gameId") Integer gameId,
+                                           @RequestBody UserDto userDto) {
+        Game game = gameRepository.getById(gameId).orElseThrow();
+        game.addPlayer(new Player(userDto.id(), userDto.name()));
+        gameRepository.save(game);
+        return GameResponseDto.from(game);
+    }
+
 }

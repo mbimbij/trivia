@@ -16,10 +16,29 @@ public class TestFixtures {
         return new Questions(questionsMap);
     }
 
+    public static Game a1playerGame() {
+        Players players = new Players(
+                new Player("player1")
+        );
+        return new Game("game name", null, players, null, null, null);
+    }
+
     public static Game a2playersGame() {
         Players players = new Players(
                 new Player("player1"),
                 new Player("player2")
+        );
+        return new Game("game name", null, players, null, null, null);
+    }
+
+    public static Game a6playersGame() {
+        Players players = new Players(
+                new Player("player1"),
+                new Player("player2"),
+                new Player("player3"),
+                new Player("player4"),
+                new Player("player5"),
+                new Player("player6")
         );
         return new Game("game name", null, players, null, null, null);
     }

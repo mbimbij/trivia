@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GameResponseDtoShould {
 
     @Test
-    void convertDomainObjectProperly() {
+    void convertFromDomainObjectProperly() {
         // GIVEN
         Game actualGame = TestFixtures.a2playersGame();
         GameResponseDto expectedGameDto = buildExpectedGameDto(actualGame);
