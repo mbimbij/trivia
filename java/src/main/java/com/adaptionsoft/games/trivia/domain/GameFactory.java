@@ -52,7 +52,8 @@ public class GameFactory {
         );
 
         eventPublisher.publish(players.getAndClearUncommittedEvents());
-        eventPublisher.publish(new GameCreatedEvent());
+        // TODO adresser la gestion d'id avant persistence du jeu en base
+        eventPublisher.publish(new GameCreatedEvent(game.getId()));
         return game;
     }
 

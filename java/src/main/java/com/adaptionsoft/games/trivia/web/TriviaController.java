@@ -42,4 +42,17 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
+    @PostMapping
+    @RequestMapping("/{gameId}/player/{playerId}/start")
+    public GameResponseDto startGame(@PathVariable("gameId") Integer gameId,
+                                     @PathVariable("playerId") Integer playerId) {
+        // TODO tester avec un joueur qui ne fait pas partie du jeu
+        // TODO tester avec un joueur / usr qui n'existe nulle part
+        Game game = gameRepository.getById(gameId).orElseThrow();
+        Player player = game.findPlayerById(playerId).orElseThrow();
+        game.startBy(player);
+        gameRepository.save(game);
+        return GameResponseDto.from(game);
+    }
+
 }
