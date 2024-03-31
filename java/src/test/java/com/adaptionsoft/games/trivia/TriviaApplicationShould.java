@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -170,5 +172,34 @@ class TriviaApplicationShould {
                     assertThat(g.getPlayers().size()).isEqualTo(2);
                     assertThat(g.getPlayers().getIndividualPlayers()).contains(new Player(newPlayerDto.id(), newPlayerDto.name()));
                 });
+    }
+
+    @SneakyThrows
+    @Test
+    void creator_can_start_game() {
+        // GIVEN an existing game
+        Player creator = new Player(1, "creator");
+        Player player2 = new Player(2, "player2");
+        Game game = gameFactory.create("game name", creator, player2);
+        gameRepository.save(game);
+
+        // WHEN the creator starts the game
+        ResultActions resultActions = mvc.perform(
+                post("/game/{gameId}/player/{playerId}/start", game.getId(), creator.getId())
+        )
+                ;
+
+        // THEN the response status is ok
+        ResultActions statusVerifyResultActions = resultActions.andExpect(status().isOk());
+
+        // AND the response body is as expected
+        GameResponseDto actualResponseDto = mapper.readValue(
+                statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
+                new TypeReference<>() {
+                });
+        UserDto creatorDto = UserDto.from(creator);
+        UserDto player2Dto = UserDto.from(player2);
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(), game.getName(), STARTED.toString(), creatorDto, List.of(creatorDto, player2Dto));
+        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
 }

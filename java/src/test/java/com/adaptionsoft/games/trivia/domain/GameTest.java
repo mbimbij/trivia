@@ -2,16 +2,11 @@ package com.adaptionsoft.games.trivia.domain;
 
 
 import com.adaptionsoft.games.trivia.domain.Game.State;
-import com.adaptionsoft.games.trivia.domain.event.Event;
-import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
-import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
-import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
+import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -25,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -182,7 +178,7 @@ class GameTest {
         List<Event> events = eventPublisher.getEvents();
         Assertions.assertArrayEquals(events.toArray(), new Event[]{new PlayerAddedEvent(player1, 1),
                 new PlayerAddedEvent(player2, 2),
-                new GameCreatedEvent()});
+                new GameCreatedEvent(null)});
     }
 
     @ParameterizedTest
@@ -217,5 +213,61 @@ class GameTest {
         // WHEN
         assertThatThrownBy(() -> game.addPlayer(new Player("player7")))
                 .isInstanceOf(Players.InvalidNumberOfPlayersException.class);
+    }
+
+    @Nested
+    class StartGame{
+
+        private final Player creator = new Player(1, "creator");
+        private final Player player2 = new Player(2, "player2");
+        // GIVEN
+        private Game game;
+
+        @BeforeEach
+        void setUp() {
+            game = gameFactory.create("game", creator, player2);
+        }
+
+        @Test
+        void creator_can_start_game() {
+            // WHEN
+            game.startBy(creator);
+
+            // THEN
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(game.getState()).isEqualTo(State.STARTED);
+                softAssertions.assertThat(eventPublisher.getEvents())
+                        .containsOnlyOnce(new GameStartedEvent(game.getId()));
+            });
+        }
+
+        @Test
+        void joined_player_cannot_start_game() {
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThatThrownBy(() -> game.startBy(player2)).isInstanceOf(Game.StartException.class);
+                softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
+            });
+        }
+
+        @Test
+        void cannot_start_a_game_with_less_than_2_players() {
+            // GIVEN a 1 player game
+            game = gameFactory.create("game", creator);
+
+            // WHEN
+            ThrowableAssert.ThrowingCallable callable = () -> game.startBy(creator);
+
+            // THEN
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThatThrownBy(callable).isInstanceOf(Game.StartException.class);
+                softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
+            });
+        }
+
+        @Test
+        @Disabled
+        // TODO Implement after Players creation logic is refactored
+        void cannot_start_a_game_with_more_than_6_players() {
+        }
     }
 }
