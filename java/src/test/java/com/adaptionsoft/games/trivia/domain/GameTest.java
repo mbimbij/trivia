@@ -5,7 +5,6 @@ import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
-import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -141,7 +140,7 @@ class GameTest {
             Players players = new Players(player1, player2);
 
             // WHEN
-            Game game = new Game("game name", eventPublisher, players, null, null, null);
+            Game game = new Game("game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null));
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();

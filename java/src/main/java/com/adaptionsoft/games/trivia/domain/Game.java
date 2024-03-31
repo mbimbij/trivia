@@ -26,10 +26,6 @@ public class Game extends Entity {
     @Getter
     private final Players players;
 
-    private final Questions questions;
-    private final Random rand;
-    private final Board board;
-
     private boolean isGameInProgress = true;
     int turn = 1;
     private Player currentPlayer;
@@ -40,15 +36,11 @@ public class Game extends Entity {
 
 
     // do not call directly, unless in a testing context
-    public Game(String name, EventPublisher eventPublisher, Players players, Questions questions, Random rand, Board board) {
+    public Game(String name, EventPublisher eventPublisher, Players players, PlayerTurnOrchestrator playerTurnOrchestrator) {
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
-        this.questions = questions;
-        this.rand = rand;
-        this.board = board;
-        // TODO Extract Parameter & remove questions, rand, board
-        playerTurnOrchestrator = new PlayerTurnOrchestrator(questions, rand, board);
+        this.playerTurnOrchestrator = playerTurnOrchestrator;
         // TODO injecter directement currentPlayer et state, et déplacer la logique de calcul vers l'appelant, factory ou test
         currentPlayer = players.getCurrent();
         state = CREATED;
