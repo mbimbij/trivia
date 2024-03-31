@@ -55,4 +55,14 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
+    @PostMapping
+    @RequestMapping("/{gameId}/player/{playerId}/playTurn")
+    public GameResponseDto playTurn(@PathVariable("gameId") Integer gameId,
+                                     @PathVariable("playerId") Integer playerId) {
+        Game game = gameRepository.getById(gameId).orElseThrow();
+        Player player = game.findPlayerById(playerId).orElseThrow();
+        game.playTurnBy(player);
+        gameRepository.save(game);
+        return GameResponseDto.from(game);
+    }
 }

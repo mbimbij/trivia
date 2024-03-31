@@ -8,6 +8,8 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.*;
 
@@ -45,19 +47,24 @@ public class Game extends Entity {
         this.questions = questions;
         this.rand = rand;
         this.board = board;
-        currentPlayer = players.getCurrent();
+        // TODO Extract Parameter & remove questions, rand, board
         playerTurnOrchestrator = new PlayerTurnOrchestrator(questions, rand, board);
+        // TODO injecter directement currentPlayer et state, et déplacer la logique de calcul vers l'appelant, factory ou test
+        currentPlayer = players.getCurrent();
         state = CREATED;
     }
 
     public void play() {
         do {
-            performGameTurn();
+            playTurnBy(currentPlayer);
         } while (isGameInProgress);
     }
 
-    private void performGameTurn() {
-        playerTurnOrchestrator.performTurn(currentPlayer);
+    public void playTurnBy(Player player) {
+        if(!Objects.equals(player, currentPlayer)){
+            throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
+        }
+        playerTurnOrchestrator.performTurn(player);
         endGameIfCurrentPlayerWon();
         publishDomainEvents();
         endCurrentPlayerTurn();
@@ -156,6 +163,18 @@ public class Game extends Entity {
                     Players.MIN_PLAYER_COUNT_AT_START_TIME,
                     Players.MAX_PLAYER_COUNT,
                     numberOfPlayers));
+        }
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public static class PlayTurnException extends PlayerException {
+        private PlayTurnException(Integer gameId, Integer playerId, String message) {
+            super(gameId, playerId, message);
+        }
+
+        public static PlayTurnException notCurrentPlayerException(Integer gameId, Integer playerId, Integer currentPlayerId) {
+            String message = "game id=%d, player id=%d tried to play but it is not its turn. Current player is id=%d".formatted(gameId, playerId, currentPlayerId);
+            return new PlayTurnException(gameId, playerId, message);
         }
     }
 }
