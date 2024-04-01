@@ -45,7 +45,7 @@ class TestRestTemplateBasedControllerTest {
         AddPlayerInvalidStateException exception = new AddPlayerInvalidStateException(1, Game.State.STARTED);
         Mockito.doThrow(exception).when(mockGame).addPlayer(any());
 
-        Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).getById(anyInt());
+        Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(anyInt());
 
         // WHEN a new player tries to join the game
         int newPlayerId = 2;

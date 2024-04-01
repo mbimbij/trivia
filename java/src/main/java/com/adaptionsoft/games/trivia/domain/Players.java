@@ -84,7 +84,7 @@ public class Players extends EventRaiser {
         return individualPlayers.get(currentPlayerIndex);
     }
 
-    public int size() {
+    public int count() {
         return individualPlayers.size();
     }
 

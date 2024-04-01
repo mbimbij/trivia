@@ -3,7 +3,7 @@ package com.adaptionsoft.games.trivia.domain.exception;
 import lombok.Getter;
 
 @Getter
-public class PlayerException extends BusinessException {
+public abstract class PlayerException extends BusinessException {
     private final Integer gameId;
     private final Integer playerId;
 

@@ -22,10 +22,7 @@ public class Game extends Entity {
     @Getter
     private final String name;
     private final EventPublisher eventPublisher;
-
-    @Getter
     private final Players players;
-
     private boolean isGameInProgress = true;
     int turn = 1;
     private Player currentPlayer;
@@ -43,6 +40,10 @@ public class Game extends Entity {
         this.playerTurnOrchestrator = playerTurnOrchestrator;
         this.currentPlayer = currentPlayer;
         this.state = state;
+    }
+
+    public Player getCreator() {
+        return players.getCreator();
     }
 
     public void play() {
@@ -90,8 +91,8 @@ public class Game extends Entity {
         if (!Objects.equals(player, players.getCreator())) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
         }
-        if (players.size() < Players.MIN_PLAYER_COUNT_AT_START_TIME) {
-            throw StartException.invalidNumberOfPlayers(id, players.size());
+        if (players.count() < Players.MIN_PLAYER_COUNT_AT_START_TIME) {
+            throw StartException.invalidNumberOfPlayers(id, players.count());
         }
         state = STARTED;
         // TODO régler publication des events uncommitted
@@ -104,6 +105,18 @@ public class Game extends Entity {
                 .stream()
                 .filter(player -> Objects.equals(player.getId(), playerId))
                 .findAny();
+    }
+
+    public Player getCurrentPlayer() {
+        return players.getCurrent();
+    }
+
+    public Collection<Player> getPlayersList() {
+        return players.getIndividualPlayers();
+    }
+
+    public int getPlayersCount() {
+        return players.count();
     }
 
     public enum State {

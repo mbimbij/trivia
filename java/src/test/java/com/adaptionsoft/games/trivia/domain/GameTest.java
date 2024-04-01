@@ -268,8 +268,9 @@ class GameTest {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatCode(() -> game.playTurnBy(creator)).doesNotThrowAnyException();
                 // TODO apply refacto 'Hide Delegate'
-                softAssertions.assertThat(game.getPlayers().getCurrent()).isEqualTo(player2);
+                softAssertions.assertThat(game.getCurrentPlayer()).isEqualTo(player2);
             });
         }
+
     }
 }

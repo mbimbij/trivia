@@ -8,5 +8,5 @@ public interface GameRepository {
     Collection<Game> list();
     void deleteAll();
 
-    Optional<Game> getById(int gameId);
+    Optional<Game> findById(int gameId);
 }

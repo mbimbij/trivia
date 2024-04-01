@@ -134,13 +134,13 @@ class TriviaApplicationShould {
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the game is created
-        assertThat(gameRepository.getById(gameId))
+        assertThat(gameRepository.findById(gameId))
                 .hasValueSatisfying(game -> {
                     assertThat(game.getId()).isEqualTo(gameId);
                     assertThat(game.getName()).isEqualTo(gameName);
                     Player expectedCreator = new Player(creatorId, creatorName);
-                    assertThat(game.getPlayers().getCreator()).isEqualTo(expectedCreator);
-                    assertThat(game.getPlayers().getIndividualPlayers()).containsExactly(expectedCreator);
+                    assertThat(game.getCreator()).isEqualTo(expectedCreator);
+                    assertThat(game.getPlayersList()).containsExactly(expectedCreator);
                 });
     }
 
@@ -178,10 +178,10 @@ class TriviaApplicationShould {
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the player is added to the game
-        assertThat(gameRepository.getById(game.getId()))
+        assertThat(gameRepository.findById(game.getId()))
                 .hasValueSatisfying(g -> {
-                    assertThat(g.getPlayers().size()).isEqualTo(2);
-                    assertThat(g.getPlayers().getIndividualPlayers()).contains(new Player(newPlayerDto.id(), newPlayerDto.name()));
+                    assertThat(g.getPlayersCount()).isEqualTo(2);
+                    assertThat(g.getPlayersList()).contains(new Player(newPlayerDto.id(), newPlayerDto.name()));
                 });
     }
 
