@@ -1,6 +1,5 @@
-package com.adaptionsoft.games.trivia.domain;
+package com.adaptionsoft.games.trivia.domain.exception;
 
-import com.adaptionsoft.games.trivia.microarchitecture.BusinessException;
 import lombok.Getter;
 
 @Getter

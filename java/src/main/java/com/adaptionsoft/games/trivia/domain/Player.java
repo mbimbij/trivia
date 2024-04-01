@@ -8,11 +8,8 @@ import lombok.*;
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PUBLIC;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @AllArgsConstructor
 public class Player extends Entity {
-    // TODO revoir l'égalité: des entités ddd doivent être égales par id, et non par un autre attribut
-    @EqualsAndHashCode.Include
     @Getter(PUBLIC)
     private final String name;
 

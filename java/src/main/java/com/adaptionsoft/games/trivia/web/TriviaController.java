@@ -26,7 +26,6 @@ public class TriviaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
-        final Player[] players = new Player[]{requestDto.toDomain()};
         Game game = gameFactory.create(requestDto.gameName(), requestDto.toDomain());
         gameRepository.save(game);
         return GameResponseDto.from(game);

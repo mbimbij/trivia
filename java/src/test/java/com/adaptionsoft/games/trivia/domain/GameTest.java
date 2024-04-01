@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
+import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.assertj.core.api.ThrowableAssert;
@@ -82,7 +83,7 @@ class GameTest {
 
         @Test
         void cannot_create_game_with_more_than_6_players() {
-            assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game",
+            assertThrows(InvalidNumberOfPlayersException.class, () -> gameFactory.create("game",
                     "player1",
                     "player2",
                     "player3",
@@ -106,7 +107,7 @@ class GameTest {
                 System.out.println(Arrays.toString(playersNamesWithDuplicates));
                 String creatorName = playersNamesWithDuplicates[0];
                 String[] otherPlayersNames = Arrays.copyOfRange(playersNamesWithDuplicates, 1, playersNamesWithDuplicates.length);
-                assertThrows(Players.DuplicatePlayerNameException.class, () -> gameFactory.create("game", creatorName, otherPlayersNames));
+                assertThrows(DuplicatePlayerNameException.class, () -> gameFactory.create("game", creatorName, otherPlayersNames));
             }
         }
 
@@ -183,7 +184,7 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("new player")))
-                    .isInstanceOf(Game.AddPlayerInvalidStateException.class)
+                    .isInstanceOf(AddPlayerInvalidStateException.class)
                     .hasMessage("Tried to add player for game=%d with state='%s'".formatted(game.getId(), game.getState()));
         }
 
@@ -194,7 +195,7 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("player1")))
-                    .isInstanceOf(Players.DuplicatePlayerNameException.class)
+                    .isInstanceOf(DuplicatePlayerNameException.class)
                     .hasMessageStartingWith("duplicate player name on player join");
         }
 
@@ -205,7 +206,7 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("player7")))
-                    .isInstanceOf(Players.InvalidNumberOfPlayersException.class);
+                    .isInstanceOf(InvalidNumberOfPlayersException.class);
         }
     }
 
@@ -228,7 +229,7 @@ class GameTest {
         @Test
         void joined_player_cannot_start_game() {
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> game.startBy(player2)).isInstanceOf(Game.StartException.class);
+                softAssertions.assertThatThrownBy(() -> game.startBy(player2)).isInstanceOf(StartException.class);
                 softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
             });
         }
@@ -243,7 +244,7 @@ class GameTest {
 
             // THEN
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(callable).isInstanceOf(Game.StartException.class);
+                softAssertions.assertThatThrownBy(callable).isInstanceOf(StartException.class);
                 softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
             });
         }
@@ -259,7 +260,7 @@ class GameTest {
     class PlayTurn {
         @Test
         void player_other_than_current_should_not_be_able_to_play_turn() {
-            assertThatThrownBy(() -> game.playTurnBy(player2)).isInstanceOf(Game.PlayTurnException.class);
+            assertThatThrownBy(() -> game.playTurnBy(player2)).isInstanceOf(PlayTurnException.class);
         }
 
         @Test
