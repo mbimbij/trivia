@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.web;
 
-import com.adaptionsoft.games.trivia.domain.Game;
+import com.adaptionsoft.games.trivia.domain.exception.AddPlayerInvalidStateException;
+import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -54,7 +55,7 @@ class RestAssuredBasedControllerTest {
     @Test
     void business_exception_should_throw_409_conflict() {
         // GIVEN an error is thrown when adding a player
-        Mockito.doThrow(new Game.AddPlayerInvalidStateException(null, null))
+        Mockito.doThrow(new AddPlayerInvalidStateException(null, null))
                 .when(triviaController)
                 .addPlayerToGame(anyInt(), any());
 
@@ -78,7 +79,7 @@ class RestAssuredBasedControllerTest {
     @Test
     void invalid_player_turn_exception_should_throw_403_unauthorized() {
         // GIVEN an error is thrown when adding a player
-        Mockito.doThrow(Game.PlayTurnException.notCurrentPlayerException(null, null, null))
+        Mockito.doThrow(PlayTurnException.notCurrentPlayerException(null, null, null))
                 .when(triviaController)
                 .playTurn(anyInt(), anyInt());
 

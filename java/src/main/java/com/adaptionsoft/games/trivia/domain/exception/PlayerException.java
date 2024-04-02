@@ -1,10 +1,9 @@
-package com.adaptionsoft.games.trivia.domain;
+package com.adaptionsoft.games.trivia.domain.exception;
 
-import com.adaptionsoft.games.trivia.microarchitecture.BusinessException;
 import lombok.Getter;
 
 @Getter
-public class PlayerException extends BusinessException {
+public abstract class PlayerException extends BusinessException {
     private final Integer gameId;
     private final Integer playerId;
 

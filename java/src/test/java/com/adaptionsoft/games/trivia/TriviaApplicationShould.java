@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,13 +134,13 @@ class TriviaApplicationShould {
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the game is created
-        assertThat(gameRepository.getById(gameId))
+        assertThat(gameRepository.findById(gameId))
                 .hasValueSatisfying(game -> {
                     assertThat(game.getId()).isEqualTo(gameId);
                     assertThat(game.getName()).isEqualTo(gameName);
                     Player expectedCreator = new Player(creatorId, creatorName);
-                    assertThat(game.getPlayers().getCreator()).isEqualTo(expectedCreator);
-                    assertThat(game.getPlayers().getIndividualPlayers()).containsExactly(expectedCreator);
+                    assertThat(game.getCreator()).isEqualTo(expectedCreator);
+                    assertThat(game.getPlayersList()).containsExactly(expectedCreator);
                 });
     }
 
@@ -150,6 +149,7 @@ class TriviaApplicationShould {
     void user_can_join_game() {
         // GIVEN an existing game
         Player creator = new Player(1, "creator");
+        final Player[] players = new Player[]{creator};
         Game game = gameFactory.create("game name", creator);
         gameRepository.save(game);
 
@@ -178,10 +178,10 @@ class TriviaApplicationShould {
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the player is added to the game
-        assertThat(gameRepository.getById(game.getId()))
+        assertThat(gameRepository.findById(game.getId()))
                 .hasValueSatisfying(g -> {
-                    assertThat(g.getPlayers().size()).isEqualTo(2);
-                    assertThat(g.getPlayers().getIndividualPlayers()).contains(new Player(newPlayerDto.id(), newPlayerDto.name()));
+                    assertThat(g.getPlayersCount()).isEqualTo(2);
+                    assertThat(g.getPlayersList()).contains(new Player(newPlayerDto.id(), newPlayerDto.name()));
                 });
     }
 
@@ -191,6 +191,7 @@ class TriviaApplicationShould {
         // GIVEN an existing game
         Player creator = new Player(1, "creator");
         Player player2 = new Player(2, "player2");
+        final Player[] players = new Player[]{creator, player2};
         Game game = gameFactory.create("game name", creator, player2);
         gameRepository.save(game);
 
@@ -224,6 +225,7 @@ class TriviaApplicationShould {
         // GIVEN an existing started game
         Player creator = new Player(1, "creator");
         Player player2 = new Player(2, "player2");
+        final Player[] players = new Player[]{creator, player2};
         Game game = gameFactory.create("game name", creator, player2);
         gameRepository.save(game);
         game.startBy(creator);

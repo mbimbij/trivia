@@ -18,9 +18,9 @@ public record GameResponseDto(
 
         ) {
     public static GameResponseDto from(Game game) {
-        List<UserDto> players = game.getPlayers().getIndividualPlayers().stream().map(UserDto::from).toList();
-        UserDto creator = UserDto.from(game.getPlayers().getCreator());
-        UserDto currentPlayerDto = Optional.ofNullable(game.getPlayers().getCurrent())
+        List<UserDto> players = game.getPlayersList().stream().map(UserDto::from).toList();
+        UserDto creator = UserDto.from(game.getCreator());
+        UserDto currentPlayerDto = Optional.ofNullable(game.getCurrentPlayer())
                 .map(UserDto::from)
                 .orElse(null);
         return new GameResponseDto(game.getId(),
@@ -30,4 +30,5 @@ public record GameResponseDto(
                 players,
                 currentPlayerDto);
     }
+
 }

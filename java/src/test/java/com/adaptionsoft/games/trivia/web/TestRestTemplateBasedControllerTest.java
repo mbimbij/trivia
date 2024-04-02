@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
+import com.adaptionsoft.games.trivia.domain.exception.AddPlayerInvalidStateException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -42,10 +42,10 @@ class TestRestTemplateBasedControllerTest {
     void handle_errors() {
         // GIVEN an error is thrown when adding a player
         Game mockGame = Mockito.mock(Game.class);
-        Game.AddPlayerInvalidStateException exception = new Game.AddPlayerInvalidStateException(1, Game.State.STARTED);
+        AddPlayerInvalidStateException exception = new AddPlayerInvalidStateException(1, Game.State.STARTED);
         Mockito.doThrow(exception).when(mockGame).addPlayer(any());
 
-        Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).getById(anyInt());
+        Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(anyInt());
 
         // WHEN a new player tries to join the game
         int newPlayerId = 2;

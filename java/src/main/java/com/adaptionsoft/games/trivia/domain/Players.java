@@ -1,39 +1,41 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
-import com.adaptionsoft.games.trivia.microarchitecture.BusinessException;
+import com.adaptionsoft.games.trivia.domain.exception.DuplicatePlayerNameException;
+import com.adaptionsoft.games.trivia.domain.exception.InvalidNumberOfPlayersException;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Players extends EventRaiser {
-    private static final int MIN_PLAYER_COUNT_AT_CREATION_TIME = 1;
     public static final int MIN_PLAYER_COUNT_AT_START_TIME = 2;
     public static final int MAX_PLAYER_COUNT = 6;
     @Getter
-    private final Player creator;
+    @Setter
+    private Player creator;
     @Getter
     private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
+    public Players(Player ... individualPlayers) {
+        if(individualPlayers.length > 0){
+            setCreator(individualPlayers[0]);
+        }
+        this.individualPlayers.addAll(Arrays.asList(individualPlayers));
+    }
 
-    public Players(Player... individualPlayers) {
-        // TODO déplacer la logique vers une factory.
-        if (individualPlayers.length < MIN_PLAYER_COUNT_AT_CREATION_TIME || individualPlayers.length > MAX_PLAYER_COUNT) {
-            throw InvalidNumberOfPlayersException.onCreation(individualPlayers.length);
+    public void validateOnCreation() {
+        if (individualPlayers.isEmpty() || individualPlayers.size() > MAX_PLAYER_COUNT) {
+            throw InvalidNumberOfPlayersException.onCreation(individualPlayers.size());
         }
         if (findDuplicatesAtCreationTime(individualPlayers)) {
             throw DuplicatePlayerNameException.onCreation(individualPlayers);
         }
-
-        creator = individualPlayers[0];
-
-        Arrays.stream(individualPlayers).forEach(this::add);
     }
 
-    private void add(Player newPlayer) {
+    public void add(Player newPlayer) {
         individualPlayers.add(newPlayer);
         raise(new PlayerAddedEvent(newPlayer, individualPlayers.size()));
     }
@@ -48,8 +50,8 @@ public class Players extends EventRaiser {
         add(newPlayer);
     }
 
-    private boolean findDuplicatesAtCreationTime(Player[] players) {
-        String[] playersNames = Arrays.stream(players).map(Player::getName).toArray(String[]::new);
+    private boolean findDuplicatesAtCreationTime(List<Player> players) {
+        String[] playersNames = players.stream().map(Player::getName).toArray(String[]::new);
         return findDuplicates(playersNames);
     }
 
@@ -82,43 +84,13 @@ public class Players extends EventRaiser {
         return individualPlayers.get(currentPlayerIndex);
     }
 
-    public int size() {
+    public int count() {
         return individualPlayers.size();
     }
 
-    public static class DuplicatePlayerNameException extends BusinessException {
-        private DuplicatePlayerNameException(String message) {
-            super(message);
-        }
-
-        public static DuplicatePlayerNameException onCreation(Player[] players) {
-            String playerNames = Arrays.stream(players)
-                    .map(Player::getName)
-                    .collect(Collectors.joining(","));
-            String message = "duplicate player names on game creation: %s".formatted(playerNames);
-            return new DuplicatePlayerNameException(message);
-        }
-
-        public static DuplicatePlayerNameException onAdd(Player newPlayer, Collection<Player> existingPlayers) {
-            String existingPlayerNames = existingPlayers.stream()
-                    .map(Player::getName)
-                    .collect(Collectors.joining(","));
-            String message = "duplicate player name on player join: %s. Existing player names:%s".formatted(newPlayer.getName(), existingPlayerNames);
-            return new DuplicatePlayerNameException(message);
-        }
+    public void addCreator(Player creator) {
+        setCreator(creator);
+        add(creator);
     }
 
-    public static class InvalidNumberOfPlayersException extends BusinessException {
-        private InvalidNumberOfPlayersException(String message) {
-            super(message);
-        }
-
-        public static InvalidNumberOfPlayersException onCreation(int playersCount){
-            return new InvalidNumberOfPlayersException("number of players at creation time must be between 1 and 6, but was: %d".formatted(playersCount));
-        }
-
-        public static InvalidNumberOfPlayersException onAdd(){
-            return new InvalidNumberOfPlayersException("Tried to add another player but cannot have more than 6 in a game.");
-        }
-    }
 }

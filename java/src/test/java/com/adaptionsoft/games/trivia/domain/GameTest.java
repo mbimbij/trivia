@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
+import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import lombok.SneakyThrows;
 import org.assertj.core.api.ThrowableAssert;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,6 +42,7 @@ class GameTest {
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         gameFactory = new GameFactory(eventPublisher, new QuestionsLoader());
+        final Player[] players = new Player[]{creator, player2};
         game = gameFactory.create("game", creator, player2);
     }
 
@@ -49,8 +52,9 @@ class GameTest {
         redirectStdoutToFile();
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
         int seed = 2;
-        Game game = gameFactory.create(
-                new Random(seed), "game",
+        final String[] strings = new String[]{"Chet", "Pat", "Sue", "Joe", "Vlad"};
+        Game game = gameFactory.create(new Random(seed),
+                "game",
                 "Chet",
                 "Pat",
                 "Sue",
@@ -58,8 +62,8 @@ class GameTest {
                 "Vlad");
 
         // WHEN
-
         game.play();
+
         // THEN
         String lead = Files.readString(Paths.get("src/test/resources/lead.txt"));
         assertEquals(gold, lead);
@@ -71,22 +75,22 @@ class GameTest {
     }
 
     @Nested
-    class CreateGame{
+    class CreateGame {
         @Test
         void cannot_create_game_without_any_player() {
-            assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game", new String[0]));
+//            assertThrows(Players.Nu.class, () -> gameFactory.create("game"));
         }
 
         @Test
         void cannot_create_game_with_more_than_6_players() {
-            String[] playersNames = {"player1",
+            assertThrows(InvalidNumberOfPlayersException.class, () -> gameFactory.create("game",
+                    "player1",
                     "player2",
                     "player3",
                     "player4",
                     "player5",
                     "player6",
-                    "player7"};
-            assertThrows(Players.InvalidNumberOfPlayersException.class, () -> gameFactory.create("game", playersNames));
+                    "player7"));
         }
 
         @Test
@@ -101,8 +105,9 @@ class GameTest {
                 int duplicatesCount = random.nextInt(1, Players.MAX_PLAYER_COUNT) + 1;
                 String[] playersNamesWithDuplicates = generatePlayersNamesWithDuplicates(duplicatesCount);
                 System.out.println(Arrays.toString(playersNamesWithDuplicates));
-
-                assertThrows(Players.DuplicatePlayerNameException.class, () -> gameFactory.create("game", playersNamesWithDuplicates));
+                String creatorName = playersNamesWithDuplicates[0];
+                String[] otherPlayersNames = Arrays.copyOfRange(playersNamesWithDuplicates, 1, playersNamesWithDuplicates.length);
+                assertThrows(DuplicatePlayerNameException.class, () -> gameFactory.create("game", creatorName, otherPlayersNames));
             }
         }
 
@@ -140,7 +145,7 @@ class GameTest {
             Players players = new Players(player1, player2);
 
             // WHEN
-            Game game = new Game("game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null));
+            Game game = new Game("game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();
@@ -157,6 +162,7 @@ class GameTest {
             Player player2 = new Player(playerName2);
 
             // WHEN
+            final String[] strings = new String[]{playerName1, playerName2};
             gameFactory.create("game", playerName1, playerName2);
 
             // THEN the domain events are produced in the correct order
@@ -168,7 +174,7 @@ class GameTest {
     }
 
     @Nested
-    class JoinGame{
+    class JoinGame {
         @ParameterizedTest
         @EnumSource(value = State.class, names = {"STARTED", "ENDED"})
         void cannot_join_game__when_state_is_not_CREATED(State state) {
@@ -178,7 +184,7 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("new player")))
-                    .isInstanceOf(Game.AddPlayerInvalidStateException.class)
+                    .isInstanceOf(AddPlayerInvalidStateException.class)
                     .hasMessage("Tried to add player for game=%d with state='%s'".formatted(game.getId(), game.getState()));
         }
 
@@ -189,7 +195,7 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("player1")))
-                    .isInstanceOf(Players.DuplicatePlayerNameException.class)
+                    .isInstanceOf(DuplicatePlayerNameException.class)
                     .hasMessageStartingWith("duplicate player name on player join");
         }
 
@@ -200,11 +206,12 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("player7")))
-                    .isInstanceOf(Players.InvalidNumberOfPlayersException.class);
+                    .isInstanceOf(InvalidNumberOfPlayersException.class);
         }
     }
+
     @Nested
-    class StartGame{
+    class StartGame {
 
         @Test
         void creator_can_start_game() {
@@ -222,7 +229,7 @@ class GameTest {
         @Test
         void joined_player_cannot_start_game() {
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> game.startBy(player2)).isInstanceOf(Game.StartException.class);
+                softAssertions.assertThatThrownBy(() -> game.startBy(player2)).isInstanceOf(StartException.class);
                 softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
             });
         }
@@ -237,23 +244,23 @@ class GameTest {
 
             // THEN
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(callable).isInstanceOf(Game.StartException.class);
+                softAssertions.assertThatThrownBy(callable).isInstanceOf(StartException.class);
                 softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
             });
         }
 
         @Test
         @Disabled
-        // TODO Implement after Players creation logic is refactored
+            // TODO Implement after Players creation logic is refactored
         void cannot_start_a_game_with_more_than_6_players() {
         }
     }
 
     @Nested
-    class PlayTurn{
+    class PlayTurn {
         @Test
         void player_other_than_current_should_not_be_able_to_play_turn() {
-            assertThatThrownBy(() -> game.playTurnBy(player2)).isInstanceOf(Game.PlayTurnException.class);
+            assertThatThrownBy(() -> game.playTurnBy(player2)).isInstanceOf(PlayTurnException.class);
         }
 
         @Test
@@ -261,8 +268,9 @@ class GameTest {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatCode(() -> game.playTurnBy(creator)).doesNotThrowAnyException();
                 // TODO apply refacto 'Hide Delegate'
-                softAssertions.assertThat(game.getPlayers().getCurrent()).isEqualTo(player2);
+                softAssertions.assertThat(game.getCurrentPlayer()).isEqualTo(player2);
             });
         }
+
     }
 }

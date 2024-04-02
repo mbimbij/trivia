@@ -32,7 +32,7 @@ public class GameRepositoryInMemory implements GameRepository {
     }
 
     @Override
-    public Optional<Game> getById(int gameId) {
+    public Optional<Game> findById(int gameId) {
         return games.stream()
                 .filter(game -> Objects.equals(gameId, game.getId()))
                 .findAny();
