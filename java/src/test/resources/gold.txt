@@ -8,6 +8,7 @@ Joe was added
 They are player number 4
 Vlad was added
 They are player number 5
+Game created
 Chet is the current player
 They have rolled a 4
 Chet's new location is 4
@@ -282,3 +283,5 @@ The category is Rock
 Rock Question 6
 Answer was correct!!!!
 Chet now has 12 Gold Coins.
+player id=null won game id=null
+game gameId=null ended with winner playerId=null

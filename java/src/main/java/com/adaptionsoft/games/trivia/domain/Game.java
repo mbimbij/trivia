@@ -1,8 +1,10 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.Event;
+import com.adaptionsoft.games.trivia.domain.event.GameEndedEvent;
 import com.adaptionsoft.games.trivia.domain.event.GameStartedEvent;
-import com.adaptionsoft.games.trivia.domain.exception.AddPlayerInvalidStateException;
+import com.adaptionsoft.games.trivia.domain.event.PlayerWonEvent;
+import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
@@ -13,8 +15,7 @@ import lombok.Setter;
 
 import java.util.*;
 
-import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
-import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
+import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 
 @EqualsAndHashCode(callSuper = true)
 public class Game extends Entity {
@@ -33,13 +34,29 @@ public class Game extends Entity {
 
 
     // do not call directly, unless in a testing context
-    public Game(String name, EventPublisher eventPublisher, Players players, PlayerTurnOrchestrator playerTurnOrchestrator, Player currentPlayer, State state) {
+    public Game(String name,
+                EventPublisher eventPublisher,
+                Players players,
+                PlayerTurnOrchestrator playerTurnOrchestrator,
+                Player currentPlayer,
+                State state) {
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
         this.playerTurnOrchestrator = playerTurnOrchestrator;
         this.currentPlayer = currentPlayer;
         this.state = state;
+    }
+
+    public Game(Integer id,
+                String name,
+                EventPublisher eventPublisher,
+                Players players,
+                PlayerTurnOrchestrator playerTurnOrchestrator,
+                Player currentPlayer,
+                State state) {
+        this(name, eventPublisher, players, playerTurnOrchestrator, currentPlayer, state);
+        this.id = id;
     }
 
     public Player getCreator() {
@@ -53,7 +70,8 @@ public class Game extends Entity {
     }
 
     public void playTurnBy(Player player) {
-        if(!Objects.equals(player, currentPlayer)){
+        validateGameNotEnded("play turn");
+        if (!Objects.equals(player, currentPlayer)) {
             throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
         }
         playerTurnOrchestrator.performTurn(player);
@@ -62,8 +80,19 @@ public class Game extends Entity {
         endCurrentPlayerTurn();
     }
 
+    private void validateGameNotEnded(String action) {
+        if(state.equals(ENDED)){
+            throw new InvalidGameStateException(this.getId(), this.getState(), action);
+        }
+    }
+
     private void endGameIfCurrentPlayerWon() {
-        this.isGameInProgress = !currentPlayer.isWinning();
+        if (currentPlayer.isWinning()) {
+            isGameInProgress = false;
+            state = ENDED;
+            raise(new PlayerWonEvent(id, currentPlayer));
+            raise(new GameEndedEvent(id, currentPlayer.getId()));
+        }
     }
 
     private void endCurrentPlayerTurn() {
@@ -82,12 +111,13 @@ public class Game extends Entity {
 
     public void addPlayer(Player player) {
         if (!state.equals(CREATED)) {
-            throw new AddPlayerInvalidStateException(this.getId(), this.getState());
+            throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
         }
         players.addAfterCreationTime(player);
     }
 
     public void startBy(Player player) {
+        validateGameNotEnded("start");
         if (!Objects.equals(player, players.getCreator())) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
         }
