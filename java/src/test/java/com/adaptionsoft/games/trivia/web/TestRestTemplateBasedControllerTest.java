@@ -2,7 +2,7 @@ package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
-import com.adaptionsoft.games.trivia.domain.exception.AddPlayerInvalidStateException;
+import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class TestRestTemplateBasedControllerTest {
     void handle_errors() {
         // GIVEN an error is thrown when adding a player
         Game mockGame = Mockito.mock(Game.class);
-        AddPlayerInvalidStateException exception = new AddPlayerInvalidStateException(1, Game.State.STARTED);
+        InvalidGameStateException exception = new InvalidGameStateException(1, Game.State.STARTED, "add player");
         Mockito.doThrow(exception).when(mockGame).addPlayer(any());
 
         Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(anyInt());

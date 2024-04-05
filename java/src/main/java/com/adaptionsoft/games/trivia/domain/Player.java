@@ -9,7 +9,9 @@ import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PUBLIC;
 
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Player extends Entity {
+    // TODO distinguer strictement "Player" et "User" -> player.id != user.id
     @Getter(PUBLIC)
     private final String name;
 

@@ -9,7 +9,10 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -19,13 +22,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
-import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GameTest {
 
     private static final PrintStream stdout = System.out;
@@ -42,7 +47,6 @@ class GameTest {
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         gameFactory = new GameFactory(eventPublisher, new QuestionsLoader());
-        final Player[] players = new Player[]{creator, player2};
         game = gameFactory.create("game", creator, player2);
     }
 
@@ -184,8 +188,7 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("new player")))
-                    .isInstanceOf(AddPlayerInvalidStateException.class)
-                    .hasMessage("Tried to add player for game=%d with state='%s'".formatted(game.getId(), game.getState()));
+                    .isInstanceOf(InvalidGameStateException.class);
         }
 
         @Test
@@ -272,5 +275,46 @@ class GameTest {
             });
         }
 
+    }
+
+    @Nested
+    class EndGame {
+        @Test
+        void game_should_end__if_current_player_is_winning() {
+            // GIVEN
+            int gameId = 1;
+            Players players = Mockito.mock(Players.class);
+            PlayerTurnOrchestrator playerTurnOrchestrator = Mockito.mock(PlayerTurnOrchestrator.class);
+            int playerId = 2;
+            Player player = Mockito.spy(new Player(playerId, null));
+            Mockito.doReturn(true).when(player).isWinning();
+            Game game = new Game(gameId, null, eventPublisher, players, playerTurnOrchestrator, player, STARTED);
+
+            // WHEN
+            game.playTurnBy(player);
+
+            // THEN
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThat(game.getState()).isEqualTo(ENDED);
+                softAssertions.assertThat(eventPublisher.getEvents()).contains(new GameEndedEvent(gameId, player.getId()));
+                softAssertions.assertThat(eventPublisher.getEvents()).contains(new PlayerWonEvent(gameId, player));
+            });
+        }
+
+        @SneakyThrows
+        @Test
+        void cannot_perform_a_command_on_an_ended_game() {
+            // GIVEN an ended game
+            game.setState(ENDED);
+
+            // WHEN
+            assertSoftly(softAssertions -> {
+                softAssertions.assertThatThrownBy(() -> game.addPlayer(new Player(null))).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.startBy(creator)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.playTurnBy(creator)).isInstanceOf(InvalidGameStateException.class);
+            });
+
+            // THEN
+        }
     }
 }

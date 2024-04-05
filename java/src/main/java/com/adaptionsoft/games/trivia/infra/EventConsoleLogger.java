@@ -7,7 +7,7 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventListener;
 public class EventConsoleLogger implements EventListener {
     @Override
     public boolean accept(Event event) {
-        return event instanceof PlayerEvent;
+        return event != null;
     }
 
     @Override
