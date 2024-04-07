@@ -1,10 +1,5 @@
 # sprint
-
-- noter les sources d'illisibilité dans mon code, potentiellement liées à la violation de la Loi de Déméter (ou autre)
-  - des events purement liés au `Player` sont créés et produits dans `Game`, et d'autres dans `Player` ce qui est
-    incohérent. Où devraient-ils être créés, il ya de bonnes raisons de le faire dans l'un ou l'autre
-- revenir au modèle de la collection interne pour stocker les events de l'aggrégat
-- refacto factory de question initialization strategy et voir si je peux faire des trucs avec les sealed classes
+- Déployer le backend dans AWS
 
 # backlog
 
