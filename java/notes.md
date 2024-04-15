@@ -3,15 +3,6 @@
 
 # backlog
 
-- [F9] écrire un test pour vérifier mon hypothèse sur nécessité de remettre à zéro le compteur de mauvaise réponse à la fin
-  du tour d'un joueur
-  - si 2 mauvaises réponses consécutives -> prison
-  - au prochain tour, si le joueur sort de prison et donne une mauvaise réponse, il est envoyé directement en prison,
-    sans 2e chance, car son compteur n'est pas réinitialisé
-- [F1] Version Web
-  - Backend API - V0 : Vérifier que je peux jouer une partie complète
-  - Frontend - V0: le strict minimum pour 
-- [F7] NFR guidance
 - [F1] [F7] Setup Prod - walking skeleton
 - [F4] Setup environnements : "prod" & "dev"
 - [F4] Setup CI basique
