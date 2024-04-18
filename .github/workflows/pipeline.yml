@@ -14,26 +14,29 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
       - name: Set up Docker Buildx # necessary for caching Docker layers
         uses: docker/setup-buildx-action@v3
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+      - uses: actions/setup-java@v4
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          context: java
-          file: java/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: 'java/pom.xml' # optional
+      - name: Build with Maven
+        working-directory: java
+        run: mvn -B verify --file pom.xml
+      - name: Build, tag, and push docker image to Amazon ECR
+        working-directory: java
+        run: |
+          java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted
+          docker build -t 870103585828.dkr.ecr.eu-west-3.amazonaws.com/trivia:latest . --file pipeline.Dockerfile
+          docker push 870103585828.dkr.ecr.eu-west-3.amazonaws.com/trivia:latest
