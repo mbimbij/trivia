@@ -1,22 +1,8 @@
 # sprint
-
-- noter les sources d'illisibilité dans mon code, potentiellement liées à la violation de la Loi de Déméter (ou autre)
-  - des events purement liés au `Player` sont créés et produits dans `Game`, et d'autres dans `Player` ce qui est
-    incohérent. Où devraient-ils être créés, il ya de bonnes raisons de le faire dans l'un ou l'autre
-- revenir au modèle de la collection interne pour stocker les events de l'aggrégat
-- refacto factory de question initialization strategy et voir si je peux faire des trucs avec les sealed classes
+- Déployer le backend dans AWS
 
 # backlog
 
-- [F9] écrire un test pour vérifier mon hypothèse sur nécessité de remettre à zéro le compteur de mauvaise réponse à la fin
-  du tour d'un joueur
-  - si 2 mauvaises réponses consécutives -> prison
-  - au prochain tour, si le joueur sort de prison et donne une mauvaise réponse, il est envoyé directement en prison,
-    sans 2e chance, car son compteur n'est pas réinitialisé
-- [F1] Version Web
-  - Backend API - V0 : Vérifier que je peux jouer une partie complète
-  - Frontend - V0: le strict minimum pour 
-- [F7] NFR guidance
 - [F1] [F7] Setup Prod - walking skeleton
 - [F4] Setup environnements : "prod" & "dev"
 - [F4] Setup CI basique

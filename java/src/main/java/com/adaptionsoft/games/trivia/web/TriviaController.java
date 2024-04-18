@@ -33,36 +33,41 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
-    @PostMapping
-    @RequestMapping("/{gameId}/player/{playerId}/join")
+    @PostMapping("/{gameId}/player/{playerId}/join")
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto addPlayerToGame(@PathVariable("gameId") Integer gameId,
                                            @RequestBody UserDto userDto) {
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        Game game = findGameOrThrow(gameId);
         game.addPlayer(new Player(userDto.id(), userDto.name()));
         gameRepository.save(game);
         return GameResponseDto.from(game);
     }
 
-    @PostMapping
-    @RequestMapping("/{gameId}/player/{playerId}/start")
+    @PostMapping("/{gameId}/player/{playerId}/start")
     public GameResponseDto startGame(@PathVariable("gameId") Integer gameId,
                                      @PathVariable("playerId") Integer playerId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
-        Player player = game.findPlayerById(playerId).orElseThrow(() -> new PlayerNotFoundInGameException(gameId, playerId));
+        Game game = findGameOrThrow(gameId);
+        Player player = findPlayerOrThrow(game, playerId);
         game.startBy(player);
         gameRepository.save(game);
         return GameResponseDto.from(game);
     }
 
-    @PostMapping
-    @RequestMapping("/{gameId}/player/{playerId}/playTurn")
+    @PostMapping("/{gameId}/player/{playerId}/playTurn")
     public GameResponseDto playTurn(@PathVariable("gameId") Integer gameId,
                                      @PathVariable("playerId") Integer playerId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
-        Player player = game.findPlayerById(playerId).orElseThrow(() -> new PlayerNotFoundInGameException(gameId, playerId));
+        Game game = findGameOrThrow(gameId);
+        Player player = findPlayerOrThrow(game, playerId);
         game.playTurnBy(player);
         gameRepository.save(game);
         return GameResponseDto.from(game);
+    }
+
+    private Game findGameOrThrow(Integer gameId) {
+        return gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+    }
+
+    private Player findPlayerOrThrow(Game game, Integer playerId) {
+        return game.findPlayerById(playerId).orElseThrow(() -> new PlayerNotFoundInGameException(game.getId(), playerId));
     }
 }
