@@ -5,12 +5,13 @@ import {GameServiceMock} from "./game-service-mock";
 import {GameServiceAbstract} from "./game-service-abstract";
 import {CreateGameComponent} from "./create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
+import {RouterModule} from "@angular/router";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [{provide: GameServiceAbstract, useClass: GameServiceMock}],
     declarations: [AppComponent],
-    imports: [ HttpClientTestingModule, CreateGameComponent, FormsModule ]
+    imports: [ HttpClientTestingModule, CreateGameComponent, FormsModule, RouterModule ]
   }));
 
   it('should create the app', () => {

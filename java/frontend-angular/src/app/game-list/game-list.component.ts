@@ -1,14 +1,24 @@
-import {Component} from '@angular/core';
-import {GameServiceAbstract} from "./game-service-abstract";
-import {GameResponseDto} from "./openapi-generated";
+import { Component } from '@angular/core';
+import {CreateGameComponent} from "../create-game/create-game.component";
+import {FormsModule} from "@angular/forms";
+import {NgForOf, NgIf} from "@angular/common";
+import {GameResponseDto} from "../openapi-generated";
+import {GameServiceAbstract} from "../game-service-abstract";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-game-list',
+  standalone: true,
+    imports: [
+        CreateGameComponent,
+        FormsModule,
+        NgForOf,
+        NgIf
+    ],
+  templateUrl: './game-list.component.html',
+  styleUrl: './game-list.component.css'
 })
-export class AppComponent {
+export class GameListComponent {
   title = 'frontend-angular';
   games: GameResponseDto[] = [];
   playerName: string = 'player';
@@ -43,4 +53,5 @@ export class AppComponent {
   isCurrentPlayerCreator(game: GameResponseDto): boolean {
     return game.creator.name === this.playerName;
   }
+
 }

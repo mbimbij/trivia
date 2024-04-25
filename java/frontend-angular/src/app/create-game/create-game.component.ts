@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";
 import {FormsModule} from "@angular/forms";
 import {tap} from "rxjs";
-import {Game} from "../game";
 
 @Component({
   selector: 'app-create-game',
