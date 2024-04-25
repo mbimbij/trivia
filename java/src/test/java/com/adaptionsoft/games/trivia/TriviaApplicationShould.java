@@ -157,7 +157,7 @@ class TriviaApplicationShould {
         int newPlayerId = 2;
         UserDto newPlayerDto = new UserDto(newPlayerId, "new player");
         ResultActions resultActions = mvc.perform(
-                post("/game/{gameId}/player/{playerId}/join", game.getId(), newPlayerId)
+                post("/games/{gameId}/players/{playerId}/join", game.getId(), newPlayerId)
                         .content(mapper.writeValueAsString(newPlayerDto))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -197,7 +197,7 @@ class TriviaApplicationShould {
 
         // WHEN the creator starts the game
         ResultActions resultActions = mvc.perform(
-                post("/game/{gameId}/player/{playerId}/start", game.getId(), creator.getId())
+                post("/games/{gameId}/players/{playerId}/start", game.getId(), creator.getId())
         );
 
         // THEN the response status is ok
@@ -232,7 +232,7 @@ class TriviaApplicationShould {
 
         // WHEN the current player (creator) starts the game
         ResultActions resultActions = mvc.perform(
-                post("/game/{gameId}/player/{playerId}/playTurn", game.getId(), creator.getId())
+                post("/games/{gameId}/players/{playerId}/playTurn", game.getId(), creator.getId())
         );
 
         // THEN response status is ok

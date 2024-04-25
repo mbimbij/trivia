@@ -1,0 +1,31 @@
+<mxfile host="Electron" modified="2024-04-25T08:58:45.641Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.1 Chrome/112.0.5615.87 Electron/24.1.2 Safari/537.36" etag="FLpuBue4Eh3wqSTJoa2_" version="21.2.1" type="device">
+  <diagram name="Page-1" id="dn6SCQYQpKd5RPx05TAc">
+    <mxGraphModel dx="880" dy="546" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="0pfbMOOKqHxQXELKYudj-1" value="build" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="60" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0pfbMOOKqHxQXELKYudj-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="0pfbMOOKqHxQXELKYudj-2" target="0pfbMOOKqHxQXELKYudj-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0pfbMOOKqHxQXELKYudj-2" value="deploy &lt;br&gt;staging" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0pfbMOOKqHxQXELKYudj-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="0pfbMOOKqHxQXELKYudj-3" target="0pfbMOOKqHxQXELKYudj-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0pfbMOOKqHxQXELKYudj-3" value="deploy &lt;br&gt;prod" style="shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+          <mxGeometry x="438.13" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0pfbMOOKqHxQXELKYudj-4" value="Staging" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0pfbMOOKqHxQXELKYudj-5" value="prod" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="438.13" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

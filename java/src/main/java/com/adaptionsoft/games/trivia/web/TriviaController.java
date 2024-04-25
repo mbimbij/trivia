@@ -6,7 +6,9 @@ import com.adaptionsoft.games.trivia.domain.GameRepository;
 import com.adaptionsoft.games.trivia.domain.Player;
 import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,21 @@ import java.util.Collection;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/game")
+@RequestMapping("/games")
+@CrossOrigin(origins = "${application.allowed-origins}")
+//@CrossOrigin
 public class TriviaController {
 
     private final GameRepository gameRepository;
     private final GameFactory gameFactory;
+
+    @PostConstruct
+    public void postConstruct() {
+        Game game1 = gameFactory.create("game-1", "player-1", "player-2", "player-3");
+        Game game2 = gameFactory.create("game-2", "player-4", "player-5", "player-6");
+        gameRepository.save(game1);
+        gameRepository.save(game2);
+    }
 
     @GetMapping
     public Collection<GameResponseDto> listGames() {
@@ -33,7 +45,7 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
-    @PostMapping("/{gameId}/player/{playerId}/join")
+    @PostMapping("/{gameId}/players/{playerId}/join")
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto addPlayerToGame(@PathVariable("gameId") Integer gameId,
                                            @RequestBody UserDto userDto) {
@@ -43,7 +55,7 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
-    @PostMapping("/{gameId}/player/{playerId}/start")
+    @PostMapping("/{gameId}/players/{playerId}/start")
     public GameResponseDto startGame(@PathVariable("gameId") Integer gameId,
                                      @PathVariable("playerId") Integer playerId) {
         Game game = findGameOrThrow(gameId);
@@ -53,7 +65,7 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
-    @PostMapping("/{gameId}/player/{playerId}/playTurn")
+    @PostMapping("/{gameId}/players/{playerId}/playTurn")
     public GameResponseDto playTurn(@PathVariable("gameId") Integer gameId,
                                      @PathVariable("playerId") Integer playerId) {
         Game game = findGameOrThrow(gameId);

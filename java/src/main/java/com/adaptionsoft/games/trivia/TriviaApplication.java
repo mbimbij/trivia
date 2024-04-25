@@ -1,11 +1,14 @@
 package com.adaptionsoft.games.trivia;
 
+import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameFactory;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
 import com.adaptionsoft.games.trivia.domain.QuestionsLoader;
 import com.adaptionsoft.games.trivia.domain.event.ObserverBasedEventPublisher;
 import com.adaptionsoft.games.trivia.infra.GameRepositoryInMemory;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

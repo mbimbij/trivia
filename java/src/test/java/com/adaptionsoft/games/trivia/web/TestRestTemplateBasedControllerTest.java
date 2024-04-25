@@ -51,7 +51,7 @@ class TestRestTemplateBasedControllerTest {
         int newPlayerId = 2;
         UserDto newPlayerDto = new UserDto(newPlayerId, "new player");
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
-                "/game/%d/player/%d/join".formatted(0, newPlayerId),
+                "/games/%d/players/%d/join".formatted(0, newPlayerId),
                 newPlayerDto,
                 Map.class);
 

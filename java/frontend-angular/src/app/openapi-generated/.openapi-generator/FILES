@@ -1,0 +1,16 @@
+.gitignore
+README.md
+api.module.ts
+api/api.ts
+api/trivia-controller.service.ts
+api/trivia-controller.serviceInterface.ts
+configuration.ts
+encoder.ts
+git_push.sh
+index.ts
+model/create-game-request-dto.ts
+model/game-response-dto.ts
+model/models.ts
+model/user-dto.ts
+param.ts
+variables.ts

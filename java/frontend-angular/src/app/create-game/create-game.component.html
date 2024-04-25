@@ -1,0 +1,3 @@
+<label for="newGameName">Create Game</label>
+<input type="text" id="newGameName" required minlength="1" maxlength="100" size="20" #newGameName />
+<button (click)="createGame(newGameName.value)">create</button>

@@ -65,7 +65,7 @@ class RestAssuredBasedControllerTest {
                 .contentType("application/json")
                 .body(new UserDto(null, null))
         .when()
-                .post("/game/{gameId}/player/{playerId}/join", 0, 0)
+                .post("/games/{gameId}/players/{playerId}/join", 0, 0)
         .then()
                 .statusCode(409)
                 .body("timestamp", notNullValue())
@@ -87,7 +87,7 @@ class RestAssuredBasedControllerTest {
         //@formatter:off
         requestSpec
         .when()
-                .post("/game/{gameId}/player/{playerId}/playTurn", 0, 0)
+                .post("/games/{gameId}/players/{playerId}/playTurn", 0, 0)
         .then()
                 .statusCode(403)
 //                .body("timestamp", notNullValue())
