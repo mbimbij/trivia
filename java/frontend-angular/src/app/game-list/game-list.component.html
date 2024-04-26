@@ -1,3 +1,4 @@
+<p>Welcome to Trivia Web !</p>
 <label for="playerName">Player Name</label>
 <input type="text" id="playerName" required minlength="1" maxlength="100" size="20" [(ngModel)]="playerName"/>
 <br>
@@ -5,15 +6,26 @@
 <table>
   <tr>
     <th>game</th>
+    <th>creator</th>
+    <th>players</th>
     <th>status</th>
     <th>join</th>
+    <th>go to</th>
   </tr>
   <tr class="game" *ngFor="let game of games" [className]="game.state">
     <td class="item-name">{{ game.name }}</td>
+    <td class="item-name">{{ game.creator.name }}</td>
+    <td class="players-names">{{ playersNames(game) }}</td>
     <td class="item-status">{{ game.state }}</td>
-    <td class="item-status">
-      <button (click)="joinGame(game)" *ngIf="!isCurrentPlayerCreator(game)">
+    <td class="join">
+      <button (click)="joinGame(game)" *ngIf="!isUserPlayer(game)">
         join
+      </button>
+      <span *ngIf="isUserPlayer(game)">already joined</span>
+    </td>
+    <td class="goto">
+      <button (click)="goToGame(game)" *ngIf="isUserPlayer(game)">
+        go to
       </button>
     </td>
   </tr>

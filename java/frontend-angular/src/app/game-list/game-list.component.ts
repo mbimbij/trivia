@@ -28,7 +28,6 @@ export class GameListComponent {
   }
 
   ngOnInit(): void {
-    console.log("trivia application up and running")
     this.service.getGames()
       .subscribe(games => {
         this.games = games;
@@ -50,8 +49,19 @@ export class GameListComponent {
     this.router.navigate(['/game']);
   }
 
-  isCurrentPlayerCreator(game: GameResponseDto): boolean {
+  isUserCreator(game: GameResponseDto): boolean {
     return game.creator.name === this.playerName;
   }
 
+  isUserPlayer(game: GameResponseDto): boolean {
+    return game.players.some(player => player.name === this.playerName);
+  }
+
+  goToGame(game: GameResponseDto) {
+    console.log(`going to game ${game.id}`)
+  }
+
+  playersNames(game: GameResponseDto) {
+    return game.players.map(value => value.name).join(', ');
+  }
 }
