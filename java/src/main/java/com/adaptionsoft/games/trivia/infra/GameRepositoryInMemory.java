@@ -10,7 +10,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 public class GameRepositoryInMemory implements GameRepository {
-    private final List<Game> games = new ArrayList<>();
+    private final Set<Game> games = new HashSet<>();
     private final IdGenerator idGenerator;
 
     @Override

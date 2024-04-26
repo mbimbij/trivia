@@ -57,7 +57,7 @@ class TriviaApplicationShould {
     @Test
     void return_empty_response__when_no_game() {
         // WHEN
-        ResultActions perform = mvc.perform(get("/game"));
+        ResultActions perform = mvc.perform(get("/games"));
 
         // THEN http status is ok
         MvcResult mvcResult = perform
@@ -80,7 +80,7 @@ class TriviaApplicationShould {
 
 
         // WHEN listing game
-        ResultActions resultActions = mvc.perform(get("/game"));
+        ResultActions resultActions = mvc.perform(get("/games"));
 
         // THEN status is ok
         MvcResult mvcResult = resultActions
@@ -113,7 +113,7 @@ class TriviaApplicationShould {
         Mockito.doReturn(gameId).when(idGenerator).nextId();
 
         // WHEN I create a game
-        ResultActions performResultActions = mvc.perform(post("/game")
+        ResultActions performResultActions = mvc.perform(post("/games")
                         .content(mapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
