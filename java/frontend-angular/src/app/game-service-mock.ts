@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {GameServiceAbstract} from "./game-service-abstract";
 import {Observable, of} from "rxjs";
 import {Game} from "./game";
-import {GameResponseDto} from "./openapi-generated";
+import {GameResponseDto, UserDto} from "./openapi-generated";
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +27,9 @@ export class GameServiceMock extends GameServiceAbstract {
         players: [{id: 2, name: "player2"}, {id: 3, name: "player3"}, {id: 4, name: "player"}]
       },
     ]);
+  }
+
+  join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
+    return of(game);
   }
 }

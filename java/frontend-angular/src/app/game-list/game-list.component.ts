@@ -1,30 +1,33 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {GameResponseDto} from "../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {Router} from "@angular/router";
+import {ObjectAttributePipe} from "../object-attribute.pipe";
 
 @Component({
   selector: 'app-game-list',
   standalone: true,
-    imports: [
-        CreateGameComponent,
-        FormsModule,
-        NgForOf,
-        NgIf
-    ],
+  imports: [
+    CreateGameComponent,
+    FormsModule,
+    NgForOf,
+    NgIf,
+    ObjectAttributePipe
+  ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
 })
 export class GameListComponent {
   title = 'frontend-angular';
   games: GameResponseDto[] = [];
-  playerName: string = 'player';
+  playerName: string = 'player4';
 
   constructor(private service: GameServiceAbstract,
-              private router: Router) {
+              private router: Router,
+              private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -40,17 +43,21 @@ export class GameListComponent {
     this.games.push(newGame);
   }
 
-  deleteGame(game: GameResponseDto) {
-    console.log(`deleting game ${game.id}`)
-  }
-
   joinGame(game: GameResponseDto) {
     console.log(`joining game ${game.id}`)
-    this.router.navigate(['/game']);
+    this.service.join(game, {id: 1, name: this.playerName})
+      .subscribe(response => {
+          this.updateGameWith(response);
+        }
+      )
   }
 
-  isUserCreator(game: GameResponseDto): boolean {
-    return game.creator.name === this.playerName;
+  private updateGameWith(replacement: GameResponseDto) {
+    const index = this.games.findIndex(
+      game => game.id === replacement.id);
+    if (index !== -1) {
+      this.games.splice(index, 1, replacement);
+    }
   }
 
   isUserPlayer(game: GameResponseDto): boolean {
@@ -59,9 +66,5 @@ export class GameListComponent {
 
   goToGame(game: GameResponseDto) {
     console.log(`going to game ${game.id}`)
-  }
-
-  playersNames(game: GameResponseDto) {
-    return game.players.map(value => value.name).join(', ');
   }
 }

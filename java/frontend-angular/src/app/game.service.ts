@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "./game-service-abstract";
 import {Game} from "./game";
 import {catchError, map, Observable, of, tap} from "rxjs";
-import {GameResponseDto, TriviaControllerService} from "./openapi-generated";
+import {GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
 import {HttpClient} from "@angular/common/http";
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,9 @@ export class GameService extends GameServiceAbstract {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
+    return this.service.addPlayerToGame(game.id, user.id, user);
   }
 }

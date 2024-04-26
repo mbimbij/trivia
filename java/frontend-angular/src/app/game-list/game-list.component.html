@@ -15,7 +15,7 @@
   <tr class="game" *ngFor="let game of games" [className]="game.state">
     <td class="item-name">{{ game.name }}</td>
     <td class="item-name">{{ game.creator.name }}</td>
-    <td class="players-names">{{ playersNames(game) }}</td>
+    <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
     <td class="item-status">{{ game.state }}</td>
     <td class="join">
       <button (click)="joinGame(game)" *ngIf="!isUserPlayer(game)">
