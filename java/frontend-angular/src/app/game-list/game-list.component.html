@@ -1,6 +1,7 @@
 <p>Welcome to Trivia Web !</p>
 <label for="playerName">Player Name</label>
-<input type="text" id="playerName" required minlength="1" maxlength="100" size="20" [(ngModel)]="playerName"/>
+<input type="text" id="playerName" required minlength="1" maxlength="100" size="20"
+       [(ngModel)]="playerName" (ngModelChange)="syncNameToLocalStorage()"/>
 <br>
 <app-create-game [playerName]="playerName" (newGameEvent)="addGame($event)"></app-create-game>
 <table>
@@ -9,19 +10,19 @@
     <th>creator</th>
     <th>players</th>
     <th>status</th>
-    <th>join</th>
-    <th>go to</th>
+    <th>join</th>    <th>go to</th>
   </tr>
   <tr class="game" *ngFor="let game of games" [className]="game.state">
-    <td class="item-name">{{ game.name }}</td>
+    <td class="item-name"><a [routerLink]="['game',game.id]" [state]="game" >{{ game.name }}</a>
+    </td>
     <td class="item-name">{{ game.creator.name }}</td>
     <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
     <td class="item-status">{{ game.state }}</td>
     <td class="join">
-      <button (click)="joinGame(game)" *ngIf="!isUserPlayer(game)">
-        join
-      </button>
-      <span *ngIf="isUserPlayer(game)">already joined</span>
+      <app-join-game-button
+        [game]="game"
+        (gameModifiedEvent)="updateGameWith($event)">
+      </app-join-game-button>
     </td>
     <td class="goto">
       <button (click)="goToGame(game)" *ngIf="isUserPlayer(game)">

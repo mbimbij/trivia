@@ -1,11 +1,12 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {GameResponseDto} from "../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {Router} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
+import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 
 @Component({
   selector: 'app-game-list',
@@ -15,7 +16,9 @@ import {ObjectAttributePipe} from "../object-attribute.pipe";
     FormsModule,
     NgForOf,
     NgIf,
-    ObjectAttributePipe
+    ObjectAttributePipe,
+    RouterLink,
+    JoinGameButtonComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
@@ -23,11 +26,11 @@ import {ObjectAttributePipe} from "../object-attribute.pipe";
 export class GameListComponent {
   title = 'frontend-angular';
   games: GameResponseDto[] = [];
-  playerName: string = 'player4';
+  defaultPlayerName: string = 'player';
+  playerName: string;
 
-  constructor(private service: GameServiceAbstract,
-              private router: Router,
-              private cdr: ChangeDetectorRef) {
+  constructor(private service: GameServiceAbstract) {
+    this.playerName = localStorage.getItem('playerName') || this.defaultPlayerName
   }
 
   ngOnInit(): void {
@@ -52,7 +55,7 @@ export class GameListComponent {
       )
   }
 
-  private updateGameWith(replacement: GameResponseDto) {
+  protected updateGameWith(replacement: GameResponseDto) {
     const index = this.games.findIndex(
       game => game.id === replacement.id);
     if (index !== -1) {
@@ -66,5 +69,9 @@ export class GameListComponent {
 
   goToGame(game: GameResponseDto) {
     console.log(`going to game ${game.id}`)
+  }
+
+  syncNameToLocalStorage() {
+    localStorage.setItem('playerName', this.playerName);
   }
 }

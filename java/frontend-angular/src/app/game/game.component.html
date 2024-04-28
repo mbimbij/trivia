@@ -1,1 +1,2 @@
-<p>game component works!</p>
+<p>player: {{ playerName }} - game id: {{ game.id }} - game name: {{ game.name }}</p>
+<app-join-game-button [game]="game" (gameModifiedEvent)="updateGameWith($event)"></app-join-game-button>
