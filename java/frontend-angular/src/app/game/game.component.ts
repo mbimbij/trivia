@@ -2,12 +2,17 @@ import {Component} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {GameResponseDto} from "../openapi-generated";
+import {NgForOf, NgIf} from "@angular/common";
+import {ObjectAttributePipe} from "../object-attribute.pipe";
 
 @Component({
   selector: 'app-game',
   standalone: true,
   imports: [
-    JoinGameButtonComponent
+    JoinGameButtonComponent,
+    NgForOf,
+    NgIf,
+    ObjectAttributePipe
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'

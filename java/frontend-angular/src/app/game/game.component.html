@@ -1,2 +1,29 @@
-<p>player: {{ playerName }} - game id: {{ game.id }} - game name: {{ game.name }}</p>
-<app-join-game-button [game]="game" (gameModifiedEvent)="updateGameWith($event)"></app-join-game-button>
+<table>
+  <tr>
+    <th>game</th>
+    <th>creator</th>
+    <th>players</th>
+    <th>status</th>
+    <th>join</th>    <th>go to</th>
+  </tr>
+  <tr class="game">
+    <td class="item-name">
+      {{ game.name }}
+    </td>
+    <td class="item-name">{{ game.creator.name }}</td>
+    <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
+    <td class="item-status">{{ game.state }}</td>
+    <td class="join">
+      <app-join-game-button
+        [game]="game"
+        (gameModifiedEvent)="updateGameWith($event)">
+      </app-join-game-button>
+    </td>
+    <td class="goto">
+      todo goto
+<!--      <button (click)="goToGame(game)" *ngIf="isUserPlayer(game)">-->
+<!--        go to-->
+<!--      </button>-->
+    </td>
+  </tr>
+</table>
