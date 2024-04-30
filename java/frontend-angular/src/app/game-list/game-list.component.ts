@@ -7,6 +7,7 @@ import {GameServiceAbstract} from "../game-service-abstract";
 import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
+import {LocalStorageService} from "../local-storage.service";
 
 @Component({
   selector: 'app-game-list',
@@ -29,8 +30,9 @@ export class GameListComponent {
   defaultPlayerName: string = 'player';
   playerName: string;
 
-  constructor(private service: GameServiceAbstract) {
-    this.playerName = localStorage.getItem('playerName') || this.defaultPlayerName
+  constructor(private service: GameServiceAbstract,
+              private localStorageService: LocalStorageService) {
+    this.playerName = localStorage.getItem('playerName') ?? this.defaultPlayerName
   }
 
   ngOnInit(): void {
@@ -42,19 +44,9 @@ export class GameListComponent {
   }
 
   addGame(newGame: GameResponseDto) {
-    console.log(`app.component.ts received game: ${newGame}`);
+    console.log(`game created: ${JSON.stringify(newGame)}`);
     this.games.push(newGame);
   }
-
-  joinGame(game: GameResponseDto) {
-    console.log(`joining game ${game.id}`)
-    this.service.join(game, {id: 1, name: this.playerName})
-      .subscribe(response => {
-          this.updateGameWith(response);
-        }
-      )
-  }
-
   protected updateGameWith(replacement: GameResponseDto) {
     const index = this.games.findIndex(
       game => game.id === replacement.id);
@@ -72,6 +64,6 @@ export class GameListComponent {
   }
 
   syncNameToLocalStorage() {
-    localStorage.setItem('playerName', this.playerName);
+    this.localStorageService.updatePlayerName(this.playerName)
   }
 }

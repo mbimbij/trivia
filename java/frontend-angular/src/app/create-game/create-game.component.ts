@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";
 import {FormsModule} from "@angular/forms";
 import {tap} from "rxjs";
@@ -12,7 +12,7 @@ import {tap} from "rxjs";
   templateUrl: './create-game.component.html',
   styleUrl: './create-game.component.css'
 })
-export class CreateGameComponent {
+export class CreateGameComponent implements OnChanges{
   @Input() playerName: string = '';
 
   @Output() newGameEvent = new EventEmitter<GameResponseDto>();
@@ -36,5 +36,12 @@ export class CreateGameComponent {
           // error:  (_) => this.handleError(`createItem(${this.newItemName})`, [])
         }
       )
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['playerName']){
+      let newName = changes['playerName'].currentValue;
+      this.playerName = newName;
+    }
   }
 }
