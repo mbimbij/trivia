@@ -4,6 +4,7 @@ import {JoinGameButtonComponent} from "../join-game-button/join-game-button.comp
 import {GameResponseDto} from "../openapi-generated";
 import {NgForOf, NgIf} from "@angular/common";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
+import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 
 @Component({
   selector: 'app-game',
@@ -12,7 +13,8 @@ import {ObjectAttributePipe} from "../object-attribute.pipe";
     JoinGameButtonComponent,
     NgForOf,
     NgIf,
-    ObjectAttributePipe
+    ObjectAttributePipe,
+    GotoGameButtonComponent
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
@@ -26,7 +28,6 @@ export class GameDetailsComponent {
   constructor(private route: ActivatedRoute) {
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
-      // this.gameId = 777;
     })
   }
 

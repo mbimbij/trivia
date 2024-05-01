@@ -8,6 +8,7 @@ import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {LocalStorageService} from "../local-storage.service";
+import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 
 @Component({
   selector: 'app-game-list',
@@ -19,7 +20,8 @@ import {LocalStorageService} from "../local-storage.service";
     NgIf,
     ObjectAttributePipe,
     RouterLink,
-    JoinGameButtonComponent
+    JoinGameButtonComponent,
+    GotoGameButtonComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'

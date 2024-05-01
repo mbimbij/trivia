@@ -4,7 +4,8 @@
     <th>creator</th>
     <th>players</th>
     <th>status</th>
-    <th>join</th>    <th>go to</th>
+    <th>join</th>
+    <th>go to</th>
   </tr>
   <tr class="game">
     <td class="item-name">
@@ -20,10 +21,7 @@
       </app-join-game-button>
     </td>
     <td class="goto">
-      todo goto
-<!--      <button (click)="goToGame(game)" *ngIf="isUserPlayer(game)">-->
-<!--        go to-->
-<!--      </button>-->
+      <app-goto-game-button [game]="game"></app-goto-game-button>
     </td>
   </tr>
 </table>

@@ -13,7 +13,7 @@
     <th>join</th>    <th>go to</th>
   </tr>
   <tr class="game" *ngFor="let game of games" [className]="game.state">
-    <td class="item-name"><a [routerLink]="['game',game.id]" [state]="game" >{{ game.name }}</a>
+    <td class="item-name"><a [routerLink]="['game-details',game.id]" [state]="game" >{{ game.name }}</a>
     </td>
     <td class="item-name">{{ game.creator.name }}</td>
     <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
@@ -25,9 +25,7 @@
       </app-join-game-button>
     </td>
     <td class="goto">
-      <button (click)="goToGame(game)" *ngIf="isUserPlayer(game)">
-        go to
-      </button>
+      <app-goto-game-button [game]="game"></app-goto-game-button>
     </td>
   </tr>
 </table>

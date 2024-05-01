@@ -38,10 +38,6 @@ export class JoinGameButtonComponent {
       )
   }
 
-  // updateName(event: StorageEvent): void {
-  //   console.log('Storage event detected:', event);
-  // }
-
   private updateName = (newName: string) => {
     this.playerName = newName
   }

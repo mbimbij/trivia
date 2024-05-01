@@ -1,11 +1,11 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GameDetailsComponent} from './game-details.component';
-import {ActivatedRoute, provideRouter, RouterModule} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {Observable, of} from "rxjs";
 import {mockGame1} from "../test-helpers";
+import {MockActivatedRoute} from "../mock-activated.route";
 
 describe('GameComponent', () => {
   let component: GameDetailsComponent;
@@ -36,6 +36,3 @@ describe('GameComponent', () => {
 });
 
 
-class MockActivatedRoute {
-  params: Observable<any> = of({id: '123'}); // Mock route params
-}
