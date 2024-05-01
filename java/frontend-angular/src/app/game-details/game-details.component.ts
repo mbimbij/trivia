@@ -14,10 +14,10 @@ import {ObjectAttributePipe} from "../object-attribute.pipe";
     NgIf,
     ObjectAttributePipe
   ],
-  templateUrl: './game.component.html',
-  styleUrl: './game.component.css'
+  templateUrl: './game-details.component.html',
+  styleUrl: './game-details.component.css'
 })
-export class GameComponent {
+export class GameDetailsComponent {
   gameId!: number;
   game!: GameResponseDto;
   // TODO localstorage events: synchro le nom si changé dans une autre tab - après gestion d'identité propre
