@@ -9,6 +9,7 @@ import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {LocalStorageService} from "../local-storage.service";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
+import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 
 @Component({
   selector: 'app-game-list',
@@ -21,7 +22,8 @@ import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.comp
     ObjectAttributePipe,
     RouterLink,
     JoinGameButtonComponent,
-    GotoGameButtonComponent
+    GotoGameButtonComponent,
+    StartGameButtonComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
@@ -56,15 +58,6 @@ export class GameListComponent {
       this.games.splice(index, 1, replacement);
     }
   }
-
-  isUserPlayer(game: GameResponseDto): boolean {
-    return game.players.some(player => player.name === this.playerName);
-  }
-
-  goToGame(game: GameResponseDto) {
-    console.log(`going to game ${game.id}`)
-  }
-
   syncNameToLocalStorage() {
     this.localStorageService.updatePlayerName(this.playerName)
   }

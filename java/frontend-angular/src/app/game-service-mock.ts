@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {GameServiceAbstract} from "./game-service-abstract";
 import {Observable, of} from "rxjs";
-import {Game} from "./game";
 import {GameResponseDto, UserDto} from "./openapi-generated";
 import {mockGame1, mockGame2} from "./test-helpers";
 
@@ -15,8 +14,11 @@ export class GameServiceMock extends GameServiceAbstract {
       mockGame2,
     ]);
   }
-
   join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
     return of(game);
+  }
+
+  override start(gameId: number, userId: number): Observable<GameResponseDto> {
+    return of(mockGame1);
   }
 }

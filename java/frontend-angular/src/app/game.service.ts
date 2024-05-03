@@ -5,17 +5,17 @@ import {catchError, map, Observable, of, tap} from "rxjs";
 import {GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
 import {HttpClient} from "@angular/common/http";
 import {error} from "@angular/compiler-cli/src/transformers/util";
+import {mockGame1} from "./test-helpers";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
-
   constructor(private service: TriviaControllerService) {
     super();
   }
 
-  getGames(): Observable<Array<GameResponseDto>> {
+  override getGames(): Observable<Array<GameResponseDto>> {
     return this.service.listGames()
       .pipe(
         catchError(this.handleError("getGames", [])),
@@ -23,6 +23,14 @@ export class GameService extends GameServiceAbstract {
         //   return value.map(dto => new Game(dto.id, dto.name, dto.state));
         // })
       )
+  }
+
+  override start(gameId: number, userId: number): Observable<GameResponseDto> {
+    return this.service.startGame(gameId, userId);
+  }
+
+  override join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
+    return this.service.addPlayerToGame(game.id, user.id, user);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -37,9 +45,5 @@ export class GameService extends GameServiceAbstract {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
-  }
-
-  join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
-    return this.service.addPlayerToGame(game.id, user.id, user);
   }
 }

@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,8 +28,10 @@ public class TriviaController {
 
     @PostConstruct
     public void postConstruct() {
-        Game game1 = gameFactory.create("game-1", "player-1", "player-2", "player-3");
-        Game game2 = gameFactory.create("game-2", "player-4", "player-5", "player-6");
+        Player[] game1Players = IntStream.rangeClosed(1, 3).mapToObj(value -> new Player(value, "player-" + value)).toArray(Player[]::new);
+        Player[] game2Players = IntStream.rangeClosed(4, 6).mapToObj(value -> new Player(value, "player-" + value)).toArray(Player[]::new);
+        Game game1 = gameFactory.create("game-1", game1Players[0], Arrays.copyOfRange(game1Players,1,game1Players.length));
+        Game game2 = gameFactory.create("game-2", game2Players[0], Arrays.copyOfRange(game2Players,1,game2Players.length));
         gameRepository.save(game1);
         gameRepository.save(game2);
     }
