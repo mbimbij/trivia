@@ -25,7 +25,8 @@ public class Game extends Entity {
     private final EventPublisher eventPublisher;
     private final Players players;
     private boolean isGameInProgress = true;
-    int turn = 1;
+    @Getter
+    int turn = 0;
     private Player currentPlayer;
     private PlayerTurnOrchestrator playerTurnOrchestrator;
     @Getter
@@ -81,7 +82,7 @@ public class Game extends Entity {
     }
 
     private void validateGameNotEnded(String action) {
-        if(state.equals(ENDED)){
+        if (state.equals(ENDED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), action);
         }
     }
@@ -125,6 +126,7 @@ public class Game extends Entity {
             throw StartException.invalidNumberOfPlayers(id, players.count());
         }
         state = STARTED;
+        turn = 1;
         // TODO régler publication des events uncommitted
         raise(new GameStartedEvent(id));
         publishDomainEvents();

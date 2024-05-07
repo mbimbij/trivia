@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameComponent } from './game.component';
 import {ActivatedRoute} from "@angular/router";
 import {MockActivatedRoute} from "../mock-activated.route";
+import {mockGame1} from "../test-helpers";
 
 describe('GameComponent', () => {
   let component: GameComponent;
@@ -16,6 +17,12 @@ describe('GameComponent', () => {
       ]
     })
     .compileComponents();
+
+    Object.defineProperty(window, 'history', {
+      value: {
+        state: mockGame1
+      }
+    })
 
     fixture = TestBed.createComponent(GameComponent);
     component = fixture.componentInstance;

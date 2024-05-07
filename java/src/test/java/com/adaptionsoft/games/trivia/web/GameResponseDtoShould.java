@@ -27,6 +27,6 @@ class GameResponseDtoShould {
     private GameResponseDto buildExpectedGameDto(Game game) {
         UserDto player1 = UserDto.from(game.getCreator());
         List<UserDto> players = game.getPlayersList().stream().map(UserDto::from).toList();
-        return new GameResponseDto(null, game.getName(), CREATED.toString(), player1, players, player1);
+        return new GameResponseDto(1, game.getName(), CREATED.toString(), 1, player1, players, player1);
     }
 }

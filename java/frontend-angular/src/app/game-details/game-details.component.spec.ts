@@ -20,10 +20,12 @@ describe('GameComponent', () => {
       imports: [GameDetailsComponent]
     })
       .compileComponents();
-    const mockHistory = {
-      state: mockGame1
-    };
-    Object.defineProperty(window, 'history', {value: mockHistory})
+
+    Object.defineProperty(window, 'history', {
+      value: {
+        state: mockGame1
+      }
+    })
 
     fixture = TestBed.createComponent(GameDetailsComponent);
     component = fixture.componentInstance;

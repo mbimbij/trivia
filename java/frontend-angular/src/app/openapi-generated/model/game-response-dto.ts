@@ -16,6 +16,7 @@ export interface GameResponseDto {
     id: number;
     name: string;
     state: string;
+    turn: number;
     creator: UserDto;
     players: Array<UserDto>;
     currentPlayer: UserDto;

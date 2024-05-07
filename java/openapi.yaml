@@ -153,6 +153,10 @@ components:
           nullable: false
         state:
           type: string
+        turn:
+          type: integer
+          nullable: false
+          format: int32
         creator:
           $ref: '#/components/schemas/UserDto'
         players:
@@ -165,6 +169,7 @@ components:
         - id
         - name
         - state
+        - turn
         - creator
         - players
         - currentPlayer

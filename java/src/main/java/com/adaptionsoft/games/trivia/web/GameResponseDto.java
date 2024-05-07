@@ -9,9 +9,10 @@ import java.util.Optional;
 
 @With
 public record GameResponseDto(
-        Integer id,
+        int id,
         String name,
         String state,
+        int turn,
         UserDto creator,
         Collection<UserDto> players,
         UserDto currentPlayer
@@ -26,6 +27,7 @@ public record GameResponseDto(
         return new GameResponseDto(game.getId(),
                 game.getName(),
                 game.getState().toString(),
+                game.getTurn(),
                 creator,
                 players,
                 currentPlayerDto);
