@@ -1,5 +1,5 @@
 import {Component, ElementRef, Renderer2} from '@angular/core';
-import {GameResponseDto} from "../openapi-generated";
+import {GameResponseDto, UserDto} from "../openapi-generated";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf} from '@angular/common';
 import {LocalStorageService} from "../local-storage.service";
@@ -14,7 +14,7 @@ import {LocalStorageService} from "../local-storage.service";
   styleUrl: './game.component.css'
 })
 export class GameComponent {
-  protected playerName!: string;
+  protected user!: UserDto;
   private gameId!: number;
   protected game!: GameResponseDto;
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
@@ -22,19 +22,20 @@ export class GameComponent {
 
   constructor(private route: ActivatedRoute,
               private localStorageService: LocalStorageService) {
-    this.playerName = localStorage.getItem('playerName')!;
+    this.user = localStorageService.getUser()
+    console.log(`${this.constructor.name} - create with user ${this.user}`)
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
     })
-    localStorageService.registerObserver(this.updateName)
+    localStorageService.registerUserUpdatedObserver(this.updateUser)
   }
 
   protected isCurrentPlayer() {
-    return this.game.currentPlayer.name === this.playerName
+    return this.game.currentPlayer === this.user
   }
 
   protected newMessage() {
-    this.logs.push(`coucou ${this.counter++}`)
+    this.logs.push(`newMessage ${this.counter++}`)
   }
 
   private ngOnInit() {
@@ -50,7 +51,8 @@ export class GameComponent {
     element.scrollTop = element.scrollHeight
   }
 
-  private updateName = (newName: string) => {
-    this.playerName = newName
+  private updateUser = (updatedUser: UserDto) => {
+    console.log(`${this.constructor.name} - update user ${this.user}`)
+    this.user = updatedUser
   }
 }

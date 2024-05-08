@@ -9,14 +9,22 @@ import {Router, RouterLink} from "@angular/router";
     RouterLink
   ],
   template: `
-    <button>
-      <a [routerLink]="['/game',game.id]" [state]="game">
-        go to
-      </a>
+    <button [disabled]="!isGameStarted()" (click)="router.navigate(['/game',game.id], { state: game })">
+      go to
+<!--      <a [routerLink]="['/game',game.id]" [state]="game">-->
+<!--        go to-->
+<!--      </a>-->
     </button>
   `,
   styleUrl: './goto-game-button.component.css'
 })
 export class GotoGameButtonComponent {
   @Input() game!: GameResponseDto
+
+  constructor(protected router: Router) {
+  }
+
+  isGameStarted() {
+    return this.game.state === 'started';
+  }
 }

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
-import {GameResponseDto} from "../openapi-generated";
+import {GameResponseDto, UserDto} from "../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
@@ -33,10 +33,13 @@ export class GameListComponent {
   games: GameResponseDto[] = [];
   defaultPlayerName: string = 'player';
   playerName: string;
+  user: UserDto;
+  defaultUser: UserDto = {id: 1, name: this.defaultPlayerName};
 
   constructor(private service: GameServiceAbstract,
               private localStorageService: LocalStorageService) {
     this.playerName = localStorage.getItem('playerName') ?? this.defaultPlayerName
+    this.user = JSON.parse(localStorage.getItem('user')!) ?? this.defaultUser
   }
 
   ngOnInit(): void {
@@ -58,7 +61,8 @@ export class GameListComponent {
       this.games.splice(index, 1, replacement);
     }
   }
-  syncNameToLocalStorage() {
-    this.localStorageService.updatePlayerName(this.playerName)
+  syncPlayerToLocalStorage() {
+    console.log("syncPlayerToLocalStorage: "+JSON.stringify(this.user))
+    this.localStorageService.updatePlayer(this.user)
   }
 }
