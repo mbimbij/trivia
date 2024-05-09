@@ -52,7 +52,6 @@ export class JoinGameButtonComponent {
   }
 
   private updateUser = (updatedUser: UserDto) => {
-    console.log(`${this.constructor.name} - update user ${this.user}`)
     this.user = updatedUser
   }
 }

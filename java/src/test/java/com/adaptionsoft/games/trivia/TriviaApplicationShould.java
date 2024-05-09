@@ -215,7 +215,7 @@ class TriviaApplicationShould {
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
                 game.getName(),
                 STARTED.toString(),
-                0,
+                1,
                 creatorDto,
                 List.of(creatorDto, player2Dto),
                 creatorDto);
@@ -251,7 +251,7 @@ class TriviaApplicationShould {
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
                 game.getName(),
                 STARTED.toString(),
-                0,
+                2,
                 creatorDto,
                 List.of(creatorDto, otherPlayerDto),
                 otherPlayerDto);

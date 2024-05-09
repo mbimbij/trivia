@@ -29,8 +29,6 @@ export class CreateGameComponent implements OnChanges{
       .subscribe(
         {
           next: (newGame) => {
-            console.log(newGame)
-            console.log("emitting event: " + JSON.stringify(newGame))
             this.newGameEvent.emit(newGame);
           },
           // error:  (_) => this.handleError(`createItem(${this.newItemName})`, [])

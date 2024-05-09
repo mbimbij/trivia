@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @With
 public record GameResponseDto(
-        int id,
+        Integer id,
         String name,
         String state,
         int turn,

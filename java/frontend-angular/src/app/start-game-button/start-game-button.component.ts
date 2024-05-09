@@ -32,7 +32,7 @@ export class StartGameButtonComponent {
   }
 
   startGame() {
-    this.service.start(this.game.id,1)
+    this.service.start(this.game.id,this.user.id)
       .subscribe(response => {
           this.gameModifiedEvent.emit(response);
         }
@@ -40,7 +40,6 @@ export class StartGameButtonComponent {
   }
 
   private updateUser = (updatedUser: UserDto) => {
-    console.log(`${this.constructor.name} - update user ${this.user}`)
     this.user = updatedUser
   }
 

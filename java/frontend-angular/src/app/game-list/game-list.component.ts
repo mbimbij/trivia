@@ -62,7 +62,6 @@ export class GameListComponent {
     }
   }
   syncPlayerToLocalStorage() {
-    console.log("syncPlayerToLocalStorage: "+JSON.stringify(this.user))
     this.localStorageService.updatePlayer(this.user)
   }
 }
