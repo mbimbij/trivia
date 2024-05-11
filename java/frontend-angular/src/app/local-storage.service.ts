@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {UserDto} from "./openapi-generated";
+import {mockUser1} from "./test-helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,11 @@ export class LocalStorageService {
 
   getUser(): UserDto{
     return JSON.parse(localStorage.getItem('user')!)
+  }
+}
+
+export class LocalStorageServiceTest extends LocalStorageService {
+  override getUser(): UserDto {
+    return mockUser1;
   }
 }

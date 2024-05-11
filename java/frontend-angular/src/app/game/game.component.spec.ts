@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GameComponent } from './game.component';
+import {GameComponent} from './game.component';
 import {ActivatedRoute} from "@angular/router";
 import {MockActivatedRoute} from "../mock-activated.route";
 import {mockGame1} from "../test-helpers";
@@ -13,7 +13,7 @@ describe('GameComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GameComponent],
       providers: [
-        {provide: ActivatedRoute, useClass: MockActivatedRoute}
+        {provide: ActivatedRoute, useClass: MockActivatedRoute},
       ]
     })
     .compileComponents();

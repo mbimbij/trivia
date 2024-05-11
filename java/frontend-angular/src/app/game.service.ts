@@ -1,18 +1,19 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "./game-service-abstract";
-import {Game} from "./game";
-import {catchError, map, Observable, of, tap} from "rxjs";
+import {catchError, Observable, of} from "rxjs";
 import {GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
-import {HttpClient} from "@angular/common/http";
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import {mockGame1} from "./test-helpers";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
+
   constructor(private service: TriviaControllerService) {
     super();
+  }
+
+  override playTurn(gameId: number, userId: number): Observable<GameResponseDto> {
+    return this.service.playTurn(gameId,userId);
   }
 
   override getGames(): Observable<Array<GameResponseDto>> {

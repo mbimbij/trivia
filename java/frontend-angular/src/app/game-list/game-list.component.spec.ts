@@ -3,12 +3,11 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GameListComponent} from './game-list.component';
 import {GameServiceAbstract} from "../game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {AppComponent} from "../app.component";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
-import {provideRouter, RouterModule} from "@angular/router";
-import {RouterTestingModule} from "@angular/router/testing";
+import {provideRouter} from "@angular/router";
+import {LocalStorageService, LocalStorageServiceTest} from "../local-storage.service";
 
 describe('GameListComponent', () => {
   let component: GameListComponent;
@@ -18,6 +17,7 @@ describe('GameListComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
+        {provide: LocalStorageService, useClass: LocalStorageServiceTest},
         provideRouter([])
       ],
       imports: [HttpClientTestingModule, CreateGameComponent, FormsModule],

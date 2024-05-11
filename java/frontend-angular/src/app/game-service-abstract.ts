@@ -5,5 +5,6 @@ export abstract class GameServiceAbstract {
   abstract getGames(): Observable<Array<GameResponseDto>>;
   abstract join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto>;
   abstract start(gameId: number, userId: number): Observable<GameResponseDto>;
+  abstract playTurn(gameId: number, userId: number): Observable<GameResponseDto>;
 }
 
