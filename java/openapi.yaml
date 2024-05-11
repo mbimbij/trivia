@@ -37,6 +37,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GameResponseDto'
+  /games/{gameId}:
+    get:
+      tags:
+        - trivia-controller
+      summary: get a game by its id
+      operationId: getGameById
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "404":
+          description: game not found
+          content:
+            application/problem+json:
+              example:
+                type: about:blank
+                title: Not Found
+                status: 404
+                instance: /games/777
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameResponseDto'
   /games/{gameId}/players/{playerId}/start:
     post:
       tags:

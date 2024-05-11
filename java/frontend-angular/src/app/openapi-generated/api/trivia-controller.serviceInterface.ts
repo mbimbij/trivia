@@ -43,6 +43,13 @@ export interface TriviaControllerServiceInterface {
     createGame(createGameRequestDto: CreateGameRequestDto, extraHttpRequestParams?: any): Observable<GameResponseDto>;
 
     /**
+     * get a game by its id
+     * 
+     * @param gameId 
+     */
+    getGameById(gameId: number, extraHttpRequestParams?: any): Observable<GameResponseDto>;
+
+    /**
      * 
      * 
      */

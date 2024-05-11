@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -42,7 +43,6 @@ public class TriviaController {
     private final GameRepository gameRepository;
     private final GameFactory gameFactory;
     private final SimpMessagingTemplate template;
-    private final ResponseSupportConverter responseSupportConverter;
 
     @PostConstruct
     public void postConstruct() {
@@ -122,22 +122,23 @@ public class TriviaController {
         Player player = findPlayerOrThrow(game, playerId);
         game.playTurnBy(player);
         gameRepository.save(game);
+        template.convertAndSend("/topic/game/%d".formatted(gameId), game);
         return GameResponseDto.from(game);
     }
-
-    @GetMapping("/test-ws/{gameId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hello(@PathVariable("gameId") Integer gameId) {
-        log.info("test ws pour la partie %s".formatted(gameId));
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                template.convertAndSend("/topic/game/%d".formatted(gameId), "hello websocket - game #%d".formatted(gameId));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-    }
+//
+//    @GetMapping("/test-ws/{gameId}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void hello(@PathVariable("gameId") Integer gameId) {
+//        log.info("test ws pour la partie %s".formatted(gameId));
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(1000);
+//                template.convertAndSend("/hello/game/%d".formatted(gameId), "hello websocket - game #%d".formatted(gameId));
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }).start();
+//    }
 
     private Game findGameOrThrow(Integer gameId) {
         return gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));

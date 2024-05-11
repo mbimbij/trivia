@@ -46,7 +46,6 @@ export class GameListComponent {
     this.service.getGames()
       .subscribe(games => {
         this.games = games;
-        return this.games
       });
   }
 

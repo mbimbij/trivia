@@ -1,15 +1,35 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "./game-service-abstract";
-import {catchError, Observable, of} from "rxjs";
+import {catchError, Observable, of, Subject} from "rxjs";
 import {GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
+import {IMessage} from "@stomp/rx-stomp";
+import {RxStompService} from "./rx-stomp.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
+  private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
 
-  constructor(private service: TriviaControllerService) {
+  constructor(private service: TriviaControllerService,
+              private rxStompService: RxStompService) {
     super();
+  }
+
+  override registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void) {
+    if(!this.gameUpdatedSubjects.has(gameId)){
+      this.gameUpdatedSubjects.set(gameId, new Subject<GameResponseDto>());
+      this.rxStompService.watch(`/topic/game/${gameId}`).subscribe((message: IMessage) => {
+        console.log("coucou websocket: " + message.body);
+        let updatedGame = JSON.parse(message.body);
+        this.gameUpdatedSubjects.get(gameId)!.next(updatedGame);
+      });
+    }
+    this.gameUpdatedSubjects.get(gameId)!.subscribe(observer)
+  }
+
+  override getGame(gameId: number): Observable<GameResponseDto> {
+    return this.service.getGameById(gameId);
   }
 
   override playTurn(gameId: number, userId: number): Observable<GameResponseDto> {

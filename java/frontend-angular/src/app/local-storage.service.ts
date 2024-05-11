@@ -8,18 +8,24 @@ import {mockUser1} from "./test-helpers";
 })
 export class LocalStorageService {
   private userSubject = new Subject<UserDto>();
+  private defaultUser = {id: 1, name: "player-1"};
 
   constructor() {
   }
+
   updatePlayer(value: UserDto): void {
     localStorage.setItem('user', JSON.stringify(value));
     this.userSubject.next(value)
   }
+
   registerUserUpdatedObserver(observer: (newPlayerName: UserDto) => void) {
     this.userSubject.subscribe(observer)
   }
 
-  getUser(): UserDto{
+  getUser(): UserDto {
+    if (localStorage.getItem('user') == null) {
+      localStorage.setItem('user', JSON.stringify(this.defaultUser))
+    }
     return JSON.parse(localStorage.getItem('user')!)
   }
 }

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {GameResponseDto, UserDto} from "../openapi-generated";
 import {ActivatedRoute} from "@angular/router";
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {LocalStorageService} from "../local-storage.service";
 import {compareUserDto} from "../helpers";
 import {RxStompService} from "../rx-stomp.service";
@@ -13,7 +13,8 @@ import {HttpClient} from "@angular/common/http";
   selector: 'app-game',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
@@ -24,10 +25,10 @@ export class GameComponent {
   protected game!: GameResponseDto;
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
   private counter: number = 0;
+  protected dataLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private localStorageService: LocalStorageService,
-              private rxStompService: RxStompService,
               private gameService: GameService,
               private httpClient: HttpClient) {
     this.user = localStorageService.getUser()
@@ -53,18 +54,18 @@ export class GameComponent {
   }
 
   private ngOnInit() {
-    // TODO récupérer le jeu depuis appel au backend, et update de l'état de la partie via websocket quand d'autres joueurs jouent sur une autre tab / un autre navigateur
-    this.game = history?.state
-    this.rxStompService.watch(`/topic/game/${this.gameId}`).subscribe((message: IMessage) => {
-      console.log("coucou websocket: " + message.body);
-    });
-    // this.rxStompService.watch(`/topic/hello`).subscribe((message: IMessage) => {
-    //   console.log("coucou websocket: " + message.body);
-    // });
+    this.gameService.getGame(this.gameId)
+      .subscribe(value => {
+        this.game = value
+        this.dataLoaded = true
+      })
+    this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGame);
   }
 
   private ngAfterViewChecked() {
-    this.scrollLogsToBottom()
+    if(this.dataLoaded){
+      this.scrollLogsToBottom()
+    }
   }
 
   private scrollLogsToBottom() {
@@ -76,9 +77,7 @@ export class GameComponent {
     this.user = updatedUser
   }
 
-  testWs() {
-    this.httpClient.get(`http://localhost:8080/games/test-ws/${this.gameId}`).subscribe(value => {
-      console.log(`received ${value}`);
-    })
+  private updateGame = (updatedGame: GameResponseDto) => {
+    this.game = updatedGame
   }
 }
