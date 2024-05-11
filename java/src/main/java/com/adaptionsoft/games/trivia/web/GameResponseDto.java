@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Game;
+import jakarta.validation.constraints.NotBlank;
 import lombok.With;
 
 import java.util.Collection;
@@ -9,15 +10,22 @@ import java.util.Optional;
 
 @With
 public record GameResponseDto(
+        @NotBlank
         Integer id,
+        @NotBlank
         String name,
+        @NotBlank
         String state,
+        @NotBlank
         int turn,
+        @NotBlank
         UserDto creator,
+        @NotBlank
         Collection<UserDto> players,
+        @NotBlank
         UserDto currentPlayer
 
-        ) {
+) {
     public static GameResponseDto from(Game game) {
         List<UserDto> players = game.getPlayersList().stream().map(UserDto::from).toList();
         UserDto creator = UserDto.from(game.getCreator());
