@@ -11,9 +11,6 @@ import {Router, RouterLink} from "@angular/router";
   template: `
     <button [disabled]="!isGameStarted()" (click)="router.navigate(['/game',game.id], { state: game })">
       go to
-<!--      <a [routerLink]="['/game',game.id]" [state]="game">-->
-<!--        go to-->
-<!--      </a>-->
     </button>
   `,
   styleUrl: './goto-game-button.component.css'

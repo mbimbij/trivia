@@ -31,21 +31,20 @@ import {StartGameButtonComponent} from "../start-game-button/start-game-button.c
 export class GameListComponent {
   title = 'frontend-angular';
   games: GameResponseDto[] = [];
-  defaultPlayerName: string = 'player';
-  playerName: string;
-  user: UserDto;
-  defaultUser: UserDto = {id: 1, name: this.defaultPlayerName};
+  user!: UserDto;
 
-  constructor(private service: GameServiceAbstract,
+  constructor(private gameService: GameServiceAbstract,
               private localStorageService: LocalStorageService) {
-    this.playerName = localStorage.getItem('playerName') ?? this.defaultPlayerName
-    this.user = JSON.parse(localStorage.getItem('user')!) ?? this.defaultUser
   }
 
   ngOnInit(): void {
-    this.service.getGames()
+    this.user = this.localStorageService.getUser();
+    this.gameService.getGames()
       .subscribe(games => {
         this.games = games;
+        this.games.forEach(game => {
+          this.gameService.registerGameUpdatedObserver(game.id, this.updateGameWithArrow);
+        })
       });
   }
 
@@ -53,6 +52,7 @@ export class GameListComponent {
     console.log(`game created: ${JSON.stringify(newGame)}`);
     this.games.push(newGame);
   }
+
   protected updateGameWith(replacement: GameResponseDto) {
     const index = this.games.findIndex(
       game => game.id === replacement.id);
@@ -60,6 +60,13 @@ export class GameListComponent {
       this.games.splice(index, 1, replacement);
     }
   }
+
+  protected updateGameWithArrow = (replacement: GameResponseDto) => {
+    console.log("coucou")
+    this.updateGameWith(replacement);
+  }
+
+
   syncPlayerToLocalStorage() {
     this.localStorageService.updatePlayer(this.user)
   }

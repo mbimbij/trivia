@@ -4,8 +4,6 @@ import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf} from '@angular/common';
 import {LocalStorageService} from "../local-storage.service";
 import {compareUserDto} from "../helpers";
-import {RxStompService} from "../rx-stomp.service";
-import {IMessage} from "@stomp/rx-stomp";
 import {GameService} from "../game.service";
 import {HttpClient} from "@angular/common/http";
 
@@ -24,27 +22,15 @@ export class GameComponent {
   private gameId!: number;
   protected game!: GameResponseDto;
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
-  private counter: number = 0;
   protected dataLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private localStorageService: LocalStorageService,
-              private gameService: GameService,
-              private httpClient: HttpClient) {
-    this.user = localStorageService.getUser()
-    console.log(`${this.constructor.name} - create with user ${this.user}`)
-    this.route.params.subscribe(value => {
-      this.gameId = value['id'];
-    })
-    localStorageService.registerUserUpdatedObserver(this.updateUser)
+              private gameService: GameService) {
   }
 
   protected isCurrentPlayer() {
     return compareUserDto(this.user, this.game.currentPlayer)
-  }
-
-  protected newMessage() {
-    this.logs.push(`newMessage ${this.counter++}`)
   }
 
   protected playTurn() {
@@ -54,12 +40,17 @@ export class GameComponent {
   }
 
   private ngOnInit() {
+    this.user = this.localStorageService.getUser()
+    this.localStorageService.registerUserUpdatedObserver(this.updateUser)
+    this.route.params.subscribe(value => {
+      this.gameId = value['id'];
+    })
     this.gameService.getGame(this.gameId)
       .subscribe(value => {
         this.game = value
         this.dataLoaded = true
       })
-    this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGame);
+    this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGameWith);
   }
 
   private ngAfterViewChecked() {
@@ -77,7 +68,7 @@ export class GameComponent {
     this.user = updatedUser
   }
 
-  private updateGame = (updatedGame: GameResponseDto) => {
+  private updateGameWith = (updatedGame: GameResponseDto) => {
     this.game = updatedGame
   }
 }

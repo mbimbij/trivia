@@ -19,8 +19,7 @@ export class GameService extends GameServiceAbstract {
   override registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void) {
     if(!this.gameUpdatedSubjects.has(gameId)){
       this.gameUpdatedSubjects.set(gameId, new Subject<GameResponseDto>());
-      this.rxStompService.watch(`/topic/game/${gameId}`).subscribe((message: IMessage) => {
-        console.log("coucou websocket: " + message.body);
+      this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
         let updatedGame = JSON.parse(message.body);
         this.gameUpdatedSubjects.get(gameId)!.next(updatedGame);
       });
