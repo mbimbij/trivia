@@ -5,17 +5,19 @@ import {GameResponseDto} from "../openapi-generated";
 import {NgForOf, NgIf} from "@angular/common";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
+import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [
-    JoinGameButtonComponent,
-    NgForOf,
-    NgIf,
-    ObjectAttributePipe,
-    GotoGameButtonComponent
-  ],
+    imports: [
+        JoinGameButtonComponent,
+        NgForOf,
+        NgIf,
+        ObjectAttributePipe,
+        GotoGameButtonComponent,
+        StartGameButtonComponent
+    ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
 })

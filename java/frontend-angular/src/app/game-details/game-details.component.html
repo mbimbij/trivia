@@ -14,6 +14,12 @@
     <td class="item-name">{{ game.creator.name }}</td>
     <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
     <td class="item-status">{{ game.state }}</td>
+    <td class="game-start">
+      <app-start-game-button
+        [game]="game"
+        (gameModifiedEvent)="updateGameWith($event)"
+      />
+    </td>
     <td class="join">
       <app-join-game-button
         [game]="game"
