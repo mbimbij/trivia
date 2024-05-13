@@ -15,18 +15,10 @@ public class Player extends Entity {
     @Getter(PUBLIC)
     private final String name;
 
-    public Player(String name) {
-        this.name = name;
-    }
-
-    public Player(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     @With // for testing purposes only
     @Getter(PUBLIC)
     private int coinCount;
+
     @Getter(PUBLIC)
     @Setter
     private int location;
@@ -37,6 +29,18 @@ public class Player extends Entity {
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
     private int consecutiveIncorrectAnswersCount;
+    @Getter
+    @Setter
+    private Integer gameId;
+
+    public Player(String name) {
+        this.name = name;
+    }
+
+    public Player(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     void incrementTurn() {
         turn++;

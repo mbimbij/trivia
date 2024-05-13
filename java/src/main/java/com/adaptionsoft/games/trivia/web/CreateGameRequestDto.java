@@ -9,7 +9,7 @@ public record CreateGameRequestDto(
         @NotBlank
         UserDto creator
 ) {
-    public Player toDomain() {
+    public Player getCreatorAsDomainObject() {
         return new Player(creator.id(), creator.name());
     }
 }

@@ -93,4 +93,8 @@ public class Players extends EventRaiser {
         add(creator);
     }
 
+    public void setGameId(int gameId) {
+        individualPlayers.forEach(player -> player.setGameId(gameId));
+        uncommittedEvents.forEach(event -> event.setGameId(gameId));
+    }
 }

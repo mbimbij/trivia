@@ -41,6 +41,7 @@ public class Game extends Entity {
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
                 State state) {
+        // TODO remove this constructor, as we now require games to have an id on creation, not just on save
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
@@ -52,12 +53,14 @@ public class Game extends Entity {
     public Game(Integer id,
                 String name,
                 EventPublisher eventPublisher,
+                // TODO R-1 retirer cet attribut, les joueurs devraient être rajoutés à une partie, pas à un artefact séparé
                 Players players,
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
                 State state) {
         this(name, eventPublisher, players, playerTurnOrchestrator, currentPlayer, state);
         this.id = id;
+        setGameIdToPlayers();
     }
 
     public Player getCreator() {
@@ -114,6 +117,7 @@ public class Game extends Entity {
         if (!state.equals(CREATED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
         }
+        player.setGameId(id);
         players.addAfterCreationTime(player);
     }
 
@@ -149,6 +153,10 @@ public class Game extends Entity {
 
     public int getPlayersCount() {
         return players.count();
+    }
+
+    public void setGameIdToPlayers() {
+        players.setGameId(getId());
     }
 
     public enum State {

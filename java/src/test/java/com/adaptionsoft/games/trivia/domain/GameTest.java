@@ -5,13 +5,12 @@ import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
+import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.SneakyThrows;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 import static org.assertj.core.api.Assertions.*;
@@ -46,7 +44,7 @@ class GameTest {
         System.setOut(stdout);
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
-        gameFactory = new GameFactory(eventPublisher, new QuestionsLoader());
+        gameFactory = new GameFactory(new IdGenerator(), eventPublisher, new QuestionsLoader());
         game = gameFactory.create("game", creator, player2);
     }
 
@@ -210,6 +208,19 @@ class GameTest {
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(new Player("player7")))
                     .isInstanceOf(InvalidNumberOfPlayersException.class);
+        }
+
+        @Test
+        void game_id_is_set__when_joining_game() {
+            // GIVEN
+            Game game = TestFixtures.a1playerGame();
+            Player newPlayer = new Player("newPlayer");
+
+            // WHEN
+            game.addPlayer(newPlayer);
+
+            // THEN
+            assertThat(newPlayer.getGameId()).isEqualTo(game.getId());
         }
     }
 

@@ -4,10 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class GameEvent extends Event {
-    private final Integer gameId;
-
+    // TODO ajouter à quel tour de jeu un event a lieu
     protected GameEvent(Integer gameId, String stringValue) {
-        super(stringValue);
-        this.gameId = gameId;
+        super(gameId, stringValue);
     }
 }

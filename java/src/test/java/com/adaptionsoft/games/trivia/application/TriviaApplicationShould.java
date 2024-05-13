@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia;
+package com.adaptionsoft.games.trivia.application;
 
 import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
@@ -6,6 +6,7 @@ import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.TriviaController;
 import com.adaptionsoft.games.trivia.web.UserDto;
+import com.adaptionsoft.games.trivia.websocket.WebSocketConfig;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TriviaController.class)
 @ActiveProfiles("test")
+@Import(WebSocketConfig.class)
 class TriviaApplicationShould {
 
     @Autowired
@@ -135,12 +138,15 @@ class TriviaApplicationShould {
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the game is created
+        Player expectedCreator = new Player(creatorId, creatorName);
+        expectedCreator.setGameId(gameId);
+
         assertThat(gameRepository.findById(gameId))
                 .hasValueSatisfying(game -> {
                     assertThat(game.getId()).isEqualTo(gameId);
                     assertThat(game.getName()).isEqualTo(gameName);
-                    Player expectedCreator = new Player(creatorId, creatorName);
                     assertThat(game.getCreator()).isEqualTo(expectedCreator);
+                    assertThat(game.getCreator().getGameId()).isEqualTo(gameId);
                     assertThat(game.getPlayersList()).containsExactly(expectedCreator);
                 });
     }

@@ -283,5 +283,5 @@ The category is Rock
 Rock Question 6
 Answer was correct!!!!
 Chet now has 12 Gold Coins.
-player id=null won game id=null
-game gameId=null ended with winner playerId=null
+player id=null won game id=1
+game gameId=1 ended with winner playerId=null

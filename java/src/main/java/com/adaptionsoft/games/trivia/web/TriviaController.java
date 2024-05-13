@@ -6,6 +6,8 @@ import com.adaptionsoft.games.trivia.domain.GameRepository;
 import com.adaptionsoft.games.trivia.domain.Player;
 import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
+import com.adaptionsoft.games.trivia.domain.gamelogs.GameLog;
+import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,14 +32,22 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/games")
-@CrossOrigin(origins = "${application.allowed-origins}")
+@RequestMapping(
+        value = "/games",
+        produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE
+        }
+)
+//@CrossOrigin(origins = "${application.allowed-origins}")
+@CrossOrigin(origins = "*")
+@Slf4j
 public class TriviaController {
 
-    private static final Logger log = LoggerFactory.getLogger(TriviaController.class);
     private final GameRepository gameRepository;
     private final GameFactory gameFactory;
     private final SimpMessagingTemplate template;
+    private final GameLogsRepository gameLogsRepository;
     // TODO créer un channel websocket pour notifier des changements sur la liste des parties
 
     @PostConstruct
@@ -48,13 +59,6 @@ public class TriviaController {
         Game game2 = gameFactory.create("game-2", game2Players[0], Arrays.copyOfRange(game2Players, 1, game2Players.length));
         gameRepository.save(game1);
         gameRepository.save(game2);
-    }
-
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGames() {
-        resetGames();
-        template.convertAndSend("/topic/games",gameRepository.list());
     }
 
     @GetMapping
@@ -89,11 +93,24 @@ public class TriviaController {
         return gameRepository.findById(gameId).map(GameResponseDto::from).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     }
 
+    @GetMapping
+    @RequestMapping("/{gameId}/logs")
+    public Collection<GameLog> getGameLogs(@PathVariable("gameId") int gameId) {
+        return gameLogsRepository.getLogsForGame(gameId);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGames() {
+        resetGames();
+        template.convertAndSend("/topic/games", gameRepository.list());
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
         // TODO notifier via websocket de l'ajout d'une partie
-        Game game = gameFactory.create(requestDto.gameName(), requestDto.toDomain());
+        Game game = gameFactory.create(requestDto.gameName(), requestDto.getCreatorAsDomainObject());
         gameRepository.save(game);
         return GameResponseDto.from(game);
     }
@@ -135,20 +152,6 @@ public class TriviaController {
     private void notifyGameUpdatedViaWebsocket(Integer gameId, Game game) {
         template.convertAndSend("/topic/games/%d".formatted(gameId), GameResponseDto.from(game));
     }
-//
-//    @GetMapping("/test-ws/{gameId}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void hello(@PathVariable("gameId") Integer gameId) {
-//        log.info("test ws pour la partie %s".formatted(gameId));
-//        new Thread(() -> {
-//            try {
-//                Thread.sleep(1000);
-//                template.convertAndSend("/hello/game/%d".formatted(gameId), "hello websocket - game #%d".formatted(gameId));
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
-//    }
 
     private Game findGameOrThrow(Integer gameId) {
         return gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));

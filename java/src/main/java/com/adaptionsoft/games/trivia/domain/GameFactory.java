@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -13,17 +14,21 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 
 
 public class GameFactory {
+    // TODO distinguer id métier et technique, générer l'id métier par la factory, ça devrait résoudre une bonne partie de mes problèmes.
 
+    private final IdGenerator idGenerator;
     private final EventPublisher eventPublisher;
     private final QuestionsLoader questionsLoader;
 
-    public GameFactory(EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
-        this.eventPublisher = eventPublisher;
-        this.questionsLoader = questionsLoader;
-    }
 
     public Game create(String gameName, String creatorName, String... otherPlayersNames) {
         return create(new Random(), gameName, creatorName, otherPlayersNames);
+    }
+
+    public GameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
+        this.idGenerator = idGenerator;
+        this.eventPublisher = eventPublisher;
+        this.questionsLoader = questionsLoader;
     }
 
     public Game create(String gameName, Player creator, Player... players) {
@@ -46,7 +51,7 @@ public class GameFactory {
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
-        Game game = new Game(
+        Game game = new Game(idGenerator.nextId(),
                 gameName,
                 eventPublisher,
                 players,

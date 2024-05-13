@@ -18,6 +18,8 @@ public class GameRepositoryInMemory implements GameRepository {
         // FIXME ajout de jeu en duplicat. equalsAndHashCode sur l'id des entités semble merder
         if(game.getId() == null) {
             game.setId(idGenerator.nextId());
+            // FIXME l'assignation de l'id du jeu aux joueurs devrait être indépendant de l'implem du repository
+            game.setGameIdToPlayers();
         }
         games.add(game);
     }

@@ -1,11 +1,10 @@
 import {Component} from '@angular/core';
-import {GameResponseDto, UserDto} from "../openapi-generated";
+import {GameLog, GameResponseDto, UserDto} from "../openapi-generated";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf} from '@angular/common';
 import {LocalStorageService} from "../local-storage.service";
 import {compareUserDto} from "../helpers";
 import {GameService} from "../game.service";
-import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-game',
@@ -45,12 +44,19 @@ export class GameComponent {
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
     })
+
     this.gameService.getGame(this.gameId)
       .subscribe(value => {
         this.game = value
         this.dataLoaded = true
       })
     this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGameWith);
+
+    this.gameService.getGameLogs(this.gameId)
+      .subscribe(gameLogs => {
+        this.logs = gameLogs.map(log => log.value)
+      })
+    this.gameService.registerGameLogsObserver(this.gameId, this.addLogs);
   }
 
   private ngAfterViewChecked() {
@@ -70,5 +76,9 @@ export class GameComponent {
 
   private updateGameWith = (updatedGame: GameResponseDto) => {
     this.game = updatedGame
+  }
+
+  private addLogs = (gameLog: GameLog) => {
+    this.logs.push(gameLog.value);
   }
 }

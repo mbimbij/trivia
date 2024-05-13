@@ -14,6 +14,7 @@ import { HttpHeaders }                                       from '@angular/comm
 import { Observable }                                        from 'rxjs';
 
 import { CreateGameRequestDto } from '../model/models';
+import { GameLog } from '../model/models';
 import { GameResponseDto } from '../model/models';
 import { UserDto } from '../model/models';
 
@@ -48,6 +49,55 @@ export interface TriviaControllerServiceInterface {
      * @param gameId 
      */
     getGameById(gameId: number, extraHttpRequestParams?: any): Observable<GameResponseDto>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs1(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs2(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs3(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs4(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs5(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     */
+    getGameLogs6(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
 
     /**
      * 

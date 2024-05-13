@@ -147,6 +147,147 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GameResponseDto'
+  /games/{gameId}/logs:
+    get:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
+    put:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs_3
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
+    post:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs_2
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
+    delete:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs_5
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
+    options:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs_6
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
+    head:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs_1
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
+    patch:
+      tags:
+        - trivia-controller
+      operationId: getGameLogs_4
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameLog'
 components:
   schemas:
     CreateGameRequestDto:
@@ -202,3 +343,14 @@ components:
         - creator
         - players
         - currentPlayer
+    GameLog:
+      type: object
+      properties:
+        gameId:
+          type: integer
+          format: int32
+        value:
+          type: string
+      required:
+        - gameId
+        - value

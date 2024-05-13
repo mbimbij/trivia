@@ -23,7 +23,7 @@ class EventPublisherTest {
 
     public static class MockEvent extends Event{
         public MockEvent() {
-            super("mock event");
+            super(0, "mock event");
         }
     }
 

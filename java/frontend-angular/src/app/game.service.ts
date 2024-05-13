@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "./game-service-abstract";
 import {catchError, Observable, of, Subject} from "rxjs";
-import {GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
+import {GameLog, GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "./rx-stomp.service";
 
@@ -10,7 +10,7 @@ import {RxStompService} from "./rx-stomp.service";
 })
 export class GameService extends GameServiceAbstract {
   private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
-
+  private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
   constructor(private service: TriviaControllerService,
               private rxStompService: RxStompService) {
     super();
@@ -25,6 +25,17 @@ export class GameService extends GameServiceAbstract {
       });
     }
     this.gameUpdatedSubjects.get(gameId)!.subscribe(observer)
+  }
+
+  registerGameLogsObserver(gameId: number, observer: (gameLog: GameLog) => void) {
+    if(!this.gameLogsAddedSubjects.has(gameId)){
+      this.gameLogsAddedSubjects.set(gameId, new Subject<GameLog>());
+      this.rxStompService.watch(`/topic/games/${gameId}/logs`).subscribe((message: IMessage) => {
+        let updatedGame = JSON.parse(message.body);
+        this.gameLogsAddedSubjects.get(gameId)!.next(updatedGame);
+      });
+    }
+    this.gameLogsAddedSubjects.get(gameId)!.subscribe(observer)
   }
 
   override getGame(gameId: number): Observable<GameResponseDto> {
@@ -51,6 +62,10 @@ export class GameService extends GameServiceAbstract {
 
   override join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
     return this.service.addPlayerToGame(game.id, user.id, user);
+  }
+
+  override getGameLogs(gameId: number): Observable<Array<GameLog>> {
+    return this.service.getGameLogs(gameId)
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

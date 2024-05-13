@@ -9,6 +9,7 @@ encoder.ts
 git_push.sh
 index.ts
 model/create-game-request-dto.ts
+model/game-log.ts
 model/game-response-dto.ts
 model/models.ts
 model/user-dto.ts
