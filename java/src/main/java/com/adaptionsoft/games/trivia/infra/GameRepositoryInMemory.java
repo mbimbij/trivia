@@ -11,15 +11,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GameRepositoryInMemory implements GameRepository {
     private final Set<Game> games = new HashSet<>();
-    private final IdGenerator idGenerator;
 
     @Override
     public void save(Game game) {
-        if(game.getId() == null) {
-            game.setId(idGenerator.nextId());
-            // FIXME l'assignation de l'id du jeu aux joueurs devrait être indépendant de l'implem du repository
-            game.setGameIdToPlayers();
-        }
         games.add(game);
     }
 
