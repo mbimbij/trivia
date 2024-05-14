@@ -17,7 +17,7 @@ import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Game extends Entity {
     // TODO designer où mettre les logs pour permettre à un nouvel onglet d'afficher les logs passés
     @Getter

@@ -17,10 +17,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 import static org.assertj.core.api.Assertions.*;
@@ -49,7 +46,7 @@ class GameTest {
     }
 
     @Test
-    public void should_not_differ_from_golden_master() throws IOException {
+    void should_not_differ_from_golden_master() throws IOException {
         // GIVEN
         redirectStdoutToFile();
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
@@ -74,6 +71,20 @@ class GameTest {
     @SneakyThrows
     private void redirectStdoutToFile() {
         System.setOut(new PrintStream("src/test/resources/lead.txt"));
+    }
+
+    @Test
+    void should_not_add_duplicate_in_set() {
+        // GIVEN
+        Set<Game> games = new HashSet<>();
+        games.add(game);
+
+        // WHEN
+        game.playTurnBy(game.getCurrentPlayer());
+        games.add(game);
+
+        // THEN
+        assertThat(games).hasSize(1);
     }
 
     @Nested

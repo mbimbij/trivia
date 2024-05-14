@@ -6,7 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 public class Entity extends EventRaiser {
+    @EqualsAndHashCode.Include
     protected Integer id;
 }
