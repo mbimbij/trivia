@@ -35,13 +35,15 @@ class GameTest {
     private final Player player2 = new Player(2, "player2");
     // GIVEN
     private Game game;
+    private IdGenerator idGenerator;
 
     @BeforeEach
     void setUp() {
         System.setOut(stdout);
+        idGenerator = new IdGenerator();
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
-        gameFactory = new GameFactory(new IdGenerator(), eventPublisher, new QuestionsLoader());
+        gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsLoader());
         game = gameFactory.create("game", creator, player2);
     }
 
@@ -175,14 +177,15 @@ class GameTest {
             Player player2 = new Player(playerName2);
 
             // WHEN
-            final String[] strings = new String[]{playerName1, playerName2};
-            gameFactory.create("game", playerName1, playerName2);
+            Game game = gameFactory.create("game", player1, player2);
 
             // THEN the domain events are produced in the correct order
             List<Event> events = eventPublisher.getEvents();
-            Assertions.assertArrayEquals(events.toArray(), new Event[]{new PlayerAddedEvent(player1, 1),
+            Assertions.assertArrayEquals(events.toArray(), new Event[]{
+                    new PlayerAddedEvent(player1, 1),
                     new PlayerAddedEvent(player2, 2),
-                    new GameCreatedEvent(null)});
+                    new GameCreatedEvent(game.getId())
+            });
         }
     }
 

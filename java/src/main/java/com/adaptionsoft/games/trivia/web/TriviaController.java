@@ -39,8 +39,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
                 MediaType.APPLICATION_PROBLEM_JSON_VALUE
         }
 )
-//@CrossOrigin(origins = "${application.allowed-origins}")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "${application.allowed-origins}")
 @Slf4j
 public class TriviaController {
 
