@@ -62,7 +62,6 @@ export class GameListComponent {
   }
 
   protected updateGameWithArrow = (replacement: GameResponseDto) => {
-    console.log("coucou")
     this.updateGameWith(replacement);
   }
 
