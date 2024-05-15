@@ -6,7 +6,7 @@
 <input type="number" id="playerId" size="4"
        [(ngModel)]="user.id" (ngModelChange)="syncPlayerToLocalStorage()"/>
 <br>
-<app-create-game [playerName]="user.name" (newGameEvent)="addGame($event)"></app-create-game>
+<app-create-game [playerName]="user.name"></app-create-game>
 <table>
   <tr>
     <th>game</th>

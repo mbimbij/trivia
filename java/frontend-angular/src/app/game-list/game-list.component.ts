@@ -48,12 +48,17 @@ export class GameListComponent {
           this.gameService.registerGameUpdatedObserver(game.id, this.updateGameWithArrow);
         })
       });
+    this.gameService.registerGameCreatedObserver(this.addGameArrow)
   }
 
   addGame(newGame: GameResponseDto) {
     console.log(`game created: ${JSON.stringify(newGame)}`);
     this.gameService.registerGameUpdatedObserver(newGame.id, this.updateGameWithArrow);
     this.games.push(newGame);
+  }
+
+  protected addGameArrow = (newGame: GameResponseDto) => {
+    this.addGame(newGame);
   }
 
   protected updateGameWith(replacement: GameResponseDto) {

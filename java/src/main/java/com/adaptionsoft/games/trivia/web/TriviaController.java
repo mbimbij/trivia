@@ -106,9 +106,9 @@ public class TriviaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
-        // TODO notifier via websocket de l'ajout d'une partie
         Game game = gameFactory.create(requestDto.gameName(), requestDto.getCreatorAsDomainObject());
         gameRepository.save(game);
+        template.convertAndSend("/topic/games/created", GameResponseDto.from(game));
         return GameResponseDto.from(game);
     }
 

@@ -9,11 +9,29 @@ import {RxStompService} from "./rx-stomp.service";
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
+  private gameCreatedSubject = new Subject<GameResponseDto>()
+  private gameDeletedSubject = new Subject<number>()
   private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
   private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
   constructor(private service: TriviaControllerService,
               private rxStompService: RxStompService) {
     super();
+  }
+
+  override registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void {
+    this.gameCreatedSubject.subscribe(observer);
+    this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
+      let newGame = JSON.parse(message.body);
+      this.gameCreatedSubject.next(newGame);
+    });
+  }
+
+  override registerGameDeletedObserver(observer: (gameId: number) => void): void {
+    this.gameDeletedSubject.subscribe(observer);
+    this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
+      let deletedGameId: number = Number.parseInt(message.body);
+      this.gameDeletedSubject.next(deletedGameId);
+    });
   }
 
   override registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void) {

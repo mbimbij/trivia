@@ -15,8 +15,6 @@ import {tap} from "rxjs";
 export class CreateGameComponent implements OnChanges{
   @Input() playerName: string = '';
 
-  @Output() newGameEvent = new EventEmitter<GameResponseDto>();
-
   constructor(private service: TriviaControllerService) {
   }
 
@@ -27,12 +25,12 @@ export class CreateGameComponent implements OnChanges{
         tap(response => console.log(`created game "${newGameName}"`)),
       )
       .subscribe(
-        {
-          next: (newGame) => {
-            this.newGameEvent.emit(newGame);
-          },
-          // error:  (_) => this.handleError(`createItem(${this.newItemName})`, [])
-        }
+        // {
+        //   next: (newGame) => {
+        //     this.newGameEvent.emit(newGame);
+        //   },
+        //   // error:  (_) => this.handleError(`createItem(${this.newItemName})`, [])
+        // }
       )
   }
 
