@@ -14,8 +14,6 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 
 
 public class GameFactory {
-    // TODO distinguer id métier et technique, générer l'id métier par la factory, ça devrait résoudre une bonne partie de mes problèmes.
-
     private final IdGenerator idGenerator;
     private final EventPublisher eventPublisher;
     private final QuestionsLoader questionsLoader;
@@ -59,7 +57,6 @@ public class GameFactory {
         );
 
         eventPublisher.publish(players.getAndClearUncommittedEvents());
-        // TODO adresser la gestion d'id avant persistence du jeu en base
         eventPublisher.publish(new GameCreatedEvent(game.getId()));
         return game;
     }

@@ -19,7 +19,6 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Game extends Entity {
-    // TODO designer où mettre les logs pour permettre à un nouvel onglet d'afficher les logs passés
     @Getter
     private final String name;
     private final EventPublisher eventPublisher;
@@ -33,23 +32,6 @@ public class Game extends Entity {
     @Setter // for testing purposes only
     private State state;
 
-
-    // do not call directly, unless in a testing context
-    public Game(String name,
-                EventPublisher eventPublisher,
-                Players players,
-                PlayerTurnOrchestrator playerTurnOrchestrator,
-                Player currentPlayer,
-                State state) {
-        // TODO remove this constructor, as we now require games to have an id on creation, not just on save
-        this.name = name;
-        this.eventPublisher = eventPublisher;
-        this.players = players;
-        this.playerTurnOrchestrator = playerTurnOrchestrator;
-        this.currentPlayer = currentPlayer;
-        this.state = state;
-    }
-
     public Game(Integer id,
                 String name,
                 EventPublisher eventPublisher,
@@ -58,8 +40,13 @@ public class Game extends Entity {
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
                 State state) {
-        this(name, eventPublisher, players, playerTurnOrchestrator, currentPlayer, state);
         this.id = id;
+        this.name = name;
+        this.eventPublisher = eventPublisher;
+        this.players = players;
+        this.playerTurnOrchestrator = playerTurnOrchestrator;
+        this.currentPlayer = currentPlayer;
+        this.state = state;
         setGameIdToPlayers();
     }
 
@@ -131,7 +118,7 @@ public class Game extends Entity {
         }
         state = STARTED;
         turn = 1;
-        // TODO régler publication des events uncommitted
+        // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
         publishDomainEvents();
     }

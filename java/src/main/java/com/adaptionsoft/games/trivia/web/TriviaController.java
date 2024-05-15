@@ -16,8 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -117,8 +115,8 @@ public class TriviaController {
     @PostMapping("/{gameId}/players/{playerId}/join")
     // FIXME map {playerId} path param to method parameter, validate & test
     @ResponseStatus(HttpStatus.CREATED)
-    public GameResponseDto addPlayerToGame(@PathVariable("gameId") Integer gameId,
-                                           @RequestBody UserDto userDto) {
+    public GameResponseDto joinGame(@PathVariable("gameId") Integer gameId,
+                                    @RequestBody UserDto userDto) {
         Game game = findGameOrThrow(gameId);
         game.addPlayer(new Player(userDto.id(), userDto.name()));
         gameRepository.save(game);

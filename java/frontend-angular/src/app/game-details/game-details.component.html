@@ -9,12 +9,12 @@
     <th>go to</th>
   </tr>
   <tr class="game">
-    <td class="item-name">
+    <td class="game-name">
       {{ game.name }}
     </td>
-    <td class="item-name">{{ game.creator.name }}</td>
+    <td class="creator-name">{{ game.creator.name }}</td>
     <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
-    <td class="item-status">{{ game.state }}</td>
+    <td class="game-status">{{ game.state }}</td>
     <td class="game-start">
       <app-start-game-button
         [game]="game"

@@ -57,7 +57,7 @@ class RestAssuredBasedControllerTest {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(new InvalidGameStateException(null, null, "add player"))
                 .when(triviaController)
-                .addPlayerToGame(anyInt(), any());
+                .joinGame(anyInt(), any());
 
         // WHEN a new player tries to join the game
         //@formatter:off

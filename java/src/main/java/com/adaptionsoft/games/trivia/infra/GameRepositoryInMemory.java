@@ -2,8 +2,6 @@ package com.adaptionsoft.games.trivia.infra;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
-import com.adaptionsoft.games.trivia.domain.Player;
-import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;

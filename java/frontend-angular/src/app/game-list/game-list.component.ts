@@ -10,6 +10,7 @@ import {JoinGameButtonComponent} from "../join-game-button/join-game-button.comp
 import {LocalStorageService} from "../local-storage.service";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
+import {GameTableLineComponent} from "../game-table-line/game-table-line.component";
 
 @Component({
   selector: 'app-game-list',
@@ -23,7 +24,8 @@ import {StartGameButtonComponent} from "../start-game-button/start-game-button.c
     RouterLink,
     JoinGameButtonComponent,
     GotoGameButtonComponent,
-    StartGameButtonComponent
+    StartGameButtonComponent,
+    GameTableLineComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
@@ -50,6 +52,7 @@ export class GameListComponent {
 
   addGame(newGame: GameResponseDto) {
     console.log(`game created: ${JSON.stringify(newGame)}`);
+    this.gameService.registerGameUpdatedObserver(newGame.id, this.updateGameWithArrow);
     this.games.push(newGame);
   }
 

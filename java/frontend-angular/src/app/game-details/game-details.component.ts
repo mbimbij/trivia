@@ -6,6 +6,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
+import {GameService} from "../game.service";
 
 @Component({
   selector: 'app-game',
@@ -24,20 +25,27 @@ import {StartGameButtonComponent} from "../start-game-button/start-game-button.c
 export class GameDetailsComponent {
   gameId!: number;
   game!: GameResponseDto;
-  // TODO localstorage events: synchro le nom si changé dans une autre tab - après gestion d'identité propre
-  playerName!: string;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private gameService: GameService) {
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
     })
   }
 
   ngOnInit() {
-    this.game = history?.state
+    this.gameService.getGame(this.gameId)
+      .subscribe(value => {
+        this.game = value
+      })
+    this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGameWithArrow);
   }
 
   updateGameWith($event: GameResponseDto) {
     this.game = $event
+  }
+
+  protected updateGameWithArrow = (replacement: GameResponseDto) => {
+    this.updateGameWith(replacement);
   }
 }

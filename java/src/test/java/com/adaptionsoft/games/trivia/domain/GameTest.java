@@ -160,7 +160,7 @@ class GameTest {
             Players players = new Players(player1, player2);
 
             // WHEN
-            Game game = new Game("game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
+            Game game = new Game(1, "game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();
@@ -276,12 +276,6 @@ class GameTest {
                 softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
             });
         }
-
-        @Test
-        @Disabled
-            // TODO Implement after Players creation logic is refactored
-        void cannot_start_a_game_with_more_than_6_players() {
-        }
     }
 
     @Nested
@@ -295,7 +289,6 @@ class GameTest {
         void current_player_should_be_able_to_play_turn() {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatCode(() -> game.playTurnBy(creator)).doesNotThrowAnyException();
-                // TODO apply refacto 'Hide Delegate'
                 softAssertions.assertThat(game.getCurrentPlayer()).isEqualTo(player2);
             });
         }

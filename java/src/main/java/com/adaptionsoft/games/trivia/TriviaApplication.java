@@ -26,8 +26,8 @@ public class TriviaApplication {
     }
 
     @Bean
-    public GameRepository gameRepository(IdGenerator idGenerator) {
-        return new GameRepositoryInMemory(idGenerator);
+    public GameRepository gameRepository() {
+        return new GameRepositoryInMemory();
     }
 
     @Bean

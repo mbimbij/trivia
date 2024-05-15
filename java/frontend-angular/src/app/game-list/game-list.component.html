@@ -18,7 +18,7 @@
     <th>go to</th>
   </tr>
   <tr class="game" *ngFor="let game of games" [className]="game.state">
-    <td class="item-name"><a [routerLink]="['game-details',game.id]" [state]="game">{{ game.name }}</a>
+    <td class="item-name"><a [routerLink]="['game-details',game.id]">{{ game.name }}</a>
     </td>
     <td class="item-name">{{ game.creator.name }}</td>
     <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
