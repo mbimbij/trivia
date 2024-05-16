@@ -12,5 +12,6 @@ export abstract class GameServiceAbstract {
   abstract registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void): void;
   abstract registerGameLogsObserver(gameId: number, observer: (updatedGame: GameLog) => void): void;
   abstract getGameLogs(gameId: number): Observable<Array<GameLog>>;
+  abstract delete(gameId: number): Observable<void> ;
 }
 

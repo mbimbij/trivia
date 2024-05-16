@@ -11,6 +11,7 @@ import {LocalStorageService} from "../local-storage.service";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {GameTableLineComponent} from "../game-table-line/game-table-line.component";
+import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
 
 @Component({
   selector: 'app-game-list',
@@ -25,7 +26,8 @@ import {GameTableLineComponent} from "../game-table-line/game-table-line.compone
     JoinGameButtonComponent,
     GotoGameButtonComponent,
     StartGameButtonComponent,
-    GameTableLineComponent
+    GameTableLineComponent,
+    DeleteGameButtonComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
@@ -49,6 +51,7 @@ export class GameListComponent {
         })
       });
     this.gameService.registerGameCreatedObserver(this.addGameArrow)
+    this.gameService.registerGameDeletedObserver(this.deleteGameArrow)
   }
 
   addGame(newGame: GameResponseDto) {
@@ -59,6 +62,14 @@ export class GameListComponent {
 
   protected addGameArrow = (newGame: GameResponseDto) => {
     this.addGame(newGame);
+  }
+
+  protected deleteGameArrow = (gameId: number) => {
+    const index = this.games.findIndex(
+      game => game.id === gameId);
+    if (index !== -1) {
+      this.games.splice(index, 1);
+    }
   }
 
   protected updateGameWith(replacement: GameResponseDto) {

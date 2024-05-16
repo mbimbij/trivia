@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,7 +38,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
                 MediaType.APPLICATION_PROBLEM_JSON_VALUE
         }
 )
-@CrossOrigin(origins = "${application.allowed-origins}")
+@CrossOrigin(origins = "${application.allowed-origins}", methods = {DELETE, GET, POST, OPTIONS})
 @Slf4j
 public class TriviaController {
 
@@ -94,6 +95,14 @@ public class TriviaController {
     @RequestMapping("/{gameId}/logs")
     public Collection<GameLog> getGameLogs(@PathVariable("gameId") int gameId) {
         return gameLogsRepository.getLogsForGame(gameId);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping("/{gameId}")
+    public void deleteGameById(@PathVariable("gameId") int gameId) {
+        gameRepository.deleteGameById(gameId);
+        template.convertAndSend("/topic/games/deleted", gameId);
     }
 
     @DeleteMapping

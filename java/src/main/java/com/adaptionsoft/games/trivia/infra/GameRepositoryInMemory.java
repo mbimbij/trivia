@@ -31,4 +31,10 @@ public class GameRepositoryInMemory implements GameRepository {
                 .filter(game -> Objects.equals(gameId, game.getId()))
                 .findAny();
     }
+
+    @Override
+    public void deleteGameById(int gameId) {
+        this.findById(gameId).ifPresent(games::remove);
+        System.out.println();
+    }
 }

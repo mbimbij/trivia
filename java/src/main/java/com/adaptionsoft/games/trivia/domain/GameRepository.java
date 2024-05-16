@@ -9,4 +9,6 @@ public interface GameRepository {
     void deleteAll();
 
     Optional<Game> findById(int gameId);
+
+    void deleteGameById(int gameId);
 }

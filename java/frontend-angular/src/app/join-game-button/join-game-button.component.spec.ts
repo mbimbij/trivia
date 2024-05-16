@@ -29,4 +29,6 @@ describe('JoinGameButtonComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // TODO écrire un test vérifiant que le composant disparaît / devient grisé quand un 6e joueur rejoint la partie
 });

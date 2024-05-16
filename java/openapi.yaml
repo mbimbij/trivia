@@ -66,6 +66,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GameResponseDto'
+    delete:
+      tags:
+        - trivia-controller
+      operationId: deleteGameById
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "204":
+          description: No Content
   /games/{gameId}/players/{playerId}/start:
     post:
       tags:

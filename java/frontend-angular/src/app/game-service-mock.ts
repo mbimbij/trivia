@@ -8,6 +8,15 @@ import {mockGame1, mockGame2} from "./test-helpers";
   providedIn: 'root'
 })
 export class GameServiceMock extends GameServiceAbstract {
+  override registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void {
+      throw new Error("Method not implemented.");
+  }
+  override registerGameDeletedObserver(observer: (gameId: number) => void): void {
+      throw new Error("Method not implemented.");
+  }
+  override delete(gameId: number): Observable<void> {
+      return of();
+  }
   override registerGameLogsObserver(gameId: number, observer: (updatedGame: GameLog) => void): void {
   }
 

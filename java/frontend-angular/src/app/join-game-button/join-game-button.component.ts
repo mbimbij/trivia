@@ -21,11 +21,10 @@ import {LocalStorageService} from "../local-storage.service";
 export class JoinGameButtonComponent {
 
   @Input() game!: GameResponseDto
-  @Output() gameModifiedEvent = new EventEmitter<GameResponseDto>();
   cannotJoinReason: string = 'already joined'
   protected user!: UserDto;
 
-  constructor(private service: GameServiceAbstract,
+  constructor(private gameService: GameServiceAbstract,
               private localStorageService: LocalStorageService) {
     this.user = localStorageService.getUser()
     localStorageService.registerUserUpdatedObserver(this.updateUser)
@@ -36,11 +35,8 @@ export class JoinGameButtonComponent {
   }
 
   joinGame() {
-    this.service.join(this.game, this.user)
-      .subscribe(response => {
-          this.gameModifiedEvent.emit(response);
-        }
-      )
+    this.gameService.join(this.game, this.user)
+      .subscribe(() => {})
   }
 
   private playersCountsLessThanMax() {

@@ -9,6 +9,9 @@ import {RxStompService} from "./rx-stomp.service";
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
+  override delete(gameId: number): Observable<any> {
+      return this.service.deleteGameById(gameId)
+  }
   private gameCreatedSubject = new Subject<GameResponseDto>()
   private gameDeletedSubject = new Subject<number>()
   private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
@@ -28,7 +31,7 @@ export class GameService extends GameServiceAbstract {
 
   override registerGameDeletedObserver(observer: (gameId: number) => void): void {
     this.gameDeletedSubject.subscribe(observer);
-    this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
+    this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
       let deletedGameId: number = Number.parseInt(message.body);
       this.gameDeletedSubject.next(deletedGameId);
     });
