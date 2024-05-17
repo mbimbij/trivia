@@ -44,7 +44,7 @@ export class StartGameButtonComponent {
   }
 
   canStartGame(): boolean{
-    return this.isPlayerCreator() && !this.isGameStarted() && this.playersCountIsValid()
+    return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
   }
 
   private playersCountIsValid() {
@@ -55,7 +55,7 @@ export class StartGameButtonComponent {
     return compareUserDto(this.game.creator, this.user);
   }
 
-  private isGameStarted(): boolean {
-    return this.game.state === "started"
+  private isGameJustCreated(): boolean {
+    return this.game.state === "created"
   }
 }

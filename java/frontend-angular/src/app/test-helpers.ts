@@ -22,5 +22,6 @@ export const mockGame2 = {
 
 export const mockUser1: UserDto = {
   id: 1,
-  name: "user1"
+  name: "user1",
+  coinCount: 2
 }

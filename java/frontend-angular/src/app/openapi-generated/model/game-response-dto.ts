@@ -20,5 +20,6 @@ export interface GameResponseDto {
     creator: UserDto;
     players: Array<UserDto>;
     currentPlayer: UserDto;
+    winner?: UserDto;
 }
 

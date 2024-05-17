@@ -7,9 +7,17 @@ public record UserDto(
         @NotBlank
         Integer id,
         @NotBlank
-        String name
+        String name,
+        @NotBlank
+        int coinCount
 ) {
+    public UserDto(@NotBlank
+                   Integer id, @NotBlank
+                   String name) {
+        this(id, name,0);
+    }
+
     public static UserDto from(Player player) {
-        return new UserDto(player.getId(), player.getName());
+        return new UserDto(player.getId(), player.getName(), player.getCoinCount());
     }
 }

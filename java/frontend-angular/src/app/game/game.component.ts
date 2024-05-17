@@ -28,16 +28,6 @@ export class GameComponent {
               private gameService: GameService) {
   }
 
-  protected isCurrentPlayer() {
-    return compareUserDto(this.user, this.game.currentPlayer)
-  }
-
-  protected playTurn() {
-    this.gameService.playTurn(this.gameId, this.user.id).subscribe(value => {
-      this.game = value
-    });
-  }
-
   private ngOnInit() {
     this.user = this.localStorageService.getUser()
     this.localStorageService.registerUserUpdatedObserver(this.updateUser)
@@ -49,6 +39,7 @@ export class GameComponent {
       .subscribe(value => {
         this.game = value
         this.dataLoaded = true
+        this.setCoinCount();
       })
     this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGameWith);
 
@@ -57,6 +48,34 @@ export class GameComponent {
         this.logs = gameLogs.map(log => log.value)
       })
     this.gameService.registerGameLogsObserver(this.gameId, this.addLogs);
+  }
+
+  private setCoinCount() {
+    // TODO améliorer le design de cette merde ! 1. introduire une distinction entre User et Player 2. améliorer update player.coinCount
+    const index = this.game.players.findIndex(
+      player => player.id === this.user.id);
+    if (index !== -1) {
+      this.user.coinCount = this.game.players[index].coinCount;
+    }
+  }
+
+  protected canPlayTurn() {
+    return this.isCurrentPlayer() && !this.isGameEnded();
+  }
+
+  private isGameEnded() {
+    return this.game.state === "ended";
+  }
+
+  protected isCurrentPlayer() {
+    return compareUserDto(this.user, this.game.currentPlayer)
+  }
+
+  protected playTurn() {
+    this.gameService.playTurn(this.gameId, this.user.id).subscribe(value => {
+      this.game = value
+      this.setCoinCount();
+    });
   }
 
   private ngAfterViewChecked() {

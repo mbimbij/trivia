@@ -1,0 +1,1 @@
+// TODO rédiger ADR justifiant la génération de l'id dans la factory et non lors de la sauvegarde de l'entité. Les pours, les contres, les risques, etc.

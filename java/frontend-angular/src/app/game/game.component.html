@@ -1,13 +1,15 @@
 <div *ngIf="dataLoaded">
-  <h1>Welcome to Game - "{{ game.name }}"</h1>
+  <h1>Welcome to Game - "{{ game.name }}" {{ game.state === "ended" ? " - ENDED" : "" }}</h1>
+  <h2 *ngIf="game.state === 'ended'">{{ game.winner?.name }} won, Congratulations</h2>
   <p>Turn #{{ game.turn }}</p>
-  <p>you are - "{{ user.name }}"</p>
+  <p>you are - "{{ user.name }}". Coin count: {{user.coinCount}}</p>
   <p>Current Player - "{{ game.currentPlayer.name }}"</p>
   <button type="button" (click)="playTurn()"
-          [disabled]="!isCurrentPlayer()">{{ isCurrentPlayer() ? 'play' : 'play (not your turn)' }}
+          [disabled]="!canPlayTurn()">{{ isCurrentPlayer() ? 'play' : 'play (not your turn)' }}
   </button>
 
   <div id="messagesContainer" style="overflow-y: scroll; height:100px;">
+<!--    TODO introduire un style différent pour distinguer les logs des différents joueurs-->
     <div *ngFor="let log of logs">{{ log }}</div>
   </div>
 </div>

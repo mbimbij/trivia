@@ -27,6 +27,8 @@ public class Game extends Entity {
     @Getter
     int turn = 0;
     private Player currentPlayer;
+    @Getter
+    private Player winner;
     private PlayerTurnOrchestrator playerTurnOrchestrator;
     @Getter
     @Setter // for testing purposes only
@@ -81,6 +83,7 @@ public class Game extends Entity {
         if (currentPlayer.isWinning()) {
             isGameInProgress = false;
             state = ENDED;
+            winner = currentPlayer;
             raise(new PlayerWonEvent(id, currentPlayer));
             raise(new GameEndedEvent(id, currentPlayer.getId()));
         }
