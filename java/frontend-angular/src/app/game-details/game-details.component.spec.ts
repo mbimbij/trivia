@@ -18,6 +18,7 @@ describe('GameDetailsComponent', () => {
         {provide: GameServiceAbstract, useClass: GameServiceMock},
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
         {provide: LocalStorageService, useClass: LocalStorageServiceTest},
+        {provide: GameServiceAbstract, useClass: GameServiceMock}
       ],
       imports: [GameDetailsComponent]
     })

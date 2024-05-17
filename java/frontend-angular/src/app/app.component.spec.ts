@@ -9,7 +9,9 @@ import {RouterModule} from "@angular/router";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [{provide: GameServiceAbstract, useClass: GameServiceMock}],
+    providers: [
+      {provide: GameServiceAbstract, useClass: GameServiceMock}
+    ],
     declarations: [AppComponent],
     imports: [ HttpClientTestingModule, CreateGameComponent, FormsModule, RouterModule ]
   }));

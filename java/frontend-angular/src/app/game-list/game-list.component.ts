@@ -10,7 +10,6 @@ import {JoinGameButtonComponent} from "../join-game-button/join-game-button.comp
 import {LocalStorageService} from "../local-storage.service";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
-import {GameTableLineComponent} from "../game-table-line/game-table-line.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
 
 @Component({
@@ -26,7 +25,6 @@ import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-butto
     JoinGameButtonComponent,
     GotoGameButtonComponent,
     StartGameButtonComponent,
-    GameTableLineComponent,
     DeleteGameButtonComponent
   ],
   templateUrl: './game-list.component.html',

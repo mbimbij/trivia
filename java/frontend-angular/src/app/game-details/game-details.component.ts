@@ -7,6 +7,7 @@ import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {GameService} from "../game.service";
+import {GameServiceAbstract} from "../game-service-abstract";
 
 @Component({
   selector: 'app-game',
@@ -27,7 +28,7 @@ export class GameDetailsComponent {
   game!: GameResponseDto;
 
   constructor(private route: ActivatedRoute,
-              private gameService: GameService) {
+              private gameService: GameServiceAbstract) {
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
     })
