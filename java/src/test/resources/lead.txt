@@ -9,6 +9,7 @@ They are player number 4
 Vlad was added
 They are player number 5
 Game created
+Game id=1 started
 Chet is the current player
 They have rolled a 4
 Chet's new location is 4

@@ -19,8 +19,6 @@ public class PlayerTurnOrchestrator extends EventRaiser {
 
     public void performTurn(Player player) {
         currentPlayer = player;
-        // TODO produire l'event avant l'action du joueur
-        raise(new PlayerTurnStartedEvent(currentPlayer));
         int roll = rollDice();
         if (currentPlayer.isInPenaltyBox()) {
             playFromPenaltyBox(roll);

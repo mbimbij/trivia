@@ -1,14 +1,12 @@
 package com.adaptionsoft.games.trivia.domain;
 
-import com.adaptionsoft.games.trivia.domain.event.Event;
-import com.adaptionsoft.games.trivia.domain.event.GameEndedEvent;
-import com.adaptionsoft.games.trivia.domain.event.GameStartedEvent;
-import com.adaptionsoft.games.trivia.domain.event.PlayerWonEvent;
+import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,6 +55,7 @@ public class Game extends Entity {
     }
 
     public void play() {
+        startBy(currentPlayer);
         do {
             playTurnBy(currentPlayer);
         } while (isGameInProgress);
@@ -71,11 +70,19 @@ public class Game extends Entity {
         endGameIfCurrentPlayerWon();
         publishDomainEvents();
         endCurrentPlayerTurn();
+        displayNextPlayerIfGameNotEnded();
+        publishDomainEvents();
     }
 
     private void validateGameNotEnded(String action) {
         if (state.equals(ENDED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), action);
+        }
+    }
+
+    private void displayNextPlayerIfGameNotEnded() {
+        if(state != ENDED){
+            raise(new PlayerTurnStartedEvent(currentPlayer));
         }
     }
 
@@ -97,7 +104,10 @@ public class Game extends Entity {
 
     private void publishDomainEvents() {
         List<Event> aggregatedEvents = getAndClearUncommittedEvents();
-        aggregatedEvents.addAll(currentPlayer.getAndClearUncommittedEvents());
+        List<Event> currentPlayerEvents = Optional.ofNullable(currentPlayer)
+                .map(EventRaiser::getAndClearUncommittedEvents)
+                .orElse(Collections.emptyList());
+        aggregatedEvents.addAll(currentPlayerEvents);
         aggregatedEvents.addAll(playerTurnOrchestrator.getAndClearUncommittedEvents());
         aggregatedEvents.sort(Comparator.comparingInt(Event::getOrderNumber));
         eventPublisher.publish(aggregatedEvents);
@@ -123,6 +133,7 @@ public class Game extends Entity {
         turn = 1;
         // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
+        raise(new PlayerTurnStartedEvent(currentPlayer));
         publishDomainEvents();
     }
 
