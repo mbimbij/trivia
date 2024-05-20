@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GameResponseDto, UserDto} from "../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {LocalStorageService} from "../local-storage.service";
+import {UserService} from "../user.service";
 import {NgIf} from "@angular/common";
-import {compareUserDto} from "../helpers";
+import {compareUserAndPlayer, compareUserDto} from "../helpers";
+import {User} from "../user";
 
 @Component({
   selector: 'app-start-game-button',
@@ -22,28 +23,28 @@ export class StartGameButtonComponent {
 
   @Input() game!: GameResponseDto
   @Output() gameModifiedEvent = new EventEmitter<GameResponseDto>();
-  protected user!: UserDto;
+  protected user!: User;
 
 
   constructor(private service: GameServiceAbstract,
-              private localStorageService: LocalStorageService) {
-    this.user = localStorageService.getUser()
-    localStorageService.registerUserUpdatedObserver(this.updateUser)
+              private userService: UserService) {
+    this.user = userService.getUser()
+    userService.registerUserUpdatedObserver(this.updateUser)
   }
 
   startGame() {
-    this.service.start(this.game.id,this.user.id)
+    this.service.start(this.game.id, this.user.idInteger)
       .subscribe(response => {
           this.gameModifiedEvent.emit(response);
         }
       )
   }
 
-  private updateUser = (updatedUser: UserDto) => {
+  private updateUser = (updatedUser: User) => {
     this.user = updatedUser
   }
 
-  canStartGame(): boolean{
+  canStartGame(): boolean {
     return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
   }
 
@@ -52,7 +53,7 @@ export class StartGameButtonComponent {
   }
 
   private isPlayerCreator(): boolean {
-    return compareUserDto(this.game.creator, this.user);
+    return compareUserAndPlayer(this.user, this.game.creator);
   }
 
   private isGameJustCreated(): boolean {

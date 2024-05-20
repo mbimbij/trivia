@@ -1,0 +1,14 @@
+<h1 style="text-align: center">Welcome to Trivia Web !</h1>
+<div>
+  <firebase-ui
+    *ngIf="!(isLoggedIn | async)"
+    (signInSuccessWithAuthResult)="successCallback($event)"
+    (signInFailure)="errorCallback($event)"
+    (uiShown)="uiShownCallback()"
+  />
+  <button
+    style="display: block; margin: auto"
+    (click)="logout()"
+    *ngIf="(isLoggedIn | async)"
+  >Logout</button>
+</div>

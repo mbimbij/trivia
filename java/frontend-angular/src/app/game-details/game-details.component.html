@@ -1,34 +1,36 @@
-<table>
-<!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
-  <tr>
-    <th>game</th>
-    <th>creator</th>
-    <th>players</th>
-    <th>status</th>
-    <th>join</th>
-    <th>go to</th>
-  </tr>
-  <tr class="game">
-    <td class="game-name">
-      {{ game.name }}
-    </td>
-    <td class="creator-name">{{ game.creator.name }}</td>
-    <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
-    <td class="game-status">{{ game.state }}</td>
-    <td class="game-start">
-      <app-start-game-button
-        [game]="game"
-        (gameModifiedEvent)="updateGameWith($event)"
-      />
-    </td>
-    <td class="join">
-      <app-join-game-button
-        [game]="game"
-      >
-      </app-join-game-button>
-    </td>
-    <td class="goto">
-      <app-goto-game-button [game]="game"></app-goto-game-button>
-    </td>
-  </tr>
-</table>
+<div *ngIf="dataLoaded">
+  <table>
+    <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
+    <tr>
+      <th>game</th>
+      <th>creator</th>
+      <th>players</th>
+      <th>status</th>
+      <th>join</th>
+      <th>go to</th>
+    </tr>
+    <tr class="game">
+      <td class="game-name">
+        {{ game.name }}
+      </td>
+      <td class="creator-name">{{ game.creator.name }}</td>
+      <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
+      <td class="game-status">{{ game.state }}</td>
+      <td class="game-start">
+        <app-start-game-button
+          [game]="game"
+          (gameModifiedEvent)="updateGameWith($event)"
+        />
+      </td>
+      <td class="join">
+        <app-join-game-button
+          [game]="game"
+        >
+        </app-join-game-button>
+      </td>
+      <td class="goto">
+        <app-goto-game-button [game]="game"></app-goto-game-button>
+      </td>
+    </tr>
+  </table>
+</div>

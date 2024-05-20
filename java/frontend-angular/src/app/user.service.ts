@@ -1,28 +1,28 @@
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
-import {UserDto} from "./openapi-generated";
 import {mockUser1} from "./test-helpers";
+import {User} from "./user";
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocalStorageService {
-  private userSubject = new Subject<UserDto>();
+export class UserService {
+  private userSubject = new Subject<User>();
   private defaultUser = {id: 1, name: "player-1"};
 
   constructor() {
   }
 
-  updatePlayer(value: UserDto): void {
-    localStorage.setItem('user', JSON.stringify(value));
-    this.userSubject.next(value)
+  setUser(user: User): void {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.userSubject.next(user)
   }
 
-  registerUserUpdatedObserver(observer: (newPlayerName: UserDto) => void) {
+  registerUserUpdatedObserver(observer: (newPlayerName: User) => void) {
     this.userSubject.subscribe(observer)
   }
 
-  getUser(): UserDto {
+  getUser(): User {
     if (localStorage.getItem('user') == null) {
       localStorage.setItem('user', JSON.stringify(this.defaultUser))
     }
@@ -30,8 +30,8 @@ export class LocalStorageService {
   }
 }
 
-export class LocalStorageServiceTest extends LocalStorageService {
-  override getUser(): UserDto {
+export class LocalStorageServiceTest extends UserService {
+  override getUser(): User {
     return mockUser1;
   }
 }

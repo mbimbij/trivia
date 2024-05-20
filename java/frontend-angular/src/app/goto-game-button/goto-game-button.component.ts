@@ -9,7 +9,7 @@ import {Router, RouterLink} from "@angular/router";
     RouterLink
   ],
   template: `
-    <button [disabled]="!isGameStarted()" (click)="router.navigate(['/game',game.id], { state: game })">
+    <button [disabled]="!isGameStarted()" (click)="router.navigate(['/games',game.id], { state: game })">
       go to
     </button>
   `,

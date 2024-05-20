@@ -26,6 +26,7 @@ import {GameServiceAbstract} from "../game-service-abstract";
 export class GameDetailsComponent {
   gameId!: number;
   game!: GameResponseDto;
+  protected dataLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private gameService: GameServiceAbstract) {
@@ -38,6 +39,7 @@ export class GameDetailsComponent {
     this.gameService.getGame(this.gameId)
       .subscribe(value => {
         this.game = value
+        this.dataLoaded = true;
       })
     this.gameService.registerGameUpdatedObserver(this.gameId, this.updateGameWithArrow);
   }

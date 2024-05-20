@@ -24,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -46,18 +47,6 @@ public class TriviaController {
     private final GameFactory gameFactory;
     private final SimpMessagingTemplate template;
     private final GameLogsRepository gameLogsRepository;
-    // TODO créer un channel websocket pour notifier des changements sur la liste des parties
-
-    @PostConstruct
-    public void resetGames() {
-        gameRepository.deleteAll();
-        Player[] game1Players = IntStream.rangeClosed(1, 2).mapToObj(value -> new Player(value, "player-" + value)).toArray(Player[]::new);
-        Player[] game2Players = IntStream.rangeClosed(3, 4).mapToObj(value -> new Player(value, "player-" + value)).toArray(Player[]::new);
-        Game game1 = gameFactory.create("game-1", game1Players[0], Arrays.copyOfRange(game1Players, 1, game1Players.length));
-        Game game2 = gameFactory.create("game-2", game2Players[0], Arrays.copyOfRange(game2Players, 1, game2Players.length));
-        gameRepository.save(game1);
-        gameRepository.save(game2);
-    }
 
     @GetMapping
     public Collection<GameResponseDto> listGames() {
@@ -102,14 +91,19 @@ public class TriviaController {
     @RequestMapping("/{gameId}")
     public void deleteGameById(@PathVariable("gameId") int gameId) {
         gameRepository.deleteGameById(gameId);
+        notifyGameDeletedViaWebsocket(gameId);
+    }
+
+    private void notifyGameDeletedViaWebsocket(int gameId) {
         template.convertAndSend("/topic/games/deleted", gameId);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGames() {
-        resetGames();
-        template.convertAndSend("/topic/games", gameRepository.list());
+        List<Integer> gameToBeDeletedIds = gameRepository.list().stream().map(Game::getId).toList();
+        gameRepository.deleteAll();
+        gameToBeDeletedIds.forEach(this::notifyGameDeletedViaWebsocket);
     }
 
     @PostMapping

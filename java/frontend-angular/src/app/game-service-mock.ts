@@ -3,18 +3,26 @@ import {GameServiceAbstract} from "./game-service-abstract";
 import {Observable, of} from "rxjs";
 import {GameLog, GameResponseDto, UserDto} from "./openapi-generated";
 import {mockGame1, mockGame2} from "./test-helpers";
+import {User} from "./user";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameServiceMock extends GameServiceAbstract {
+  override create(name: string, user: User): Observable<GameResponseDto> {
+    return of(mockGame1);
+  }
+
   override registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void {
   }
+
   override registerGameDeletedObserver(observer: (gameId: number) => void): void {
   }
+
   override delete(gameId: number): Observable<void> {
-      return of();
+    return of();
   }
+
   override registerGameLogsObserver(gameId: number, observer: (updatedGame: GameLog) => void): void {
   }
 
@@ -43,7 +51,7 @@ export class GameServiceMock extends GameServiceAbstract {
     ]);
   }
 
-  join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
+  join(game: GameResponseDto, user: User): Observable<GameResponseDto> {
     return of(game);
   }
 

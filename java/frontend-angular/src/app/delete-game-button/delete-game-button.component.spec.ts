@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {DeleteGameButtonComponent} from './delete-game-button.component';
 import {GameServiceAbstract} from "../game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {LocalStorageService, LocalStorageServiceTest} from "../local-storage.service";
+import {UserService, LocalStorageServiceTest} from "../user.service";
 import {mockGame1} from "../test-helpers";
 
 describe('DeleteGameButtonComponent', () => {
@@ -15,7 +15,7 @@ describe('DeleteGameButtonComponent', () => {
       imports: [DeleteGameButtonComponent],
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: LocalStorageService, useClass: LocalStorageServiceTest}
+        {provide: UserService, useClass: LocalStorageServiceTest}
       ]
     })
       .compileComponents();

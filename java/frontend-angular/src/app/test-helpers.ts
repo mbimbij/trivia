@@ -1,4 +1,5 @@
 import {UserDto} from "./openapi-generated";
+import {User} from "./user";
 
 export const mockGame1 = {
   id: 1,
@@ -20,8 +21,8 @@ export const mockGame2 = {
   players: [{id: 2, name: "player2"}, {id: 3, name: "player3"}, {id: 4, name: "player"}]
 };
 
-export const mockUser1: UserDto = {
-  id: 1,
+export const mockUser1: User = {
+  id: "1",
+  idInteger: 1,
   name: "user1",
-  coinCount: 2
 }

@@ -1,12 +1,12 @@
-<p>Welcome to Trivia Web !</p>
+<app-navbar [username]="user.name"></app-navbar>
 <label for="playerName">Player Name</label>
 <input type="text" id="playerName" required minlength="1" maxlength="100" size="20"
        [(ngModel)]="user.name" (ngModelChange)="syncPlayerToLocalStorage()"/>
-<label for="playerId">Player Id</label>
-<input type="number" id="playerId" size="4"
-       [(ngModel)]="user.id" (ngModelChange)="syncPlayerToLocalStorage()"/>
+<!--<label for="playerId">Player Id</label>-->
+<!--<input type="number" id="playerId" size="4"-->
+<!--       [(ngModel)]="user.id" (ngModelChange)="syncPlayerToLocalStorage()"/>-->
 <br>
-<app-create-game [playerName]="user.name"></app-create-game>
+<app-create-game></app-create-game>
 <table>
   <tr>
     <th>game</th>
@@ -19,7 +19,7 @@
     <th>delete</th>
   </tr>
   <tr class="game" *ngFor="let game of games" [className]="game.state">
-    <td class="item-name"><a [routerLink]="['game-details',game.id]">{{ game.name }}</a>
+    <td class="item-name"><a [routerLink]="[game.id,'details']">{{ game.name }}</a>
     </td>
     <td class="item-name">{{ game.creator.name }}</td>
     <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>

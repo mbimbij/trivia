@@ -2,6 +2,9 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";
 import {FormsModule} from "@angular/forms";
 import {tap} from "rxjs";
+import {GameServiceAbstract} from "../game-service-abstract";
+import {User} from "../user";
+import {UserService} from "../user.service";
 
 @Component({
   selector: 'app-create-game',
@@ -12,32 +15,25 @@ import {tap} from "rxjs";
   templateUrl: './create-game.component.html',
   styleUrl: './create-game.component.css'
 })
-export class CreateGameComponent implements OnChanges{
-  @Input() playerName: string = '';
+export class CreateGameComponent {
+  user!: User;
 
-  constructor(private service: TriviaControllerService) {
+  constructor(private gameService: GameServiceAbstract,
+              private userService: UserService) {
+  }
+
+  ngOnInit() {
+    this.user = this.userService.getUser()
+    this.userService.registerUserUpdatedObserver(this.updateUser)
   }
 
   createGame(newGameName: string) {
-    console.log(`player: ${this.playerName}. creating new game with name: ${newGameName}`)
-    this.service.createGame({gameName: newGameName, creator: {id: 1, name: this.playerName}})
-      .pipe(
-        tap(response => console.log(`created game "${newGameName}"`)),
-      )
-      .subscribe(
-        // {
-        //   next: (newGame) => {
-        //     this.newGameEvent.emit(newGame);
-        //   },
-        //   // error:  (_) => this.handleError(`createItem(${this.newItemName})`, [])
-        // }
-      )
+    this.gameService.create(newGameName, this.user)
+      .subscribe(() => {
+      })
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['playerName']){
-      let newName = changes['playerName'].currentValue;
-      this.playerName = newName;
-    }
+  private updateUser = (updatedUser: User) => {
+    this.user = updatedUser
   }
 }

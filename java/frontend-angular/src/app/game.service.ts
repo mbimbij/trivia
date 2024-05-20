@@ -4,11 +4,16 @@ import {catchError, Observable, of, Subject} from "rxjs";
 import {GameLog, GameResponseDto, TriviaControllerService, UserDto} from "./openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "./rx-stomp.service";
+import {User} from "./user";
+import {userToPlayer} from "./helpers";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
+  override create(name: string, user: User): Observable<GameResponseDto> {
+      return this.service.createGame({gameName: name, creator: userToPlayer(user)})
+  }
   override delete(gameId: number): Observable<any> {
       return this.service.deleteGameById(gameId)
   }
@@ -81,8 +86,10 @@ export class GameService extends GameServiceAbstract {
     return this.service.startGame(gameId, userId);
   }
 
-  override join(game: GameResponseDto, user: UserDto): Observable<GameResponseDto> {
-    return this.service.addPlayerToGame(game.id, user.id, user);
+  override join(game: GameResponseDto, user: User): Observable<GameResponseDto> {
+    let idInteger = user.idInteger;
+    let userDto = {id: idInteger, name: user.name};
+    return this.service.addPlayerToGame(game.id, idInteger, userDto);
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {

@@ -1,8 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../game-service-abstract";
-import {LocalStorageService} from "../local-storage.service";
-import {GameResponseDto, UserDto} from "../openapi-generated";
-import {compareUserDto} from "../helpers";
+import {UserService} from "../user.service";
+import {GameResponseDto} from "../openapi-generated";
+import {compareUserAndPlayer} from "../helpers";
+import {User} from "../user";
 
 @Component({
   selector: 'app-delete-game-button',
@@ -18,20 +19,20 @@ import {compareUserDto} from "../helpers";
 export class DeleteGameButtonComponent {
   @Input() gameId!: number;
   @Input() game!: GameResponseDto;
-  private user: UserDto;
+  private user: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private localStorageService: LocalStorageService) {
+              private localStorageService: UserService) {
     this.user = localStorageService.getUser()
     localStorageService.registerUserUpdatedObserver(this.updateUser)
   }
 
-  private updateUser = (updatedUser: UserDto) => {
+  private updateUser = (updatedUser: User) => {
     this.user = updatedUser
   }
 
   protected canDeleteGame() {
-    return compareUserDto(this.user, this.game.creator)
+    return compareUserAndPlayer(this.user, this.game.creator)
   }
 
   protected deleteGame() {

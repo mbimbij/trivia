@@ -2,9 +2,10 @@ import {Component} from '@angular/core';
 import {GameLog, GameResponseDto, UserDto} from "../openapi-generated";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf} from '@angular/common';
-import {LocalStorageService} from "../local-storage.service";
-import {compareUserDto} from "../helpers";
+import {UserService} from "../user.service";
+import {comparePlayers, userToPlayer} from "../helpers";
 import {GameService} from "../game.service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-game',
@@ -17,19 +18,19 @@ import {GameService} from "../game.service";
   styleUrl: './game.component.css'
 })
 export class GameComponent {
-  protected user!: UserDto;
+  protected player!: UserDto;
   private gameId!: number;
   protected game!: GameResponseDto;
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
   protected dataLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private localStorageService: LocalStorageService,
+              private localStorageService: UserService,
               private gameService: GameService) {
   }
 
   private ngOnInit() {
-    this.user = this.localStorageService.getUser()
+    this.player = userToPlayer(this.localStorageService.getUser())
     this.localStorageService.registerUserUpdatedObserver(this.updateUser)
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
@@ -51,11 +52,11 @@ export class GameComponent {
   }
 
   private setCoinCount() {
-    // TODO améliorer le design de cette merde ! 1. introduire une distinction entre User et Player 2. améliorer update player.coinCount
+    // TODO améliorer update player.coinCount -> introduire une update via websocket par exemple
     const index = this.game.players.findIndex(
-      player => player.id === this.user.id);
+      player => player.id === this.player.id);
     if (index !== -1) {
-      this.user.coinCount = this.game.players[index].coinCount;
+      this.player.coinCount = this.game.players[index].coinCount;
     }
   }
 
@@ -68,11 +69,11 @@ export class GameComponent {
   }
 
   protected isCurrentPlayer() {
-    return compareUserDto(this.user, this.game.currentPlayer)
+    return comparePlayers(this.player, this.game.currentPlayer)
   }
 
   protected playTurn() {
-    this.gameService.playTurn(this.gameId, this.user.id).subscribe(value => {
+    this.gameService.playTurn(this.gameId, this.player.id).subscribe(value => {
       this.game = value
       this.setCoinCount();
     });
@@ -89,8 +90,8 @@ export class GameComponent {
     element.scrollTop = element.scrollHeight
   }
 
-  private updateUser = (updatedUser: UserDto) => {
-    this.user = updatedUser
+  private updateUser = (updatedUser: User) => {
+    this.player = {id: updatedUser.idInteger, name: updatedUser.name}
   }
 
   private updateGameWith = (updatedGame: GameResponseDto) => {

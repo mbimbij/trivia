@@ -4,13 +4,18 @@ import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {GameResponseDto, UserDto} from "../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
-import {LocalStorageService} from "../local-storage.service";
+import {UserService} from "../user.service";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
+import {FirebaseuiAngularLibraryComponent} from "firebaseui-angular";
+import {AuthenticationService} from "../authentication.service";
+import {Observable} from "rxjs";
+import {NavbarComponent} from "../navbar/navbar.component";
+import {User} from "../user";
 
 @Component({
   selector: 'app-game-list',
@@ -25,22 +30,23 @@ import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-butto
     JoinGameButtonComponent,
     GotoGameButtonComponent,
     StartGameButtonComponent,
-    DeleteGameButtonComponent
+    DeleteGameButtonComponent,
+    FirebaseuiAngularLibraryComponent,
+    NavbarComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
 })
 export class GameListComponent {
-  title = 'frontend-angular';
   games: GameResponseDto[] = [];
-  user!: UserDto;
+  user!: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private localStorageService: LocalStorageService) {
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
-    this.user = this.localStorageService.getUser();
+    this.user = this.userService.getUser();
     this.gameService.getGames()
       .subscribe(games => {
         this.games = games;
@@ -53,7 +59,6 @@ export class GameListComponent {
   }
 
   addGame(newGame: GameResponseDto) {
-    console.log(`game created: ${JSON.stringify(newGame)}`);
     this.gameService.registerGameUpdatedObserver(newGame.id, this.updateGameWithArrow);
     this.games.push(newGame);
   }
@@ -82,8 +87,7 @@ export class GameListComponent {
     this.updateGameWith(replacement);
   }
 
-
   syncPlayerToLocalStorage() {
-    this.localStorageService.updatePlayer(this.user)
+    this.userService.setUser(this.user)
   }
 }

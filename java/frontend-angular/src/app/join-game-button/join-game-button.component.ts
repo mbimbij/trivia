@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '
 import {NgIf} from "@angular/common";
 import {GameResponseDto, UserDto} from "../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {LocalStorageService} from "../local-storage.service";
+import {UserService} from "../user.service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-join-game-button',
@@ -22,10 +23,10 @@ export class JoinGameButtonComponent {
 
   @Input() game!: GameResponseDto
   cannotJoinReason: string = 'already joined'
-  protected user!: UserDto;
+  protected user!: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private localStorageService: LocalStorageService) {
+              private localStorageService: UserService) {
     this.user = localStorageService.getUser()
     localStorageService.registerUserUpdatedObserver(this.updateUser)
   }
@@ -47,7 +48,7 @@ export class JoinGameButtonComponent {
     return this.game.players.some(player => player.name === this.user.name);
   }
 
-  private updateUser = (updatedUser: UserDto) => {
+  private updateUser = (updatedUser: User) => {
     this.user = updatedUser
   }
 }

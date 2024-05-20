@@ -4,7 +4,7 @@ import { JoinGameButtonComponent } from './join-game-button.component';
 import {GameServiceAbstract} from "../game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {mockGame1} from "../test-helpers";
-import {LocalStorageService, LocalStorageServiceTest} from "../local-storage.service";
+import {UserService, LocalStorageServiceTest} from "../user.service";
 
 describe('JoinGameButtonComponent', () => {
   let component: JoinGameButtonComponent;
@@ -14,7 +14,7 @@ describe('JoinGameButtonComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: LocalStorageService, useClass: LocalStorageServiceTest},
+        {provide: UserService, useClass: LocalStorageServiceTest},
       ],
       imports: [JoinGameButtonComponent]
     })

@@ -7,7 +7,7 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {provideRouter} from "@angular/router";
-import {LocalStorageService, LocalStorageServiceTest} from "../local-storage.service";
+import {UserService, LocalStorageServiceTest} from "../user.service";
 
 describe('GameListComponent', () => {
   let component: GameListComponent;
@@ -17,7 +17,7 @@ describe('GameListComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: LocalStorageService, useClass: LocalStorageServiceTest},
+        {provide: UserService, useClass: LocalStorageServiceTest},
         provideRouter([])
       ],
       imports: [HttpClientTestingModule, CreateGameComponent, FormsModule],
