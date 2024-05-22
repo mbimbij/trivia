@@ -1,13 +1,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
-import {GameListComponent} from "./game-list/game-list.component";
-import {GameDetailsComponent} from "./game-details/game-details.component";
-import {GameComponent} from "./game/game.component";
-import {AuthenticationComponent} from "./auth/authentication.component";
+import {GameListComponent} from "./game/game-list/game-list.component";
+import {GameDetailsComponent} from "./game/game-details/game-details.component";
+import {GameComponent} from "./game/game/game.component";
+import {AuthenticationComponent} from "./authentication/authentication-page/authentication.component";
 import {
   WaitingForEmailVerificationComponent
-} from "./waiting-for-email-verification/waiting-for-email-verification.component";
-import {loginActivateGuard} from "./auth/login-activate.guard";
+} from "./authentication/waiting-for-email-verification/waiting-for-email-verification.component";
+import {loginActivateGuard} from "./authentication/authentication-guard/login-activate.guard";
 
 const routes: Routes = [
   {path: "games", component: GameListComponent, canActivate: [loginActivateGuard]},
