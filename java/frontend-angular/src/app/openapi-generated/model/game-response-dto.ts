@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserDto } from './user-dto';
+import { PlayerDto } from './player-dto';
 
 
 export interface GameResponseDto { 
@@ -17,9 +17,9 @@ export interface GameResponseDto {
     name: string;
     state: string;
     turn: number;
-    creator: UserDto;
-    players: Array<UserDto>;
-    currentPlayer: UserDto;
-    winner?: UserDto;
+    creator: PlayerDto;
+    players: Array<PlayerDto>;
+    currentPlayer: PlayerDto;
+    winner?: PlayerDto;
 }
 

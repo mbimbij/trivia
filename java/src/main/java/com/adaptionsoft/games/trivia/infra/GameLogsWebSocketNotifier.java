@@ -20,6 +20,6 @@ public class GameLogsWebSocketNotifier implements EventListener {
     @Override
     public void handle(Event event) {
         GameLog gameLog = new GameLog(event.getGameId(), event.getStringValue());
-        template.convertAndSend("/topic/games/%d/logs".formatted(event.getGameId()), gameLog);
+        template.convertAndSend("/topic/games/%s/logs".formatted(event.getGameId().getValue()), gameLog);
     }
 }

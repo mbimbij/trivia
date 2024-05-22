@@ -40,7 +40,7 @@ export class GameServiceMock extends GameServiceAbstract {
     return of(mockGame1);
   }
 
-  override playTurn(gameId: number, userId: number): Observable<GameResponseDto> {
+  override playTurn(gameId: number, userId: string): Observable<GameResponseDto> {
     return of(mockGame1);
   }
 
@@ -55,7 +55,7 @@ export class GameServiceMock extends GameServiceAbstract {
     return of(game);
   }
 
-  override start(gameId: number, userId: number): Observable<GameResponseDto> {
+  override start(gameId: number, userId: string): Observable<GameResponseDto> {
     return of(mockGame1);
   }
 }

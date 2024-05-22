@@ -34,7 +34,7 @@ export interface TriviaControllerServiceInterface {
      * @param playerId 
      * @param userDto 
      */
-    addPlayerToGame(gameId: number, playerId: number, userDto: UserDto, extraHttpRequestParams?: any): Observable<GameResponseDto>;
+    addPlayerToGame(gameId: number, playerId: string, userDto: UserDto, extraHttpRequestParams?: any): Observable<GameResponseDto>;
 
     /**
      * 
@@ -67,48 +67,6 @@ export interface TriviaControllerServiceInterface {
     /**
      * 
      * 
-     * @param gameId 
-     */
-    getGameLogs1(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
-
-    /**
-     * 
-     * 
-     * @param gameId 
-     */
-    getGameLogs2(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
-
-    /**
-     * 
-     * 
-     * @param gameId 
-     */
-    getGameLogs3(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
-
-    /**
-     * 
-     * 
-     * @param gameId 
-     */
-    getGameLogs4(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
-
-    /**
-     * 
-     * 
-     * @param gameId 
-     */
-    getGameLogs5(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
-
-    /**
-     * 
-     * 
-     * @param gameId 
-     */
-    getGameLogs6(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
-
-    /**
-     * 
-     * 
      */
     listGames(extraHttpRequestParams?: any): Observable<Array<GameResponseDto>>;
 
@@ -118,7 +76,7 @@ export interface TriviaControllerServiceInterface {
      * @param gameId 
      * @param playerId 
      */
-    playTurn(gameId: number, playerId: number, extraHttpRequestParams?: any): Observable<GameResponseDto>;
+    playTurn(gameId: number, playerId: string, extraHttpRequestParams?: any): Observable<GameResponseDto>;
 
     /**
      * 
@@ -126,6 +84,6 @@ export interface TriviaControllerServiceInterface {
      * @param gameId 
      * @param playerId 
      */
-    startGame(gameId: number, playerId: number, extraHttpRequestParams?: any): Observable<GameResponseDto>;
+    startGame(gameId: number, playerId: string, extraHttpRequestParams?: any): Observable<GameResponseDto>;
 
 }

@@ -11,8 +11,9 @@
  */
 
 
-export interface UserDto { 
+export interface PlayerDto { 
     id: string;
     name: string;
+    coinCount: number;
 }
 

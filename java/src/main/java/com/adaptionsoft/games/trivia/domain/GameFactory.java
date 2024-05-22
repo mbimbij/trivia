@@ -35,10 +35,10 @@ public class GameFactory {
 
     public Game create(Random rand, String gameName, @NonNull String creatorName, String... playersNames) {
         Player[] playersArray = Arrays.stream(playersNames)
-                .map(Player::new)
+                .map((String playerName) -> new Player(new UserId(playerName),playerName))
                 .toArray(Player[]::new);
 
-        final Player player = new Player(creatorName);
+        final Player player = new Player(new UserId(creatorName), creatorName);
         return create(rand, gameName, player, playersArray);
     }
 
@@ -49,11 +49,15 @@ public class GameFactory {
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
-        Game game = new Game(idGenerator.nextId(),
+        Integer id = idGenerator.nextId();
+        Game game = new Game(
+                new GameId(id),
                 gameName,
                 eventPublisher,
                 players,
-                new PlayerTurnOrchestrator(questions, rand, board), players.getCurrent(), CREATED
+                new PlayerTurnOrchestrator(questions, rand, board),
+                players.getCurrent(),
+                CREATED
         );
 
         eventPublisher.publish(players.getAndClearUncommittedEvents());

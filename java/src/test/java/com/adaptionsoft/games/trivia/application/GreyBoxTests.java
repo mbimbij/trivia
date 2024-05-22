@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Collection;
 
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -41,8 +43,8 @@ public class GreyBoxTests {
     @Test
     void create_game__should_store_logs() {
         // GIVEN
-        Player player1 = new Player(1, "player1");
-        Player player2 = new Player(2, "player2");
+        Player player1 = player1();
+        Player player2 = player2();
 
         // WHEN
         Game game = gameFactory.create("game name", player1, player2);

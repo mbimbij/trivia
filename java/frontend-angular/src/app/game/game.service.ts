@@ -5,22 +5,25 @@ import {GameLog, GameResponseDto, TriviaControllerService, UserDto} from "../ope
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../websockets/rx-stomp.service";
 import {User} from "../user/user";
-import {userToPlayer} from "../common/helpers";
+import {userToPlayerDto, userToUserDto} from "../common/helpers";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
   override create(name: string, user: User): Observable<GameResponseDto> {
-      return this.service.createGame({gameName: name, creator: userToPlayer(user)})
+    return this.service.createGame({gameName: name, creator: userToUserDto(user)})
   }
+
   override delete(gameId: number): Observable<any> {
-      return this.service.deleteGameById(gameId)
+    return this.service.deleteGameById(gameId)
   }
+
   private gameCreatedSubject = new Subject<GameResponseDto>()
   private gameDeletedSubject = new Subject<number>()
   private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
   private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
+
   constructor(private service: TriviaControllerService,
               private rxStompService: RxStompService) {
     super();
@@ -43,7 +46,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   override registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void) {
-    if(!this.gameUpdatedSubjects.has(gameId)){
+    if (!this.gameUpdatedSubjects.has(gameId)) {
       this.gameUpdatedSubjects.set(gameId, new Subject<GameResponseDto>());
       this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
         let updatedGame = JSON.parse(message.body);
@@ -54,7 +57,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   registerGameLogsObserver(gameId: number, observer: (gameLog: GameLog) => void) {
-    if(!this.gameLogsAddedSubjects.has(gameId)){
+    if (!this.gameLogsAddedSubjects.has(gameId)) {
       this.gameLogsAddedSubjects.set(gameId, new Subject<GameLog>());
       this.rxStompService.watch(`/topic/games/${gameId}/logs`).subscribe((message: IMessage) => {
         let updatedGame = JSON.parse(message.body);
@@ -68,8 +71,8 @@ export class GameService extends GameServiceAbstract {
     return this.service.getGameById(gameId);
   }
 
-  override playTurn(gameId: number, userId: number): Observable<GameResponseDto> {
-    return this.service.playTurn(gameId,userId);
+  override playTurn(gameId: number, userId: string): Observable<GameResponseDto> {
+    return this.service.playTurn(gameId, userId);
   }
 
   override getGames(): Observable<Array<GameResponseDto>> {
@@ -82,14 +85,12 @@ export class GameService extends GameServiceAbstract {
       )
   }
 
-  override start(gameId: number, userId: number): Observable<GameResponseDto> {
+  override start(gameId: number, userId: string): Observable<GameResponseDto> {
     return this.service.startGame(gameId, userId);
   }
 
   override join(game: GameResponseDto, user: User): Observable<GameResponseDto> {
-    let idInteger = user.idInteger;
-    let userDto = {id: idInteger, name: user.name};
-    return this.service.addPlayerToGame(game.id, idInteger, userDto);
+    return this.service.addPlayerToGame(game.id, user.id, userToUserDto(user));
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {

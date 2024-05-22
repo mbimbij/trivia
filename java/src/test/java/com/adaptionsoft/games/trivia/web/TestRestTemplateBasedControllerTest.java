@@ -2,7 +2,9 @@ package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
+import com.adaptionsoft.games.trivia.domain.TestFixtures;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
+import jakarta.validation.constraints.NotBlank;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +20,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -42,16 +44,15 @@ class TestRestTemplateBasedControllerTest {
     void handle_errors() {
         // GIVEN an error is thrown when adding a player
         Game mockGame = Mockito.mock(Game.class);
-        InvalidGameStateException exception = new InvalidGameStateException(1, Game.State.STARTED, "add player");
+        InvalidGameStateException exception = new InvalidGameStateException(TestFixtures.gameId(), Game.State.STARTED, "add player");
         Mockito.doThrow(exception).when(mockGame).addPlayer(any());
 
-        Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(anyInt());
+        Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(any());
 
         // WHEN a new player tries to join the game
-        int newPlayerId = 2;
-        UserDto newPlayerDto = new UserDto(newPlayerId, "new player");
+        @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2());
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
-                "/games/%d/players/%d/join".formatted(0, newPlayerId),
+                "/games/%d/players/%s/join".formatted(0, newPlayerDto.id()),
                 newPlayerDto,
                 Map.class);
 
@@ -67,4 +68,5 @@ class TestRestTemplateBasedControllerTest {
         });
         System.out.println();
     }
+
 }

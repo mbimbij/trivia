@@ -33,7 +33,7 @@ export class StartGameButtonComponent {
   }
 
   startGame() {
-    this.service.start(this.game.id, this.user.idInteger)
+    this.service.start(this.game.id, this.user.id)
       .subscribe(response => {
           this.gameModifiedEvent.emit(response);
         }

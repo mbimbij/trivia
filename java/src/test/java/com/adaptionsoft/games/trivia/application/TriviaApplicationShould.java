@@ -2,14 +2,13 @@ package com.adaptionsoft.games.trivia.application;
 
 import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
-import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
-import com.adaptionsoft.games.trivia.web.TriviaController;
-import com.adaptionsoft.games.trivia.web.UserDto;
+import com.adaptionsoft.games.trivia.web.*;
 import com.adaptionsoft.games.trivia.websocket.WebSocketConfig;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.constraints.NotBlank;
 import lombok.SneakyThrows;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,6 +27,8 @@ import java.util.List;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -104,16 +105,17 @@ class TriviaApplicationShould {
     @Test
     void user_can_create_game() {
         // GIVEN a request
-        int creatorId = 1;
-        String creatorName = "player name";
-        UserDto creatorDto = new UserDto(creatorId, creatorName);
+        String playerId = player1().getId().getValue();
+        String playerName = player1().getName();
+        @NotBlank PlayerDto creatorDtoPlayer = new PlayerDto(playerId, playerName);
+        @NotBlank UserDto creatorDtoUser = new UserDto(playerId, playerName);
 
         String gameName = "game name";
-        CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, creatorDto);
+        CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, creatorDtoUser);
 
         // AND a set id generation strategy
-        int gameId = 2;
-        Mockito.doReturn(gameId).when(idGenerator).nextId();
+        int gameIdInt = 2;
+        Mockito.doReturn(gameIdInt).when(idGenerator).nextId();
 
         // WHEN I create a game
         ResultActions performResultActions = mvc.perform(post("/games")
@@ -127,18 +129,19 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        GameResponseDto expectedResponseDto = new GameResponseDto(gameId,
+        GameResponseDto expectedResponseDto = new GameResponseDto(gameIdInt,
                 gameName,
                 CREATED.toString(),
                 0,
-                creatorDto,
-                List.of(creatorDto),
-                creatorDto
+                creatorDtoPlayer,
+                List.of(creatorDtoPlayer),
+                creatorDtoPlayer
         );
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the game is created
-        Player expectedCreator = new Player(creatorId, creatorName);
+        Player expectedCreator = player1();
+        GameId gameId = new GameId(gameIdInt);
         expectedCreator.setGameId(gameId);
 
         assertThat(gameRepository.findById(gameId))
@@ -155,16 +158,14 @@ class TriviaApplicationShould {
     @Test
     void user_can_join_game() {
         // GIVEN an existing game
-        Player creator = new Player(1, "creator");
-        final Player[] players = new Player[]{creator};
+        Player creator = player1();
         Game game = gameFactory.create("game name", creator);
         gameRepository.save(game);
 
         // WHEN a new player joins the game
-        int newPlayerId = 2;
-        UserDto newPlayerDto = new UserDto(newPlayerId, "new player");
+        @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2());
         ResultActions resultActions = mvc.perform(
-                post("/games/{gameId}/players/{playerId}/join", game.getId(), newPlayerId)
+                post("/games/{gameId}/players/{playerId}/join", game.getId().getValue(), newPlayerDto.id())
                         .content(mapper.writeValueAsString(newPlayerDto))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -175,8 +176,8 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        UserDto creatorDto = UserDto.from(creator);
-        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
+        @NotBlank PlayerDto creatorDto = PlayerDto.from(creator);
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 CREATED.toString(),
                 0,
@@ -189,7 +190,7 @@ class TriviaApplicationShould {
         assertThat(gameRepository.findById(game.getId()))
                 .hasValueSatisfying(g -> {
                     assertThat(g.getPlayersCount()).isEqualTo(2);
-                    assertThat(g.getPlayersList()).contains(new Player(newPlayerDto.id(), newPlayerDto.name()));
+                    assertThat(g.getPlayersList()).contains(newPlayerDto.toDomainObject());
                 });
     }
 
@@ -197,15 +198,15 @@ class TriviaApplicationShould {
     @Test
     void creator_can_start_game() {
         // GIVEN an existing game
-        Player creator = new Player(1, "creator");
-        Player player2 = new Player(2, "player2");
-        final Player[] players = new Player[]{creator, player2};
-        Game game = gameFactory.create("game name", creator, player2);
+        Player player1 = player1();
+        Player player2 = player2();
+        final Player[] players = new Player[]{player1, player2};
+        Game game = gameFactory.create("game name", player1, player2);
         gameRepository.save(game);
 
         // WHEN the creator starts the game
         ResultActions resultActions = mvc.perform(
-                post("/games/{gameId}/players/{playerId}/start", game.getId(), creator.getId())
+                post("/games/{gameId}/players/{playerId}/start", game.getId().getValue(), player1.getId().getValue())
         );
 
         // THEN the response status is ok
@@ -216,9 +217,9 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        UserDto creatorDto = UserDto.from(creator);
-        UserDto player2Dto = UserDto.from(player2);
-        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
+        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
+        @NotBlank PlayerDto player2Dto = PlayerDto.from(player2);
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),
                 1,
@@ -232,16 +233,16 @@ class TriviaApplicationShould {
     @Test
     void let_current_player_play_turn() {
         // GIVEN an existing started game
-        Player creator = new Player(1, "creator");
-        Player player2 = new Player(2, "player2");
-        final Player[] players = new Player[]{creator, player2};
-        Game game = gameFactory.create("game name", creator, player2);
+        Player player1 = player1();
+        Player player2 = player2();
+        final Player[] players = new Player[]{player1, player2};
+        Game game = gameFactory.create("game name", player1, player2);
         gameRepository.save(game);
-        game.startBy(creator);
+        game.startBy(player1);
 
         // WHEN the current player (creator) starts the game
         ResultActions resultActions = mvc.perform(
-                post("/games/{gameId}/players/{playerId}/playTurn", game.getId(), creator.getId())
+                post("/games/{gameId}/players/{playerId}/playTurn", game.getId().getValue(), player1.getId().getValue())
         );
 
         // THEN response status is ok
@@ -252,9 +253,9 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        UserDto creatorDto = UserDto.from(creator);
-        UserDto otherPlayerDto = UserDto.from(player2);
-        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId(),
+        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
+        @NotBlank PlayerDto otherPlayerDto = PlayerDto.from(player2);
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),
                 2,

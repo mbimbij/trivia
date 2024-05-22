@@ -10,6 +10,9 @@
 <!--  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">-->
 <!--    <mat-icon>share</mat-icon>-->
 <!--  </button>-->
-  <span>{{ username }}</span>
+  <button *ngIf="user.isAnonymous" mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+    <mat-icon>no_accounts</mat-icon>
+  </button>
+  <span>{{ user.name }}</span>
   <app-logout-button></app-logout-button>
 </mat-toolbar>

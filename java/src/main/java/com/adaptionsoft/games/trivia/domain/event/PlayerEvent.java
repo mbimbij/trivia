@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain.event;
 
 import com.adaptionsoft.games.trivia.domain.Player;
+import com.adaptionsoft.games.trivia.domain.UserId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,7 +10,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class PlayerEvent extends Event {
-    protected final Integer playerId;
+    protected final UserId playerId;
     protected final String playerName;
 
     /**

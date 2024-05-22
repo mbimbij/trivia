@@ -19,12 +19,12 @@ public record GameResponseDto(
         @NotBlank
         int turn,
         @NotBlank
-        UserDto creator,
+        PlayerDto creator,
         @NotBlank
-        Collection<UserDto> players,
+        Collection<PlayerDto> players,
         @NotBlank
-        UserDto currentPlayer,
-        UserDto winner
+        PlayerDto currentPlayer,
+        PlayerDto winner
 ) {
 
     public GameResponseDto(@NotBlank Integer id,
@@ -33,11 +33,10 @@ public record GameResponseDto(
                            @NotBlank
                            int turn,
                            @NotBlank
-                           UserDto creator,
+                           PlayerDto creator,
+                           Collection<PlayerDto> players,
                            @NotBlank
-                           Collection<UserDto> players,
-                           @NotBlank
-                           UserDto currentPlayer) {
+                           PlayerDto currentPlayer) {
         this(id,
                 name,
                 state,
@@ -49,13 +48,13 @@ public record GameResponseDto(
     }
 
     public static GameResponseDto from(Game game) {
-        List<UserDto> playersDto = game.getPlayersList().stream().map(UserDto::from).toList();
-        UserDto creatorDto = UserDto.from(game.getCreator());
-        UserDto currentPlayerDto = Optional.ofNullable(game.getCurrentPlayer())
-                .map(UserDto::from)
+        List<PlayerDto> playersDto = game.getPlayersList().stream().map(PlayerDto::from).toList();
+        PlayerDto creatorDto = PlayerDto.from(game.getCreator());
+        PlayerDto currentPlayerDto = Optional.ofNullable(game.getCurrentPlayer())
+                .map(PlayerDto::from)
                 .orElse(null);
-        UserDto winnerDto = Optional.ofNullable(game.getWinner()).map(UserDto::from).orElse(null);
-        return new GameResponseDto(game.getId(),
+        PlayerDto winnerDto = Optional.ofNullable(game.getWinner()).map(PlayerDto::from).orElse(null);
+        return new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 game.getState().toString(),
                 game.getTurn(),

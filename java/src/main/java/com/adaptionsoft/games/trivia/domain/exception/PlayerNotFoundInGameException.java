@@ -1,7 +1,10 @@
 package com.adaptionsoft.games.trivia.domain.exception;
 
+import com.adaptionsoft.games.trivia.domain.GameId;
+import com.adaptionsoft.games.trivia.domain.UserId;
+
 public class PlayerNotFoundInGameException extends PlayerException {
-    public PlayerNotFoundInGameException(Integer gameId, Integer playerId) {
-        super(gameId, playerId, "user %d was not found in the game id=%d".formatted(playerId, gameId));
+    public PlayerNotFoundInGameException(GameId gameId, UserId playerId) {
+        super(gameId, playerId, "user %s was not found in the game id=%s".formatted(playerId, gameId));
     }
 }

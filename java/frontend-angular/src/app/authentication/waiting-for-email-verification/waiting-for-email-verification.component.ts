@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-waiting-for-email-verification',
@@ -9,4 +10,6 @@ import { Component } from '@angular/core';
 })
 export class WaitingForEmailVerificationComponent {
 
+  constructor(protected router: Router) {
+  }
 }

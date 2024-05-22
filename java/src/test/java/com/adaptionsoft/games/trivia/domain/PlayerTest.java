@@ -2,12 +2,10 @@ package com.adaptionsoft.games.trivia.domain;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 class PlayerTest {
 
@@ -15,8 +13,7 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        player = new Player("name"
-        );
+        player = player1();
     }
 
     @Test
@@ -109,9 +106,9 @@ class PlayerTest {
 
     @Test
     void equality_on_id_only() {
-        Player player1 = new Player(1, "player1");
-        Player player2 = new Player(1, "player2");
-        Player player3 = new Player(2, "player2");
+        Player player1 = new Player(new UserId("playerId1"), "player1");
+        Player player2 = new Player(new UserId("playerId1"), "player2");
+        Player player3 = new Player(new UserId("playerId2"), "player2");
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(player1).isEqualTo(player2);
             softAssertions.assertThat(player1).isNotEqualTo(player3);

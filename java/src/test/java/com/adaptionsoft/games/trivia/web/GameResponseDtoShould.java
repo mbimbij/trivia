@@ -26,8 +26,8 @@ class GameResponseDtoShould {
     }
 
     private GameResponseDto buildExpectedGameDto(Game game) {
-        UserDto player1 = UserDto.from(game.getCreator());
-        List<UserDto> players = game.getPlayersList().stream().map(UserDto::from).toList();
+        @jakarta.validation.constraints.NotBlank PlayerDto player1 = PlayerDto.from(game.getCreator());
+        List<PlayerDto> players = game.getPlayersList().stream().map(PlayerDto::from).toList();
         return new GameResponseDto(GAME_TEST_ID, game.getName(), CREATED.toString(), 0, player1, players, player1);
     }
 }

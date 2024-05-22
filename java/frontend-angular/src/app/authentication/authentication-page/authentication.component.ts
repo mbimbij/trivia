@@ -5,11 +5,13 @@ import {
   FirebaseUISignInSuccessWithAuthResult
 } from "firebaseui-angular";
 import {Router} from "@angular/router";
-import {Observable} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {AuthenticationService} from "../authentication.service";
 import {UserService} from "../../user/user.service";
-import {generateRandomString, stringHashCode} from "../../common/helpers";
+import {generateRandomString} from "../../common/helpers";
+import {User} from "../../user/user";
+import {ConsoleLogPipe} from "../../console-log.pipe";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Component({
   selector: 'app-authentication',
@@ -17,7 +19,8 @@ import {generateRandomString, stringHashCode} from "../../common/helpers";
   imports: [
     FirebaseuiAngularLibraryComponent,
     NgIf,
-    AsyncPipe
+    AsyncPipe,
+    ConsoleLogPipe
   ],
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css'
@@ -29,14 +32,6 @@ export class AuthenticationComponent {
               private router: Router) {
   }
 
-  logout() {
-    this.authenticationService.logout();
-  }
-
-  get isLoggedIn(): Observable<boolean> {
-    return this.authenticationService.isLoggedIn
-  }
-
   successCallback($event: FirebaseUISignInSuccessWithAuthResult) {
     let user = $event.authResult.user!;
     if (!user?.isAnonymous && user?.emailVerified === false) {
@@ -44,13 +39,16 @@ export class AuthenticationComponent {
       // user.sendEmailVerification()
       this.router.navigate(['waiting-for-email-verification']);
     } else {
-      let triviaUser = {
-        name: user.displayName ?? 'anon-' + generateRandomString(6),
-        id: user.uid,
-        idInteger: stringHashCode(user.uid)
-      };
-      this.userService.setUser(triviaUser)
-      this.router.navigate(['games']);
+      let userNameUndefined: boolean = user.displayName == null
+      let userName = user.displayName ?? 'anon-' + generateRandomString(6);
+      let triviaUser = new User(user.uid,
+        userName,
+        user.isAnonymous);
+      if(userNameUndefined){
+        this.userService.updateUserName(userName)
+      }
+      this.userService.updateUser(triviaUser)
+      this.router.navigate(['/games']);
     }
   }
 

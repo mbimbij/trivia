@@ -1,10 +1,13 @@
-<app-navbar [username]="user.name"></app-navbar>
+<app-navbar></app-navbar>
 <label for="playerName">Player Name</label>
-<input type="text" id="playerName" required minlength="1" maxlength="100" size="20"
-       [(ngModel)]="user.name" (ngModelChange)="syncPlayerToLocalStorage()"/>
-<!--<label for="playerId">Player Id</label>-->
-<!--<input type="number" id="playerId" size="4"-->
-<!--       [(ngModel)]="user.id" (ngModelChange)="syncPlayerToLocalStorage()"/>-->
+<input
+  type="text"
+  id="playerName" required minlength="1" maxlength="100" size="20"
+  #newUserName
+  [value]="user.name"
+  (keyup.enter)="updateName(newUserName.value)"
+/>
+<button (click)="updateName(newUserName.value)">ok</button>
 <br>
 <app-create-game></app-create-game>
 <table>

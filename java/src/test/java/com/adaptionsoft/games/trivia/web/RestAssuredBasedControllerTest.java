@@ -21,8 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.reset;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -81,7 +80,7 @@ class RestAssuredBasedControllerTest {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(PlayTurnException.notCurrentPlayerException(null, null, null))
                 .when(triviaController)
-                .playTurn(anyInt(), anyInt());
+                .playTurn(anyInt(), anyString());
 
         // WHEN a player tries to play a turn
         //@formatter:off

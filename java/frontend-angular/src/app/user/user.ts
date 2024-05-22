@@ -1,11 +1,25 @@
+import firebase from "firebase/compat";
+
 export class User {
-  idInteger: number;
   id: string;
   name: string;
+  isAnonymous: boolean
 
-  constructor(id: string, idInteger: number, name: string) {
+  constructor(id: string, name: string, isAnonymous: boolean) {
     this.id = id;
-    this.idInteger = idInteger;
     this.name = name;
+    this.isAnonymous = isAnonymous;
+  }
+}
+
+export class Nobody extends User {
+  private static _instance: Nobody = new Nobody();
+
+  constructor() {
+    super("", "", true);
+  }
+
+  static get instance(): Nobody {
+    return this._instance;
   }
 }

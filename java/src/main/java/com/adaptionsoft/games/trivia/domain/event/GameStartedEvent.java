@@ -1,7 +1,9 @@
 package com.adaptionsoft.games.trivia.domain.event;
 
+import com.adaptionsoft.games.trivia.domain.GameId;
+
 public class GameStartedEvent extends GameEvent {
-    public GameStartedEvent(Integer gameId) {
-        super(gameId, "Game id=%d started".formatted(gameId));
+    public GameStartedEvent(GameId gameId) {
+        super(gameId, "Game %s started".formatted(gameId));
     }
 }

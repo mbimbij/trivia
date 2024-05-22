@@ -1,7 +1,5 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {GameResponseDto, TriviaControllerService} from "../../openapi-generated";
+import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {tap} from "rxjs";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {User} from "../../user/user";
 import {UserService} from "../../user/user.service";

@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,20 +32,19 @@ class GameTest {
     private static final PrintStream stdout = System.out;
     private MockEventPublisher eventPublisher;
     private GameFactory gameFactory;
-    private final Player creator = new Player(1, "creator");
-    private final Player player2 = new Player(2, "player2");
+    private final Player player1 = player1();
+    private final Player player2 = player2();
     // GIVEN
     private Game game;
-    private IdGenerator idGenerator;
 
     @BeforeEach
     void setUp() {
         System.setOut(stdout);
-        idGenerator = new IdGenerator();
+        IdGenerator idGenerator = new IdGenerator();
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsLoader());
-        game = gameFactory.create("game", creator, player2);
+        game = gameFactory.create("game", player1, player2);
     }
 
     @Test
@@ -153,14 +153,17 @@ class GameTest {
         void creation_through_constructor__should_not_raise_any_event() {
             // GIVEN
             eventPublisher.clearEvents();
-            String playerName1 = "player1";
-            String playerName2 = "player2";
-            Player player1 = new Player(playerName1);
-            Player player2 = new Player(playerName2);
-            Players players = new Players(player1, player2);
+            Players players = new Players(player1(), player2());
 
             // WHEN
-            Game game = new Game(1, "game name", eventPublisher, players, new PlayerTurnOrchestrator(null, null, null), players.getCurrent(), CREATED);
+            Game game = new Game(
+                    new GameId(1),
+                    "game name",
+                    eventPublisher,
+                    players,
+                    new PlayerTurnOrchestrator(null, null, null),
+                    players.getCurrent(),
+                    CREATED);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();
@@ -171,12 +174,10 @@ class GameTest {
         void creation_through_factory__should_raise_player_added_event() {
             // GIVEN
             eventPublisher.clearEvents();
-            String playerName1 = "player1";
-            String playerName2 = "player2";
-            Player player1 = new Player(playerName1);
-            Player player2 = new Player(playerName2);
 
             // WHEN
+            Player player1 = player1();
+            Player player2 = player2();
             Game game = gameFactory.create("game", player1, player2);
 
             // THEN the domain events are produced in the correct order
@@ -199,7 +200,7 @@ class GameTest {
             game.setState(state);
 
             // WHEN
-            assertThatThrownBy(() -> game.addPlayer(new Player("new player")))
+            assertThatThrownBy(() -> game.addPlayer(player2()))
                     .isInstanceOf(InvalidGameStateException.class);
         }
 
@@ -209,7 +210,7 @@ class GameTest {
             Game game = TestFixtures.a1playerGame();
 
             // WHEN
-            assertThatThrownBy(() -> game.addPlayer(new Player("player1")))
+            assertThatThrownBy(() -> game.addPlayer(player1()))
                     .isInstanceOf(DuplicatePlayerNameException.class)
                     .hasMessageStartingWith("duplicate player name on player join");
         }
@@ -220,7 +221,7 @@ class GameTest {
             Game game = TestFixtures.a6playersGame();
 
             // WHEN
-            assertThatThrownBy(() -> game.addPlayer(new Player("player7")))
+            assertThatThrownBy(() -> game.addPlayer(player(7)))
                     .isInstanceOf(InvalidNumberOfPlayersException.class);
         }
 
@@ -228,7 +229,7 @@ class GameTest {
         void game_id_is_set__when_joining_game() {
             // GIVEN
             Game game = TestFixtures.a1playerGame();
-            Player newPlayer = new Player("newPlayer");
+            Player newPlayer = player2();
 
             // WHEN
             game.addPlayer(newPlayer);
@@ -244,7 +245,7 @@ class GameTest {
         @Test
         void creator_can_start_game() {
             // WHEN
-            game.startBy(creator);
+            game.startBy(player1);
 
             // THEN
             assertSoftly(softAssertions -> {
@@ -265,10 +266,10 @@ class GameTest {
         @Test
         void cannot_start_a_game_with_less_than_2_players() {
             // GIVEN a 1 player game
-            game = gameFactory.create("game", creator);
+            game = gameFactory.create("game", player1);
 
             // WHEN
-            ThrowableAssert.ThrowingCallable callable = () -> game.startBy(creator);
+            ThrowableAssert.ThrowingCallable callable = () -> game.startBy(player1);
 
             // THEN
             assertSoftly(softAssertions -> {
@@ -288,7 +289,7 @@ class GameTest {
         @Test
         void current_player_should_be_able_to_play_turn() {
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatCode(() -> game.playTurnBy(creator)).doesNotThrowAnyException();
+                softAssertions.assertThatCode(() -> game.playTurnBy(player1)).doesNotThrowAnyException();
                 softAssertions.assertThat(game.getCurrentPlayer()).isEqualTo(player2);
             });
         }
@@ -300,11 +301,10 @@ class GameTest {
         @Test
         void game_should_end__if_current_player_is_winning() {
             // GIVEN
-            int gameId = 1;
+            GameId gameId = new GameId(1);
             Players players = Mockito.mock(Players.class);
             PlayerTurnOrchestrator playerTurnOrchestrator = Mockito.mock(PlayerTurnOrchestrator.class);
-            int playerId = 2;
-            Player player = Mockito.spy(new Player(playerId, null));
+            Player player = Mockito.spy(player1());
             Mockito.doReturn(true).when(player).isWinning();
             Game game = new Game(gameId, null, eventPublisher, players, playerTurnOrchestrator, player, STARTED);
 
@@ -327,9 +327,9 @@ class GameTest {
 
             // WHEN
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> game.addPlayer(new Player(null))).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.startBy(creator)).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.playTurnBy(creator)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.startBy(player1)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.playTurnBy(player1)).isInstanceOf(InvalidGameStateException.class);
             });
 
             // THEN

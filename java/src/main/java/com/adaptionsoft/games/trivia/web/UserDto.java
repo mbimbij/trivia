@@ -1,23 +1,11 @@
 package com.adaptionsoft.games.trivia.web;
 
-import com.adaptionsoft.games.trivia.domain.Player;
 import jakarta.validation.constraints.NotBlank;
 
 public record UserDto(
         @NotBlank
-        Integer id,
+        String id,
         @NotBlank
-        String name,
-        @NotBlank
-        int coinCount
+        String name
 ) {
-    public UserDto(@NotBlank
-                   Integer id, @NotBlank
-                   String name) {
-        this(id, name,0);
-    }
-
-    public static UserDto from(Player player) {
-        return new UserDto(player.getId(), player.getName(), player.getCoinCount());
-    }
 }

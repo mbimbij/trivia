@@ -8,7 +8,7 @@ public interface GameRepository {
     Collection<Game> list();
     void deleteAll();
 
-    Optional<Game> findById(int gameId);
+    Optional<Game> findById(GameId gameId);
 
-    void deleteGameById(int gameId);
+    void deleteGameById(GameId gameId);
 }

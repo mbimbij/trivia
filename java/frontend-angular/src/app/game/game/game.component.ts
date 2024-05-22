@@ -3,9 +3,10 @@ import {GameLog, GameResponseDto, UserDto} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgForOf, NgIf} from '@angular/common';
 import {UserService} from "../../user/user.service";
-import {comparePlayers, userToPlayer} from "../../common/helpers";
+import {comparePlayers, userToPlayerDto} from "../../common/helpers";
 import {GameService} from "../game.service";
 import {User} from "../../user/user";
+import {Player} from "../../user/player";
 
 @Component({
   selector: 'app-game',
@@ -18,7 +19,7 @@ import {User} from "../../user/user";
   styleUrl: './game.component.css'
 })
 export class GameComponent {
-  protected player!: UserDto;
+  protected player!: Player;
   private gameId!: number;
   protected game!: GameResponseDto;
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
@@ -26,13 +27,13 @@ export class GameComponent {
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
-              private localStorageService: UserService,
+              private userService: UserService,
               private gameService: GameService) {
   }
 
   private ngOnInit() {
-    this.player = userToPlayer(this.localStorageService.getUser())
-    this.localStorageService.registerUserUpdatedObserver(this.updateUser)
+    this.player = userToPlayerDto(this.userService.getUser())
+    this.userService.registerUserUpdatedObserver(this.updateUser)
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
     })
@@ -92,7 +93,11 @@ export class GameComponent {
   }
 
   private updateUser = (updatedUser: User) => {
-    this.player = {id: updatedUser.idInteger, name: updatedUser.name}
+    const index = this.game.players.findIndex(
+      player => player.id === this.player.id);
+    if (index !== -1) {
+      this.player = this.game.players[index];
+    }
   }
 
   private updateGameWith = (updatedGame: GameResponseDto) => {

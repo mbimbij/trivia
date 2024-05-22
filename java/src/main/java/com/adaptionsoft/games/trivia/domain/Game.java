@@ -16,7 +16,7 @@ import java.util.*;
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Game extends Entity {
+public class Game extends Entity<GameId> {
     @Getter
     private final String name;
     private final EventPublisher eventPublisher;
@@ -27,20 +27,20 @@ public class Game extends Entity {
     private Player currentPlayer;
     @Getter
     private Player winner;
-    private PlayerTurnOrchestrator playerTurnOrchestrator;
+    private final PlayerTurnOrchestrator playerTurnOrchestrator;
     @Getter
     @Setter // for testing purposes only
     private State state;
 
-    public Game(Integer id,
+    public Game(GameId gameId,
                 String name,
-                EventPublisher eventPublisher,
                 // TODO R-1 retirer cet attribut, les joueurs devraient être rajoutés à une partie, pas à un artefact séparé
+                EventPublisher eventPublisher,
                 Players players,
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
                 State state) {
-        this.id = id;
+        super(gameId);
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
@@ -137,7 +137,7 @@ public class Game extends Entity {
         publishDomainEvents();
     }
 
-    public Optional<Player> findPlayerById(Integer playerId) {
+    public Optional<Player> findPlayerById(UserId playerId) {
         return players.getIndividualPlayers()
                 .stream()
                 .filter(player -> Objects.equals(player.getId(), playerId))

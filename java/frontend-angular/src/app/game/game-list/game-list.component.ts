@@ -14,6 +14,7 @@ import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.comp
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
 import {NavbarComponent} from "../navbar/navbar.component";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Component({
   selector: 'app-game-list',
@@ -40,7 +41,12 @@ export class GameListComponent {
   user!: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private userService: UserService) {
+              protected userService: UserService,
+              private afAuth: AngularFireAuth) {
+  }
+
+  updateName(name: string){
+    this.userService.updateUserName(name)
   }
 
   ngOnInit(): void {
@@ -83,9 +89,5 @@ export class GameListComponent {
 
   protected updateGameWithArrow = (replacement: GameResponseDto) => {
     this.updateGameWith(replacement);
-  }
-
-  syncPlayerToLocalStorage() {
-    this.userService.setUser(this.user)
   }
 }

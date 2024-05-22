@@ -11,9 +11,9 @@ export abstract class GameServiceAbstract {
 
   abstract join(game: GameResponseDto, user: User): Observable<GameResponseDto>;
 
-  abstract start(gameId: number, userId: number): Observable<GameResponseDto>;
+  abstract start(gameId: number, userId: string): Observable<GameResponseDto>;
 
-  abstract playTurn(gameId: number, userId: number): Observable<GameResponseDto>;
+  abstract playTurn(gameId: number, userId: string): Observable<GameResponseDto>;
 
   abstract registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void;
 
