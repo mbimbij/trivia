@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {GameLog, GameResponseDto, UserDto} from "../openapi-generated";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NgForOf, NgIf} from '@angular/common';
 import {UserService} from "../user.service";
-import {comparePlayers, userToPlayer} from "../helpers";
+import {comparePlayers, compareUserAndPlayer, userToPlayer} from "../helpers";
 import {GameService} from "../game.service";
 import {User} from "../user";
 
@@ -25,6 +25,7 @@ export class GameComponent {
   protected dataLoaded: boolean = false;
 
   constructor(private route: ActivatedRoute,
+              protected router: Router,
               private localStorageService: UserService,
               private gameService: GameService) {
   }
@@ -61,10 +62,10 @@ export class GameComponent {
   }
 
   protected canPlayTurn() {
-    return this.isCurrentPlayer() && !this.isGameEnded();
+    return this.isCurrentPlayer() && !this.isGameEnded;
   }
 
-  private isGameEnded() {
+  get isGameEnded(): boolean {
     return this.game.state === "ended";
   }
 
@@ -80,7 +81,7 @@ export class GameComponent {
   }
 
   private ngAfterViewChecked() {
-    if(this.dataLoaded){
+    if (this.dataLoaded) {
       this.scrollLogsToBottom()
     }
   }
@@ -100,5 +101,9 @@ export class GameComponent {
 
   private addLogs = (gameLog: GameLog) => {
     this.logs.push(gameLog.value);
+  }
+
+  protected playerWon(): boolean {
+    return comparePlayers(this.player, this.game.winner)
   }
 }

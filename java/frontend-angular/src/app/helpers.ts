@@ -9,8 +9,8 @@ export function compareUserAndPlayer(user: User, player: UserDto): boolean {
   return user !== null && player !== null && user.idInteger === player.id;
 }
 
-export function comparePlayers(player1: UserDto, player2: UserDto): boolean {
-  return player1 !== null && player2 !== null && player1.id === player2.id;
+export function comparePlayers(player1?: UserDto, player2?: UserDto): boolean {
+  return player1 !== null && player2 !== null && player1?.id === player2?.id;
 }
 
 export function userToPlayer(user: User): UserDto{
