@@ -9,7 +9,7 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 })
 export class UserService {
   private userSubject = new Subject<User>();
-  private defaultUser = {id: 1, name: "player-1"};
+  private defaultUser: User = new User("1", "player-1", true);
 
   constructor(private afAuth: AngularFireAuth) {
   }

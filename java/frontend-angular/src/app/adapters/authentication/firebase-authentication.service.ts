@@ -1,23 +1,20 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {from, map, Observable, Subject} from "rxjs";
-import {UserService} from "../user/user.service";
+import {from, map, Observable} from "rxjs";
+import {UserService} from "../../user/user.service";
+import {AuthenticationServiceAbstract} from "../../authentication/authentication-service.abstract";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class FirebaseAuthenticationService implements AuthenticationServiceAbstract {
 
-  loggedIn : boolean = false;
+  loggedIn: boolean = false;
 
   constructor(private afAuth: AngularFireAuth,
               private userService: UserService) {
     this.afAuth.onAuthStateChanged(auth => {
-      if(auth !== null){
-        this.loggedIn = true
-      }else{
-        this.loggedIn = false
-      }
+      this.loggedIn = auth !== null;
     })
   }
 

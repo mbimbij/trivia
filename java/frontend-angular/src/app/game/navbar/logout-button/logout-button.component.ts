@@ -3,8 +3,8 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
-import {AuthenticationService} from "../../../authentication/authentication.service";
 import {ConsoleLogPipe} from "../../../console-log.pipe";
+import {AuthenticationServiceAbstract} from "../../../authentication/authentication-service.abstract";
 
 @Component({
   selector: 'app-logout-button',
@@ -29,7 +29,7 @@ import {ConsoleLogPipe} from "../../../console-log.pipe";
 export class LogoutButtonComponent {
 
   constructor(private router: Router,
-              protected authenticationService: AuthenticationService) {
+              protected authenticationService: AuthenticationServiceAbstract) {
   }
 
   logout() {

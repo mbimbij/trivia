@@ -6,12 +6,11 @@ import {
 } from "firebaseui-angular";
 import {Router} from "@angular/router";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {AuthenticationService} from "../authentication.service";
 import {UserService} from "../../user/user.service";
 import {generateRandomString} from "../../common/helpers";
 import {User} from "../../user/user";
 import {ConsoleLogPipe} from "../../console-log.pipe";
-import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {AuthenticationServiceAbstract} from "../authentication-service.abstract";
 
 @Component({
   selector: 'app-authentication',
@@ -27,7 +26,7 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 })
 export class AuthenticationComponent {
 
-  constructor(protected authenticationService: AuthenticationService,
+  constructor(protected authenticationService: AuthenticationServiceAbstract,
               protected userService: UserService,
               private router: Router) {
   }

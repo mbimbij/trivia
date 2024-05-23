@@ -17,8 +17,10 @@ import {AngularFireModule} from "@angular/fire/compat";
 import {environment} from "../environments/environment";
 import {AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR} from "@angular/fire/compat/auth";
 import {FirebaseUIModule} from "firebaseui-angular";
-import {firebaseUiAuthConfig} from "./authentication/firebase-ui-auth-config";
+import {firebaseUiAuthConfig} from "./adapters/authentication/firebase-ui-auth-config";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {AuthenticationServiceAbstract} from "./authentication/authentication-service.abstract";
+import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
   ],
   providers: [
     {provide: GameServiceAbstract, useClass: GameService},
+    {provide: AuthenticationServiceAbstract, useClass: FirebaseAuthenticationService},
     {provide: RxStompService, useFactory: rxStompServiceFactory},
     provideAuth(() => getAuth()),
     {
