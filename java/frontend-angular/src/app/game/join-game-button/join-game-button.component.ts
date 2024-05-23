@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NgIf} from "@angular/common";
-import {GameResponseDto, UserDto} from "../../openapi-generated";
+import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {UserService} from "../../user/user.service";
 import {User} from "../../user/user";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-join-game-button',
@@ -12,40 +12,52 @@ import {User} from "../../user/user";
     NgIf
   ],
   template: `
-    <button (click)="joinGame()" *ngIf="canJoin()">
-      join
-    </button>
-    <span *ngIf="!canJoin()">{{ cannotJoinReason }}</span>
+    @if (canJoin()) {
+      <button (click)="joinGame()">
+        join
+      </button>
+    } @else if (isGameStarted()) {
+      <span *ngIf="!canJoin()">{{ 'game started' }}</span>
+    } @else if (isPlayerInGame()) {
+      <span *ngIf="!canJoin()">{{ 'already joined' }}</span>
+    } @else {
+      <span *ngIf="!canJoin()">{{ 'cannot join' }}</span>
+    }
   `,
   styleUrl: './join-game-button.component.css'
 })
 export class JoinGameButtonComponent {
 
   @Input() game!: GameResponseDto
-  cannotJoinReason: string = 'already joined'
   protected user!: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private localStorageService: UserService) {
-    this.user = localStorageService.getUser()
-    localStorageService.registerUserUpdatedObserver(this.updateUser)
+              private userService: UserServiceAbstract) {
+    this.user = userService.getUser()
+    userService.registerUserUpdatedObserver(this.updateUser)
   }
 
   canJoin(): boolean {
-    return !this.isPlayerInGame() && this.playersCountsLessThanMax()
+    return !this.isPlayerInGame() && this.playersCountsLessThanMax() && !this.isGameStarted()
   }
 
-  joinGame() {
-    this.gameService.join(this.game, this.user)
-      .subscribe(() => {})
+  protected isPlayerInGame(): boolean {
+    return this.game.players.some(player => player.name === this.user.name);
   }
 
   private playersCountsLessThanMax() {
     return this.game.players.length < 6;
   }
 
-  private isPlayerInGame(): boolean {
-    return this.game.players.some(player => player.name === this.user.name);
+  protected isGameStarted(): boolean {
+    return this.game.state === 'started';
+  }
+
+
+  joinGame() {
+    this.gameService.join(this.game, this.user)
+      .subscribe(() => {
+      })
   }
 
   private updateUser = (updatedUser: User) => {

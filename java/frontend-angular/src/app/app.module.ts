@@ -10,8 +10,8 @@ import {CreateGameComponent} from "./game/create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from './app-routing.module';
 import {GameListComponent} from "./game/game-list/game-list.component";
-import {RxStompService} from "./websockets/rx-stomp.service";
-import {rxStompServiceFactory} from "./websockets/rx-stomp-service-factory";
+import {RxStompService} from "./adapters/websockets/rx-stomp.service";
+import {rxStompServiceFactory} from "./adapters/websockets/rx-stomp-service-factory";
 import {getAuth, provideAuth} from '@angular/fire/auth';
 import {AngularFireModule} from "@angular/fire/compat";
 import {environment} from "../environments/environment";
@@ -21,6 +21,8 @@ import {firebaseUiAuthConfig} from "./adapters/authentication/firebase-ui-auth-c
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {AuthenticationServiceAbstract} from "./authentication/authentication-service.abstract";
 import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
+import {FirebaseUserService} from "./adapters/user/firebase-user.service";
+import {UserServiceAbstract} from "./user/user-service.abstract";
 
 @NgModule({
   declarations: [
@@ -41,6 +43,7 @@ import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-
   providers: [
     {provide: GameServiceAbstract, useClass: GameService},
     {provide: AuthenticationServiceAbstract, useClass: FirebaseAuthenticationService},
+    {provide: UserServiceAbstract, useClass: FirebaseUserService},
     {provide: RxStompService, useFactory: rxStompServiceFactory},
     provideAuth(() => getAuth()),
     {

@@ -1,6 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {GameResponseDto} from "../../openapi-generated";
 import {Router, RouterLink} from "@angular/router";
+import {compareUserAndPlayer} from "../../common/helpers";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {User} from "../../user/user";
 
 @Component({
   selector: 'app-goto-game-button',
@@ -9,7 +12,7 @@ import {Router, RouterLink} from "@angular/router";
     RouterLink
   ],
   template: `
-    <button [disabled]="!isGameStarted()" (click)="router.navigate(['/games',game.id], { state: game })">
+    <button [disabled]="!canGotoGame()" (click)="router.navigate(['/games',game.id], { state: game })">
       go to
     </button>
   `,
@@ -17,11 +20,27 @@ import {Router, RouterLink} from "@angular/router";
 })
 export class GotoGameButtonComponent {
   @Input() game!: GameResponseDto
+  private user: User;
 
-  constructor(protected router: Router) {
+  constructor(protected router: Router,
+              private userService: UserServiceAbstract) {
+    this.user = userService.getUser();
+    userService.registerUserUpdatedObserver(this.updateUser)
   }
 
-  isGameStarted() {
+  canGotoGame() {
+    return this.isPlayer() && this.isGameStarted();
+  }
+
+  private isPlayer() {
+    return this.game.players.find(player => compareUserAndPlayer(this.user, player)) != null;
+  }
+
+  private isGameStarted() {
     return this.game.state === 'started';
+  }
+
+  private updateUser = (updatedUser: User) => {
+    this.user = updatedUser
   }
 }

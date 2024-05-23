@@ -3,7 +3,7 @@ import {GameServiceAbstract} from "./game-service-abstract";
 import {catchError, Observable, of, Subject} from "rxjs";
 import {GameLog, GameResponseDto, TriviaControllerService, UserDto} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
-import {RxStompService} from "../websockets/rx-stomp.service";
+import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
 import {userToPlayerDto, userToUserDto} from "../common/helpers";
 
@@ -11,6 +11,11 @@ import {userToPlayerDto, userToUserDto} from "../common/helpers";
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
+  constructor(private service: TriviaControllerService,
+              private rxStompService: RxStompService) {
+    super();
+  }
+
   override create(name: string, user: User): Observable<GameResponseDto> {
     return this.service.createGame({gameName: name, creator: userToUserDto(user)})
   }
@@ -18,16 +23,11 @@ export class GameService extends GameServiceAbstract {
   override delete(gameId: number): Observable<any> {
     return this.service.deleteGameById(gameId)
   }
-
   private gameCreatedSubject = new Subject<GameResponseDto>()
   private gameDeletedSubject = new Subject<number>()
   private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
-  private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
 
-  constructor(private service: TriviaControllerService,
-              private rxStompService: RxStompService) {
-    super();
-  }
+  private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
 
   override registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void {
     this.gameCreatedSubject.subscribe(observer);

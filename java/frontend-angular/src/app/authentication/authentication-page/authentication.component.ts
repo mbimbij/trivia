@@ -6,11 +6,11 @@ import {
 } from "firebaseui-angular";
 import {Router} from "@angular/router";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {UserService} from "../../user/user.service";
 import {generateRandomString} from "../../common/helpers";
 import {User} from "../../user/user";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {AuthenticationServiceAbstract} from "../authentication-service.abstract";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-authentication',
@@ -27,7 +27,7 @@ import {AuthenticationServiceAbstract} from "../authentication-service.abstract"
 export class AuthenticationComponent {
 
   constructor(protected authenticationService: AuthenticationServiceAbstract,
-              protected userService: UserService,
+              protected userService: UserServiceAbstract,
               private router: Router) {
   }
 
@@ -44,9 +44,9 @@ export class AuthenticationComponent {
         userName,
         user.isAnonymous);
       if(userNameUndefined){
-        this.userService.updateUserName(userName)
+        this.userService.renameUser(userName)
       }
-      this.userService.updateUser(triviaUser)
+      this.userService.setUser(triviaUser)
       this.router.navigate(['/games']);
     }
   }

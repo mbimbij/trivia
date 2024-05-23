@@ -3,8 +3,8 @@ import {NgIf} from "@angular/common";
 import {GameResponseDto} from "../../openapi-generated";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {UserService} from "../../user/user.service";
 import {compareUserAndPlayer} from "../../common/helpers";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-start-game-button',
@@ -27,7 +27,7 @@ export class StartGameButtonComponent {
 
 
   constructor(private service: GameServiceAbstract,
-              private userService: UserService) {
+              private userService: UserServiceAbstract) {
     this.user = userService.getUser()
     userService.registerUserUpdatedObserver(this.updateUser)
   }

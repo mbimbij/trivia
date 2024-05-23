@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
-import {GameLog, GameResponseDto, UserDto} from "../../openapi-generated";
+import {GameLog, GameResponseDto} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgForOf, NgIf} from '@angular/common';
-import {UserService} from "../../user/user.service";
 import {comparePlayers, userToPlayerDto} from "../../common/helpers";
 import {GameService} from "../game.service";
 import {User} from "../../user/user";
 import {Player} from "../../user/player";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-game',
@@ -27,7 +27,7 @@ export class GameComponent {
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
-              private userService: UserService,
+              private userService: UserServiceAbstract,
               private gameService: GameService) {
   }
 

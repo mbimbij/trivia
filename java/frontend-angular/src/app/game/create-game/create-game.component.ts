@@ -2,7 +2,8 @@ import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {User} from "../../user/user";
-import {UserService} from "../../user/user.service";
+
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-create-game',
@@ -17,7 +18,7 @@ export class CreateGameComponent {
   user!: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private userService: UserService) {
+              private userService: UserServiceAbstract) {
   }
 
   ngOnInit() {

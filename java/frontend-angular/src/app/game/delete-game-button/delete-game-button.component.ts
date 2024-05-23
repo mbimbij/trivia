@@ -1,9 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../game-service-abstract";
-import {UserService} from "../../user/user.service";
 import {GameResponseDto} from "../../openapi-generated";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {User} from "../../user/user";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-delete-game-button',
@@ -22,7 +22,7 @@ export class DeleteGameButtonComponent {
   private user: User;
 
   constructor(private gameService: GameServiceAbstract,
-              private localStorageService: UserService) {
+              private localStorageService: UserServiceAbstract) {
     this.user = localStorageService.getUser()
     localStorageService.registerUserUpdatedObserver(this.updateUser)
   }

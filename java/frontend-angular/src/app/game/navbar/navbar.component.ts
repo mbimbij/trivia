@@ -1,11 +1,11 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {LogoutButtonComponent} from "./logout-button/logout-button.component";
-import {UserService} from "../../user/user.service";
 import {User} from "../../user/user";
 import {NgIf} from "@angular/common";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-navbar',
@@ -17,11 +17,10 @@ import {NgIf} from "@angular/common";
   styleUrl: './navbar.component.css'
 })
 
-// TODO try to update username with `implements OnChanges` rather
 export class NavbarComponent {
   user!: User
 
-  constructor(private userService:UserService) {
+  constructor(private userService:UserServiceAbstract) {
     this.user = this.userService.getUser();
     userService.registerUserUpdatedObserver(this.updateUser)
   }

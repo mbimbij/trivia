@@ -6,7 +6,6 @@ import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
-import {UserService} from "../../user/user.service";
 import {FirebaseuiAngularLibraryComponent} from "firebaseui-angular";
 import {User} from "../../user/user";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
@@ -14,7 +13,7 @@ import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.comp
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
 import {NavbarComponent} from "../navbar/navbar.component";
-import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 @Component({
   selector: 'app-game-list',
@@ -41,12 +40,11 @@ export class GameListComponent {
   user!: User;
 
   constructor(private gameService: GameServiceAbstract,
-              protected userService: UserService,
-              private afAuth: AngularFireAuth) {
+              protected userService: UserServiceAbstract) {
   }
 
   updateName(name: string){
-    this.userService.updateUserName(name)
+    this.userService.renameUser(name)
   }
 
   ngOnInit(): void {
