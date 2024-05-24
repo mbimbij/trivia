@@ -4,9 +4,9 @@ import {GameDetailsComponent} from './game-details.component';
 import {ActivatedRoute} from "@angular/router";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {mockGame1} from "../test-helpers";
-import {MockActivatedRoute} from "../mock-activated.route";
-import {UserService, LocalStorageServiceTest} from "../user.service";
+import {MockActivatedRoute, mockGame1} from "../../common/test-helpers";
+import {UserServiceTest} from "../../adapters/user/user-service.test";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
 
 describe('GameDetailsComponent', () => {
   let component: GameDetailsComponent;
@@ -17,7 +17,7 @@ describe('GameDetailsComponent', () => {
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
-        {provide: UserService, useClass: LocalStorageServiceTest},
+        {provide: UserServiceAbstract, useClass: UserServiceTest},
         {provide: GameServiceAbstract, useClass: GameServiceMock}
       ],
       imports: [GameDetailsComponent]

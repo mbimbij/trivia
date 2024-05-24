@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {User} from "../../user/user";
+import {Nobody, User} from "../../user/user";
 
 import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-create-game',
@@ -11,28 +12,26 @@ import {UserServiceAbstract} from "../../user/user-service.abstract";
   imports: [
     FormsModule
   ],
-  templateUrl: './create-game.component.html',
+  template: `
+    <label for="newGameName">Create Game</label>
+    <input type="text" id="newGameName" required minlength="1" maxlength="100" size="20" #newGameName/>
+    <button (click)="createGame(newGameName.value)">create</button>
+  `,
   styleUrl: './create-game.component.css'
 })
 export class CreateGameComponent {
-  user!: User;
+  private user: User = Nobody.instance;
+  private user$: Observable<User>;
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
+    this.user$ = userService.getUser();
+    this.user$.subscribe(updatedUser => this.user = updatedUser)
   }
 
-  ngOnInit() {
-    this.user = this.userService.getUser()
-    this.userService.registerUserUpdatedObserver(this.updateUser)
-  }
-
-  createGame(newGameName: string) {
+  protected createGame(newGameName: string) {
     this.gameService.create(newGameName, this.user)
       .subscribe(() => {
       })
-  }
-
-  private updateUser = (updatedUser: User) => {
-    this.user = updatedUser
   }
 }

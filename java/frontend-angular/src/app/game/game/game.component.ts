@@ -7,6 +7,7 @@ import {GameService} from "../game.service";
 import {User} from "../../user/user";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-game',
@@ -23,17 +24,19 @@ export class GameComponent {
   private gameId!: number;
   protected game!: GameResponseDto;
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
+  // remplacer par ngif & async pipe
   protected dataLoaded: boolean = false;
+  user$: Observable<User>;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameService) {
+    this.user$ = userService.getUser();
+    this.user$.subscribe(updatedUser => this.player = userToPlayerDto(updatedUser))
   }
 
   private ngOnInit() {
-    this.player = userToPlayerDto(this.userService.getUser())
-    this.userService.registerUserUpdatedObserver(this.updateUser)
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
     })
@@ -63,6 +66,8 @@ export class GameComponent {
   }
 
   protected canPlayTurn() {
+    // TODO empêcher la fonction d'être appelée 36 fois
+    console.log(`canPlayTurn called`)
     return this.isCurrentPlayer() && !this.isGameEnded;
   }
 

@@ -9,3 +9,15 @@ export class User {
     this.isAnonymous = isAnonymous;
   }
 }
+
+export class Nobody extends User {
+  private static _instance: Nobody = new Nobody();
+
+  constructor() {
+    super("id-Nobody", "Nobody", true);
+  }
+
+  static get instance(): Nobody {
+    return this._instance;
+  }
+}

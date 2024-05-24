@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
 import {RouterLink} from "@angular/router";
@@ -14,6 +14,7 @@ import {StartGameButtonComponent} from "../start-game-button/start-game-button.c
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
 import {NavbarComponent} from "../navbar/navbar.component";
 import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-game-list',
@@ -30,17 +31,19 @@ import {UserServiceAbstract} from "../../user/user-service.abstract";
     StartGameButtonComponent,
     DeleteGameButtonComponent,
     FirebaseuiAngularLibraryComponent,
-    NavbarComponent
+    NavbarComponent,
+    AsyncPipe
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css'
 })
 export class GameListComponent {
   games: GameResponseDto[] = [];
-  user!: User;
+  user$: Observable<User>;
 
   constructor(private gameService: GameServiceAbstract,
               protected userService: UserServiceAbstract) {
+    this.user$ = userService.getUser();
   }
 
   updateName(name: string){
@@ -48,7 +51,6 @@ export class GameListComponent {
   }
 
   ngOnInit(): void {
-    this.user = this.userService.getUser();
     this.gameService.getGames()
       .subscribe(games => {
         this.games = games;

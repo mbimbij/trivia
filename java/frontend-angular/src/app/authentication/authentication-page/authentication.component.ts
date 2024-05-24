@@ -39,15 +39,19 @@ export class AuthenticationComponent {
       this.router.navigate(['waiting-for-email-verification']);
     } else {
       let userNameUndefined: boolean = user.displayName == null
-      let userName = user.displayName ?? 'anon-' + generateRandomString(6);
+      let userName = user.displayName ?? generateName(user.isAnonymous);
       let triviaUser = new User(user.uid,
         userName,
         user.isAnonymous);
       if(userNameUndefined){
         this.userService.renameUser(userName)
       }
-      this.userService.setUser(triviaUser)
       this.router.navigate(['/games']);
+    }
+
+    function generateName(isAnonymous: boolean): string{
+      let hash = generateRandomString(6);
+      return isAnonymous ? `anon-${hash}` : `user-${hash}`;
     }
   }
 

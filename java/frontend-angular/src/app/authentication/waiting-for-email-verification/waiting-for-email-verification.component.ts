@@ -1,15 +1,19 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthenticationServiceAbstract} from "../authentication-service.abstract";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-waiting-for-email-verification',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf
+  ],
   templateUrl: './waiting-for-email-verification.component.html',
   styleUrl: './waiting-for-email-verification.component.css'
 })
 export class WaitingForEmailVerificationComponent {
-
-  constructor(protected router: Router) {
+  constructor(protected router: Router,
+              protected authenticationService:AuthenticationServiceAbstract) {
   }
 }

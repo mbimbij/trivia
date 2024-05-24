@@ -115,6 +115,7 @@ public class TriviaController {
 
     @PostMapping("/{gameId}/players/{playerId}/join")
     // FIXME map {playerId} path param to method parameter, validate & test
+    // TODO empêcher un même joueur de rejoindre s'il est deja présent (vérification de l'id)
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto joinGame(@PathVariable("gameId") Integer gameIdInt,
                                     @RequestBody PlayerDto playerDto) {

@@ -4,6 +4,7 @@ import {GameResponseDto} from "../../openapi-generated";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {User} from "../../user/user";
 import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-delete-game-button',
@@ -19,19 +20,17 @@ import {UserServiceAbstract} from "../../user/user-service.abstract";
 export class DeleteGameButtonComponent {
   @Input() gameId!: number;
   @Input() game!: GameResponseDto;
-  private user: User;
+  private user!: User;
+  private user$: Observable<User>;
 
   constructor(private gameService: GameServiceAbstract,
-              private localStorageService: UserServiceAbstract) {
-    this.user = localStorageService.getUser()
-    localStorageService.registerUserUpdatedObserver(this.updateUser)
+              private userService: UserServiceAbstract) {
+    this.user$ = userService.getUser();
+    this.user$.subscribe(updatedUser => this.user = updatedUser)
   }
-
-  private updateUser = (updatedUser: User) => {
-    this.user = updatedUser
-  }
-
   protected canDeleteGame() {
+    // TODO empêcher la fonction d'être appelée 36 fois
+    console.log(`canDeleteGame called`)
     return compareUserAndPlayer(this.user, this.game.creator)
   }
 

@@ -1,27 +1,24 @@
 import {Component, Input} from '@angular/core';
-import {NgIf} from "@angular/common";
 import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../game-service-abstract";
-import {User} from "../../user/user";
+import {Nobody, User} from "../../user/user";
 import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-join-game-button',
   standalone: true,
-  imports: [
-    NgIf
-  ],
   template: `
     @if (canJoin()) {
       <button (click)="joinGame()">
         join
       </button>
     } @else if (isGameStarted()) {
-      <span *ngIf="!canJoin()">{{ 'game started' }}</span>
+      <span>{{ 'game started' }}</span>
     } @else if (isPlayerInGame()) {
-      <span *ngIf="!canJoin()">{{ 'already joined' }}</span>
+      <span>{{ 'already joined' }}</span>
     } @else {
-      <span *ngIf="!canJoin()">{{ 'cannot join' }}</span>
+      <span>{{ 'cannot join' }}</span>
     }
   `,
   styleUrl: './join-game-button.component.css'
@@ -29,15 +26,18 @@ import {UserServiceAbstract} from "../../user/user-service.abstract";
 export class JoinGameButtonComponent {
 
   @Input() game!: GameResponseDto
-  protected user!: User;
+  protected user: User = Nobody.instance;
+  user$: Observable<User>;
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
-    this.user = userService.getUser()
-    userService.registerUserUpdatedObserver(this.updateUser)
+    this.user$ = userService.getUser();
+    this.user$.subscribe(updatedUser => this.user = updatedUser)
   }
 
   canJoin(): boolean {
+    // TODO empêcher cette fonction d'être appelée 36 fois
+    console.log(`canJoin called`)
     return !this.isPlayerInGame() && this.playersCountsLessThanMax() && !this.isGameStarted()
   }
 
@@ -59,8 +59,8 @@ export class JoinGameButtonComponent {
       .subscribe(() => {
       })
   }
-
-  private updateUser = (updatedUser: User) => {
-    this.user = updatedUser
-  }
+  //
+  // private updateUser = (updatedUser: User) => {
+  //   this.user = updatedUser
+  // }
 }

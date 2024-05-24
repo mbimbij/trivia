@@ -7,7 +7,8 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {provideRouter} from "@angular/router";
-import {FirebaseUserService, UserServiceTest} from "../../adapters/user/firebase-user.service";
+import {FirebaseUserService} from "../../adapters/user/firebase-user.service";
+import {UserServiceTest} from "../../adapters/user/user-service.test";
 
 describe('GameListComponent', () => {
   let component: GameListComponent;

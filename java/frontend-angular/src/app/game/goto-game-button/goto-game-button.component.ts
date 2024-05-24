@@ -4,6 +4,7 @@ import {Router, RouterLink} from "@angular/router";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../user/user-service.abstract";
 import {User} from "../../user/user";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-goto-game-button',
@@ -20,12 +21,13 @@ import {User} from "../../user/user";
 })
 export class GotoGameButtonComponent {
   @Input() game!: GameResponseDto
-  private user: User;
+  private user!: User;
+  user$: Observable<User>;
 
   constructor(protected router: Router,
               private userService: UserServiceAbstract) {
-    this.user = userService.getUser();
-    userService.registerUserUpdatedObserver(this.updateUser)
+    this.user$ = userService.getUser();
+    this.user$.subscribe(updatedUser => this.user = updatedUser)
   }
 
   canGotoGame() {
@@ -38,9 +40,5 @@ export class GotoGameButtonComponent {
 
   private isGameStarted() {
     return this.game.state === 'started';
-  }
-
-  private updateUser = (updatedUser: User) => {
-    this.user = updatedUser
   }
 }

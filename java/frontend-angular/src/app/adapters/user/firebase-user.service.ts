@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Subject} from "rxjs";
-import {mockUser1} from "../../common/test-helpers";
-import {User} from "../../user/user";
+import {BehaviorSubject, map, Observable} from "rxjs";
+import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserServiceAbstract} from "../../user/user-service.abstract";
 
@@ -9,45 +8,37 @@ import {UserServiceAbstract} from "../../user/user-service.abstract";
   providedIn: 'root'
 })
 export class FirebaseUserService extends UserServiceAbstract {
-  private userSubject = new Subject<User>();
-  private defaultUser: User = new User("1", "player-1", true);
+  userSubject = new BehaviorSubject<User>(Nobody.instance);
 
   constructor(private afAuth: AngularFireAuth) {
     super();
+    this.updateUserSubject();
   }
 
-  renameUser(newUserName: string): void {
+  override getUser(): Observable<User> {
+    return this.userSubject.asObservable()
+  }
+
+  override renameUser(newUserName: string): void {
     this.afAuth.user
       .subscribe(user => {
         user?.updateProfile({displayName: newUserName})
           .then(() => {
-            let updatedUser = this.getUser();
-            updatedUser.name = newUserName
-            this.setUser(updatedUser)
+            this.updateUserSubject()
           })
       })
   }
-  /**
-   * Should only be called by Authentication Service (to be merged ?)
-   * @param user
-   */
-  setUser(user: User): void {
-    localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user)
+
+  private updateUserSubject() {
+    this.afAuth.user.pipe(map(user => this.buildDomainUser(user))).subscribe(
+      value => {
+        this.userSubject.next(value);
+      }
+    )
   }
-  registerUserUpdatedObserver(observer: (updatedUser: User) => void) {
-    this.userSubject.subscribe(observer)
-  }
-  getUser(): User {
-    if (localStorage.getItem('user') == null) {
-      localStorage.setItem('user', JSON.stringify(this.defaultUser))
-    }
-    return JSON.parse(localStorage.getItem('user')!)
+
+  private buildDomainUser(user: firebase.default.User | null) {
+    return user ? new User(user.uid, user.displayName!, user.isAnonymous) : Nobody.instance;
   }
 }
 
-export class UserServiceTest extends FirebaseUserService {
-  override getUser(): User {
-    return mockUser1;
-  }
-}

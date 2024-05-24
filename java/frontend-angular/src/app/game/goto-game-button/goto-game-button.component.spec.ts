@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GotoGameButtonComponent } from './goto-game-button.component';
 import {ActivatedRoute} from "@angular/router";
-import {MockActivatedRoute} from "../mock-activated.route";
-import {mockGame1} from "../test-helpers";
+import {MockActivatedRoute, mockGame1} from "../../common/test-helpers";
 
 describe('GotoGameButtonComponent', () => {
   let component: GotoGameButtonComponent;

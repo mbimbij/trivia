@@ -3,8 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JoinGameButtonComponent } from './join-game-button.component';
 import {GameServiceAbstract} from "../game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {mockGame1} from "../test-helpers";
-import {UserService, LocalStorageServiceTest} from "../user.service";
+import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceTest} from "../../adapters/user/user-service.test";
+import {mockGame1} from "../../common/test-helpers";
 
 describe('JoinGameButtonComponent', () => {
   let component: JoinGameButtonComponent;
@@ -14,7 +15,7 @@ describe('JoinGameButtonComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: UserService, useClass: LocalStorageServiceTest},
+        {provide: UserServiceAbstract, useClass: UserServiceTest},
       ],
       imports: [JoinGameButtonComponent]
     })
