@@ -50,7 +50,8 @@
 <ng-container *ngIf="(this.games$ | async) as games">
   <table>
     <tr>
-      <th>game</th>
+      <th>id</th>
+      <th>name</th>
       <th>creator</th>
       <th>players</th>
       <th>status</th>
@@ -60,6 +61,7 @@
       <th>delete</th>
     </tr>
     <tr class="game" *ngFor="let game of games" [className]="game.state">
+      <td class="game-id">{{ game.id }}</td>
       <td class="item-name"><a [routerLink]="['/games',game.id,'details']">{{ game.name }}</a>
       </td>
       <td class="item-name">{{ game.creator.name }}</td>
