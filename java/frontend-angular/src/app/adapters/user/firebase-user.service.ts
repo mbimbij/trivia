@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, map, Observable} from "rxjs";
 import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 
 @Injectable({
   providedIn: 'root'

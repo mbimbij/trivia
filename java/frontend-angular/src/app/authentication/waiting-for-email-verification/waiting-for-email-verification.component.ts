@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthenticationServiceAbstract} from "../authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {NgIf} from "@angular/common";
 
 @Component({

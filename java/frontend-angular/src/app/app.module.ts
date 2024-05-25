@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
-import {GameServiceAbstract} from "./game/game-service-abstract";
+import {GameServiceAbstract} from "./services/game-service-abstract";
 import {GameService} from "./game/game.service";
 import {ApiModule} from "./openapi-generated";
 import {CreateGameComponent} from "./game/create-game/create-game.component";
@@ -19,10 +19,10 @@ import {AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR} from "@angular
 import {FirebaseUIModule} from "firebaseui-angular";
 import {firebaseUiAuthConfig} from "./adapters/authentication/firebase-ui-auth-config";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {AuthenticationServiceAbstract} from "./authentication/authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "./services/authentication-service.abstract";
 import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
 import {FirebaseUserService} from "./adapters/user/firebase-user.service";
-import {UserServiceAbstract} from "./user/user-service.abstract";
+import {UserServiceAbstract} from "./services/user-service.abstract";
 
 @NgModule({
   declarations: [

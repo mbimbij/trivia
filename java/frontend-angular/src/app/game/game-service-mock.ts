@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {GameServiceAbstract} from "./game-service-abstract";
+import {GameServiceAbstract} from "../services/game-service-abstract";
 import {Observable, of} from "rxjs";
 import {GameLog, GameResponseDto, UserDto} from "../openapi-generated";
 import {mockGame1, mockGame2} from "../common/test-helpers";

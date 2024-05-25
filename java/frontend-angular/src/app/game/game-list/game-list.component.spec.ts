@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GameListComponent} from './game-list.component';
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {CreateGameComponent} from "../create-game/create-game.component";

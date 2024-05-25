@@ -5,7 +5,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {LogoutButtonComponent} from "./logout-button/logout-button.component";
 import {User} from "../../user/user";
 import {AsyncPipe, KeyValuePipe, NgIf} from "@angular/common";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 

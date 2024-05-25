@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 
 @Component({

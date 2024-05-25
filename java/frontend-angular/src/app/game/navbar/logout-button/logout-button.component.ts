@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {ConsoleLogPipe} from "../../../console-log.pipe";
-import {AuthenticationServiceAbstract} from "../../../authentication/authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "../../../services/authentication-service.abstract";
 
 @Component({
   selector: 'app-logout-button',

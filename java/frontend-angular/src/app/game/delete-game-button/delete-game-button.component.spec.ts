@@ -1,9 +1,9 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {DeleteGameButtonComponent} from './delete-game-button.component';
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceTest} from "../../adapters/user/user-service.test";
 import {mockGame1} from "../../common/test-helpers";
 

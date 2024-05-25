@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {from, map, Observable} from "rxjs";
-import {AuthenticationServiceAbstract} from "../../authentication/authentication-service.abstract";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import firebase from "firebase/compat";
 
 @Injectable({

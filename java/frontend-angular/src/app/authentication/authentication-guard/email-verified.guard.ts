@@ -1,6 +1,6 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
-import {AuthenticationServiceAbstract} from "../authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {map} from "rxjs";
 
 export const emailVerifiedGuard: CanActivateFn = (route, state) => {

@@ -3,7 +3,7 @@ import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {GameResponseDto} from "../../openapi-generated";
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 import {FirebaseuiAngularLibraryComponent} from "firebaseui-angular";
@@ -13,7 +13,7 @@ import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.comp
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
 import {NavbarComponent} from "../navbar/navbar.component";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 
 @Component({

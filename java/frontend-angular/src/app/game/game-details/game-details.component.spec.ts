@@ -2,11 +2,11 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GameDetailsComponent} from './game-details.component';
 import {ActivatedRoute} from "@angular/router";
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {MockActivatedRoute, mockGame1} from "../../common/test-helpers";
 import {UserServiceTest} from "../../adapters/user/user-service.test";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 
 describe('GameDetailsComponent', () => {
   let component: GameDetailsComponent;

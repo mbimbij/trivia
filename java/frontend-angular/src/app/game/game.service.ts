@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {GameServiceAbstract} from "./game-service-abstract";
+import {GameServiceAbstract} from "../services/game-service-abstract";
 import {catchError, Observable, of, Subject} from "rxjs";
 import {GameLog, GameResponseDto, TriviaControllerService, UserDto} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
@@ -23,6 +23,7 @@ export class GameService extends GameServiceAbstract {
   override delete(gameId: number): Observable<any> {
     return this.service.deleteGameById(gameId)
   }
+
   private gameCreatedSubject = new Subject<GameResponseDto>()
   private gameDeletedSubject = new Subject<number>()
   private gameUpdatedSubjects = new Map<number, Subject<GameResponseDto>>()
@@ -68,7 +69,19 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGame(gameId: number): Observable<GameResponseDto> {
-    return this.service.getGameById(gameId);
+    // TODO Réfléchir à comment designer ce machin pour qu'il passe à l'échelle, cad potentiellement des millions de parties
+    if (!this.gameUpdatedSubjects.has(gameId)) {
+      this.gameUpdatedSubjects.set(gameId, new Subject<GameResponseDto>());
+    }
+    this.service.getGameById(gameId).subscribe(game => {
+        this.gameUpdatedSubjects.get(gameId)!.next(game);
+      }
+    );
+    this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
+      let updatedGame = JSON.parse(message.body);
+      this.gameUpdatedSubjects.get(gameId)!.next(updatedGame);
+    });
+    return this.gameUpdatedSubjects.get(gameId)!.asObservable();
   }
 
   override playTurn(gameId: number, userId: string): Observable<GameResponseDto> {

@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@
 import {NgIf} from "@angular/common";
 import {GameResponseDto} from "../../openapi-generated";
 import {User} from "../../user/user";
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {compareUserAndPlayer} from "../../common/helpers";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 
 @Component({
@@ -24,6 +24,7 @@ import {Observable} from "rxjs";
 export class StartGameButtonComponent {
 
   @Input() game!: GameResponseDto
+  // TODO Supprimer cet event emitter, tous les composants sont typiquement notifiés par websocket
   @Output() gameModifiedEvent = new EventEmitter<GameResponseDto>();
   protected user!: User;
   user$: Observable<User>;

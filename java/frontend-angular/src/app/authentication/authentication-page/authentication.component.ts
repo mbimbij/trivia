@@ -9,8 +9,8 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {generateRandomString} from "../../common/helpers";
 import {User} from "../../user/user";
 import {ConsoleLogPipe} from "../../console-log.pipe";
-import {AuthenticationServiceAbstract} from "../authentication-service.abstract";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 
 @Component({
   selector: 'app-authentication',

@@ -1,9 +1,9 @@
 import {Component, Input} from '@angular/core';
-import {GameServiceAbstract} from "../game-service-abstract";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameResponseDto} from "../../openapi-generated";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {User} from "../../user/user";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 
 @Component({

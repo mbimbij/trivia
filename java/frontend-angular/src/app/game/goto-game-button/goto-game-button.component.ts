@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {GameResponseDto} from "../../openapi-generated";
 import {Router, RouterLink} from "@angular/router";
 import {compareUserAndPlayer} from "../../common/helpers";
-import {UserServiceAbstract} from "../../user/user-service.abstract";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {User} from "../../user/user";
 import {Observable} from "rxjs";
 
@@ -22,7 +22,7 @@ import {Observable} from "rxjs";
 export class GotoGameButtonComponent {
   @Input() game!: GameResponseDto
   private user!: User;
-  user$: Observable<User>;
+  private user$: Observable<User>;
 
   constructor(protected router: Router,
               private userService: UserServiceAbstract) {

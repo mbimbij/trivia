@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {GameServiceMock} from "./game/game-service-mock";
-import {GameServiceAbstract} from "./game/game-service-abstract";
+import {GameServiceAbstract} from "./services/game-service-abstract";
 import {CreateGameComponent} from "./game/create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
