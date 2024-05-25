@@ -27,7 +27,6 @@ import {Game} from "../game";
 })
 export class GameDetailsComponent {
   gameId!: number;
-  game!: Game;
   game$!: Observable<Game>;
 
   constructor(private route: ActivatedRoute,
@@ -35,7 +34,6 @@ export class GameDetailsComponent {
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
       this.game$ = gameService.getGame(this.gameId);
-      this.game$.subscribe(game => this.game=game);
     })
   }
 }

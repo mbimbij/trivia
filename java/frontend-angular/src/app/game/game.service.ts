@@ -49,17 +49,7 @@ export class GameService extends GameServiceAbstract {
   doInit() {
     this.service.listGames()
       .pipe(
-        map(dtos =>
-          dtos.map(dto => new Game(dto.id,
-            dto.name,
-            dto.state,
-            dto.turn,
-            playerDtoToPlayer(dto.creator),
-            playerDtoToPlayer(dto.currentPlayer),
-            dto.players.map(
-              playerDto => playerDtoToPlayer(playerDto)
-            )
-          )))
+        map(dtos => dtos.map(Game.fromDto))
       )
       .subscribe(games => {
         this.gamesSubject.next(games);
@@ -86,8 +76,9 @@ export class GameService extends GameServiceAbstract {
   }
 
   override create(name: string, user: User): Observable<Game> {
-    return this.service.createGame({gameName: name, creator: userToUserDto(user)})
-      .pipe(map((game: GameResponseDto) => Game.fromDto(game)));
+    let requestDto = {gameName: name, creator: userToUserDto(user)};
+    return this.service.createGame(requestDto)
+      .pipe(map(Game.fromDto));
   }
 
   override delete(gameId: number): Observable<any> {
@@ -124,24 +115,22 @@ export class GameService extends GameServiceAbstract {
       this.gameUpdatedSubjects.get(gameId)!.next(updatedGame);
     });
     return this.gameUpdatedSubjects.get(gameId)!.asObservable()
-      .pipe(map((game: GameResponseDto) => Game.fromDto(game)));
+      .pipe(map(Game.fromDto));
   }
 
   override playTurn(gameId: number, userId: string): Observable<Game> {
     return this.service.playTurn(gameId, userId)
-      .pipe(
-        map(dto => Game.fromDto(dto))
-      );
+      .pipe(map(Game.fromDto));
   }
 
   override start(gameId: number, userId: string): Observable<Game> {
     return this.service.startGame(gameId, userId)
-      .pipe(map((game: GameResponseDto) => Game.fromDto(game)));
+      .pipe(map(Game.fromDto));
   }
 
   override join(game: Game, user: User): Observable<Game> {
     return this.service.addPlayerToGame(game.id, user.id, userToUserDto(user))
-      .pipe(map(dto => Game.fromDto(dto)));
+      .pipe(map(Game.fromDto));
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
