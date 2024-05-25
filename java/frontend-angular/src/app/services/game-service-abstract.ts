@@ -1,30 +1,27 @@
 import {Observable} from "rxjs";
 import {GameLog, GameResponseDto} from "../openapi-generated";
 import {User} from "../user/user";
+import {Game} from "../game/game";
 
 export abstract class GameServiceAbstract {
-  abstract getGames(): Observable<Array<GameResponseDto>>;
+  abstract doInit(): void;
 
-  abstract getGame(gameId: number): Observable<GameResponseDto>;
+  abstract getGames(): Observable<Array<Game>>;
 
-  abstract create(name: string, user: User): Observable<GameResponseDto>;
+  abstract getGame(gameId: number): Observable<Game>;
 
-  abstract join(game: GameResponseDto, user: User): Observable<GameResponseDto>;
+  abstract create(name: string, user: User): Observable<Game>;
 
-  abstract start(gameId: number, userId: string): Observable<GameResponseDto>;
+  abstract join(game: Game, user: User): Observable<Game>;
 
-  abstract playTurn(gameId: number, userId: string): Observable<GameResponseDto>;
+  abstract start(gameId: number, userId: string): Observable<Game>;
 
-  abstract registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void;
+  abstract playTurn(gameId: number, userId: string): Observable<Game>;
 
-  abstract registerGameDeletedObserver(observer: (gameId: number) => void): void;
-
-  abstract registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void): void;
-
-  abstract registerGameLogsObserver(gameId: number, observer: (updatedGame: GameLog) => void): void;
+  abstract delete(gameId: number): Observable<void> ;
 
   abstract getGameLogs(gameId: number): Observable<Array<GameLog>>;
 
-  abstract delete(gameId: number): Observable<void> ;
+  abstract registerGameLogsObserver(gameId: number, observer: (updatedGame: GameLog) => void): void;
 }
 

@@ -8,6 +8,7 @@ import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.comp
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Observable} from "rxjs";
+import {Game} from "../game";
 
 @Component({
   selector: 'app-game',
@@ -26,8 +27,8 @@ import {Observable} from "rxjs";
 })
 export class GameDetailsComponent {
   gameId!: number;
-  game!: GameResponseDto;
-  game$!: Observable<GameResponseDto>;
+  game!: Game;
+  game$!: Observable<Game>;
 
   constructor(private route: ActivatedRoute,
               private gameService: GameServiceAbstract) {

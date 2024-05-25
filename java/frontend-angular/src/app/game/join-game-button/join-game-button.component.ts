@@ -4,6 +4,7 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
+import { Game } from '../game';
 
 @Component({
   selector: 'app-join-game-button',
@@ -25,7 +26,7 @@ import {Observable} from "rxjs";
 })
 export class JoinGameButtonComponent {
 
-  @Input() game!: GameResponseDto
+  @Input() game!: Game
   protected user: User = Nobody.instance;
   user$: Observable<User>;
 
@@ -37,7 +38,7 @@ export class JoinGameButtonComponent {
 
   canJoin(): boolean {
     // TODO empêcher cette fonction d'être appelée 36 fois
-    console.log(`canJoin called`)
+    // console.log(`canJoin called`)
     return !this.isPlayerInGame() && this.playersCountsLessThanMax() && !this.isGameStarted()
   }
 
@@ -53,14 +54,9 @@ export class JoinGameButtonComponent {
     return this.game.state === 'started';
   }
 
-
   joinGame() {
     this.gameService.join(this.game, this.user)
       .subscribe(() => {
       })
   }
-  //
-  // private updateUser = (updatedUser: User) => {
-  //   this.user = updatedUser
-  // }
 }

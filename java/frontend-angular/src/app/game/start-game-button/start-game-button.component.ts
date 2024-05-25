@@ -6,10 +6,11 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
+import {Game} from "../game";
 
 @Component({
-  selector: 'app-start-game-button',
   standalone: true,
+  selector: 'app-start-game-button',
   imports: [
     NgIf
   ],
@@ -23,12 +24,10 @@ import {Observable} from "rxjs";
 })
 export class StartGameButtonComponent {
 
-  @Input() game!: GameResponseDto
-  // TODO Supprimer cet event emitter, tous les composants sont typiquement notifiés par websocket
-  @Output() gameModifiedEvent = new EventEmitter<GameResponseDto>();
+  @Input() game!: Game
   protected user!: User;
   user$: Observable<User>;
-  protected canstartgame:boolean = false
+  protected canstartgame: boolean = false
 
   constructor(private service: GameServiceAbstract,
               private userService: UserServiceAbstract) {
@@ -36,14 +35,13 @@ export class StartGameButtonComponent {
     this.user$.subscribe(updatedUser => this.user = updatedUser)
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.canstartgame = this.canStartGame()
   }
 
   startGame() {
     this.service.start(this.game.id, this.user.id)
-      .subscribe(response => {
-          this.gameModifiedEvent.emit(response);
+      .subscribe(() => {
         }
       )
   }

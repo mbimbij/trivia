@@ -5,6 +5,7 @@ import {compareUserAndPlayer} from "../../common/helpers";
 import {User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
+import {Game} from "../game";
 
 @Component({
   selector: 'app-delete-game-button',
@@ -19,7 +20,7 @@ import {Observable} from "rxjs";
 })
 export class DeleteGameButtonComponent {
   @Input() gameId!: number;
-  @Input() game!: GameResponseDto;
+  @Input() game!: Game;
   private user!: User;
   private user$: Observable<User>;
 
@@ -30,7 +31,7 @@ export class DeleteGameButtonComponent {
   }
   protected canDeleteGame() {
     // TODO empêcher la fonction d'être appelée 36 fois
-    console.log(`canDeleteGame called`)
+    // console.log(`canDeleteGame called`)
     return compareUserAndPlayer(this.user, this.game.creator)
   }
 

@@ -8,6 +8,7 @@ import {User} from "../../user/user";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
+import {Game} from "../game";
 
 @Component({
   selector: 'app-game',
@@ -23,8 +24,8 @@ import {Observable} from "rxjs";
 export class GameComponent{
   protected player!: Player;
   private gameId!: number;
-  protected game!: GameResponseDto;
-  protected game$!: Observable<GameResponseDto>
+  protected game!: Game;
+  protected game$!: Observable<Game>
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
   private user$: Observable<User>;
 
@@ -59,7 +60,7 @@ export class GameComponent{
 
   protected canPlayTurn() {
     // TODO empêcher la fonction d'être appelée 36 fois
-    console.log(`canPlayTurn called`)
+    // console.log(`canPlayTurn called`)
     return this.isCurrentPlayer() && !this.isGameEnded;
   }
 

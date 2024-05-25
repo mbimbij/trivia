@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -15,6 +15,7 @@ import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-butto
 import {NavbarComponent} from "../navbar/navbar.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
+import {Game} from "../game";
 
 @Component({
   selector: 'app-game-list',
@@ -35,59 +36,25 @@ import {Observable} from "rxjs";
     AsyncPipe
   ],
   templateUrl: './game-list.component.html',
-  styleUrl: './game-list.component.css'
+  styleUrl: './game-list.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameListComponent {
-  games: GameResponseDto[] = [];
-  user$: Observable<User>;
+  user$!: Observable<User>;
+  games$!: Observable<Array<Game>>
 
-  constructor(private gameService: GameServiceAbstract,
-              protected userService: UserServiceAbstract) {
-    this.user$ = userService.getUser();
+  constructor(
+    protected gameService: GameServiceAbstract,
+    protected userService: UserServiceAbstract) {
   }
 
-  updateName(name: string){
+  updateName(name: string) {
     this.userService.renameUser(name)
   }
 
   ngOnInit(): void {
-    this.gameService.getGames()
-      .subscribe(games => {
-        this.games = games;
-        this.games.forEach(game => {
-          this.gameService.registerGameUpdatedObserver(game.id, this.updateGameWithArrow);
-        })
-      });
-    this.gameService.registerGameCreatedObserver(this.addGameArrow)
-    this.gameService.registerGameDeletedObserver(this.deleteGameArrow)
-  }
-
-  addGame(newGame: GameResponseDto) {
-    this.gameService.registerGameUpdatedObserver(newGame.id, this.updateGameWithArrow);
-    this.games.push(newGame);
-  }
-
-  protected addGameArrow = (newGame: GameResponseDto) => {
-    this.addGame(newGame);
-  }
-
-  protected deleteGameArrow = (gameId: number) => {
-    const index = this.games.findIndex(
-      game => game.id === gameId);
-    if (index !== -1) {
-      this.games.splice(index, 1);
-    }
-  }
-
-  protected updateGameWith(replacement: GameResponseDto) {
-    const index = this.games.findIndex(
-      game => game.id === replacement.id);
-    if (index !== -1) {
-      this.games.splice(index, 1, replacement);
-    }
-  }
-
-  protected updateGameWithArrow = (replacement: GameResponseDto) => {
-    this.updateGameWith(replacement);
+    this.gameService.doInit()
+    this.user$ = this.userService.getUser();
+    this.games$ = this.gameService.getGames();
   }
 }

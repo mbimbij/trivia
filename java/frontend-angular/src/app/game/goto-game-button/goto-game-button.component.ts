@@ -5,6 +5,7 @@ import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {User} from "../../user/user";
 import {Observable} from "rxjs";
+import {Game} from "../game";
 
 @Component({
   selector: 'app-goto-game-button',
@@ -13,6 +14,7 @@ import {Observable} from "rxjs";
     RouterLink
   ],
   template: `
+<!--     TODO delete state, as the backend is called-->
     <button [disabled]="!canGotoGame()" (click)="router.navigate(['/games',game.id], { state: game })">
       go to
     </button>
@@ -20,7 +22,7 @@ import {Observable} from "rxjs";
   styleUrl: './goto-game-button.component.css'
 })
 export class GotoGameButtonComponent {
-  @Input() game!: GameResponseDto
+  @Input() game!: Game
   private user!: User;
   private user$: Observable<User>;
 

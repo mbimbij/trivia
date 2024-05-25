@@ -1,8 +1,9 @@
 import {User} from "../user/user";
 import {Observable, of} from "rxjs";
 import {GameResponseDto} from "../openapi-generated";
+import {Game} from "../game/game";
 
-export const mockGame1: GameResponseDto = {
+export const mockGame1: Game = Game.fromDto({
   id: 1,
   name: "game1",
   state: "created",
@@ -10,9 +11,9 @@ export const mockGame1: GameResponseDto = {
   creator: {id: "1", name: "player1", coinCount: 0},
   currentPlayer: {id: "1", name: "player1", coinCount: 0},
   players: [{id: "1", name: "player1", coinCount: 0}, {id: "2", name: "player2", coinCount: 1}]
-};
+});
 
-export const mockGame2: GameResponseDto = {
+export const mockGame2: Game = Game.fromDto({
   id: 2,
   name: "game2",
   state: "started",
@@ -24,7 +25,7 @@ export const mockGame2: GameResponseDto = {
     name: "player",
     coinCount: 2
   }]
-};
+});
 
 export const mockUser1: User = {
   id: "1",
