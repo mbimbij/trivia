@@ -19,16 +19,21 @@ export function userToPlayerDto(user: User): PlayerDto {
   return {id: user.id, name: user.name, coinCount: 0}
 }
 
+export function userToPlayer(user: User): Player {
+  return new Player(user.id, user.name, 0)
+}
+
 export function userToUserDto(user: User): UserDto {
   return {id: user.id, name: user.name}
 }
 
 export function playerDtoToPlayer(dto: PlayerDto): Player {
-  return {id: dto.id, name: dto.name, coinCount: dto.coinCount}
+  return new Player(dto.id, dto.name, dto.coinCount)
+
 }
 
-export function playerToPlayerDto(dto: PlayerDto): PlayerDto {
-  return new Player(dto.id, dto.name, dto.coinCount)
+export function playerToPlayerDto(player: Player): PlayerDto {
+  return {id: player.id, name: player.name, coinCount: player.coinCount}
 }
 
 export function getRandomInt(max: number) {

@@ -53,7 +53,7 @@ export class GameListComponent {
   }
 
   ngOnInit(): void {
-    this.gameService.doInit()
+    this.gameService.initGamesListHandlers()
     this.user$ = this.userService.getUser();
     this.games$ = this.gameService.getGames();
   }

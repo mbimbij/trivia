@@ -10,7 +10,7 @@ import {Game} from "./game";
   providedIn: 'root'
 })
 export class GameServiceMock extends GameServiceAbstract  {
-  override doInit(): void {
+  override initGamesListHandlers(): void {
 
   }
   override create(name: string, user: User): Observable<Game> {

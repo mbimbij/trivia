@@ -27,7 +27,7 @@ export class GameService extends GameServiceAbstract {
     return this.games$;
   }
 
-  doInit() {
+  initGamesListHandlers() {
     this.service.listGames()
       .pipe(
         map(dtos => dtos.map(Game.fromDto))

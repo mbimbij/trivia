@@ -1,7 +1,6 @@
 import {Player} from "../user/player";
 import {GameResponseDto} from "../openapi-generated";
 import {playerDtoToPlayer, playerToPlayerDto} from "../common/helpers";
-import {state} from "@angular/animations";
 
 export class Game {
   id: number
@@ -13,8 +12,7 @@ export class Game {
   players: Player[];
   winner?: Player
 
-
-  constructor(id: number, name: string, state: string, turn: number, creator: Player, currentPlayer: Player, players: Player[]) {
+  constructor(id: number, name: string, state: string, turn: number, creator: Player, currentPlayer: Player, players: Player[], winner?: Player) {
     this.id = id;
     this.name = name;
     this.state = state;
@@ -22,12 +20,7 @@ export class Game {
     this.creator = creator;
     this.currentPlayer = currentPlayer;
     this.players = players;
-  }
-
-  withState(newState: string): Game {
-    let game = new Game(this.id, this.name, this.state, this.turn, this.creator, this.currentPlayer, this.players);
-    game.state = newState;
-    return game;
+    this.winner = winner;
   }
 
   static fromDto(dto: GameResponseDto): Game {
@@ -39,7 +32,8 @@ export class Game {
       playerDtoToPlayer(dto.currentPlayer),
       dto.players.map(
         playerDto => playerDtoToPlayer(playerDto)
-      )
+      ),
+      dto.winner ? playerDtoToPlayer(dto.winner) : undefined
     )
   }
 

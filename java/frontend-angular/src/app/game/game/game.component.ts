@@ -1,10 +1,9 @@
-import {AfterViewInit, Component} from '@angular/core';
-import {GameLog, GameResponseDto} from "../../openapi-generated";
+import {Component} from '@angular/core';
+import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {comparePlayers, userToPlayerDto} from "../../common/helpers";
+import {comparePlayers, userToPlayer, userToPlayerDto} from "../../common/helpers";
 import {GameService} from "../game.service";
-import {User} from "../../user/user";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
@@ -21,20 +20,18 @@ import {Game} from "../game";
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
-export class GameComponent{
+export class GameComponent {
   protected player!: Player;
   private gameId!: number;
   protected game!: Game;
   protected game$!: Observable<Game>
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
-  private user$: Observable<User>;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameService) {
-    this.user$ = userService.getUser();
-    this.user$.subscribe(updatedUser => this.player = userToPlayerDto(updatedUser))
+    userService.getUser().subscribe(updatedUser => this.player = userToPlayer(updatedUser))
 
     this.route.params.subscribe(value => {
       this.gameId = value['id'];
@@ -85,10 +82,11 @@ export class GameComponent{
 
   private scrollLogsToBottom() {
     let element = document.getElementById("messagesContainer")!;
-    if(element){
+    if (element) {
       element.scrollTop = element.scrollHeight
     }
   }
+
   private addLogs = (gameLog: GameLog) => {
     this.logs.push(gameLog.value);
   }
