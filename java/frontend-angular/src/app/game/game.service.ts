@@ -16,9 +16,10 @@ export class GameService extends GameServiceAbstract {
   private games$ = this.gamesSubject.asObservable()
   private gameSubject = new Subject<Game>()
   private game$ = this.gameSubject.asObservable()
-  private gameLogsSubjects = new Map<number, Subject<GameLog>>()
+  private gameLogsSubjects = new BehaviorSubject<GameLog[]>([])
+  private gameLogs$ = this.gameLogsSubjects.asObservable()
 
-  constructor(private service: TriviaControllerService,
+  constructor(private openApiService: TriviaControllerService,
               private rxStompService: RxStompService) {
     super();
   }
@@ -28,7 +29,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   initGamesListHandlers() {
-    this.service.listGames()
+    this.openApiService.listGames()
       .pipe(
         map(dtos => dtos.map(Game.fromDto))
       )
@@ -42,61 +43,64 @@ export class GameService extends GameServiceAbstract {
     this.registerGameDeletedHandler();
   }
 
+  initGameLogs(gameId: number) {
+    this.openApiService.getGameLogs(gameId)
+      .subscribe(gameLogs => this.gameLogsSubjects.next(gameLogs))
+    this.registerNewGameLogHandler(gameId);
+  }
+
+  private registerNewGameLogHandler(gameId: number) {
+    this.rxStompService.watch(`/topic/games/${gameId}/logs`)
+      .subscribe((message: IMessage) => {
+        let newGameLog = JSON.parse(message.body) as GameLog;
+        this.gameLogsSubjects.next([...this.gameLogsSubjects.value, newGameLog])
+      });
+  }
+
   override create(name: string, user: User): Observable<Game> {
     let requestDto = {gameName: name, creator: userToUserDto(user)};
-    return this.service.createGame(requestDto)
+    return this.openApiService.createGame(requestDto)
       .pipe(
         map(Game.fromDto)
       );
   }
 
   override getGame(gameId: number): Observable<Game> {
-    this.service.getGameById(gameId)
+    this.openApiService.getGameById(gameId)
       .pipe(map(Game.fromDto))
       .subscribe(game => {
-        this.gameSubject.next(game);
-        this.registerGameUpdatedHandler(game);
+          this.gameSubject.next(game);
+          this.registerGameUpdatedHandler(game);
         }
       );
     return this.game$;
   }
 
   override delete(gameId: number): Observable<any> {
-    return this.service.deleteGameById(gameId)
+    return this.openApiService.deleteGameById(gameId)
   }
 
   override playTurn(gameId: number, userId: string): Observable<Game> {
-    return this.service.playTurn(gameId, userId)
+    return this.openApiService.playTurn(gameId, userId)
       .pipe(map(Game.fromDto));
   }
 
   override start(gameId: number, userId: string): Observable<Game> {
-    return this.service.startGame(gameId, userId)
+    return this.openApiService.startGame(gameId, userId)
       .pipe(map(Game.fromDto));
   }
 
   override join(game: Game, user: User): Observable<Game> {
-    return this.service.addPlayerToGame(game.id, user.id, userToUserDto(user))
+    return this.openApiService.addPlayerToGame(game.id, user.id, userToUserDto(user))
       .pipe(map(Game.fromDto));
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
-    return this.service.getGameLogs(gameId)
+    return this.openApiService.getGameLogs(gameId)
   }
 
-  override registerGameLogsAddedHandler(gameId: number, observer: (gameLog: GameLog) => void) {
-    if (!this.gameLogsSubjects.has(gameId)) {
-      this.gameLogsSubjects.set(gameId, new Subject<GameLog>());
-      this.rxStompService.watch(`/topic/games/${gameId}/logs`).subscribe((message: IMessage) => {
-        let newLog = JSON.parse(message.body) as GameLog;
-        this.addGameLogToSubject(gameId, newLog);
-      });
-    }
-    this.gameLogsSubjects.get(gameId)!.subscribe(observer)
-  }
-
-  private addGameLogToSubject(gameId: number, updatedGame: GameLog) {
-    this.gameLogsSubjects.get(gameId)!.next(updatedGame);
+  getGameLogs2(gameId: number): Observable<Array<GameLog>> {
+    return this.gameLogs$;
   }
 
   private registerGameCreatedHandler() {

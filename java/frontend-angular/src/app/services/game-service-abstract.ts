@@ -22,6 +22,5 @@ export abstract class GameServiceAbstract {
 
   abstract getGameLogs(gameId: number): Observable<Array<GameLog>>;
 
-  abstract registerGameLogsAddedHandler(gameId: number, observer: (updatedGame: GameLog) => void): void;
 }
 

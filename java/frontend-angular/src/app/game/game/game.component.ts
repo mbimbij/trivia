@@ -26,11 +26,13 @@ export class GameComponent {
   protected game!: Game;
   protected game$!: Observable<Game>
   protected logs: Array<string> = [...Array(20).keys()].map(value => `message: ${value}`);
+  protected gameLogs$!: Observable<GameLog[]>;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameService) {
+    // TODO améliorer l'initialisation des subjects et observables en tenant compte des dépendances
     userService.getUser().subscribe(updatedUser => this.player = userToPlayer(updatedUser))
 
     this.route.params.subscribe(value => {
@@ -43,7 +45,6 @@ export class GameComponent {
       .subscribe(gameLogs => {
         this.logs = gameLogs.map(log => log.value)
       })
-    this.gameService.registerGameLogsAddedHandler(this.gameId, this.addLogs);
   }
 
   private setCoinCount() {
@@ -53,6 +54,11 @@ export class GameComponent {
     if (index !== -1) {
       this.player.coinCount = this.game.players[index].coinCount;
     }
+  }
+
+  ngOnInit() {
+    this.gameService.initGameLogs(this.gameId);
+    this.gameLogs$ = this.gameService.getGameLogs2(this.gameId);
   }
 
   protected canPlayTurn() {
