@@ -15,7 +15,7 @@ import {Game} from "../game";
     NgIf
   ],
   template: `
-    <button (click)="startGame()" *ngIf="canstartgame">
+    <button (click)="startGame()" *ngIf="canStartGame()">
       start
     </button>
   `,

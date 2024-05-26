@@ -12,40 +12,6 @@
 </ng-container>
 <br>
 <app-create-game></app-create-game>
-<!--<table>-->
-<!--  <tr>-->
-<!--    <th>game</th>-->
-<!--    <th>creator</th>-->
-<!--    <th>players</th>-->
-<!--    <th>status</th>-->
-<!--    <th>start</th>-->
-<!--    <th>join</th>-->
-<!--    <th>go to</th>-->
-<!--    <th>delete</th>-->
-<!--  </tr>-->
-<!--  <tr class="game" *ngFor="let game of games" [className]="game.state">-->
-<!--    <td class="item-name"><a [routerLink]="[game.id,'details']">{{ game.name }}</a>-->
-<!--    </td>-->
-<!--    <td class="item-name">{{ game.creator.name }}</td>-->
-<!--    <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>-->
-<!--    <td class="item-status">{{ game.state }}</td>-->
-<!--    <td class="game-start">-->
-<!--      <app-start-game-button-->
-<!--        [game]="game"-->
-<!--        (gameModifiedEvent)="updateGameWith($event)"-->
-<!--      />-->
-<!--    </td>-->
-<!--    <td class="join">-->
-<!--      <app-join-game-button [game]="game"/>-->
-<!--    </td>-->
-<!--    <td class="goto">-->
-<!--      <app-goto-game-button [game]="game"/>-->
-<!--    </td>-->
-<!--    <td class="delete">-->
-<!--      <app-delete-game-button [gameId]="game.id" [game]="game"/>-->
-<!--    </td>-->
-<!--  </tr>-->
-<!--</table>-->
 
 <ng-container *ngIf="(this.games$ | async) as games">
   <table>

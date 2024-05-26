@@ -21,7 +21,7 @@ export class GameServiceMock extends GameServiceAbstract  {
     return of();
   }
 
-  override registerGameLogsObserver(gameId: number, observer: (updatedGame: GameLog) => void): void {
+  override registerGameLogsAddedHandler(gameId: number, observer: (updatedGame: GameLog) => void): void {
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {

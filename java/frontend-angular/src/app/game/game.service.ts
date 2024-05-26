@@ -14,6 +14,9 @@ import {Game} from "./game";
 export class GameService extends GameServiceAbstract {
   private gamesSubject = new BehaviorSubject<Game[]>([])
   private games$ = this.gamesSubject.asObservable()
+  private gameSubject = new Subject<Game>()
+  private game$ = this.gameSubject.asObservable()
+  private gameLogsSubjects = new Map<number, Subject<GameLog>>()
 
   constructor(private service: TriviaControllerService,
               private rxStompService: RxStompService) {
@@ -32,21 +35,11 @@ export class GameService extends GameServiceAbstract {
       .subscribe(games => {
         this.gamesSubject.next(games);
         for (let game of games) {
-          this.registerGameUpdatedObserver(game);
+          this.registerGameUpdatedHandler(game);
         }
       })
-
-    this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
-      let newGame = JSON.parse(message.body);
-      this.addGameToSubjects(newGame)
-      // TODO améliorer la lisibilité de la logique d'update des parties nouvellement créées
-      this.registerUpdateNotificationsForSingleGame(newGame.id)
-    });
-
-    this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
-      let deletedGameId: number = Number.parseInt(message.body);
-      this.deleteGameFromSubjects(deletedGameId);
-    });
+    this.registerGameCreatedHandler();
+    this.registerGameDeletedHandler();
   }
 
   override create(name: string, user: User): Observable<Game> {
@@ -58,56 +51,18 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGame(gameId: number): Observable<Game> {
-    // TODO Réfléchir à comment designer ce machin pour qu'il passe à l'échelle, cad potentiellement des millions de parties
-    this.registerUpdateNotificationsForSingleGame(gameId);
     this.service.getGameById(gameId)
       .pipe(map(Game.fromDto))
       .subscribe(game => {
-          this.gameUpdatedSubjects.get(gameId)!.next(game);
+        this.gameSubject.next(game);
+        this.registerGameUpdatedHandler(game);
         }
       );
-    return this.gameUpdatedSubjects.get(gameId)!.asObservable();
-  }
-
-  private registerUpdateNotificationsForSingleGame(gameId: number) {
-    if (!this.gameUpdatedSubjects.has(gameId)) {
-      this.gameUpdatedSubjects.set(gameId, new Subject<Game>());
-    }
-    this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
-      let updatedGame = JSON.parse(message.body) as Game;
-      this.gameUpdatedSubjects.get(gameId)!.next(updatedGame);
-      this.updateGameFromList(updatedGame)
-    });
+    return this.game$;
   }
 
   override delete(gameId: number): Observable<any> {
     return this.service.deleteGameById(gameId)
-  }
-
-  private gameUpdatedSubjects = new Map<number, Subject<Game>>()
-
-  private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
-
-  private addGameToSubjects(game: Game) {
-    this.gamesSubject.next([...this.gamesSubject.value, game])
-  }
-
-  private updateGameFromList(game: Game) {
-    let replacement = this.gamesSubject.value;
-    const index = replacement.findIndex(
-      g => g.id === game.id);
-    if (index !== -1) {
-      replacement.splice(index, 1, game);
-    }
-    this.gamesSubject.next(replacement)
-  }
-
-  private registerGameUpdatedObserver(game: Game) {
-    this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
-      let updatedGame = JSON.parse(message.body);
-      this.updateGameFromList(updatedGame)
-      this.registerUpdateNotificationsForSingleGame(game.id)
-    });
   }
 
   override playTurn(gameId: number, userId: string): Observable<Game> {
@@ -125,24 +80,65 @@ export class GameService extends GameServiceAbstract {
       .pipe(map(Game.fromDto));
   }
 
-  private deleteGameFromSubjects(gameId: number) {
-    console.log(`coucou deleteGame$`)
-    this.gamesSubject.next([...this.gamesSubject.value.filter(game => game.id !== gameId)])
-  }
-
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
     return this.service.getGameLogs(gameId)
   }
 
-  registerGameLogsObserver(gameId: number, observer: (gameLog: GameLog) => void) {
-    if (!this.gameLogsAddedSubjects.has(gameId)) {
-      this.gameLogsAddedSubjects.set(gameId, new Subject<GameLog>());
+  override registerGameLogsAddedHandler(gameId: number, observer: (gameLog: GameLog) => void) {
+    if (!this.gameLogsSubjects.has(gameId)) {
+      this.gameLogsSubjects.set(gameId, new Subject<GameLog>());
       this.rxStompService.watch(`/topic/games/${gameId}/logs`).subscribe((message: IMessage) => {
-        let updatedGame = JSON.parse(message.body);
-        this.gameLogsAddedSubjects.get(gameId)!.next(updatedGame);
+        let newLog = JSON.parse(message.body) as GameLog;
+        this.addGameLogToSubject(gameId, newLog);
       });
     }
-    this.gameLogsAddedSubjects.get(gameId)!.subscribe(observer)
+    this.gameLogsSubjects.get(gameId)!.subscribe(observer)
+  }
+
+  private addGameLogToSubject(gameId: number, updatedGame: GameLog) {
+    this.gameLogsSubjects.get(gameId)!.next(updatedGame);
+  }
+
+  private registerGameCreatedHandler() {
+    this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
+      let newGame = JSON.parse(message.body);
+      this.addGameToSubjectList(newGame)
+      this.registerGameUpdatedHandler(newGame)
+    });
+  }
+
+  private registerGameUpdatedHandler(game: Game) {
+    this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
+      let updatedGame = JSON.parse(message.body);
+      this.gameSubject.next(updatedGame);
+      this.updateGameFromSubjectList(updatedGame)
+    });
+  }
+
+  private registerGameDeletedHandler() {
+    this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
+      let deletedGameId: number = Number.parseInt(message.body);
+      this.deleteGameFromSubjects(deletedGameId);
+    });
+  }
+
+  private addGameToSubjectList(game: Game) {
+    this.gamesSubject.next([...this.gamesSubject.value, game])
+  }
+
+  private updateGameFromSubjectList(game: Game) {
+    let replacement = this.gamesSubject.value;
+    const index = replacement.findIndex(
+      g => g.id === game.id);
+    if (index !== -1) {
+      replacement.splice(index, 1, game);
+    }
+    this.gamesSubject.next(replacement)
+  }
+
+  private deleteGameFromSubjects(gameId: number) {
+    console.log(`coucou deleteGame$`)
+    this.gamesSubject.next([...this.gamesSubject.value.filter(game => game.id !== gameId)])
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

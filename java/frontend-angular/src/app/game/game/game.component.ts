@@ -46,7 +46,7 @@ export class GameComponent{
       .subscribe(gameLogs => {
         this.logs = gameLogs.map(log => log.value)
       })
-    this.gameService.registerGameLogsObserver(this.gameId, this.addLogs);
+    this.gameService.registerGameLogsAddedHandler(this.gameId, this.addLogs);
   }
 
   private setCoinCount() {
