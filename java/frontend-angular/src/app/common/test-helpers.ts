@@ -1,5 +1,5 @@
 import {User} from "../user/user";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {GameResponseDto} from "../openapi-generated";
 import {Game} from "../game/game";
 

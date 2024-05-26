@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "../services/game-service-abstract";
-import {BehaviorSubject, map, Observable, of, Subject, tap} from "rxjs";
-import {GameLog, GameResponseDto, TriviaControllerService} from "../openapi-generated";
+import {BehaviorSubject, map, Observable, of, Subject} from "rxjs";
+import {GameLog, TriviaControllerService} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
@@ -21,7 +21,6 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGames() {
-    console.log(`coucou getGames$`)
     return this.games$;
   }
 
@@ -32,7 +31,7 @@ export class GameService extends GameServiceAbstract {
       )
       .subscribe(games => {
         this.gamesSubject.next(games);
-        for (const game of games) {
+        for (let game of games) {
           this.registerGameUpdatedObserver(game);
         }
       })
@@ -41,7 +40,7 @@ export class GameService extends GameServiceAbstract {
       let newGame = JSON.parse(message.body);
       this.addGameToSubjects(newGame)
       // TODO améliorer la lisibilité de la logique d'update des parties nouvellement créées
-      this.registerUpdateNotificationsForGame(newGame.id)
+      this.registerUpdateNotificationsForSingleGame(newGame.id)
     });
 
     this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
@@ -54,14 +53,13 @@ export class GameService extends GameServiceAbstract {
     let requestDto = {gameName: name, creator: userToUserDto(user)};
     return this.service.createGame(requestDto)
       .pipe(
-        // tap(value => this.registerUpdateNotificationsForGame(value.id)),
         map(Game.fromDto)
       );
   }
 
   override getGame(gameId: number): Observable<Game> {
     // TODO Réfléchir à comment designer ce machin pour qu'il passe à l'échelle, cad potentiellement des millions de parties
-    this.registerUpdateNotificationsForGame(gameId);
+    this.registerUpdateNotificationsForSingleGame(gameId);
     this.service.getGameById(gameId)
       .pipe(map(Game.fromDto))
       .subscribe(game => {
@@ -71,16 +69,14 @@ export class GameService extends GameServiceAbstract {
     return this.gameUpdatedSubjects.get(gameId)!.asObservable();
   }
 
-  private registerUpdateNotificationsForGame(gameId: number) {
-    console.log(`coucou registerUpdateNotificationsForGame called with game ${gameId}`)
+  private registerUpdateNotificationsForSingleGame(gameId: number) {
     if (!this.gameUpdatedSubjects.has(gameId)) {
       this.gameUpdatedSubjects.set(gameId, new Subject<Game>());
     }
     this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
       let updatedGame = JSON.parse(message.body) as Game;
       this.gameUpdatedSubjects.get(gameId)!.next(updatedGame);
-      this.updateGame$(updatedGame)
-      console.log(`coucou websocket new game received ${gameId}`)
+      this.updateGameFromList(updatedGame)
     });
   }
 
@@ -93,12 +89,10 @@ export class GameService extends GameServiceAbstract {
   private gameLogsAddedSubjects = new Map<number, Subject<GameLog>>()
 
   private addGameToSubjects(game: Game) {
-    console.log(`coucou addGame$`)
     this.gamesSubject.next([...this.gamesSubject.value, game])
   }
 
-  private updateGame$(game: Game) {
-    console.log(`coucou updateGame$`)
+  private updateGameFromList(game: Game) {
     let replacement = this.gamesSubject.value;
     const index = replacement.findIndex(
       g => g.id === game.id);
@@ -111,7 +105,8 @@ export class GameService extends GameServiceAbstract {
   private registerGameUpdatedObserver(game: Game) {
     this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
       let updatedGame = JSON.parse(message.body);
-      this.updateGame$(updatedGame)
+      this.updateGameFromList(updatedGame)
+      this.registerUpdateNotificationsForSingleGame(game.id)
     });
   }
 

@@ -8,7 +8,12 @@ import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {provideRouter} from "@angular/router";
 import {FirebaseUserService} from "../../adapters/user/firebase-user.service";
-import {UserServiceTest} from "../../adapters/user/user-service.test";
+import {UserServiceMock} from "../../adapters/user/user-service.mock";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {
+  AuthenticationServiceAbstract,
+  AuthenticationServiceMock
+} from "../../services/authentication-service.abstract";
 
 describe('GameListComponent', () => {
   let component: GameListComponent;
@@ -18,7 +23,8 @@ describe('GameListComponent', () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: FirebaseUserService, useClass: UserServiceTest},
+        {provide: UserServiceAbstract, useClass: UserServiceMock},
+        {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
         provideRouter([])
       ],
       imports: [HttpClientTestingModule, CreateGameComponent, FormsModule],

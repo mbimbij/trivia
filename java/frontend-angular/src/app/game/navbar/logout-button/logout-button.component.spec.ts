@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogoutButtonComponent } from './logout-button.component';
+import {
+  AuthenticationServiceAbstract,
+  AuthenticationServiceMock
+} from "../../../services/authentication-service.abstract";
 
 describe('LogoutButtonComponent', () => {
   let component: LogoutButtonComponent;
@@ -8,10 +12,13 @@ describe('LogoutButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LogoutButtonComponent]
+      imports: [LogoutButtonComponent],
+      providers:[
+        {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
+      ]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(LogoutButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

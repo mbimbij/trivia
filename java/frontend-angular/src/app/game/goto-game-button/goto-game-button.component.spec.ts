@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GotoGameButtonComponent } from './goto-game-button.component';
 import {ActivatedRoute} from "@angular/router";
 import {MockActivatedRoute, mockGame1} from "../../common/test-helpers";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {UserServiceMock} from "../../adapters/user/user-service.mock";
 
 describe('GotoGameButtonComponent', () => {
   let component: GotoGameButtonComponent;
@@ -12,7 +14,8 @@ describe('GotoGameButtonComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GotoGameButtonComponent],
       providers: [
-        {provide: ActivatedRoute, useClass: MockActivatedRoute}
+        {provide: ActivatedRoute, useClass: MockActivatedRoute},
+        {provide: UserServiceAbstract, useClass: UserServiceMock},
       ]
     })
     .compileComponents();

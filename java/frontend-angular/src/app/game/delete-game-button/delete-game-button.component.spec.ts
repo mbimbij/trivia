@@ -4,7 +4,7 @@ import {DeleteGameButtonComponent} from './delete-game-button.component';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {UserServiceTest} from "../../adapters/user/user-service.test";
+import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {mockGame1} from "../../common/test-helpers";
 
 describe('DeleteGameButtonComponent', () => {
@@ -16,7 +16,7 @@ describe('DeleteGameButtonComponent', () => {
       imports: [DeleteGameButtonComponent],
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: UserServiceAbstract, useClass: UserServiceTest}
+        {provide: UserServiceAbstract, useClass: UserServiceMock}
       ]
     })
       .compileComponents();

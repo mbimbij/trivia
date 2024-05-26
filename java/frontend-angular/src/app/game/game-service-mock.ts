@@ -1,22 +1,20 @@
 import {Injectable} from "@angular/core";
 import {GameServiceAbstract} from "../services/game-service-abstract";
 import {Observable, of} from "rxjs";
-import {GameLog, GameResponseDto, UserDto} from "../openapi-generated";
+import {GameLog} from "../openapi-generated";
 import {mockGame1, mockGame2} from "../common/test-helpers";
 import {User} from "../user/user";
+import {Game} from "./game";
 
 @Injectable({
   providedIn: 'root'
 })
-export class GameServiceMock extends GameServiceAbstract {
-  override create(name: string, user: User): Observable<GameResponseDto> {
+export class GameServiceMock extends GameServiceAbstract  {
+  override doInit(): void {
+
+  }
+  override create(name: string, user: User): Observable<Game> {
     return of(mockGame1);
-  }
-
-  override registerGameCreatedObserver(observer: (newGame: GameResponseDto) => void): void {
-  }
-
-  override registerGameDeletedObserver(observer: (gameId: number) => void): void {
   }
 
   override delete(gameId: number): Observable<void> {
@@ -33,29 +31,26 @@ export class GameServiceMock extends GameServiceAbstract {
     ]);
   }
 
-  override registerGameUpdatedObserver(gameId: number, observer: (updatedGame: GameResponseDto) => void): void {
-  }
-
-  override getGame(gameId: number): Observable<GameResponseDto> {
+  override getGame(gameId: number): Observable<Game> {
     return of(mockGame1);
   }
 
-  override playTurn(gameId: number, userId: string): Observable<GameResponseDto> {
+  override playTurn(gameId: number, userId: string): Observable<Game> {
     return of(mockGame1);
   }
 
-  getGames(): Observable<Array<GameResponseDto>> {
+  getGames(): Observable<Array<Game>> {
     return of([
       mockGame1,
       mockGame2,
     ]);
   }
 
-  join(game: GameResponseDto, user: User): Observable<GameResponseDto> {
+  join(game: Game, user: User): Observable<Game> {
     return of(game);
   }
 
-  override start(gameId: number, userId: string): Observable<GameResponseDto> {
+  override start(gameId: number, userId: string): Observable<Game> {
     return of(mockGame1);
   }
 }

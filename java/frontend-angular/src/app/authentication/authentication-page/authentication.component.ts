@@ -7,7 +7,6 @@ import {
 import {Router} from "@angular/router";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {generateRandomString} from "../../common/helpers";
-import {User} from "../../user/user";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -38,12 +37,8 @@ export class AuthenticationComponent {
       // user.sendEmailVerification()
       this.router.navigate(['waiting-for-email-verification']);
     } else {
-      let userNameUndefined: boolean = user.displayName == null
       let userName = user.displayName ?? generateName(user.isAnonymous);
-      let triviaUser = new User(user.uid,
-        userName,
-        user.isAnonymous);
-      if(userNameUndefined){
+      if(user.displayName == null){
         this.userService.renameUser(userName)
       }
       this.router.navigate(['/games']);
