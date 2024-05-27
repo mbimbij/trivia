@@ -1,21 +1,21 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "../services/game-service-abstract";
-import {BehaviorSubject, map, Observable, of, Subject} from "rxjs";
-import {GameLog, TriviaControllerService} from "../openapi-generated";
+import {BehaviorSubject, map, Observable, of, Subject, tap} from "rxjs";
+import {GameLog, GameResponseDto, TriviaControllerService} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
 import {userToUserDto} from "../common/helpers";
-import {Game} from "./game";
+import {Game, NoGame} from "./game";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService extends GameServiceAbstract {
   private gamesSubject = new BehaviorSubject<Game[]>([])
-  private games$ = this.gamesSubject.asObservable()
-  private gameSubject = new Subject<Game>()
-  private game$ = this.gameSubject.asObservable()
+  private isGameListInitialized: boolean = false
+  private gamesSubjectsMap = new Map<number, Subject<Game>> ()
+  private isUpdateHandlerRegistered = new Set<number> ()
   private gameLogsSubjects = new BehaviorSubject<GameLog[]>([])
   private gameLogs$ = this.gameLogsSubjects.asObservable()
 
@@ -25,10 +25,14 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGames() {
-    return this.games$;
+    if(!this.isGameListInitialized){
+      this.initGamesList();
+      this.isGameListInitialized = true
+    }
+    return this.gamesSubject.asObservable();
   }
 
-  initGamesListHandlers() {
+  initGamesList() {
     this.openApiService.listGames()
       .pipe(
         map(dtos => dtos.map(Game.fromDto))
@@ -41,6 +45,26 @@ export class GameService extends GameServiceAbstract {
       })
     this.registerGameCreatedHandler();
     this.registerGameDeletedHandler();
+  }
+
+  private addSingleGameSubject(game: Game , gameId: number = game!.id) {
+    if (!this.gamesSubjectsMap.has(gameId)) {
+      this.gamesSubjectsMap.set(gameId, new BehaviorSubject<Game>(game));
+    }else{
+      this.gamesSubjectsMap.get(gameId)!.next(game);
+    }
+  }
+
+  initSingleGame(gameId: number){
+    this.gamesSubjectsMap.set(gameId, new BehaviorSubject(new NoGame(gameId)))
+    let gameObservable = this.openApiService.getGameById(gameId)
+      .pipe(map(Game.fromDto));
+    gameObservable
+      .subscribe(game => {
+          this.addSingleGameSubject(game)
+          this.registerGameUpdatedHandler(game);
+        }
+      );
   }
 
   initGameLogs(gameId: number) {
@@ -61,19 +85,22 @@ export class GameService extends GameServiceAbstract {
     let requestDto = {gameName: name, creator: userToUserDto(user)};
     return this.openApiService.createGame(requestDto)
       .pipe(
-        map(Game.fromDto)
+        map(Game.fromDto),
       );
   }
 
   override getGame(gameId: number): Observable<Game> {
-    this.openApiService.getGameById(gameId)
-      .pipe(map(Game.fromDto))
-      .subscribe(game => {
-          this.gameSubject.next(game);
-          this.registerGameUpdatedHandler(game);
-        }
-      );
-    return this.game$;
+    // this.openApiService.getGameById(gameId)
+    //   .pipe(map(Game.fromDto))
+    //   .subscribe(game => {
+    //       this.gameSubject.next(game);
+    //       this.registerGameUpdatedHandler(game);
+    //     }
+    //   );
+    if(!this.gamesSubjectsMap.has(gameId)){
+      this.initSingleGame(gameId)
+    }
+    return this.gamesSubjectsMap.get(gameId)!.asObservable();
   }
 
   override delete(gameId: number): Observable<any> {
@@ -105,24 +132,31 @@ export class GameService extends GameServiceAbstract {
 
   private registerGameCreatedHandler() {
     this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
-      let newGame = JSON.parse(message.body);
-      this.addGameToSubjectList(newGame)
+      let newGameDto = JSON.parse(message.body) as GameResponseDto;
+      let newGame = Game.fromDto(newGameDto);
+      this.addGameToSubjectList(newGame);
+      // this.gamesSubjectsMap.set(newGame.id, new BehaviorSubject(newGame));
+      this.addSingleGameSubject(newGame, newGame.id)
       this.registerGameUpdatedHandler(newGame)
     });
   }
 
   private registerGameUpdatedHandler(game: Game) {
-    this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
-      let updatedGame = JSON.parse(message.body);
-      this.gameSubject.next(updatedGame);
-      this.updateGameFromSubjectList(updatedGame)
-    });
+    if(!this.isUpdateHandlerRegistered.has(game.id)){
+      this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
+        let updatedGame = JSON.parse(message.body);
+        this.addSingleGameSubject(updatedGame);
+        this.updateGameFromSubjectList(updatedGame)
+      });
+      this.isUpdateHandlerRegistered.add(game.id)
+    }
   }
 
   private registerGameDeletedHandler() {
     this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
       let deletedGameId: number = Number.parseInt(message.body);
       this.deleteGameFromSubjects(deletedGameId);
+      this.gamesSubjectsMap.delete(deletedGameId);
     });
   }
 

@@ -1,6 +1,7 @@
 import {Player} from "../user/player";
 import {GameResponseDto} from "../openapi-generated";
-import {playerDtoToPlayer, playerToPlayerDto} from "../common/helpers";
+import {playerDtoToPlayer, playerToPlayerDto, userToPlayer} from "../common/helpers";
+import {Nobody} from "../user/user";
 
 export class Game {
   id: number
@@ -47,5 +48,19 @@ export class Game {
       currentPlayer: playerToPlayerDto(this.currentPlayer),
       players: this.players.map(player => playerToPlayerDto(player))
     }
+  }
+}
+
+export class NoGame extends Game {
+  constructor(id: number) {
+    super(id,
+      "none",
+      "none",
+      -1,
+      userToPlayer(Nobody.instance),
+      userToPlayer(Nobody.instance),
+      [userToPlayer(Nobody.instance)],
+      userToPlayer(Nobody.instance)
+    );
   }
 }

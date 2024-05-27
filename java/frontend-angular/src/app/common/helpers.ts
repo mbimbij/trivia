@@ -36,14 +36,6 @@ export function playerToPlayerDto(player: Player): PlayerDto {
   return {id: player.id, name: player.name, coinCount: player.coinCount}
 }
 
-export function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
-
-export function randomPlayer(): Player {
-  return new Player(`id-${generateRandomString(4)}`, `name-${generateRandomString(4)}`, 0)
-}
-
 export function generateRandomString(length: number): string {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';

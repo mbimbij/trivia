@@ -4,7 +4,7 @@ import {User} from "../user/user";
 import {Game} from "../game/game";
 
 export abstract class GameServiceAbstract {
-  abstract initGamesListHandlers(): void;
+  abstract initGamesList(): void;
 
   abstract getGames(): Observable<Array<Game>>;
 

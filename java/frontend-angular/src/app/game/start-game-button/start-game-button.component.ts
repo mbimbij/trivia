@@ -1,11 +1,10 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {NgIf} from "@angular/common";
-import {GameResponseDto} from "../../openapi-generated";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable} from "rxjs";
+import {combineLatest, combineLatestAll, combineLatestWith} from "rxjs";
 import {Game} from "../game";
 
 @Component({
@@ -15,7 +14,7 @@ import {Game} from "../game";
     NgIf
   ],
   template: `
-    <button (click)="startGame()" *ngIf="canStartGame()">
+    <button (click)="startGame()" *ngIf="canStartGameAttr">
       start
     </button>
   `,
@@ -26,17 +25,42 @@ export class StartGameButtonComponent {
 
   @Input() game!: Game
   protected user!: User;
-  user$: Observable<User>;
-  protected canstartgame: boolean = false
+  protected canStartGameAttr: boolean = false
 
   constructor(private service: GameServiceAbstract,
-              private userService: UserServiceAbstract) {
-    this.user$ = userService.getUser();
-    this.user$.subscribe(updatedUser => this.user = updatedUser)
+              private userService: UserServiceAbstract,
+              private gameService: GameServiceAbstract) {
+    console.log(`constructor ${this.constructor.name} called`)
   }
 
   ngOnInit() {
-    this.canstartgame = this.canStartGame()
+    console.log(`ngOnInit ${this.constructor.name} called`)
+    let user$ = this.userService.getUser();
+    let game$ = this.gameService.getGame(this.game.id);
+
+    // user$.pipe(
+    //   combineLatestWith(game$)
+    // )
+    combineLatest([user$,game$])
+      .subscribe(([user, game]) => {
+        console.log(`coucou game ${game.id} updated`)
+        console.log(game)
+        this.user = user;
+        this.game = game;
+      this.canStartGameAttr = this.canStartGame();
+    });
+
+    // user$.subscribe(user => {
+    //   // console.log(`coucou user updated`)
+    //   this.user = user;
+    //   this.canStartGameAttr = this.canStartGame();
+    // })
+    //
+    // game$.subscribe(game => {
+    //   console.log(`coucou game ${game.id} updated`)
+    //   this.game = game;
+    //   this.canStartGameAttr = this.canStartGame();
+    // })
   }
 
   startGame() {
@@ -46,9 +70,9 @@ export class StartGameButtonComponent {
       )
   }
 
-  protected canStartGame(): boolean {
+  private canStartGame(): boolean {
     // TODO empêcher la fonction d'être appelée 36 fois
-    // console.log(`canStartGame called`)
+    console.log(`canStartGame called`)
     return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
   }
 

@@ -10,7 +10,7 @@ import {Game} from "./game";
   providedIn: 'root'
 })
 export class GameServiceMock extends GameServiceAbstract  {
-  override initGamesListHandlers(): void {
+  override initGamesList(): void {
 
   }
   override create(name: string, user: User): Observable<Game> {
@@ -19,9 +19,6 @@ export class GameServiceMock extends GameServiceAbstract  {
 
   override delete(gameId: number): Observable<void> {
     return of();
-  }
-
-  override registerGameLogsAddedHandler(gameId: number, observer: (updatedGame: GameLog) => void): void {
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {

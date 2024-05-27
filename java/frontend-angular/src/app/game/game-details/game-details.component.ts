@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {GameResponseDto} from "../../openapi-generated";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
@@ -30,9 +30,11 @@ export class GameDetailsComponent {
   game$!: Observable<Game>;
 
   constructor(private route: ActivatedRoute,
+              protected router: Router,
               private gameService: GameServiceAbstract) {
+    console.log(`constructor ${this.constructor.name} called`)
     this.route.params.subscribe(value => {
-      this.gameId = value['id'];
+      this.gameId = Number.parseInt(value['id']);
       this.game$ = gameService.getGame(this.gameId);
     })
   }
