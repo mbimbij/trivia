@@ -2,10 +2,10 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {compareUserAndPlayer} from "../../common/helpers";
+import {compareUserAndPlayer, generateRandomString} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {combineLatest, combineLatestAll, combineLatestWith} from "rxjs";
 import {Game} from "../game";
+import {combineLatest, Subscription} from "rxjs";
 
 @Component({
   standalone: true,
@@ -26,29 +26,31 @@ export class StartGameButtonComponent {
   @Input() game!: Game
   protected user!: User;
   protected canStartGameAttr: boolean = false
+  private readonly id: string;
 
   constructor(private service: GameServiceAbstract,
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract) {
-    console.log(`constructor ${this.constructor.name} called`)
+    this.id = generateRandomString(4);
+    console.log(`constructor ${this.constructor.name} - ${this.id} called`)
   }
 
+  private userGameSubscription!: Subscription;
+  private startActionSubscription: Subscription|undefined;
+
   ngOnInit() {
-    console.log(`ngOnInit ${this.constructor.name} called`)
+    console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
     let user$ = this.userService.getUser();
     let game$ = this.gameService.getGame(this.game.id);
 
-    // user$.pipe(
-    //   combineLatestWith(game$)
-    // )
-    combineLatest([user$,game$])
+    this.userGameSubscription = combineLatest([user$, game$])
       .subscribe(([user, game]) => {
-        console.log(`coucou game ${game.id} updated`)
+        console.log(`userGameSubscription ${this.constructor.name} - ${this.id} called game ${game.id} updated`)
         console.log(game)
         this.user = user;
         this.game = game;
-      this.canStartGameAttr = this.canStartGame();
-    });
+        this.canStartGameAttr = this.canStartGame();
+      });
 
     // user$.subscribe(user => {
     //   // console.log(`coucou user updated`)
@@ -57,14 +59,19 @@ export class StartGameButtonComponent {
     // })
     //
     // game$.subscribe(game => {
-    //   console.log(`coucou game ${game.id} updated`)
-    //   this.game = game;
-    //   this.canStartGameAttr = this.canStartGame();
+    //   console.log(`coucou2 game ${game.id} - ${this.id} updated`)
+    //   // console.log(game)
     // })
   }
 
+  ngOnDestroy(){
+    console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
+    this.userGameSubscription.unsubscribe()
+    this.startActionSubscription?.unsubscribe()
+  }
+
   startGame() {
-    this.service.start(this.game.id, this.user.id)
+    this.startActionSubscription = this.service.start(this.game.id, this.user.id)
       .subscribe(() => {
         }
       )
@@ -72,7 +79,7 @@ export class StartGameButtonComponent {
 
   private canStartGame(): boolean {
     // TODO empêcher la fonction d'être appelée 36 fois
-    console.log(`canStartGame called`)
+    // console.log(`canStartGame called - ${this.id}`)
     return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
   }
 

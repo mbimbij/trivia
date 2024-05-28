@@ -135,7 +135,6 @@ export class GameService extends GameServiceAbstract {
       let newGameDto = JSON.parse(message.body) as GameResponseDto;
       let newGame = Game.fromDto(newGameDto);
       this.addGameToSubjectList(newGame);
-      // this.gamesSubjectsMap.set(newGame.id, new BehaviorSubject(newGame));
       this.addSingleGameSubject(newGame, newGame.id)
       this.registerGameUpdatedHandler(newGame)
     });

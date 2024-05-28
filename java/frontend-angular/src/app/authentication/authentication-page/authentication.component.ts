@@ -10,6 +10,7 @@ import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
 
 @Component({
   selector: 'app-authentication',
@@ -25,7 +26,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 })
 export class AuthenticationComponent {
 
-  constructor(protected authenticationService: AuthenticationServiceAbstract,
+  constructor(protected authenticationService: FirebaseAuthenticationService,
               protected userService: UserServiceAbstract,
               private router: Router) {
   }

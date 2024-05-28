@@ -9,6 +9,7 @@ import {StartGameButtonComponent} from "../start-game-button/start-game-button.c
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Observable} from "rxjs";
 import {Game} from "../game";
+import {generateRandomString} from "../../common/helpers";
 
 @Component({
   selector: 'app-game',
@@ -28,14 +29,25 @@ import {Game} from "../game";
 export class GameDetailsComponent {
   gameId!: number;
   game$!: Observable<Game>;
+  private readonly id: string;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
               private gameService: GameServiceAbstract) {
-    console.log(`constructor ${this.constructor.name} called`)
+    this.id = generateRandomString(4);
+    console.log(`constructor ${this.constructor.name} - ${this.id} called`)
     this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
       this.game$ = gameService.getGame(this.gameId);
     })
   }
+
+  ngOnInit(): void {
+    console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
+  }
+
+  ngOnDestroy(): void {
+    console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
+  }
+
 }
