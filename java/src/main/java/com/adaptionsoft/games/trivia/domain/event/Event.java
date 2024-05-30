@@ -1,7 +1,9 @@
 package com.adaptionsoft.games.trivia.domain.event;
 
+import com.adaptionsoft.games.trivia.domain.GameId;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,9 +21,13 @@ public abstract class Event {
     protected final String stringValue;
     @EqualsAndHashCode.Exclude
     protected final int orderNumber;
+    // TODO remove the setter after the refacto R-1
+    @Setter
+    protected GameId gameId;
 
-    protected Event(String stringValue) {
+    protected Event(GameId gameId, String stringValue) {
         orderNumber = eventCounter.getAndIncrement();
+        this.gameId = gameId;
         this.stringValue = stringValue;
     }
 }

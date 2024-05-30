@@ -1,0 +1,42 @@
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+
+import {GameListComponent} from './game-list.component';
+import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {GameServiceMock} from "../game-service-mock";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {CreateGameComponent} from "../create-game/create-game.component";
+import {FormsModule} from "@angular/forms";
+import {provideRouter} from "@angular/router";
+import {FirebaseUserService} from "../../adapters/user/firebase-user.service";
+import {UserServiceMock} from "../../adapters/user/user-service.mock";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {
+  AuthenticationServiceAbstract,
+  AuthenticationServiceMock
+} from "../../services/authentication-service.abstract";
+
+describe('GameListComponent', () => {
+  let component: GameListComponent;
+  let fixture: ComponentFixture<GameListComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      providers: [
+        {provide: GameServiceAbstract, useClass: GameServiceMock},
+        {provide: UserServiceAbstract, useClass: UserServiceMock},
+        {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
+        provideRouter([])
+      ],
+      imports: [HttpClientTestingModule, CreateGameComponent, FormsModule],
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(GameListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

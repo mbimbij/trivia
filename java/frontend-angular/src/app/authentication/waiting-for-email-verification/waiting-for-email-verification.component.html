@@ -1,0 +1,6 @@
+<p>waiting for email verification</p>
+<button (click)="authenticationService.sendActivationEmail()">send activation email again</button>
+<br>
+<button (click)="router.navigate(['/authentication'])">go back</button>
+<br>
+<button *ngIf="authenticationService.emailVerified" (click)="router.navigate(['/games'])">go to games</button>

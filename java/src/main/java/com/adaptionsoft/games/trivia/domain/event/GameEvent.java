@@ -1,13 +1,12 @@
 package com.adaptionsoft.games.trivia.domain.event;
 
+import com.adaptionsoft.games.trivia.domain.GameId;
 import lombok.Getter;
 
 @Getter
 public class GameEvent extends Event {
-    private final Integer gameId;
-
-    protected GameEvent(Integer gameId, String stringValue) {
-        super(stringValue);
-        this.gameId = gameId;
+    // TODO ajouter à quel tour de jeu un event a lieu
+    protected GameEvent(GameId gameId, String stringValue) {
+        super(gameId, stringValue);
     }
 }

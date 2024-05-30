@@ -21,8 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.reset;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -57,7 +56,7 @@ class RestAssuredBasedControllerTest {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(new InvalidGameStateException(null, null, "add player"))
                 .when(triviaController)
-                .addPlayerToGame(anyInt(), any());
+                .joinGame(anyInt(), any());
 
         // WHEN a new player tries to join the game
         //@formatter:off
@@ -65,7 +64,7 @@ class RestAssuredBasedControllerTest {
                 .contentType("application/json")
                 .body(new UserDto(null, null))
         .when()
-                .post("/game/{gameId}/player/{playerId}/join", 0, 0)
+                .post("/games/{gameId}/players/{playerId}/join", 0, 0)
         .then()
                 .statusCode(409)
                 .body("timestamp", notNullValue())
@@ -81,13 +80,13 @@ class RestAssuredBasedControllerTest {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(PlayTurnException.notCurrentPlayerException(null, null, null))
                 .when(triviaController)
-                .playTurn(anyInt(), anyInt());
+                .playTurn(anyInt(), anyString());
 
         // WHEN a player tries to play a turn
         //@formatter:off
         requestSpec
         .when()
-                .post("/game/{gameId}/player/{playerId}/playTurn", 0, 0)
+                .post("/games/{gameId}/players/{playerId}/playTurn", 0, 0)
         .then()
                 .statusCode(403)
 //                .body("timestamp", notNullValue())

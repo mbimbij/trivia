@@ -1,0 +1,21 @@
+<mat-toolbar class="navbar">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Trivia Web</span>
+  <span class="example-spacer"></span>
+  <!--  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">-->
+  <!--    <mat-icon>favorite</mat-icon>-->
+  <!--  </button>-->
+  <!--  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">-->
+  <!--    <mat-icon>share</mat-icon>-->
+  <!--  </button>-->
+  <ng-container *ngIf="(user$ | async) as user">
+    <button *ngIf="user.isAnonymous" mat-icon-button class="example-icon"
+            aria-label="Example icon-button with share icon">
+      <mat-icon>no_accounts</mat-icon>
+    </button>
+    <span>{{ user.name }}</span>
+  </ng-container>
+  <app-logout-button></app-logout-button>
+</mat-toolbar>

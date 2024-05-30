@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -13,17 +14,19 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 
 
 public class GameFactory {
-
+    private final IdGenerator idGenerator;
     private final EventPublisher eventPublisher;
     private final QuestionsLoader questionsLoader;
 
-    public GameFactory(EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
-        this.eventPublisher = eventPublisher;
-        this.questionsLoader = questionsLoader;
-    }
 
     public Game create(String gameName, String creatorName, String... otherPlayersNames) {
         return create(new Random(), gameName, creatorName, otherPlayersNames);
+    }
+
+    public GameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
+        this.idGenerator = idGenerator;
+        this.eventPublisher = eventPublisher;
+        this.questionsLoader = questionsLoader;
     }
 
     public Game create(String gameName, Player creator, Player... players) {
@@ -32,10 +35,10 @@ public class GameFactory {
 
     public Game create(Random rand, String gameName, @NonNull String creatorName, String... playersNames) {
         Player[] playersArray = Arrays.stream(playersNames)
-                .map(Player::new)
+                .map((String playerName) -> new Player(new UserId(playerName),playerName))
                 .toArray(Player[]::new);
 
-        final Player player = new Player(creatorName);
+        final Player player = new Player(new UserId(creatorName), creatorName);
         return create(rand, gameName, player, playersArray);
     }
 
@@ -46,15 +49,18 @@ public class GameFactory {
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
+        Integer id = idGenerator.nextId();
         Game game = new Game(
+                new GameId(id),
                 gameName,
                 eventPublisher,
                 players,
-                new PlayerTurnOrchestrator(questions, rand, board), players.getCurrent(), CREATED
+                new PlayerTurnOrchestrator(questions, rand, board),
+                players.getCurrent(),
+                CREATED
         );
 
         eventPublisher.publish(players.getAndClearUncommittedEvents());
-        // TODO adresser la gestion d'id avant persistence du jeu en base
         eventPublisher.publish(new GameCreatedEvent(game.getId()));
         return game;
     }

@@ -1,0 +1,38 @@
+<button (click)="router.navigate(['/games'])">go back</button>
+<ng-container *ngIf="(game$ | async) as game; else waiting_for_data">
+  <table>
+    <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
+    <tr>
+      <th>id</th>
+      <th>game</th>
+      <th>creator</th>
+      <th>players</th>
+      <th>status</th>
+      <th>start</th>
+      <th>join</th>
+      <th>go to</th>
+    </tr>
+    <tr>
+      <td>{{ game.id }}</td>
+      <td>{{ game.name }}</td>
+      <td>{{ game.creator.name }}</td>
+      <td>{{ game.players | objectAttribute: 'name' }}</td>
+      <td>{{ game.state }}</td>
+      <td>
+        <app-start-game-button
+          [game]="game"
+        />
+      </td>
+      <td>
+        <app-join-game-button
+          [game]="game"
+        >
+        </app-join-game-button>
+      </td>
+      <td>
+        <app-goto-game-button [game]="game"></app-goto-game-button>
+      </td>
+    </tr>
+  </table>
+</ng-container>
+<ng-template #waiting_for_data>Waiting for game data</ng-template>

@@ -1,29 +1,8 @@
-- Infra
-  - Setup Prod - walking skeleton
-  - Setup environnements : "prod" & "dev"
-- CI/CD
-  - Setup CD et utilisation des environnements
-  - Setup CI basique
-- Fonctionnel
-  - Gestion d'identité
-    - Social login
-    - sign-up, login & gestion de compte
-    - gestion utilisateur anonyme
-  - Envoi d'invitation à une partie
-  - pause & resume game
-  - grant & revoke permissions sur une partie
-- Dev
-  - Design
-    - où et comment produire des events liés à une inner entity ?
-      - les inner entities les produisent eux-mêmes
-      - l'aggregate root les produit
-      - problématique: conservation de l'ordre des events
-    - comment reconstituer un aggrégat, et particulièrement des (deep) nested entities à partir d'events ?
-    - Jouer avec différentes implémentations de "maintien de l'ordre" des events dans l'aggégat Game
-  - Refacto
-    -  rollDice -> "extract class" Dice ?
-    -  isPair -> "extract class" Roll ?
-    -  isAnsweringCorrectly -> "extract class" AnswerVerifier ?
-  - Tests
-    - jouer avec / proposer un exemplar de PBT ?
-    - property-based testing pour vérifier qu'il n'y a pas de joueurs avec un même nom
+1. (optional) approve
+2. deploy
+3. test fonctionnels
+4. validation PO
+5. tests exploratoires
+6. autres tests manuels
+7. tests NFR: perfs, résilience, scalabilité etc.
+8. patterns de déploiement sûrs (B/G, canary, etc.)

@@ -1,23 +1,18 @@
 package com.adaptionsoft.games.trivia.infra;
 
 import com.adaptionsoft.games.trivia.domain.Game;
+import com.adaptionsoft.games.trivia.domain.GameId;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
-import com.adaptionsoft.games.trivia.domain.Player;
-import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
 @RequiredArgsConstructor
 public class GameRepositoryInMemory implements GameRepository {
-    private final List<Game> games = new ArrayList<>();
-    private final IdGenerator idGenerator;
+    private final Set<Game> games = new HashSet<>();
 
     @Override
     public void save(Game game) {
-        if(game.getId() == null) {
-            game.setId(idGenerator.nextId());
-        }
         games.add(game);
     }
 
@@ -32,9 +27,15 @@ public class GameRepositoryInMemory implements GameRepository {
     }
 
     @Override
-    public Optional<Game> findById(int gameId) {
+    public Optional<Game> findById(GameId gameId) {
         return games.stream()
                 .filter(game -> Objects.equals(gameId, game.getId()))
                 .findAny();
+    }
+
+    @Override
+    public void deleteGameById(GameId gameId) {
+        this.findById(gameId).ifPresent(games::remove);
+        System.out.println();
     }
 }

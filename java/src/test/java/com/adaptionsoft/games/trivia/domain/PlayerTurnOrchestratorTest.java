@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 
 import java.util.Random;
 
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -25,8 +26,6 @@ class PlayerTurnOrchestratorTest {
     @Test
     void should_ask_only_1_question__when_correct_answer() {
         // GIVEN
-        String playerName = "player name";
-        Player player = new Player(playerName);
         Questions questions = Mockito.spy(TestFixtures.questions());
         PlayerTurnOrchestrator systemUnderTest = spy(
                 new PlayerTurnOrchestrator(questions,
@@ -36,7 +35,7 @@ class PlayerTurnOrchestratorTest {
         doReturn(true).when(systemUnderTest).isAnsweringCorrectly();
 
         // WHEN
-        systemUnderTest.performTurn(player);
+        systemUnderTest.performTurn(player1());
 
         // THEN
         verify(questions).drawQuestion(anyInt());
@@ -45,8 +44,6 @@ class PlayerTurnOrchestratorTest {
     @Test
     void should_ask_2_questions__when_incorrect_answers() {
         // GIVEN
-        String playerName = "player name";
-        Player player = new Player(playerName);
         Questions questions = Mockito.spy(TestFixtures.questions());
         PlayerTurnOrchestrator systemUnderTest = spy(
                 new PlayerTurnOrchestrator(questions,
@@ -56,7 +53,7 @@ class PlayerTurnOrchestratorTest {
         doReturn(false).when(systemUnderTest).isAnsweringCorrectly();
 
         // WHEN
-        systemUnderTest.performTurn(player);
+        systemUnderTest.performTurn(player1());
 
         // THEN
         verify(questions, times(2)).drawQuestion(anyInt());

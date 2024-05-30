@@ -1,0 +1,1 @@
+// TODO rédiger ADR justifiant le choix de la solution d'authentification: On part sur Firebase.

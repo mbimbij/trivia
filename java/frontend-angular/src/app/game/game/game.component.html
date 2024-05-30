@@ -1,0 +1,24 @@
+<ng-container *ngIf="(game$ | async) as game">
+  <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
+
+  <h2 *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
+  <ng-template #you_won>You won, Congratulations !</ng-template>
+  <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
+
+  <button (click)="router.navigate(['games'])">go back</button>
+  <br>
+  <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && isCurrentPlayer()">- <b>Your Turn !</b></span></p>
+  <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
+  <p>Current Player - "{{ game.currentPlayer.name }}"</p>
+
+  <button type="button" (click)="playTurn()"
+          [disabled]="!canPlayTurn()">{{ isCurrentPlayer() ? 'play' : 'play (not your turn)' }}
+  </button>
+</ng-container>
+
+<ng-container *ngIf="(gameLogs$ | async) as logs">
+  <div id="messagesContainer" style="overflow-y: scroll; height:100px;">
+    <!--    TODO introduire un style différent pour distinguer les logs des différents joueurs-->
+    <div *ngFor="let log of logs">{{ log.value }}</div>
+  </div>
+</ng-container>

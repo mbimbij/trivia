@@ -2,7 +2,6 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
-import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.*;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -10,23 +9,14 @@ import static lombok.AccessLevel.PUBLIC;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Player extends Entity {
-    // TODO distinguer strictement "Player" et "User" -> player.id != user.id
+public class Player extends Entity<UserId> {
     @Getter(PUBLIC)
     private final String name;
-
-    public Player(String name) {
-        this.name = name;
-    }
-
-    public Player(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     @With // for testing purposes only
     @Getter(PUBLIC)
     private int coinCount;
+
     @Getter(PUBLIC)
     @Setter
     private int location;
@@ -37,6 +27,14 @@ public class Player extends Entity {
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
     private int consecutiveIncorrectAnswersCount;
+    @Getter
+    @Setter
+    private GameId gameId;
+
+    public Player(UserId playerId, String name) {
+        super(playerId);
+        this.name = name;
+    }
 
     void incrementTurn() {
         turn++;

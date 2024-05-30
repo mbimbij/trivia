@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.trivia.microarchitecture;
 
+import com.adaptionsoft.games.trivia.domain.GameId;
 import com.adaptionsoft.games.trivia.domain.event.Event;
 import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
 import lombok.Getter;
@@ -23,7 +24,7 @@ class EventPublisherTest {
 
     public static class MockEvent extends Event{
         public MockEvent() {
-            super("mock event");
+            super(new GameId(0), "mock event");
         }
     }
 

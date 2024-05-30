@@ -1,14 +1,12 @@
 package com.adaptionsoft.games.trivia.domain;
 
-import com.adaptionsoft.games.trivia.domain.event.Event;
-import com.adaptionsoft.games.trivia.domain.event.GameEndedEvent;
-import com.adaptionsoft.games.trivia.domain.event.GameStartedEvent;
-import com.adaptionsoft.games.trivia.domain.event.PlayerWonEvent;
+import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,46 +15,39 @@ import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 
-@EqualsAndHashCode(callSuper = true)
-public class Game extends Entity {
-
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+public class Game extends Entity<GameId> {
     @Getter
     private final String name;
     private final EventPublisher eventPublisher;
     private final Players players;
     private boolean isGameInProgress = true;
-    int turn = 1;
+    @Getter
+    int turn = 0;
     private Player currentPlayer;
-    private PlayerTurnOrchestrator playerTurnOrchestrator;
+    @Getter
+    private Player winner;
+    private final PlayerTurnOrchestrator playerTurnOrchestrator;
     @Getter
     @Setter // for testing purposes only
     private State state;
 
-
-    // do not call directly, unless in a testing context
-    public Game(String name,
+    public Game(GameId gameId,
+                String name,
+                // TODO R-1 retirer cet attribut, les joueurs devraient être rajoutés à une partie, pas à un artefact séparé
                 EventPublisher eventPublisher,
                 Players players,
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
                 State state) {
+        super(gameId);
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
         this.playerTurnOrchestrator = playerTurnOrchestrator;
         this.currentPlayer = currentPlayer;
         this.state = state;
-    }
-
-    public Game(Integer id,
-                String name,
-                EventPublisher eventPublisher,
-                Players players,
-                PlayerTurnOrchestrator playerTurnOrchestrator,
-                Player currentPlayer,
-                State state) {
-        this(name, eventPublisher, players, playerTurnOrchestrator, currentPlayer, state);
-        this.id = id;
+        setGameIdToPlayers();
     }
 
     public Player getCreator() {
@@ -64,6 +55,7 @@ public class Game extends Entity {
     }
 
     public void play() {
+        startBy(currentPlayer);
         do {
             playTurnBy(currentPlayer);
         } while (isGameInProgress);
@@ -78,11 +70,19 @@ public class Game extends Entity {
         endGameIfCurrentPlayerWon();
         publishDomainEvents();
         endCurrentPlayerTurn();
+        displayNextPlayerIfGameNotEnded();
+        publishDomainEvents();
     }
 
     private void validateGameNotEnded(String action) {
-        if(state.equals(ENDED)){
+        if (state.equals(ENDED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), action);
+        }
+    }
+
+    private void displayNextPlayerIfGameNotEnded() {
+        if(state != ENDED){
+            raise(new PlayerTurnStartedEvent(currentPlayer));
         }
     }
 
@@ -90,6 +90,7 @@ public class Game extends Entity {
         if (currentPlayer.isWinning()) {
             isGameInProgress = false;
             state = ENDED;
+            winner = currentPlayer;
             raise(new PlayerWonEvent(id, currentPlayer));
             raise(new GameEndedEvent(id, currentPlayer.getId()));
         }
@@ -103,7 +104,10 @@ public class Game extends Entity {
 
     private void publishDomainEvents() {
         List<Event> aggregatedEvents = getAndClearUncommittedEvents();
-        aggregatedEvents.addAll(currentPlayer.getAndClearUncommittedEvents());
+        List<Event> currentPlayerEvents = Optional.ofNullable(currentPlayer)
+                .map(EventRaiser::getAndClearUncommittedEvents)
+                .orElse(Collections.emptyList());
+        aggregatedEvents.addAll(currentPlayerEvents);
         aggregatedEvents.addAll(playerTurnOrchestrator.getAndClearUncommittedEvents());
         aggregatedEvents.sort(Comparator.comparingInt(Event::getOrderNumber));
         eventPublisher.publish(aggregatedEvents);
@@ -113,6 +117,7 @@ public class Game extends Entity {
         if (!state.equals(CREATED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
         }
+        player.setGameId(id);
         players.addAfterCreationTime(player);
     }
 
@@ -125,12 +130,14 @@ public class Game extends Entity {
             throw StartException.invalidNumberOfPlayers(id, players.count());
         }
         state = STARTED;
-        // TODO régler publication des events uncommitted
+        turn = 1;
+        // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
+        raise(new PlayerTurnStartedEvent(currentPlayer));
         publishDomainEvents();
     }
 
-    public Optional<Player> findPlayerById(Integer playerId) {
+    public Optional<Player> findPlayerById(UserId playerId) {
         return players.getIndividualPlayers()
                 .stream()
                 .filter(player -> Objects.equals(player.getId(), playerId))
@@ -147,6 +154,10 @@ public class Game extends Entity {
 
     public int getPlayersCount() {
         return players.count();
+    }
+
+    public void setGameIdToPlayers() {
+        players.setGameId(getId());
     }
 
     public enum State {

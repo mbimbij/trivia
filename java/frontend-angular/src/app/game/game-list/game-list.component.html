@@ -1,0 +1,50 @@
+<app-navbar></app-navbar>
+<ng-container *ngIf="(user$ | async) as user">
+  <label for="playerName">Player Name</label>
+  <input
+    type="text"
+    id="playerName" required minlength="1" maxlength="100" size="20"
+    #newUserName
+    [value]="user.name"
+    (keyup.enter)="updateName(newUserName.value)"
+  />
+  <button (click)="updateName(newUserName.value)">ok</button>
+</ng-container>
+<br>
+<app-create-game></app-create-game>
+
+<ng-container *ngIf="(this.games$ | async) as games">
+  <table>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>creator</th>
+      <th>players</th>
+      <th>status</th>
+      <th>start</th>
+      <th>join</th>
+      <th>go to</th>
+      <th>delete</th>
+    </tr>
+    <tr class="game" *ngFor="let game of games" [className]="game.state">
+      <td class="game-id">{{ game.id }}</td>
+      <td class="item-name"><a [routerLink]="['/games',game.id,'details']">{{ game.name }}</a>
+      </td>
+      <td class="item-name">{{ game.creator.name }}</td>
+      <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
+      <td class="item-status">{{ game.state }}</td>
+      <td class="game-start">
+        <app-start-game-button [game]="game" />
+      </td>
+      <td class="join">
+        <app-join-game-button [game]="game"/>
+      </td>
+      <td class="goto">
+        <app-goto-game-button [game]="game"/>
+      </td>
+      <td class="delete">
+        <app-delete-game-button [gameId]="game.id" [game]="game"/>
+      </td>
+    </tr>
+  </table>
+</ng-container>

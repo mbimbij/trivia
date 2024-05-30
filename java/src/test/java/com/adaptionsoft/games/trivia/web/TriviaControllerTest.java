@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,13 +35,13 @@ class TriviaControllerTest {
 
     @Test
     void given_game_not_found__should_thrown_exception() {
-        Mockito.doReturn(Optional.empty()).when(gameRepository).findById(anyInt());
+        Mockito.doReturn(Optional.empty()).when(gameRepository).findById(any());
         assertSoftly(softAssertions -> {
-            softAssertions.assertThatThrownBy(() -> controller.addPlayerToGame(-1, Mockito.mock(UserDto.class)))
+            softAssertions.assertThatThrownBy(() -> controller.joinGame(-1, Mockito.mock(PlayerDto.class)))
                     .isInstanceOf(GameNotFoundException.class);
-            softAssertions.assertThatThrownBy(() -> controller.startGame(-1, -1))
+            softAssertions.assertThatThrownBy(() -> controller.startGame(-1, "notExistingPlayer"))
                     .isInstanceOf(GameNotFoundException.class);
-            softAssertions.assertThatThrownBy(() -> controller.playTurn(-1, -1))
+            softAssertions.assertThatThrownBy(() -> controller.playTurn(-1, "notExistingPlayer"))
                     .isInstanceOf(GameNotFoundException.class);
         });
     }
@@ -48,12 +49,12 @@ class TriviaControllerTest {
     @Test
     void given_player_not_found_in_game__should_thrown_exception() {
         Game game = Mockito.mock(Game.class);
-        Mockito.doReturn(Optional.empty()).when(game).findPlayerById(anyInt());
-        Mockito.doReturn(Optional.of(game)).when(gameRepository).findById(anyInt());
+        Mockito.doReturn(Optional.empty()).when(game).findPlayerById(any());
+        Mockito.doReturn(Optional.of(game)).when(gameRepository).findById(any());
         assertSoftly(softAssertions -> {
-            softAssertions.assertThatThrownBy(() -> controller.startGame(-1, -1))
+            softAssertions.assertThatThrownBy(() -> controller.startGame(-1, "notExistingPlayer"))
                     .isInstanceOf(PlayerNotFoundInGameException.class);
-            softAssertions.assertThatThrownBy(() -> controller.playTurn(-1, -1))
+            softAssertions.assertThatThrownBy(() -> controller.playTurn(-1, "notExistingPlayer"))
                     .isInstanceOf(PlayerNotFoundInGameException.class);
         });
     }
