@@ -1,62 +1,65 @@
 import {TestBed} from '@angular/core/testing';
 
 import {GameService} from './game.service';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {mockGame1, mockGame2} from "../common/test-helpers";
-import {BehaviorSubject, Observable, of, throttleTime} from "rxjs";
-import {TestScheduler} from 'rxjs/testing';
+import {Observable, of} from "rxjs";
 import {Game} from "./game";
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";
-import {HttpEvent} from "@angular/common/http";
 
 describe('GameService', () => {
-  let service: GameService;
-  let triviaControllerService: TriviaControllerService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
-    triviaControllerService = TestBed.inject(TriviaControllerService);
-    service = TestBed.inject(GameService);
-  });
+  let defaultGameListReturnValues = [mockGame1, mockGame2].map(value => value.toDto())
+  let defaultSingleGameReturnValue = mockGame1.toDto()
 
   it('should be created', () => {
+    let service = createService()
     expect(service).toBeTruthy();
   });
 
-  const testScheduler = new TestScheduler((actual, expected) => {
-    // asserting the two objects are equal - required
-    // for TestScheduler assertions to work via your test framework
-    // e.g. using chai.
-    expect(actual).toEqual(expected);
-  });
-
-  it('should emit the expected values', () => {
-    testScheduler.run((helpers) => {
-      const {cold, time, expectObservable, expectSubscriptions} = helpers;
-      // const e1 = cold(' -a--b--c---|');
-      const e1 = cold(' -a-b------cd----|');
-      const e1subs = '  ^---------------!';
-      // const t = time('  ---|       '); // t = 3
-      const t = 3; // t = 3
-      //             '   ---|     ---|---|---|---|   ')
-      const expected = '-a--b-----c--d--|';
-
-      expectObservable(e1.pipe(throttleTime(t, testScheduler, {leading: true, trailing: true}))).toBe(expected);
-      expectSubscriptions(e1.subscriptions).toBe(e1subs);
-    });
-  });
-
   it('should return games when calling getGames()', () => {
-    let observable = of([mockGame1, mockGame2].map(value => value.toDto()));
-    spyOn(triviaControllerService, `listGames`).and.returnValue(
-      observable as Observable<any>
-    );
+    // GIVEN
+    let service = createService()
 
     // WHEN
     service.getGames().subscribe(games => {
       expect(games).toEqual([mockGame1, mockGame2])
     })
   });
+
+  it('should return empty array when calling getGames() and no games returned', () => {
+    // GIVEN
+    let service = createService([])
+
+    // WHEN
+    service.getGames().subscribe(games => {
+      expect(games).toEqual([])
+    })
+  });
+
+  it('should return single game', () => {
+    // GIVEN
+    let service = createService();
+    let emittedValues: Game[] = [];
+
+    // WHEN
+    service.getGame(1).subscribe(game => {
+      emittedValues.push(game)
+    })
+
+    // THEN
+    expect(emittedValues).toEqual([mockGame1])
+  });
+
+  function createService(gameListReturnValues: GameResponseDto[] = defaultGameListReturnValues,
+                         singleGameReturnValue: GameResponseDto = defaultSingleGameReturnValue
+  ) {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    });
+    let triviaControllerService: TriviaControllerService = TestBed.inject(TriviaControllerService);
+    spyOn(triviaControllerService, `listGames`).and.returnValue(of(gameListReturnValues) as Observable<any>);
+    spyOn(triviaControllerService, `getGameById`).and.returnValue(of(singleGameReturnValue) as Observable<any>);
+
+    return TestBed.inject(GameService);
+  }
 });

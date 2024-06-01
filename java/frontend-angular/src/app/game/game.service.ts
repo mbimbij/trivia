@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "../services/game-service-abstract";
-import {BehaviorSubject, map, Observable, of, Subject, tap} from "rxjs";
+import {BehaviorSubject, map, Observable, of, ReplaySubject, Subject, tap} from "rxjs";
 import {GameLog, GameResponseDto, TriviaControllerService} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
@@ -14,8 +14,8 @@ import {Game, NoGame} from "./game";
 export class GameService extends GameServiceAbstract {
   private gamesSubject = new BehaviorSubject<Game[]>([])
   private isGameListInitialized: boolean = false
-  private gamesSubjectsMap = new Map<number, Subject<Game>> ()
-  private isUpdateHandlerRegistered = new Set<number> ()
+  private gamesSubjectsMap = new Map<number, ReplaySubject<Game>>()
+  private isUpdateHandlerRegistered = new Set<number>()
   private gameLogsSubjects = new BehaviorSubject<GameLog[]>([])
   private gameLogs$ = this.gameLogsSubjects.asObservable()
 
@@ -25,7 +25,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGames() {
-    if(!this.isGameListInitialized){
+    if (!this.isGameListInitialized) {
       this.initGamesList();
       this.isGameListInitialized = true
     }
@@ -48,16 +48,13 @@ export class GameService extends GameServiceAbstract {
     this.registerGameDeletedHandler();
   }
 
-  private addSingleGameSubject(game: Game , gameId: number = game.id) {
-    if (!this.gamesSubjectsMap.has(gameId)) {
-      this.gamesSubjectsMap.set(gameId, new BehaviorSubject<Game>(game));
-    }else{
-      this.gamesSubjectsMap.get(gameId)!.next(game);
-    }
+  private addSingleGameSubject(game: Game, gameId: number = game.id) {
+    this.createSubjectForSingleGame(gameId);
+    this.gamesSubjectsMap.get(gameId)!.next(game);
   }
 
-  initSingleGame(gameId: number){
-    this.gamesSubjectsMap.set(gameId, new BehaviorSubject(new NoGame(gameId)))
+  initSingleGame(gameId: number) {
+    this.createSubjectForSingleGame(gameId);
     let gameObservable = this.openApiService.getGameById(gameId)
       .pipe(map(Game.fromDto));
     gameObservable
@@ -66,6 +63,12 @@ export class GameService extends GameServiceAbstract {
           this.registerGameUpdatedHandler(game);
         }
       );
+  }
+
+  private createSubjectForSingleGame(gameId: number) {
+    if (!this.gamesSubjectsMap.has(gameId)) {
+      this.gamesSubjectsMap.set(gameId, new ReplaySubject<Game>(1));
+    }
   }
 
   initGameLogs(gameId: number) {
@@ -98,7 +101,7 @@ export class GameService extends GameServiceAbstract {
     //       this.registerGameUpdatedHandler(game);
     //     }
     //   );
-    if(!this.gamesSubjectsMap.has(gameId)){
+    if (!this.gamesSubjectsMap.has(gameId)) {
       this.initSingleGame(gameId)
     }
     return this.gamesSubjectsMap.get(gameId)!.asObservable();
@@ -142,7 +145,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   private registerGameUpdatedHandler(game: Game) {
-    if(!this.isUpdateHandlerRegistered.has(game.id)){
+    if (!this.isUpdateHandlerRegistered.has(game.id)) {
       this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
         let updatedGame = JSON.parse(message.body);
         this.addSingleGameSubject(updatedGame);
@@ -169,7 +172,8 @@ export class GameService extends GameServiceAbstract {
     const index = replacement.findIndex(
       g => g.id === game.id);
     if (index !== -1) {
-      replacement.splice(index, 1, game);
+      // replacement.splice(index, 1, game);
+      replacement[index] = game
     }
     this.gamesSubject.next(replacement)
   }

@@ -19,7 +19,6 @@ import {Game} from "../game";
   styleUrl: './delete-game-button.component.css'
 })
 export class DeleteGameButtonComponent {
-  @Input() gameId!: number;
   @Input() game!: Game;
   private user!: User;
   private user$: Observable<User>;
@@ -36,6 +35,6 @@ export class DeleteGameButtonComponent {
   }
 
   protected deleteGame() {
-    this.gameService.delete(this.gameId).subscribe(() => {});
+    this.gameService.delete(this.game.id).subscribe(() => {});
   }
 }
