@@ -1,6 +1,5 @@
 import {User} from "../user/user";
-import {BehaviorSubject, Observable, of} from "rxjs";
-import {GameResponseDto} from "../openapi-generated";
+import {Observable, of} from "rxjs";
 import {Game} from "../game/game";
 
 export const mockGame1: Game = Game.fromDto({
@@ -36,3 +35,4 @@ export const mockUser1: User = {
 export class MockActivatedRoute {
   params: Observable<any> = of({id: '123'}); // Mock route params
 }
+

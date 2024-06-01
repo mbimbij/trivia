@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RouterLink} from "@angular/router";
@@ -33,7 +33,8 @@ import {Game} from "../game";
     DeleteGameButtonComponent,
     FirebaseuiAngularLibraryComponent,
     NavbarComponent,
-    AsyncPipe
+    AsyncPipe,
+    NgClass
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css',

@@ -43,11 +43,12 @@ export class GameService extends GameServiceAbstract {
           this.registerGameUpdatedHandler(game);
         }
       })
+    // TODO faire en sortes que l'enregistrement de handlers soit facultatif
     this.registerGameCreatedHandler();
     this.registerGameDeletedHandler();
   }
 
-  private addSingleGameSubject(game: Game , gameId: number = game!.id) {
+  private addSingleGameSubject(game: Game , gameId: number = game.id) {
     if (!this.gamesSubjectsMap.has(gameId)) {
       this.gamesSubjectsMap.set(gameId, new BehaviorSubject<Game>(game));
     }else{

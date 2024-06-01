@@ -26,7 +26,7 @@
       <th>go to</th>
       <th>delete</th>
     </tr>
-    <tr class="game" *ngFor="let game of games" [className]="game.state">
+    <tr [ngClass]="'game-row'" *ngFor="let game of games" [className]="game.state">
       <td class="game-id">{{ game.id }}</td>
       <td class="item-name"><a [routerLink]="['/games',game.id,'details']">{{ game.name }}</a>
       </td>

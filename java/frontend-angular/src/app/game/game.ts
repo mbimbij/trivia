@@ -43,7 +43,7 @@ export class Game {
       id: this.id,
       name: this.name,
       state: this.state,
-      turn: 0,
+      turn: this.turn,
       creator: playerToPlayerDto(this.creator),
       currentPlayer: playerToPlayerDto(this.currentPlayer),
       players: this.players.map(player => playerToPlayerDto(player))
