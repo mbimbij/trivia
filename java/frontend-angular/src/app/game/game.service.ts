@@ -94,13 +94,6 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGame(gameId: number): Observable<Game> {
-    // this.openApiService.getGameById(gameId)
-    //   .pipe(map(Game.fromDto))
-    //   .subscribe(game => {
-    //       this.gameSubject.next(game);
-    //       this.registerGameUpdatedHandler(game);
-    //     }
-    //   );
     if (!this.gamesSubjectsMap.has(gameId)) {
       this.initSingleGame(gameId)
     }
@@ -134,7 +127,7 @@ export class GameService extends GameServiceAbstract {
     return this.gameLogs$;
   }
 
-  private registerGameCreatedHandler() {
+  registerGameCreatedHandler() {
     this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
       let newGameDto = JSON.parse(message.body) as GameResponseDto;
       let newGame = Game.fromDto(newGameDto);
@@ -144,7 +137,7 @@ export class GameService extends GameServiceAbstract {
     });
   }
 
-  private registerGameUpdatedHandler(game: Game) {
+  registerGameUpdatedHandler(game: Game) {
     if (!this.isUpdateHandlerRegistered.has(game.id)) {
       this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
         let updatedGame = JSON.parse(message.body);
@@ -155,7 +148,7 @@ export class GameService extends GameServiceAbstract {
     }
   }
 
-  private registerGameDeletedHandler() {
+  registerGameDeletedHandler() {
     this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
       let deletedGameId: number = Number.parseInt(message.body);
       this.deleteGameFromSubjects(deletedGameId);

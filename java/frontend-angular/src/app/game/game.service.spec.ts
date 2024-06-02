@@ -21,9 +21,16 @@ describe('GameService', () => {
     let service = createService()
 
     // WHEN
-    service.getGames().subscribe(games => {
+    let gamesObservable = service.getGames();
+
+    // THEN
+    gamesObservable.subscribe(games => {
       expect(games).toEqual([mockGame1, mockGame2])
     })
+
+    expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(1)
+    expect(service.registerGameDeletedHandler).toHaveBeenCalledTimes(1)
+    expect(service.registerGameUpdatedHandler).toHaveBeenCalledTimes(2)
   });
 
   it('should return empty array when calling getGames() and no games returned', () => {
@@ -31,9 +38,16 @@ describe('GameService', () => {
     let service = createService([])
 
     // WHEN
-    service.getGames().subscribe(games => {
+    let gamesObservable = service.getGames();
+
+    // THEN
+    gamesObservable.subscribe(games => {
       expect(games).toEqual([])
     })
+
+    expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(1)
+    expect(service.registerGameDeletedHandler).toHaveBeenCalledTimes(1)
+    expect(service.registerGameUpdatedHandler).toHaveBeenCalledTimes(0)
   });
 
   it('should return single game', () => {
@@ -60,6 +74,11 @@ describe('GameService', () => {
     spyOn(triviaControllerService, `listGames`).and.returnValue(of(gameListReturnValues) as Observable<any>);
     spyOn(triviaControllerService, `getGameById`).and.returnValue(of(singleGameReturnValue) as Observable<any>);
 
-    return TestBed.inject(GameService);
+    let service = TestBed.inject(GameService);
+    spyOn(service, `registerGameCreatedHandler`)
+    spyOn(service, `registerGameDeletedHandler`)
+    spyOn(service, `registerGameUpdatedHandler`)
+
+    return service;
   }
 });
