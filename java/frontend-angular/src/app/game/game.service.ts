@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "../services/game-service-abstract";
-import {BehaviorSubject, map, Observable, of, ReplaySubject, Subject, tap} from "rxjs";
+import {BehaviorSubject, map, Observable, of, ReplaySubject} from "rxjs";
 import {GameLog, GameResponseDto, TriviaControllerService} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
 import {userToUserDto} from "../common/helpers";
-import {Game, NoGame} from "./game";
+import {Game} from "./game";
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +43,7 @@ export class GameService extends GameServiceAbstract {
           this.registerGameUpdatedHandler(game);
         }
       })
-    // TODO faire en sortes que l'enregistrement de handlers soit facultatif
+    // TODO get Games => enregistrement automatique des handlers, à revoir
     this.registerGameCreatedHandler();
     this.registerGameDeletedHandler();
   }
@@ -138,7 +138,7 @@ export class GameService extends GameServiceAbstract {
     this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
       let newGameDto = JSON.parse(message.body) as GameResponseDto;
       let newGame = Game.fromDto(newGameDto);
-      this.addGameToSubjectList(newGame);
+      this.addToGameListSubject(newGame);
       this.addSingleGameSubject(newGame, newGame.id)
       this.registerGameUpdatedHandler(newGame)
     });
@@ -163,7 +163,7 @@ export class GameService extends GameServiceAbstract {
     });
   }
 
-  private addGameToSubjectList(game: Game) {
+  private addToGameListSubject(game: Game) {
     this.gamesSubject.next([...this.gamesSubject.value, game])
   }
 
