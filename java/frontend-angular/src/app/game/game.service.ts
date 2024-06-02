@@ -172,7 +172,6 @@ export class GameService extends GameServiceAbstract {
     const index = replacement.findIndex(
       g => g.id === game.id);
     if (index !== -1) {
-      // replacement.splice(index, 1, game);
       replacement[index] = game
     }
     this.gamesSubject.next(replacement)
