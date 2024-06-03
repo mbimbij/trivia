@@ -60,8 +60,13 @@ describe('GameService', () => {
       emittedValues.push(game)
     })
 
-    // THEN
+    // THEN game is returned
     expect(emittedValues).toEqual([mockGame1])
+
+    // AND handler registration is performed as expected
+    expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(0)
+    expect(service.registerGameDeletedHandler).toHaveBeenCalledTimes(0)
+    expect(service.registerGameUpdatedHandler).toHaveBeenCalledTimes(1)
   });
 
   function createService(gameListReturnValues: GameResponseDto[] = defaultGameListReturnValues,

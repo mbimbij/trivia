@@ -10,7 +10,7 @@ export const loginActivateGuard: CanActivateFn = (route, state) => {
     .pipe(
       map(isLoggedIn => {
         if (!isLoggedIn) {
-          return router.createUrlTree(['waiting-for-email-verification']);
+          return router.createUrlTree(['authentication']);
         }
         return true;
       })

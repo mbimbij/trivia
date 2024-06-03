@@ -131,29 +131,42 @@ export class GameService extends GameServiceAbstract {
     this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
       let newGameDto = JSON.parse(message.body) as GameResponseDto;
       let newGame = Game.fromDto(newGameDto);
-      this.addToGameListSubject(newGame);
-      this.addSingleGameSubject(newGame, newGame.id)
-      this.registerGameUpdatedHandler(newGame)
+      this.handleGameCreated(newGame);
     });
+  }
+
+  private handleGameCreated(newGame: Game) {
+    this.addToGameListSubject(newGame);
+    this.addSingleGameSubject(newGame, newGame.id)
+    this.registerGameUpdatedHandler(newGame)
   }
 
   registerGameUpdatedHandler(game: Game) {
     if (!this.isUpdateHandlerRegistered.has(game.id)) {
-      this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
-        let updatedGame = JSON.parse(message.body);
-        this.addSingleGameSubject(updatedGame);
-        this.updateGameFromSubjectList(updatedGame)
-      });
       this.isUpdateHandlerRegistered.add(game.id)
+      this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
+        let updatedGameDto = JSON.parse(message.body) as GameResponseDto;
+        let updatedGame = Game.fromDto(updatedGameDto);
+        this.handleGameUpdated(updatedGame);
+      });
     }
+  }
+
+  private handleGameUpdated(updatedGame: Game) {
+    this.addSingleGameSubject(updatedGame);
+    this.updateGameFromSubjectList(updatedGame)
   }
 
   registerGameDeletedHandler() {
     this.rxStompService.watch(`/topic/games/deleted`).subscribe((message: IMessage) => {
       let deletedGameId: number = Number.parseInt(message.body);
-      this.deleteGameFromSubjects(deletedGameId);
-      this.gamesSubjectsMap.delete(deletedGameId);
+      this.handleGameDeleted(deletedGameId);
     });
+  }
+
+  private handleGameDeleted(deletedGameId: number) {
+    this.deleteGameFromSubjects(deletedGameId);
+    this.gamesSubjectsMap.delete(deletedGameId);
   }
 
   private addToGameListSubject(game: Game) {
