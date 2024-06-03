@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
@@ -21,7 +21,7 @@ import {combineLatest, Subscription} from "rxjs";
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartGameButtonComponent {
+export class StartGameButtonComponent implements OnChanges {
 
   @Input() game!: Game
   protected user!: User;
@@ -30,13 +30,13 @@ export class StartGameButtonComponent {
 
   constructor(private service: GameServiceAbstract,
               private userService: UserServiceAbstract,
-              private gameService: GameServiceAbstract) {
+              private gameService: GameServiceAbstract)  {
     this.id = generateRandomString(4);
     console.log(`constructor ${this.constructor.name} - ${this.id} called`)
   }
 
-  private userGameSubscription!: Subscription;
-  private startActionSubscription: Subscription|undefined;
+  private userGameSubscription: Subscription | undefined;
+  private startActionSubscription: Subscription | undefined;
 
   ngOnInit() {
     console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
@@ -45,28 +45,22 @@ export class StartGameButtonComponent {
 
     this.userGameSubscription = combineLatest([user$, game$])
       .subscribe(([user, game]) => {
-        console.log(`userGameSubscription ${this.constructor.name} - ${this.id} called game ${game.id} updated`)
-        console.log(game)
         this.user = user;
         this.game = game;
         this.canStartGameAttr = this.canStartGame();
       });
-
-    // user$.subscribe(user => {
-    //   // console.log(`coucou user updated`)
-    //   this.user = user;
-    //   this.canStartGameAttr = this.canStartGame();
-    // })
-    //
-    // game$.subscribe(game => {
-    //   console.log(`coucou2 game ${game.id} - ${this.id} updated`)
-    //   // console.log(game)
-    // })
   }
 
-  ngOnDestroy(){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['game']) {
+      console.log(`ngOnChanges ${this.constructor.name} - ${this.id} called - `)
+      console.log(changes['game'].currentValue);
+    }
+  }
+
+  ngOnDestroy() {
     console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
-    this.userGameSubscription.unsubscribe()
+    this.userGameSubscription?.unsubscribe()
     this.startActionSubscription?.unsubscribe()
   }
 
@@ -78,8 +72,6 @@ export class StartGameButtonComponent {
   }
 
   private canStartGame(): boolean {
-    // TODO empêcher la fonction d'être appelée 36 fois
-    // console.log(`canStartGame called - ${this.id}`)
     return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
   }
 

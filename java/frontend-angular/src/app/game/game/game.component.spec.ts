@@ -21,13 +21,6 @@ describe('GameComponent', () => {
     })
     .compileComponents();
 
-    // TODO delete state, as the backend is called
-    Object.defineProperty(window, 'history', {
-      value: {
-        state: mockGame1
-      }
-    })
-
     fixture = TestBed.createComponent(GameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -11,7 +11,6 @@ import {Game} from "./game";
 })
 export class GameServiceMock extends GameServiceAbstract  {
   override initGamesList(): void {
-
   }
   override create(name: string, user: User): Observable<Game> {
     return of(mockGame1);

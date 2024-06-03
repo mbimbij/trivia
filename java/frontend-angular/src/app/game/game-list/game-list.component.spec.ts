@@ -7,17 +7,16 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {provideRouter} from "@angular/router";
-import {FirebaseUserService} from "../../adapters/user/firebase-user.service";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {
-  AuthenticationServiceAbstract,
-  AuthenticationServiceMock
-} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service.abstract";
+import {DebugElement} from "@angular/core";
 
 describe('GameListComponent', () => {
   let component: GameListComponent;
   let fixture: ComponentFixture<GameListComponent>;
+  let htmlElement: HTMLElement;
+  let debugElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -33,10 +32,17 @@ describe('GameListComponent', () => {
 
     fixture = TestBed.createComponent(GameListComponent);
     component = fixture.componentInstance;
+    htmlElement = fixture.nativeElement;
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display games list', () => {
+    let htmlGameRows = htmlElement.querySelectorAll('.game-row');
+    expect(htmlGameRows).toHaveSize(2);
   });
 });
