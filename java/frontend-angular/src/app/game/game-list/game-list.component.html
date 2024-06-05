@@ -27,13 +27,13 @@
       <th>delete</th>
     </tr>
     <tr [ngClass]="'game-row'" *ngFor="let game of games; trackBy: trackByFn" [className]="game.state">
-      <td class="game-id">{{ game.id }}</td>
-      <td class="item-name"><a [routerLink]="['/games',game.id,'details']">{{ game.name }}</a>
+      <td class="id">{{ game.id }}</td>
+      <td class="name"><a [routerLink]="['/games',game.id,'details']">{{ game.name }}</a>
       </td>
-      <td class="item-name">{{ game.creator.name }}</td>
+      <td class="creator-name">{{ game.creator.name }}</td>
       <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
-      <td class="item-status">{{ game.state }}</td>
-      <td class="game-start">
+      <td class="state">{{ game.state }}</td>
+      <td class="start">
         <app-start-game-button [game]="game" />
       </td>
       <td class="join">
