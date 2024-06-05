@@ -16,7 +16,7 @@ public class GameRunner {
         com.adaptionsoft.games.trivia.microarchitecture.EventPublisher eventPublisher = new ObserverBasedEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         eventPublisher.register(new GameLogsPersister(new GameLogsRepositoryInMemory()));
-        QuestionsLoader questionsLoader = new QuestionsLoader();
+        QuestionsLoader questionsLoader = new QuestionsLoader("src/main/resources/questions");
         GameFactory gameFactory = new GameFactory(new IdGenerator(), eventPublisher, questionsLoader);
         final String[] strings = new String[]{"Chet", "Pat", "Sue", "Joe", "Vlad"};
         final String string = strings[0];

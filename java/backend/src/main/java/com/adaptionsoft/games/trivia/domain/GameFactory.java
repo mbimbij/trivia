@@ -17,6 +17,7 @@ public class GameFactory {
     private final IdGenerator idGenerator;
     private final EventPublisher eventPublisher;
     private final QuestionsLoader questionsLoader;
+    private String questionsPath;
 
 
     public Game create(String gameName, String creatorName, String... otherPlayersNames) {
@@ -68,7 +69,7 @@ public class GameFactory {
 
     private Questions buildQuestions() {
         String questionsPath = "src/main/resources/questions";
-        Map<Questions.Category, Queue<String>> questionsByCategory = questionsLoader.loadQuestionsFromDirectory(questionsPath);
+        Map<Questions.Category, Queue<String>> questionsByCategory = questionsLoader.loadQuestionsFromDirectory();
         return new Questions(questionsByCategory);
     }
 }

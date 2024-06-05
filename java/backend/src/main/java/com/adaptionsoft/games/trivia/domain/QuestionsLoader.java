@@ -12,9 +12,16 @@ import java.util.stream.Stream;
 
 public class QuestionsLoader {
 
+
+    private String directoryPathString;
+
+    public QuestionsLoader(String directoryPathString) {
+        this.directoryPathString = directoryPathString;
+    }
+
     @SneakyThrows
-    public Map<Questions.Category, Queue<String>> loadQuestionsFromDirectory(String directoryPathString) {
-        Path directoryPath = Paths.get(directoryPathString);
+    public Map<Questions.Category, Queue<String>> loadQuestionsFromDirectory() {
+        Path directoryPath = Paths.get(this.directoryPathString);
         try (Stream<Path> files = Files.list(directoryPath)) {
             return files.map(this::loadQuestionsFromFile)
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

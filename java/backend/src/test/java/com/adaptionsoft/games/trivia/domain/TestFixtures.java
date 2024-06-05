@@ -16,8 +16,8 @@ public class TestFixtures {
     }
 
     private static Questions questions(String pathString) {
-        QuestionsLoader questionsLoader = new QuestionsLoader();
-        Map<Questions.Category, Queue<String>> questionsMap = questionsLoader.loadQuestionsFromDirectory(pathString);
+        QuestionsLoader questionsLoader = new QuestionsLoader(pathString);
+        Map<Questions.Category, Queue<String>> questionsMap = questionsLoader.loadQuestionsFromDirectory();
         return new Questions(questionsMap);
     }
 

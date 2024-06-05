@@ -12,6 +12,7 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventListener;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.infra.GameLogsPersister;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -41,8 +42,13 @@ public class TriviaApplication {
     }
 
     @Bean
-    public GameFactory gameFactory(IdGenerator idGenerator, EventPublisher eventPublisher) {
-        return new GameFactory(idGenerator, eventPublisher, new QuestionsLoader());
+    public GameFactory gameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
+        return new GameFactory(idGenerator, eventPublisher, questionsLoader);
+    }
+
+    @Bean
+    public QuestionsLoader questionsLoader(@Value("${application.questions-path}") String questionsPath) {
+        return new QuestionsLoader(questionsPath);
     }
 
     @Bean

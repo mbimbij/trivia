@@ -19,9 +19,37 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.adaptionsoft.games</groupId>
+            <artifactId>backend</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>
             <version>1.44.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wnameless.json</groupId>
+            <artifactId>json-flattener</artifactId>
+            <version>0.16.6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.18.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>7.18.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>7.18.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
