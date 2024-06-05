@@ -12,7 +12,8 @@ import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StepsDefs {
 
+    private static final Logger log = LoggerFactory.getLogger(StepsDefs.class);
     private static Playwright playwright;
     private static Browser browser;
     private static Page page;
@@ -67,14 +69,23 @@ public class StepsDefs {
         }
     }
 
-    @Given("a logged-in test user")
+    @Given("a logged-in test user on the game-list page")
     public void logged_in_test_user() {
-        page.navigate("http://localhost:4200/authentication");
-        page.querySelector(".firebaseui-idp-password").click();
-        page.querySelector("#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
-        page.querySelector(".firebaseui-id-submit").click();
-        page.querySelector("#ui-sign-in-password-input").fill("azerty1!!");
-        page.querySelector(".firebaseui-id-submit").click();
+        if(!Objects.equals(page.url(), "http://localhost:4200/games")){
+            log.info("redirecting user to the game-list page");
+            page.navigate("http://localhost:4200/games");
+        }
+
+        if(Objects.equals(page.url(), "http://localhost:4200/authentication")){
+            log.info("user is not logged in, logging in...");
+            page.querySelector(".firebaseui-idp-password").click();
+            page.querySelector("#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
+            page.querySelector(".firebaseui-id-submit").click();
+            page.querySelector("#ui-sign-in-password-input").fill("azerty1!!");
+            page.querySelector(".firebaseui-id-submit").click();
+        }
+
+        assertThat(page.url()).isEqualTo("http://localhost:4200/games");
     }
 
     @Given("a test user")
@@ -95,11 +106,6 @@ public class StepsDefs {
         game2 = responseEntity2.getBody();
 
         System.out.println();
-    }
-
-    @When("test user accesses games list page")
-    public void accessingGamesList() {
-        page.navigate("http://localhost:4200/games");
     }
 
     @Then("the following games are displayed")
@@ -134,6 +140,16 @@ public class StepsDefs {
         Collection<DisplayedGame> displayedGames = TestUtils.convertDatatableList(dataTable, DisplayedGame.class);
         return displayedGames;
 
+    }
+
+    @When("test-user-2 joins test-game-1")
+    public void testUserJoinsTestGame() {
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/join",
+                new UserDto(testUser2.id(), testUser2.name()),
+                GameResponseDto.class,
+                game1.id(),
+                testUser2.id());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     private record DisplayedGame(
