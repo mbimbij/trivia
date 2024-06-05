@@ -46,8 +46,7 @@ public class StepsDefs {
     public static void beforeAll() throws Exception {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false).setSlowMo(1000)
-                ;
+                .setHeadless(false).setSlowMo(1000);
         browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
         BrowserContext newContext = browser.newContext(contextOptions);
@@ -61,22 +60,22 @@ public class StepsDefs {
 
     @After
     public void tearDown() {
-        if(this.game1 != null) {
+        if (this.game1 != null) {
             restTemplate.delete("http://localhost:8080/games/{gameId}", this.game1.id());
         }
-        if(this.game2 != null) {
+        if (this.game2 != null) {
             restTemplate.delete("http://localhost:8080/games/{gameId}", this.game2.id());
         }
     }
 
     @Given("a logged-in test user on the game-list page")
     public void logged_in_test_user() {
-        if(!Objects.equals(page.url(), "http://localhost:4200/games")){
+        if (!Objects.equals(page.url(), "http://localhost:4200/games")) {
             log.info("redirecting user to the game-list page");
             page.navigate("http://localhost:4200/games");
         }
 
-        if(Objects.equals(page.url(), "http://localhost:4200/authentication")){
+        if (Objects.equals(page.url(), "http://localhost:4200/authentication")) {
             log.info("user is not logged in, logging in...");
             page.querySelector(".firebaseui-idp-password").click();
             page.querySelector("#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
@@ -111,7 +110,7 @@ public class StepsDefs {
     @Then("the following games are displayed")
     public void theFollowingGamesAreDisplayed(Collection<DisplayedGame> expectedDisplayedGames) {
         List<DisplayedGame> actualDisplayedGames = page.querySelectorAll(".game-row").stream()
-                .filter(h -> Objects.equals(h.querySelector(".creator-name").textContent(),testUser1.name() ))
+                .filter(h -> Objects.equals(h.querySelector(".creator-name").textContent().trim(), testUser1.name()))
                 .map(this::convertElementToObject)
                 .toList();
 
@@ -120,15 +119,16 @@ public class StepsDefs {
 
     public DisplayedGame convertElementToObject(ElementHandle elementHandle) {
         return new DisplayedGame(
-                elementHandle.querySelector(".name").textContent(),
-                elementHandle.querySelector(".creator-name").textContent(),
-                elementHandle.querySelector(".players-names").textContent(),
-                elementHandle.querySelector(".state").textContent(),
+                elementHandle.querySelector(".name").textContent().trim(),
+                elementHandle.querySelector(".creator-name").textContent().trim(),
+                elementHandle.querySelector(".players-names").textContent().trim(),
+                elementHandle.querySelector(".state").textContent().trim(),
                 getButtonState(elementHandle, "start"),
                 getButtonState(elementHandle, "join"),
+                elementHandle.querySelector(".join").textContent().trim(),
                 getButtonState(elementHandle, "goto"),
                 getButtonState(elementHandle, "delete")
-                );
+        );
     }
 
     private static Boolean getButtonState(ElementHandle elementHandle, String buttonName) {
@@ -152,15 +152,14 @@ public class StepsDefs {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    private record DisplayedGame(
-            String name,
-            String creator,
-            String players,
-            String state,
-            Boolean startEnabled,
-            Boolean joinEnabled,
-            Boolean gotoEnabled,
-            Boolean deleteEnabled
-    ) {
+    @When("test-user-1 starts test-game-1")
+    public void testUserStartsTestGame() {
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/start",
+                new UserDto(testUser1.id(), testUser1.name()),
+                GameResponseDto.class,
+                game1.id(),
+                testUser1.id());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
+
 }
