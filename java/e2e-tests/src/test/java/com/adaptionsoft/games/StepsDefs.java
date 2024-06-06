@@ -107,10 +107,10 @@ public class StepsDefs {
         System.out.println();
     }
 
-    @Then("the following games are displayed")
-    public void theFollowingGamesAreDisplayed(Collection<DisplayedGame> expectedDisplayedGames) {
+    @Then("the following games are displayed for user {string}")
+    public void theFollowingGamesAreDisplayed(String userName, Collection<DisplayedGame> expectedDisplayedGames) {
         List<DisplayedGame> actualDisplayedGames = page.querySelectorAll(".game-row").stream()
-                .filter(h -> Objects.equals(h.querySelector(".creator-name").textContent().trim(), testUser1.name()))
+                .filter(h -> Objects.equals(h.querySelector(".creator-name").textContent().trim(), userName))
                 .map(this::convertElementToObject)
                 .toList();
 
