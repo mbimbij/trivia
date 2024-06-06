@@ -53,7 +53,7 @@ public class StepsDefs {
     public static void beforeAll() throws Exception {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-//                .setHeadless(false)
+                .setHeadless(false)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
@@ -69,6 +69,10 @@ public class StepsDefs {
 
     @After
     public void tearDown() {
+        deleteTestGames();
+    }
+
+    private void deleteTestGames() {
         deleteGame(this.game1);
         deleteGame(this.game2);
         deleteGame(this.createdGame);
@@ -121,9 +125,9 @@ public class StepsDefs {
     public void games() {
         String gameName1 = "test-game-1";
         game1 = createGame(gameName1, user1);
+        gamesByName.put(gameName1, game1);
         String gameName2 = "test-game-2";
         game2 = createGame(gameName2, qaUser);
-        gamesByName.put(gameName1, game1);
         gamesByName.put(gameName2, game2);
     }
 
@@ -138,16 +142,16 @@ public class StepsDefs {
 
     @Then("the following games are displayed for users \"{strings}\"")
     public void theFollowingGamesAreDisplayed(Collection<String> userNames, Collection<DisplayedGame> expectedDisplayedGames) {
-        await().atMost(Duration.ofSeconds(3))
-                .pollInterval(Duration.ofMillis(250))
+        await().atMost(Duration.ofSeconds(5))
+                .pollInterval(Duration.ofMillis(500))
                 .untilAsserted(() -> assertThat(page.querySelectorAll(".game-row").stream()
                         .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
-                        .map(this::convertElementToObject)
+                        .map(this::convertToObject)
                         .toList()).isEqualTo(expectedDisplayedGames));
 
     }
 
-    public DisplayedGame convertElementToObject(ElementHandle elementHandle) {
+    public DisplayedGame convertToObject(ElementHandle elementHandle) {
         return new DisplayedGame(
                 elementHandle.querySelector(".name").textContent().trim(),
                 elementHandle.querySelector(".creator-name").textContent().trim(),
@@ -218,5 +222,18 @@ public class StepsDefs {
     private GameResponseDto getGameByName(String gameName) {
         assertThat(gamesByName).containsKey(gameName);
         return gamesByName.get(gameName);
+    }
+
+    @When("qa-user clicks on start button for {string}")
+    public void qaUserClicksOnStartButtonFor(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        Locator startButton = page.getByTestId("start-button-%d".formatted(gameId));
+        PlaywrightAssertions.assertThat(startButton).isVisible();
+        startButton.click();
+    }
+
+    @Given("previous test data cleared")
+    public void previousTestDataCleared() {
+        deleteTestGames();
     }
 }

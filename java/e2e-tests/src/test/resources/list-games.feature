@@ -1,7 +1,8 @@
 Feature: List games
 
   Background:
-    Given 2 existing games
+    Given previous test data cleared
+    And 2 existing games
     And a logged-in test user on the game-list page
 
   Scenario: display games list
@@ -50,3 +51,15 @@ Feature: List games
         | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-2 | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
         | newGame     | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
+#      TODO create a seperate independent test
+      When qa-user clicks on start button for "test-game-2"
+      Then the following games are displayed for users "qa-user"
+        | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user | qa-user,test-user-1 | started | null          | null         | game started   | true         | true           |
+        | newGame     | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
+#      TODO create a seperate independent test
+      When qa-user clicks on start button for "newGame"
+      Then the following games are displayed for users "qa-user"
+        | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user | qa-user,test-user-1 | started | null          | null         | game started   | true         | true           |
+        | newGame     | qa-user | qa-user,test-user-1 | started | null          | null         | game started   | true         | true           |
