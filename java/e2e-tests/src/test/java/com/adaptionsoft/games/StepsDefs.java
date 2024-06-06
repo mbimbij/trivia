@@ -36,6 +36,7 @@ public class StepsDefs {
 
     private GameResponseDto game1;
     private GameResponseDto game2;
+    private GameResponseDto newGame;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
@@ -57,11 +58,14 @@ public class StepsDefs {
 
     @After
     public void tearDown() {
-        if (this.game1 != null) {
-            restTemplate.delete("http://localhost:8080/games/{gameId}", this.game1.id());
-        }
-        if (this.game2 != null) {
-            restTemplate.delete("http://localhost:8080/games/{gameId}", this.game2.id());
+        deleteGame(this.game1);
+        deleteGame(this.game2);
+        deleteGame(this.newGame);
+    }
+
+    private void deleteGame(GameResponseDto game) {
+        if (game != null) {
+            restTemplate.delete("http://localhost:8080/games/{gameId}", game.id());
         }
     }
 
@@ -84,16 +88,15 @@ public class StepsDefs {
         PlaywrightAssertions.assertThat(page).hasURL("http://localhost:4200/games");
     }
 
-    private static boolean isOnAuthenticationPage() {
+    private boolean isOnAuthenticationPage() {
         return waitForUrl("http://localhost:4200/authentication", 3000);
     }
 
-    private static boolean waitForUrl(String url, int timeout) {
+    private boolean waitForUrl(String url, int timeout) {
         try {
             page.waitForURL(url, new Page.WaitForURLOptions().setTimeout(timeout));
             return true;
         } catch (Exception e) {
-            log.info("test-user presumably not on page '%s'".formatted(url));
             return false;
         }
     }
@@ -176,4 +179,12 @@ public class StepsDefs {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @When("test-user-1 creates a game named {string}")
+    public void testUserCreatesAGameNamed(String gameName) {
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games",
+                new CreateGameRequestDto(gameName, testUser1),
+                GameResponseDto.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        newGame = responseEntity.getBody();
+    }
 }
