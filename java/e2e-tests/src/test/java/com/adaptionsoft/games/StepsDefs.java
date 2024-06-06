@@ -47,12 +47,15 @@ public class StepsDefs {
     private GameResponseDto game2;
     private GameResponseDto createdGame;
 
+    private Map<String, GameResponseDto> gamesByName = new HashMap<>();
+
     @BeforeAll
     public static void beforeAll() throws Exception {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false)
-                .setSlowMo(1000);
+//                .setHeadless(false)
+//                .setSlowMo(1000)
+                ;
         Browser browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
         BrowserContext newContext = browser.newContext(contextOptions);
@@ -74,6 +77,7 @@ public class StepsDefs {
     private void deleteGame(GameResponseDto game) {
         if (game != null) {
             restTemplate.delete("http://localhost:8080/games/{gameId}", game.id());
+            gamesByName.remove(game.name());
         }
     }
 
@@ -115,8 +119,12 @@ public class StepsDefs {
 
     @Given("2 existing games")
     public void games() {
-        game1 = createGame("test-game-1", user1);
-        game2 = createGame("test-game-2", qaUser);
+        String gameName1 = "test-game-1";
+        game1 = createGame(gameName1, user1);
+        String gameName2 = "test-game-2";
+        game2 = createGame(gameName2, qaUser);
+        gamesByName.put(gameName1, game1);
+        gamesByName.put(gameName2, game2);
     }
 
     private GameResponseDto createGame(String gameName, UserDto user) {
@@ -131,7 +139,7 @@ public class StepsDefs {
     @Then("the following games are displayed for users \"{strings}\"")
     public void theFollowingGamesAreDisplayed(Collection<String> userNames, Collection<DisplayedGame> expectedDisplayedGames) {
         await().atMost(Duration.ofSeconds(3))
-                .pollInterval(Duration.ofSeconds(1))
+                .pollInterval(Duration.ofMillis(250))
                 .untilAsserted(() -> assertThat(page.querySelectorAll(".game-row").stream()
                         .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
                         .map(this::convertElementToObject)
@@ -169,13 +177,15 @@ public class StepsDefs {
         return Arrays.stream(string.trim().split("\\s*,\\s*")).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @When("test-user-2 joins test-game-1")
-    public void testUserJoinsTestGame() {
+    @When("{string} joins {string}")
+    public void userJoinsGame(String userName, String gameName) {
+        UserDto user = getUserByName(userName);
+        GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/join",
-                new UserDto(user2.id(), user2.name()),
+                new UserDto(user.id(), user.name()),
                 GameResponseDto.class,
-                game1.id(),
-                user2.id());
+                game.id(),
+                user.id());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
@@ -191,11 +201,22 @@ public class StepsDefs {
 
     @When("{string} creates a game named {string}")
     public void testUserCreatesAGameNamed(String userName, String gameName) {
-        assertThat(usersByName).containsKey(userName);
+        UserDto creator = getUserByName(userName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games",
-                new CreateGameRequestDto(gameName, usersByName.get(userName)),
+                new CreateGameRequestDto(gameName, creator),
                 GameResponseDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         createdGame = responseEntity.getBody();
+        gamesByName.put(gameName, createdGame);
+    }
+
+    private UserDto getUserByName(String userName) {
+        assertThat(usersByName).containsKey(userName);
+        return usersByName.get(userName);
+    }
+
+    private GameResponseDto getGameByName(String gameName) {
+        assertThat(gamesByName).containsKey(gameName);
+        return gamesByName.get(gameName);
     }
 }
