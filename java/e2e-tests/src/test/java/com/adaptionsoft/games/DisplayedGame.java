@@ -1,6 +1,6 @@
 package com.adaptionsoft.games;
 
-record DisplayedGame(
+public record DisplayedGame(
         String name,
         String creator,
         String players,

@@ -4,11 +4,10 @@ import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.microsoft.playwright.options.WaitUntilState;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
-import io.cucumber.java.BeforeAll;
-import io.cucumber.java.DataTableType;
+import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -18,10 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,15 +26,13 @@ public class StepsDefs {
 
     private static final Logger log = LoggerFactory.getLogger(StepsDefs.class);
     private static Playwright playwright;
-    private static Browser browser;
     private static Page page;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
     private final UserDto testUser1 = new UserDto("id-test-user-1", "test-user-1");
     private final UserDto testUser2 = new UserDto("id-test-user-2", "test-user-2");
-    private final String gameName1 = "test-game-1";
-    private final String gameName2 = "test-game-2";
+    private final UserDto qaUser = new UserDto("w7zxul5WdsglNImquZN3NR0U3Tj1", "qa-user");
 
     private GameResponseDto game1;
     private GameResponseDto game2;
@@ -46,8 +41,10 @@ public class StepsDefs {
     public static void beforeAll() throws Exception {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false).setSlowMo(1000);
-        browser = playwright.firefox().launch(launchOptions);
+//                .setHeadless(false)
+//                .setSlowMo(1000)
+                ;
+        Browser browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
         BrowserContext newContext = browser.newContext(contextOptions);
         page = newContext.newPage();
@@ -72,45 +69,57 @@ public class StepsDefs {
     public void logged_in_test_user() {
         if (!Objects.equals(page.url(), "http://localhost:4200/games")) {
             log.info("redirecting user to the game-list page");
-            page.navigate("http://localhost:4200/games");
+            page.navigate("http://localhost:4200/games", new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+            waitForUrl("http://localhost:4200/games", 3000);
         }
 
-        if (Objects.equals(page.url(), "http://localhost:4200/authentication")) {
-            log.info("user is not logged in, logging in...");
-            page.querySelector(".firebaseui-idp-password").click();
-            page.querySelector("#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
-            page.querySelector(".firebaseui-id-submit").click();
-            page.querySelector("#ui-sign-in-password-input").fill("azerty1!!");
-            page.querySelector(".firebaseui-id-submit").click();
+        if (isOnAuthenticationPage()) {
+            page.locator("css=.firebaseui-idp-password").click();
+            page.locator("css=#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
+            page.locator("css=.firebaseui-id-submit").click();
+            page.locator("css=#ui-sign-in-password-input").fill("azerty1!!");
+            page.locator("css=.firebaseui-id-submit").click();
         }
 
-        assertThat(page.url()).isEqualTo("http://localhost:4200/games");
+        PlaywrightAssertions.assertThat(page).hasURL("http://localhost:4200/games");
+    }
+
+    private static boolean isOnAuthenticationPage() {
+        return waitForUrl("http://localhost:4200/authentication", 3000);
+    }
+
+    private static boolean waitForUrl(String url, int timeout) {
+        try {
+            page.waitForURL(url, new Page.WaitForURLOptions().setTimeout(timeout));
+            return true;
+        } catch (Exception e) {
+            log.info("test-user presumably not on page '%s'".formatted(url));
+            return false;
+        }
     }
 
     @Given("a test user")
     public void anTestUser() {
     }
 
-    @Given("{int} existing games")
-    public void games(int arg0) {
-        CreateGameRequestDto createGameRequest1 = new CreateGameRequestDto(gameName1, testUser1);
-        CreateGameRequestDto createGameRequest2 = new CreateGameRequestDto(gameName2, testUser1);
-
+    @Given("2 existing games")
+    public void games() {
+        CreateGameRequestDto createGameRequest1 = new CreateGameRequestDto("test-game-1", testUser1);
         ResponseEntity<GameResponseDto> responseEntity1 = restTemplate.postForEntity("http://localhost:8080/games", createGameRequest1, GameResponseDto.class);
         assertThat(responseEntity1.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         game1 = responseEntity1.getBody();
 
+        CreateGameRequestDto createGameRequest2 = new CreateGameRequestDto("test-game-2", qaUser);
         ResponseEntity<GameResponseDto> responseEntity2 = restTemplate.postForEntity("http://localhost:8080/games", createGameRequest2, GameResponseDto.class);
         assertThat(responseEntity2.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         game2 = responseEntity2.getBody();
 
-        System.out.println();
     }
 
-    @Then("the following games are displayed for user {string}")
-    public void theFollowingGamesAreDisplayed(String userName, Collection<DisplayedGame> expectedDisplayedGames) {
+    @Then("the following games are displayed for users \"{strings}\"")
+    public void theFollowingGamesAreDisplayed(Collection<String> userNames, Collection<DisplayedGame> expectedDisplayedGames) {
         List<DisplayedGame> actualDisplayedGames = page.querySelectorAll(".game-row").stream()
-                .filter(h -> Objects.equals(h.querySelector(".creator-name").textContent().trim(), userName))
+                .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
                 .map(this::convertElementToObject)
                 .toList();
 
@@ -131,15 +140,20 @@ public class StepsDefs {
         );
     }
 
-    private static Boolean getButtonState(ElementHandle elementHandle, String buttonName) {
+    private Boolean getButtonState(ElementHandle elementHandle, String buttonName) {
         return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button")).map(ElementHandle::isEnabled).orElse(null);
     }
 
     @DataTableType
     public Collection<DisplayedGame> displayedGames(DataTable dataTable) {
-        Collection<DisplayedGame> displayedGames = TestUtils.convertDatatableList(dataTable, DisplayedGame.class);
-        return displayedGames;
+        return TestUtils.convertDatatableList(dataTable, DisplayedGame.class);
+    }
 
+    @ParameterType(
+            value = ".+",
+            name = "strings")
+    public Collection<String> strings(String string) {
+        return Arrays.stream(string.trim().split("\\s*,\\s*")).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @When("test-user-2 joins test-game-1")
