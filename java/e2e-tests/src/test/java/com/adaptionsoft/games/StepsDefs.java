@@ -32,13 +32,20 @@ public class StepsDefs {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private final UserDto testUser1 = new UserDto("id-test-user-1", "test-user-1");
-    private final UserDto testUser2 = new UserDto("id-test-user-2", "test-user-2");
-    private final UserDto qaUser = new UserDto("w7zxul5WdsglNImquZN3NR0U3Tj1", "qa-user");
+    private final String userName1 = "test-user-1";
+    private final String userName2 = "test-user-2";
+    private final String qaUserName = "qa-user";
+    private final UserDto user1 = new UserDto("id-test-user-1", userName1);
+    private final UserDto user2 = new UserDto("id-test-user-2", userName2);
+    private final UserDto qaUser = new UserDto("w7zxul5WdsglNImquZN3NR0U3Tj1", qaUserName);
+    private final Map<String, UserDto> usersByName = Map.of(
+            userName1, user1,
+            userName2, user2,
+            qaUserName, qaUser);
 
     private GameResponseDto game1;
     private GameResponseDto game2;
-    private GameResponseDto newGame;
+    private GameResponseDto createdGame;
 
     @BeforeAll
     public static void beforeAll() throws Exception {
@@ -61,7 +68,7 @@ public class StepsDefs {
     public void tearDown() {
         deleteGame(this.game1);
         deleteGame(this.game2);
-        deleteGame(this.newGame);
+        deleteGame(this.createdGame);
     }
 
     private void deleteGame(GameResponseDto game) {
@@ -108,7 +115,7 @@ public class StepsDefs {
 
     @Given("2 existing games")
     public void games() {
-        game1 = createGame("test-game-1", testUser1);
+        game1 = createGame("test-game-1", user1);
         game2 = createGame("test-game-2", qaUser);
     }
 
@@ -165,30 +172,30 @@ public class StepsDefs {
     @When("test-user-2 joins test-game-1")
     public void testUserJoinsTestGame() {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/join",
-                new UserDto(testUser2.id(), testUser2.name()),
+                new UserDto(user2.id(), user2.name()),
                 GameResponseDto.class,
                 game1.id(),
-                testUser2.id());
+                user2.id());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @When("test-user-1 starts test-game-1")
     public void testUserStartsTestGame() {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/start",
-                new UserDto(testUser1.id(), testUser1.name()),
+                new UserDto(user1.id(), user1.name()),
                 GameResponseDto.class,
                 game1.id(),
-                testUser1.id());
+                user1.id());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    @When("test-user-1 creates a game named {string}")
-    public void testUserCreatesAGameNamed(String gameName) {
+    @When("{string} creates a game named {string}")
+    public void testUserCreatesAGameNamed(String userName, String gameName) {
+        assertThat(usersByName).containsKey(userName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games",
-                new CreateGameRequestDto(gameName, testUser1),
+                new CreateGameRequestDto(gameName, usersByName.get(userName)),
                 GameResponseDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        newGame = responseEntity.getBody();
-
+        createdGame = responseEntity.getBody();
     }
 }

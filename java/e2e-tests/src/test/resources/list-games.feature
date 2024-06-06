@@ -13,7 +13,7 @@ Feature: List games
 
   Rule: Changes on another user's game
     Scenario: another player creating a game updates the display
-      When test-user-1 creates a game named "newGame"
+      When "test-user-1" creates a game named "newGame"
       Then the following games are displayed for users "test-user-1, qa-user"
         | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-1 | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
@@ -32,11 +32,10 @@ Feature: List games
         | test-game-1 | test-user-1 | test-user-1,test-user-2 | started | null          | null         | game started   | false        | false          |
         | test-game-2 | qa-user     | qa-user                 | created | null          | null         | already joined | false        | true           |
 
-#  Rule: Changes on one's own game
-#    Scenario: qa-user creating a game updates the display
-#      When qa-user creates a game named "newGame"
-#      Then the following games are displayed for users "test-user-1, qa-user"
-#        | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-#        | test-game-1 | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
-#        | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
-#        | newGame     | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
+  Rule: Changes on one's own game
+    Scenario: qa-user creating a game updates the display
+      When "qa-user" creates a game named "newGame"
+      Then the following games are displayed for users "qa-user"
+        | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
+        | newGame     | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
