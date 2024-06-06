@@ -17,10 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 public class StepsDefs {
 
@@ -42,9 +44,8 @@ public class StepsDefs {
     public static void beforeAll() throws Exception {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-//                .setHeadless(false)
-//                .setSlowMo(1000)
-                ;
+                .setHeadless(false)
+                .setSlowMo(1000);
         Browser browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
         BrowserContext newContext = browser.newContext(contextOptions);
@@ -107,26 +108,28 @@ public class StepsDefs {
 
     @Given("2 existing games")
     public void games() {
-        CreateGameRequestDto createGameRequest1 = new CreateGameRequestDto("test-game-1", testUser1);
-        ResponseEntity<GameResponseDto> responseEntity1 = restTemplate.postForEntity("http://localhost:8080/games", createGameRequest1, GameResponseDto.class);
-        assertThat(responseEntity1.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        game1 = responseEntity1.getBody();
+        game1 = createGame("test-game-1", testUser1);
+        game2 = createGame("test-game-2", qaUser);
+    }
 
-        CreateGameRequestDto createGameRequest2 = new CreateGameRequestDto("test-game-2", qaUser);
-        ResponseEntity<GameResponseDto> responseEntity2 = restTemplate.postForEntity("http://localhost:8080/games", createGameRequest2, GameResponseDto.class);
-        assertThat(responseEntity2.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        game2 = responseEntity2.getBody();
-
+    private GameResponseDto createGame(String gameName, UserDto user) {
+        CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, user);
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games",
+                requestDto,
+                GameResponseDto.class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        return responseEntity.getBody();
     }
 
     @Then("the following games are displayed for users \"{strings}\"")
     public void theFollowingGamesAreDisplayed(Collection<String> userNames, Collection<DisplayedGame> expectedDisplayedGames) {
-        List<DisplayedGame> actualDisplayedGames = page.querySelectorAll(".game-row").stream()
-                .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
-                .map(this::convertElementToObject)
-                .toList();
+        await().atMost(Duration.ofSeconds(3))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(() -> assertThat(page.querySelectorAll(".game-row").stream()
+                        .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
+                        .map(this::convertElementToObject)
+                        .toList()).isEqualTo(expectedDisplayedGames));
 
-        assertThat(actualDisplayedGames).isEqualTo(expectedDisplayedGames);
     }
 
     public DisplayedGame convertElementToObject(ElementHandle elementHandle) {
@@ -186,5 +189,6 @@ public class StepsDefs {
                 GameResponseDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         newGame = responseEntity.getBody();
+
     }
 }
