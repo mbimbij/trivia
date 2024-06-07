@@ -1,0 +1,2 @@
+application.qa-user.id: ${QA_USER_ID}
+application.qa-user.password: ${QA_USER_PASSWORD}

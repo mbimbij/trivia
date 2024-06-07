@@ -14,7 +14,7 @@ import {combineLatest, Subscription} from "rxjs";
     NgIf
   ],
   template: `
-    <button (click)="startGame()" *ngIf="canStartGameAttr">
+    <button [attr.data-testid]="'start-button-'+game.id" (click)="startGame()" *ngIf="canStartGameAttr">
       start
     </button>
   `,
