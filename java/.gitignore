@@ -3,3 +3,4 @@ target/
 .attach_*
 *.dtmp
 *.bkp
+java/e2e-tests/videos

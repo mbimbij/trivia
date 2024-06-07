@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
