@@ -12,9 +12,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.assertj.core.util.Strings;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -40,11 +40,12 @@ public class StepsDefs {
     private final String qaUserName = "qa-user";
     private final UserDto user1 = new UserDto("id-test-user-1", userName1);
     private final UserDto user2 = new UserDto("id-test-user-2", userName2);
-    private final UserDto qaUser = new UserDto("w7zxul5WdsglNImquZN3NR0U3Tj1", qaUserName);
-    private final Map<String, UserDto> usersByName = Map.of(
-            userName1, user1,
-            userName2, user2,
-            qaUserName, qaUser);
+    @Value("${application.qa-user.id}")
+    private String qaUserId;
+    @Value("${application.qa-user.password}")
+    private String qaUserPassword;
+    private  UserDto qaUser;
+    private Map<String, UserDto> usersByName;
 
     private GameResponseDto game1;
     private GameResponseDto game2;
@@ -52,6 +53,15 @@ public class StepsDefs {
 
     private final Map<String, GameResponseDto> gamesByName = new HashMap<>();
     private static final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
+
+    @PostConstruct
+    void postConstruct(){
+        qaUser = new UserDto(qaUserId, qaUserName);
+        usersByName = Map.of(
+                userName1, user1,
+                userName2, user2,
+                qaUserName, qaUser);
+    }
 
     @BeforeAll
     public static void beforeAll() throws Exception {
@@ -83,6 +93,7 @@ public class StepsDefs {
     }
 
     private void deleteTestGames() {
+        restTemplate.delete("http://localhost:8080/games/tests");
         deleteGame(this.game1);
         deleteGame(this.game2);
         deleteGame(this.createdGame);
@@ -97,28 +108,50 @@ public class StepsDefs {
 
     @Given("a logged-in test user on the game-list page")
     public void logged_in_test_user() {
-        if (!Objects.equals(page.url(), "http://localhost:4200/games")) {
+        if (!isOnGamesListPage(1000)) {
             log.info("redirecting user to the game-list page");
             page.navigate("http://localhost:4200/games", new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
-            waitForUrl("http://localhost:4200/games", 5000);
         }
 
-        if (isOnAuthenticationPage()) {
+        if (isOnAuthenticationPage(1000)) {
             page.locator("css=.firebaseui-idp-password").click();
             page.locator("css=#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
             page.locator("css=.firebaseui-id-submit").click();
-            page.locator("css=#ui-sign-in-password-input").fill("azerty1!!");
+            page.locator("css=#ui-sign-in-password-input").fill(qaUserPassword);
             page.locator("css=.firebaseui-id-submit").click();
         }
 
         PlaywrightAssertions.assertThat(page).hasURL("http://localhost:4200/games");
     }
 
-    private boolean isOnAuthenticationPage() {
-        return waitForUrl("http://localhost:4200/authentication", 5000);
+    private boolean isOnGamesListPage(int timeout) {
+        return waitForUrl("http://localhost:4200/games", timeout);
+    }
+
+    private boolean isOnAuthenticationPage(int timeout) {
+        return waitForUrl("http://localhost:4200/authentication", timeout);
+    }
+
+    private boolean isOnUrl(String url) {
+        try {
+            assertThat(page.evaluate("window.location.href")).isEqualTo(url);
+            return true;
+        } catch (Throwable e) {
+            return false;
+        }
     }
 
     private boolean waitForUrl(String url, int timeout) {
+//        try {
+//            await().atMost(Duration.ofMillis(timeout))
+//                    .pollInterval(Duration.ofMillis(500))
+//                    .untilAsserted(
+//                            () ->
+//                                    assertThat(page.evaluate("window.location.href")).isEqualTo(url));
+//            return true;
+//        } catch (Throwable e) {
+//            return false;
+//        }
         try {
             page.waitForURL(url, new Page.WaitForURLOptions().setTimeout(timeout));
             return true;

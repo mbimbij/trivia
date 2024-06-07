@@ -5,6 +5,7 @@ import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLog;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
+import com.adaptionsoft.games.trivia.microarchitecture.Id;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -20,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -94,6 +96,24 @@ public class TriviaController {
 
     private void notifyGameDeletedViaWebsocket(GameId gameId) {
         template.convertAndSend("/topic/games/deleted", gameId.getValue());
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping("/tests")
+    public void deleteTestGames() {
+        List<Game> gamesToDelete = gameRepository.list()
+                .stream()
+                .filter(game ->
+                        Set.of("qa-user", "test-user-1", "test-user-2")
+                                .contains(game.getCreator().getName())
+                )
+                .toList();
+        System.out.println("deleteTestGames called");
+        gamesToDelete.stream()
+                .map(Game::getId)
+                .map(Id::getValue)
+                .forEach(this::deleteGameById);
     }
 
     @DeleteMapping
