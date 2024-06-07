@@ -12,7 +12,7 @@ import {Game} from "../game";
   standalone: true,
   imports: [],
   template: `
-    <button [disabled]="!canDeleteGame()" (click)="deleteGame()">
+    <button [attr.data-testid]="'delete-button-'+game.id" [disabled]="!canDeleteGame()" (click)="deleteGame()">
       delete
     </button>
   `,

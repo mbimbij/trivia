@@ -90,7 +90,7 @@ public class StepsDefs {
         if (!Objects.equals(page.url(), "http://localhost:4200/games")) {
             log.info("redirecting user to the game-list page");
             page.navigate("http://localhost:4200/games", new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
-            waitForUrl("http://localhost:4200/games", 3000);
+            waitForUrl("http://localhost:4200/games", 5000);
         }
 
         if (isOnAuthenticationPage()) {
@@ -105,7 +105,7 @@ public class StepsDefs {
     }
 
     private boolean isOnAuthenticationPage() {
-        return waitForUrl("http://localhost:4200/authentication", 3000);
+        return waitForUrl("http://localhost:4200/authentication", 5000);
     }
 
     private boolean waitForUrl(String url, int timeout) {
@@ -214,6 +214,14 @@ public class StepsDefs {
         gamesByName.put(gameName, createdGame);
     }
 
+    @When("{string} deletes the game named {string}")
+    public void deletesTheGameNamed(String userName, String gameName) {
+        UserDto creator = getUserByName(userName);
+        GameResponseDto game = getGameByName(gameName);
+        restTemplate.delete("http://localhost:8080/games/{gameId}",game.id());
+        deleteGame(game);
+    }
+
     private UserDto getUserByName(String userName) {
         assertThat(usersByName).containsKey(userName);
         return usersByName.get(userName);
@@ -224,10 +232,10 @@ public class StepsDefs {
         return gamesByName.get(gameName);
     }
 
-    @When("qa-user clicks on start button for {string}")
-    public void qaUserClicksOnStartButtonFor(String gameName) {
+    @When("qa-user clicks on {string} button for {string}")
+    public void qaUserClicksOnStartButtonFor(String buttonName, String gameName) {
         Integer gameId = getGameByName(gameName).id();
-        Locator startButton = page.getByTestId("start-button-%d".formatted(gameId));
+        Locator startButton = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
         PlaywrightAssertions.assertThat(startButton).isVisible();
         startButton.click();
     }

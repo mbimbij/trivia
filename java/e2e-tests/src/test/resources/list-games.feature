@@ -19,6 +19,15 @@ Feature: List games
         | test-game-1 | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
         | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
         | newGame     | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
+      When "test-user-1" deletes the game named "test-game-1"
+      Then the following games are displayed for users "test-user-1, qa-user"
+        | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
+        | newGame     | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
+      When "test-user-1" deletes the game named "newGame"
+      Then the following games are displayed for users "test-user-1, qa-user"
+        | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
 
     Scenario: join & start game of other players updates the display
       When "test-user-2" joins "test-game-1"
@@ -52,14 +61,23 @@ Feature: List games
         | test-game-2 | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
         | newGame     | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
 #      TODO create a seperate independent test
-      When qa-user clicks on start button for "test-game-2"
+      When qa-user clicks on "start" button for "test-game-2"
       Then the following games are displayed for users "qa-user"
         | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-2 | qa-user | qa-user,test-user-1 | started | null          | null         | game started   | true         | true           |
         | newGame     | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
 #      TODO create a seperate independent test
-      When qa-user clicks on start button for "newGame"
+      When qa-user clicks on "start" button for "newGame"
       Then the following games are displayed for users "qa-user"
-        | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-        | test-game-2 | qa-user | qa-user,test-user-1 | started | null          | null         | game started   | true         | true           |
-        | newGame     | qa-user | qa-user,test-user-1 | started | null          | null         | game started   | true         | true           |
+        | name        | creator | players             | state   | start_enabled | join_enabled | join_text    | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user | qa-user,test-user-1 | started | null          | null         | game started | true         | true           |
+        | newGame     | qa-user | qa-user,test-user-1 | started | null          | null         | game started | true         | true           |
+#      TODO create a seperate independent test
+      When qa-user clicks on "delete" button for "test-game-2"
+      Then the following games are displayed for users "qa-user"
+        | name    | creator | players             | state   | start_enabled | join_enabled | join_text    | goto_enabled | delete_enabled |
+        | newGame | qa-user | qa-user,test-user-1 | started | null          | null         | game started | true         | true           |
+#      TODO create a seperate independent test
+      When qa-user clicks on "delete" button for "newGame"
+      Then the following games are displayed for users "qa-user"
+        | name | creator | players | state | start_enabled | join_enabled | join_text | goto_enabled | delete_enabled |
