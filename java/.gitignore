@@ -5,4 +5,3 @@ target/
 *.bkp
 java/e2e-tests/videos
 **/.env
-**/environment.ts
