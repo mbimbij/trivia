@@ -8,9 +8,11 @@ import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.WaitUntilState;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.*;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.assertj.core.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -47,7 +50,8 @@ public class StepsDefs {
     private GameResponseDto game2;
     private GameResponseDto createdGame;
 
-    private Map<String, GameResponseDto> gamesByName = new HashMap<>();
+    private final Map<String, GameResponseDto> gamesByName = new HashMap<>();
+    private static final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
 
     @BeforeAll
     public static void beforeAll() throws Exception {
@@ -60,6 +64,12 @@ public class StepsDefs {
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
         BrowserContext newContext = browser.newContext(contextOptions);
         page = newContext.newPage();
+        page.onConsoleMessage(currentScenarioConsoleMessages::add);
+    }
+
+    @Before
+    public void setUp() {
+        currentScenarioConsoleMessages.clear();
     }
 
     @AfterAll
@@ -243,5 +253,17 @@ public class StepsDefs {
     @Given("previous test data cleared")
     public void previousTestDataCleared() {
         deleteTestGames();
+    }
+
+    @And("no error is displayed in the console")
+    public void noErrorIsDisplayedInTheConsole() {
+        List<ConsoleMessage> errorLogs = currentScenarioConsoleMessages.stream()
+                .filter(consoleMessage -> Objects.equals("error", consoleMessage.type()))
+                .toList();
+        String errorLogsString = errorLogs.stream().map(ConsoleMessage::text).collect(Collectors.joining("\n"));
+        String failMessage = "The following error logs were present%n%s".formatted(errorLogsString);
+        assertThat(errorLogs)
+                .withFailMessage(() -> failMessage)
+                .isEmpty();
     }
 }
