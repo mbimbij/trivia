@@ -36,6 +36,5 @@ public class GameRepositoryInMemory implements GameRepository {
     @Override
     public void deleteGameById(GameId gameId) {
         this.findById(gameId).ifPresent(games::remove);
-        System.out.println();
     }
 }

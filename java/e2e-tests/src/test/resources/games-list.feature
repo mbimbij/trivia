@@ -50,6 +50,7 @@ Feature: List games
 
   Rule: Changes on one's own game
     Scenario: create, join & start game created by qa-user updates the UI
+#      TODO use the UI and not API when qa-user creates a game
       When "qa-user" creates a game named "newGame"
       Then the following games are displayed for users "qa-user"
         | name        | creator | players | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
@@ -94,3 +95,5 @@ Feature: List games
       Then the following games are displayed for users "qa-user"
         | name | creator | players | state | start_enabled | join_enabled | join_text | goto_enabled | delete_enabled |
       And no error is displayed in the console
+
+# TODO test when qa-user joins a game: {own, others} x {newly-create, existing}

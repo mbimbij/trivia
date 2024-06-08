@@ -22,8 +22,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -44,7 +47,7 @@ public class StepsDefs {
     private String qaUserId;
     @Value("${application.qa-user.password}")
     private String qaUserPassword;
-    private  UserDto qaUser;
+    private UserDto qaUser;
     private Map<String, UserDto> usersByName;
 
     private GameResponseDto game1;
@@ -55,7 +58,7 @@ public class StepsDefs {
     private static final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
 
     @PostConstruct
-    void postConstruct(){
+    void postConstruct() {
         qaUser = new UserDto(qaUserId, qaUserName);
         usersByName = Map.of(
                 userName1, user1,
@@ -184,14 +187,35 @@ public class StepsDefs {
     }
 
     @Then("the following games are displayed for users \"{strings}\"")
-    public void theFollowingGamesAreDisplayed(Collection<String> userNames, Collection<DisplayedGame> expectedDisplayedGames) {
+    public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(Duration.ofMillis(500))
-                .untilAsserted(() -> assertThat(page.querySelectorAll(".game-row").stream()
-                        .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
-                        .map(this::convertToObject)
-                        .toList()).isEqualTo(expectedDisplayedGames));
+                .untilAsserted(
+                        () -> assertThat(getDisplayedGamesForUsers(userNames)).isEqualTo(expected)
+                );
+    }
 
+    @Then("the following games are displayed")
+    public void theFollowingGamesAreDisplayed(Collection<DisplayedGame> expected) {
+        await().atMost(Duration.ofSeconds(5))
+                .pollInterval(Duration.ofMillis(500))
+                .untilAsserted(
+                        () -> assertThat(getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
+                );
+    }
+
+    /**
+     * @param userNames Pass null or an empty collection to get gmaes for all users
+     * @return
+     */
+    private List<DisplayedGame> getDisplayedGamesForUsers(Collection<String> userNames) {
+        Predicate<ElementHandle> predicate = (userNames == null || userNames.isEmpty())
+                ? h -> true
+                : h -> userNames.contains(h.querySelector(".creator-name").textContent().trim());
+        return page.querySelectorAll(".game-row").stream()
+                .filter(predicate)
+                .map(this::convertToObject)
+                .toList();
     }
 
     public DisplayedGame convertToObject(ElementHandle elementHandle) {
@@ -261,7 +285,7 @@ public class StepsDefs {
     public void deletesTheGameNamed(String userName, String gameName) {
         UserDto creator = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
-        restTemplate.delete("http://localhost:8080/games/{gameId}",game.id());
+        restTemplate.delete("http://localhost:8080/games/{gameId}", game.id());
         deleteGame(game);
     }
 
@@ -298,5 +322,21 @@ public class StepsDefs {
         assertThat(errorLogs)
                 .withFailMessage(() -> failMessage)
                 .isEmpty();
+    }
+
+    @And("i click on game details link for {string}")
+    public void noErrorIsDisplayedInTheConsole(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String link = "/games/%d/details".formatted(gameId);
+        Locator locator = page.getByTestId("game-details-%d".formatted(gameId));
+        PlaywrightAssertions.assertThat(locator).hasAttribute("href", link);
+        locator.click();
+    }
+
+    @When("i am on the on game details page for {string}")
+    public void iAmOnTheOnGameDetailsPageFor(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String url = "http://localhost:4200/games/%d".formatted(gameId);
+        waitForUrl(url, 2000);
     }
 }
