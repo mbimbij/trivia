@@ -260,6 +260,15 @@ public class StepsDefs {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
+    @When("{string} joins {string} bis")
+    public void userJoinsGameBis(String userName, String gameName) {
+        if (Objects.equals(userName, qaUser.name())) {
+            qaUserClicksOnStartButtonFor("join", gameName);
+        } else {
+            userJoinsGame(userName, gameName);
+        }
+    }
+
     @When("test-user-1 starts test-game-1")
     public void testUserStartsTestGame() {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/start",
