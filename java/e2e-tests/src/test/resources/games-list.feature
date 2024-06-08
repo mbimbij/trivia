@@ -41,7 +41,7 @@ Feature: List games
         | test-game-2 | qa-user     | qa-user                 | created | null          | null         | already joined | false        | true           |
       And no error is displayed in the console
 #      TODO create a seperate independent test for starting a game
-      When test-user-1 starts test-game-1
+      When "test-user-1" starts "test-game-1"
       Then the following games are displayed for users "test-user-1, qa-user"
         | name        | creator     | players                 | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-1 | test-user-1 | test-user-1,test-user-2 | started | null          | null         | game started   | false        | false          |

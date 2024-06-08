@@ -23,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
@@ -145,16 +144,6 @@ public class StepsDefs {
     }
 
     private boolean waitForUrl(String url, int timeout) {
-//        try {
-//            await().atMost(Duration.ofMillis(timeout))
-//                    .pollInterval(Duration.ofMillis(500))
-//                    .untilAsserted(
-//                            () ->
-//                                    assertThat(page.evaluate("window.location.href")).isEqualTo(url));
-//            return true;
-//        } catch (Throwable e) {
-//            return false;
-//        }
         try {
             page.waitForURL(url, new Page.WaitForURLOptions().setTimeout(timeout));
             return true;
@@ -248,8 +237,7 @@ public class StepsDefs {
         return Arrays.stream(string.trim().split("\\s*,\\s*")).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @When("{string} joins {string}")
-    public void userJoinsGame(String userName, String gameName) {
+    public void anotherUserJoinsGame(String userName, String gameName) {
         UserDto user = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/join",
@@ -260,23 +248,33 @@ public class StepsDefs {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    @When("{string} joins {string} bis")
-    public void userJoinsGameBis(String userName, String gameName) {
+    @When("{string} joins {string}")
+    public void userJoinsGame(String userName, String gameName) {
         if (Objects.equals(userName, qaUser.name())) {
-            qaUserClicksOnStartButtonFor("join", gameName);
+            qaUserClicksOnButtonForGame("join", gameName);
         } else {
-            userJoinsGame(userName, gameName);
+            anotherUserJoinsGame(userName, gameName);
         }
     }
 
-    @When("test-user-1 starts test-game-1")
-    public void testUserStartsTestGame() {
+    public void testUserStartsTestGame(String userName, String gameName) {
+        UserDto user = getUserByName(userName);
+        GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/start",
-                new UserDto(user1.id(), user1.name()),
+                new UserDto(user.id(), user.name()),
                 GameResponseDto.class,
-                game1.id(),
-                user1.id());
+                game.id(),
+                user.id());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @When("{string} starts {string}")
+    public void testUserStartsTestGameBis(String userName, String gameName) {
+        if (Objects.equals(qaUser.name(), userName)) {
+            qaUserClicksOnButtonForGame("start", gameName);
+        } else {
+            testUserStartsTestGame(userName, gameName);
+        }
     }
 
     @When("{string} creates a game named {string}")
@@ -309,11 +307,11 @@ public class StepsDefs {
     }
 
     @When("qa-user clicks on {string} button for {string}")
-    public void qaUserClicksOnStartButtonFor(String buttonName, String gameName) {
+    public void qaUserClicksOnButtonForGame(String buttonName, String gameName) {
         Integer gameId = getGameByName(gameName).id();
-        Locator startButton = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
-        PlaywrightAssertions.assertThat(startButton).isVisible();
-        startButton.click();
+        Locator button = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
+        PlaywrightAssertions.assertThat(button).isVisible();
+        button.click();
     }
 
     @Given("previous test data cleared")
@@ -345,7 +343,19 @@ public class StepsDefs {
     @When("i am on the on game details page for {string}")
     public void iAmOnTheOnGameDetailsPageFor(String gameName) {
         Integer gameId = getGameByName(gameName).id();
-        String url = "http://localhost:4200/games/%d".formatted(gameId);
-        waitForUrl(url, 2000);
+        String url = "http://localhost:4200/games/%d/details".formatted(gameId);
+        assertThat(waitForUrl(url, 2000)).isTrue();
+    }
+
+    @When("i directly access the game-details page for {string}")
+    public void iDirectlyAccessTheGameDetailsPageFor(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String url = "http://localhost:4200/games/%d/details".formatted(gameId);
+        page.navigate(url);
+    }
+
+    @And("i refresh")
+    public void iRefresh() {
+        page.reload();
     }
 }
