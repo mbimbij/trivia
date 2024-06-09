@@ -22,8 +22,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
@@ -44,7 +46,7 @@ public class StepsDefs {
     private String qaUserId;
     @Value("${application.qa-user.password}")
     private String qaUserPassword;
-    private  UserDto qaUser;
+    private UserDto qaUser;
     private Map<String, UserDto> usersByName;
 
     private GameResponseDto game1;
@@ -55,7 +57,7 @@ public class StepsDefs {
     private static final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
 
     @PostConstruct
-    void postConstruct(){
+    void postConstruct() {
         qaUser = new UserDto(qaUserId, qaUserName);
         usersByName = Map.of(
                 userName1, user1,
@@ -142,16 +144,6 @@ public class StepsDefs {
     }
 
     private boolean waitForUrl(String url, int timeout) {
-//        try {
-//            await().atMost(Duration.ofMillis(timeout))
-//                    .pollInterval(Duration.ofMillis(500))
-//                    .untilAsserted(
-//                            () ->
-//                                    assertThat(page.evaluate("window.location.href")).isEqualTo(url));
-//            return true;
-//        } catch (Throwable e) {
-//            return false;
-//        }
         try {
             page.waitForURL(url, new Page.WaitForURLOptions().setTimeout(timeout));
             return true;
@@ -184,14 +176,35 @@ public class StepsDefs {
     }
 
     @Then("the following games are displayed for users \"{strings}\"")
-    public void theFollowingGamesAreDisplayed(Collection<String> userNames, Collection<DisplayedGame> expectedDisplayedGames) {
+    public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(Duration.ofMillis(500))
-                .untilAsserted(() -> assertThat(page.querySelectorAll(".game-row").stream()
-                        .filter(h -> userNames.contains(h.querySelector(".creator-name").textContent().trim()))
-                        .map(this::convertToObject)
-                        .toList()).isEqualTo(expectedDisplayedGames));
+                .untilAsserted(
+                        () -> assertThat(getDisplayedGamesForUsers(userNames)).isEqualTo(expected)
+                );
+    }
 
+    @Then("the following games are displayed")
+    public void theFollowingGamesAreDisplayed(Collection<DisplayedGame> expected) {
+        await().atMost(Duration.ofSeconds(5))
+                .pollInterval(Duration.ofMillis(500))
+                .untilAsserted(
+                        () -> assertThat(getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
+                );
+    }
+
+    /**
+     * @param userNames Pass null or an empty collection to get gmaes for all users
+     * @return
+     */
+    private List<DisplayedGame> getDisplayedGamesForUsers(Collection<String> userNames) {
+        Predicate<ElementHandle> predicate = (userNames == null || userNames.isEmpty())
+                ? h -> true
+                : h -> userNames.contains(h.querySelector(".creator-name").textContent().trim());
+        return page.querySelectorAll(".game-row").stream()
+                .filter(predicate)
+                .map(this::convertToObject)
+                .toList();
     }
 
     public DisplayedGame convertToObject(ElementHandle elementHandle) {
@@ -224,8 +237,7 @@ public class StepsDefs {
         return Arrays.stream(string.trim().split("\\s*,\\s*")).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @When("{string} joins {string}")
-    public void userJoinsGame(String userName, String gameName) {
+    public void anotherUserJoinsGame(String userName, String gameName) {
         UserDto user = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/join",
@@ -236,14 +248,33 @@ public class StepsDefs {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    @When("test-user-1 starts test-game-1")
-    public void testUserStartsTestGame() {
+    @When("{string} joins {string}")
+    public void userJoinsGame(String userName, String gameName) {
+        if (Objects.equals(userName, qaUser.name())) {
+            qaUserClicksOnButtonForGame("join", gameName);
+        } else {
+            anotherUserJoinsGame(userName, gameName);
+        }
+    }
+
+    public void testUserStartsTestGame(String userName, String gameName) {
+        UserDto user = getUserByName(userName);
+        GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/start",
-                new UserDto(user1.id(), user1.name()),
+                new UserDto(user.id(), user.name()),
                 GameResponseDto.class,
-                game1.id(),
-                user1.id());
+                game.id(),
+                user.id());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @When("{string} starts {string}")
+    public void testUserStartsTestGameBis(String userName, String gameName) {
+        if (Objects.equals(qaUser.name(), userName)) {
+            qaUserClicksOnButtonForGame("start", gameName);
+        } else {
+            testUserStartsTestGame(userName, gameName);
+        }
     }
 
     @When("{string} creates a game named {string}")
@@ -261,7 +292,7 @@ public class StepsDefs {
     public void deletesTheGameNamed(String userName, String gameName) {
         UserDto creator = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
-        restTemplate.delete("http://localhost:8080/games/{gameId}",game.id());
+        restTemplate.delete("http://localhost:8080/games/{gameId}", game.id());
         deleteGame(game);
     }
 
@@ -276,11 +307,11 @@ public class StepsDefs {
     }
 
     @When("qa-user clicks on {string} button for {string}")
-    public void qaUserClicksOnStartButtonFor(String buttonName, String gameName) {
+    public void qaUserClicksOnButtonForGame(String buttonName, String gameName) {
         Integer gameId = getGameByName(gameName).id();
-        Locator startButton = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
-        PlaywrightAssertions.assertThat(startButton).isVisible();
-        startButton.click();
+        Locator button = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
+        PlaywrightAssertions.assertThat(button).isVisible();
+        button.click();
     }
 
     @Given("previous test data cleared")
@@ -298,5 +329,33 @@ public class StepsDefs {
         assertThat(errorLogs)
                 .withFailMessage(() -> failMessage)
                 .isEmpty();
+    }
+
+    @And("i click on game details link for {string}")
+    public void noErrorIsDisplayedInTheConsole(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String link = "/games/%d/details".formatted(gameId);
+        Locator locator = page.getByTestId("game-details-%d".formatted(gameId));
+        PlaywrightAssertions.assertThat(locator).hasAttribute("href", link);
+        locator.click();
+    }
+
+    @When("i am on the on game details page for {string}")
+    public void iAmOnTheOnGameDetailsPageFor(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String url = "http://localhost:4200/games/%d/details".formatted(gameId);
+        assertThat(waitForUrl(url, 2000)).isTrue();
+    }
+
+    @When("i directly access the game-details page for {string}")
+    public void iDirectlyAccessTheGameDetailsPageFor(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String url = "http://localhost:4200/games/%d/details".formatted(gameId);
+        page.navigate(url);
+    }
+
+    @And("i refresh")
+    public void iRefresh() {
+        page.reload();
     }
 }

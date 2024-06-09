@@ -11,7 +11,7 @@ import { Game } from '../game';
   standalone: true,
   template: `
     @if (canJoin()) {
-      <button (click)="joinGame()">
+      <button [attr.data-testid]="'join-button-'+game.id" (click)="joinGame()">
         join
       </button>
     } @else if (isGameStarted()) {

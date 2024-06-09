@@ -4,3 +4,4 @@ target/
 *.dtmp
 *.bkp
 java/e2e-tests/videos
+.env

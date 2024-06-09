@@ -109,7 +109,6 @@ public class TriviaController {
                                 .contains(game.getCreator().getName())
                 )
                 .toList();
-        System.out.println("deleteTestGames called");
         gamesToDelete.stream()
                 .map(Game::getId)
                 .map(Id::getValue)

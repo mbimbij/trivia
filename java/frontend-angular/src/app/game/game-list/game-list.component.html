@@ -28,7 +28,13 @@
     </tr>
     <tr [ngClass]="'game-row'" *ngFor="let game of games; trackBy: trackByFn">
       <td class="id">{{ game.id }}</td>
-      <td class="name"><a [routerLink]="['/games',game.id,'details']">{{ game.name }}</a>
+      <td class="name">
+        <a
+          [attr.data-testid]="'game-details-'+game.id"
+          [routerLink]="['/games',game.id,'details']"
+        >
+          {{ game.name }}
+        </a>
       </td>
       <td class="creator-name">{{ game.creator.name }}</td>
       <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>

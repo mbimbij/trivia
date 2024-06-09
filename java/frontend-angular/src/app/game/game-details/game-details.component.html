@@ -12,24 +12,24 @@
       <th>join</th>
       <th>go to</th>
     </tr>
-    <tr>
-      <td>{{ game.id }}</td>
-      <td>{{ game.name }}</td>
-      <td>{{ game.creator.name }}</td>
-      <td>{{ game.players | objectAttribute: 'name' }}</td>
-      <td>{{ game.state }}</td>
-      <td>
+    <tr  [ngClass]="'game-row'">
+      <td class="id">{{ game.id }}</td>
+      <td class="name">{{ game.name }}</td>
+      <td class="creator-name">{{ game.creator.name }}</td>
+      <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
+      <td class="state">{{ game.state }}</td>
+      <td class="start">
         <app-start-game-button
           [game]="game"
         />
       </td>
-      <td>
+      <td class="join">
         <app-join-game-button
           [game]="game"
         >
         </app-join-game-button>
       </td>
-      <td>
+      <td class="goto">
         <app-goto-game-button [game]="game"></app-goto-game-button>
       </td>
     </tr>

@@ -41,7 +41,7 @@ Feature: List games
         | test-game-2 | qa-user     | qa-user                 | created | null          | null         | already joined | false        | true           |
       And no error is displayed in the console
 #      TODO create a seperate independent test for starting a game
-      When test-user-1 starts test-game-1
+      When "test-user-1" starts "test-game-1"
       Then the following games are displayed for users "test-user-1, qa-user"
         | name        | creator     | players                 | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-1 | test-user-1 | test-user-1,test-user-2 | started | null          | null         | game started   | false        | false          |
@@ -50,6 +50,7 @@ Feature: List games
 
   Rule: Changes on one's own game
     Scenario: create, join & start game created by qa-user updates the UI
+#      TODO use the UI and not API when qa-user creates a game
       When "qa-user" creates a game named "newGame"
       Then the following games are displayed for users "qa-user"
         | name        | creator | players | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
@@ -94,3 +95,5 @@ Feature: List games
       Then the following games are displayed for users "qa-user"
         | name | creator | players | state | start_enabled | join_enabled | join_text | goto_enabled | delete_enabled |
       And no error is displayed in the console
+
+# TODO test when qa-user joins a game: {own, others} x {newly-create, existing}

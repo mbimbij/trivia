@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {GameResponseDto} from "../../openapi-generated";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
@@ -21,7 +21,8 @@ import {generateRandomString} from "../../common/helpers";
     ObjectAttributePipe,
     GotoGameButtonComponent,
     StartGameButtonComponent,
-    AsyncPipe
+    AsyncPipe,
+    NgClass
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
