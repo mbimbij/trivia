@@ -68,7 +68,6 @@ public class GameFactory {
 
 
     private Questions buildQuestions() {
-        String questionsPath = "src/main/resources/questions";
         Map<Questions.Category, Queue<String>> questionsByCategory = questionsLoader.loadQuestionsFromDirectory();
         return new Questions(questionsByCategory);
     }

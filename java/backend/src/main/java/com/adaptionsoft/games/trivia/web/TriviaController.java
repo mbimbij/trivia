@@ -29,7 +29,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
-        value = "/games",
+        value = "/api/games",
         produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_PROBLEM_JSON_VALUE

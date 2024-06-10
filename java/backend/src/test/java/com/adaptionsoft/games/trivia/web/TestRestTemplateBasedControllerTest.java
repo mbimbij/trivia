@@ -52,7 +52,7 @@ class TestRestTemplateBasedControllerTest {
         // WHEN a new player tries to join the game
         @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2());
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(
-                "/games/%d/players/%s/join".formatted(0, newPlayerDto.id()),
+                "/api/games/%d/players/%s/join".formatted(0, newPlayerDto.id()),
                 newPlayerDto,
                 Map.class);
 

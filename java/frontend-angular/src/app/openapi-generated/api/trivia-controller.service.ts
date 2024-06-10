@@ -37,6 +37,7 @@ import {UserDto} from '../model/user-dto';
 import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
 import {Configuration} from '../configuration';
 import {TriviaControllerServiceInterface} from './trivia-controller.serviceInterface';
+import {environment} from "../../../environments/environment";
 
 
 @Injectable({
@@ -44,7 +45,8 @@ import {TriviaControllerServiceInterface} from './trivia-controller.serviceInter
 })
 export class TriviaControllerService implements TriviaControllerServiceInterface {
 
-    protected basePath = 'http://localhost:8080';
+    protected basePath = environment.backendUrl;
+    // protected basePath = '/';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

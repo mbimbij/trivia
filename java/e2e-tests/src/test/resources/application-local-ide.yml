@@ -1,0 +1,2 @@
+application.frontend-url-base: http://localhost:4200
+application.backend-url-base: http://localhost:8080/api

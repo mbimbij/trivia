@@ -4,4 +4,7 @@ target/
 *.dtmp
 *.bkp
 java/e2e-tests/videos
-.env
+**/*.env
+**/creds
+backend/src/main/resources/static
+

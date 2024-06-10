@@ -1,5 +1,5 @@
 name: CI/CD pipeline
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+#run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 
 jobs:
@@ -10,29 +10,64 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ vars.AWS_REGION }}
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v2
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}' # Replace with the name of your GitHub Actions secret
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 480.0.0'
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx # necessary for caching Docker layers
         uses: docker/setup-buildx-action@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: install Angular CLI
+        working-directory: java/frontend-angular
+        run: npm i -g @angular/cli@17.3.8
+      - name: build frontend
+        working-directory: java/frontend-angular
+        run: |
+          npm install
+          ng build --output-path=../backend/src/main/resources/static
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
           cache-dependency-path: 'java/pom.xml' # optional
-      - name: Build with Maven
+      - name: Build backend with Maven
         working-directory: java
-        run: mvn -B verify --file pom.xml
-      - name: Build, tag, and push docker image to Amazon ECR
+        run: mvn -pl backend -B verify --file pom.xml
+#      - name: Build, tag, and push Docker image
+#        working-directory: java
+#        run: |
+#          java -Djarmode=layertools -jar backend/target/*.jar extract --destination backend/target/extracted
+#          docker build -t ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/trivia:${{ github.sha }} . --file pipeline.Dockerfile
+#          docker push ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/trivia:latest
+      - name: Build, tag, and push Docker image
         working-directory: java
         run: |
-          java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted
-          docker build -t ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/trivia:latest . --file pipeline.Dockerfile
-          docker push ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/trivia:latest
+          java -Djarmode=layertools -jar backend/target/*.jar extract --destination backend/target/extracted
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} . --file pipeline.Dockerfile
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}
+      - name: Deploy new revision
+        run: |
+          gcloud run deploy trivia --image=${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} --region=europe-west9

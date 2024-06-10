@@ -1,8 +1,8 @@
 import { RxStompConfig } from '@stomp/rx-stomp';
-
+import {environment} from "../../../environments/environment";
 export const myRxStompConfig: RxStompConfig = {
   // Which server?
-  brokerURL: 'ws://127.0.0.1:8080/gs-guide-websocket',
+  brokerURL: `${environment.backendWebSocketUrl}`,
 
   // Headers
   // Typical keys: login, passcode, host

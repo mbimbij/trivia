@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket").setAllowedOrigins(allowedOrigins);
+        registry.addEndpoint("/ws/gs-guide-websocket").setAllowedOrigins(allowedOrigins);
     }
 
 }

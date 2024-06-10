@@ -55,6 +55,11 @@ public class StepsDefs {
 
     private final Map<String, GameResponseDto> gamesByName = new HashMap<>();
     private static final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
+    @Value("${application.frontend-url-base}")
+//    private String frontendUrlBase = "http://localhost:4200";
+    private String frontendUrlBase;
+    @Value("${application.backend-url-base}")
+    private String backendUrlBase = "http://localhost:8080/backend";
 
     @PostConstruct
     void postConstruct() {
@@ -95,7 +100,7 @@ public class StepsDefs {
     }
 
     private void deleteTestGames() {
-        restTemplate.delete("http://localhost:8080/games/tests");
+        restTemplate.delete(backendUrlBase + "/games/tests");
         deleteGame(this.game1);
         deleteGame(this.game2);
         deleteGame(this.createdGame);
@@ -103,7 +108,7 @@ public class StepsDefs {
 
     private void deleteGame(GameResponseDto game) {
         if (game != null) {
-            restTemplate.delete("http://localhost:8080/games/{gameId}", game.id());
+            restTemplate.delete(backendUrlBase + "/games/{gameId}", game.id());
             gamesByName.remove(game.name());
         }
     }
@@ -112,7 +117,7 @@ public class StepsDefs {
     public void logged_in_test_user() {
         if (!isOnGamesListPage(1000)) {
             log.info("redirecting user to the game-list page");
-            page.navigate("http://localhost:4200/games", new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+            page.navigate(frontendUrlBase + "/games", new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         }
 
         if (isOnAuthenticationPage(1000)) {
@@ -123,15 +128,15 @@ public class StepsDefs {
             page.locator("css=.firebaseui-id-submit").click();
         }
 
-        PlaywrightAssertions.assertThat(page).hasURL("http://localhost:4200/games");
+        PlaywrightAssertions.assertThat(page).hasURL(frontendUrlBase + "/games");
     }
 
     private boolean isOnGamesListPage(int timeout) {
-        return waitForUrl("http://localhost:4200/games", timeout);
+        return waitForUrl(frontendUrlBase + "/games", timeout);
     }
 
     private boolean isOnAuthenticationPage(int timeout) {
-        return waitForUrl("http://localhost:4200/authentication", timeout);
+        return waitForUrl(frontendUrlBase + "/authentication", timeout);
     }
 
     private boolean isOnUrl(String url) {
@@ -168,7 +173,7 @@ public class StepsDefs {
 
     private GameResponseDto createGame(String gameName, UserDto user) {
         CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, user);
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games",
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games",
                 requestDto,
                 GameResponseDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -240,7 +245,7 @@ public class StepsDefs {
     public void anotherUserJoinsGame(String userName, String gameName) {
         UserDto user = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/join",
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/join",
                 new UserDto(user.id(), user.name()),
                 GameResponseDto.class,
                 game.id(),
@@ -260,7 +265,7 @@ public class StepsDefs {
     public void testUserStartsTestGame(String userName, String gameName) {
         UserDto user = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games/{gameId}/players/{userId}/start",
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/start",
                 new UserDto(user.id(), user.name()),
                 GameResponseDto.class,
                 game.id(),
@@ -280,7 +285,7 @@ public class StepsDefs {
     @When("{string} creates a game named {string}")
     public void testUserCreatesAGameNamed(String userName, String gameName) {
         UserDto creator = getUserByName(userName);
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity("http://localhost:8080/games",
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games",
                 new CreateGameRequestDto(gameName, creator),
                 GameResponseDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -292,7 +297,7 @@ public class StepsDefs {
     public void deletesTheGameNamed(String userName, String gameName) {
         UserDto creator = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
-        restTemplate.delete("http://localhost:8080/games/{gameId}", game.id());
+        restTemplate.delete(backendUrlBase + "/games/{gameId}", game.id());
         deleteGame(game);
     }
 
@@ -343,14 +348,14 @@ public class StepsDefs {
     @When("i am on the on game details page for {string}")
     public void iAmOnTheOnGameDetailsPageFor(String gameName) {
         Integer gameId = getGameByName(gameName).id();
-        String url = "http://localhost:4200/games/%d/details".formatted(gameId);
+        String url = (frontendUrlBase + "/games/%d/details").formatted(gameId);
         assertThat(waitForUrl(url, 2000)).isTrue();
     }
 
     @When("i directly access the game-details page for {string}")
     public void iDirectlyAccessTheGameDetailsPageFor(String gameName) {
         Integer gameId = getGameByName(gameName).id();
-        String url = "http://localhost:4200/games/%d/details".formatted(gameId);
+        String url = (frontendUrlBase + "/games/%d/details").formatted(gameId);
         page.navigate(url);
     }
 
