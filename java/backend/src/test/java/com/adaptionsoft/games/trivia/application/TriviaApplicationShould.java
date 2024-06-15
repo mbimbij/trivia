@@ -61,7 +61,7 @@ class TriviaApplicationShould {
     @Test
     void return_empty_response__when_no_game() {
         // WHEN
-        ResultActions perform = mvc.perform(get("/games"));
+        ResultActions perform = mvc.perform(get("/api/games"));
 
         // THEN http status is ok
         MvcResult mvcResult = perform
@@ -84,7 +84,7 @@ class TriviaApplicationShould {
 
 
         // WHEN listing game
-        ResultActions resultActions = mvc.perform(get("/games"));
+        ResultActions resultActions = mvc.perform(get("/api/games"));
 
         // THEN status is ok
         MvcResult mvcResult = resultActions
@@ -118,7 +118,7 @@ class TriviaApplicationShould {
         Mockito.doReturn(gameIdInt).when(idGenerator).nextId();
 
         // WHEN I create a game
-        ResultActions performResultActions = mvc.perform(post("/games")
+        ResultActions performResultActions = mvc.perform(post("/api/games")
                         .content(mapper.writeValueAsString(requestDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
@@ -165,7 +165,7 @@ class TriviaApplicationShould {
         // WHEN a new player joins the game
         @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2());
         ResultActions resultActions = mvc.perform(
-                post("/games/{gameId}/players/{playerId}/join", game.getId().getValue(), newPlayerDto.id())
+                post("/api/games/{gameId}/players/{playerId}/join", game.getId().getValue(), newPlayerDto.id())
                         .content(mapper.writeValueAsString(newPlayerDto))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -206,7 +206,7 @@ class TriviaApplicationShould {
 
         // WHEN the creator starts the game
         ResultActions resultActions = mvc.perform(
-                post("/games/{gameId}/players/{playerId}/start", game.getId().getValue(), player1.getId().getValue())
+                post("/api/games/{gameId}/players/{playerId}/start", game.getId().getValue(), player1.getId().getValue())
         );
 
         // THEN the response status is ok
@@ -242,7 +242,7 @@ class TriviaApplicationShould {
 
         // WHEN the current player (creator) starts the game
         ResultActions resultActions = mvc.perform(
-                post("/games/{gameId}/players/{playerId}/playTurn", game.getId().getValue(), player1.getId().getValue())
+                post("/api/games/{gameId}/players/{playerId}/playTurn", game.getId().getValue(), player1.getId().getValue())
         );
 
         // THEN response status is ok

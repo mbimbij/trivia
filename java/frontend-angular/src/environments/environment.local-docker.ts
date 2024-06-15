@@ -1,6 +1,6 @@
 export const environment = {
-  backendUrl: `http://localhost:8080/api`,
-  backendWebSocketUrl: `ws://localhost:8080/ws/gs-guide-websocket`,
+  backendUrl: `http://localhost:8100/api`,
+  backendWebSocketUrl: `ws://localhost:8100/ws/gs-guide-websocket`,
   firebaseConfig: {
     apiKey: 'AIzaSyBgVgToHnITb86RRrQYX7-s2vWJoa3IDEw',
   }

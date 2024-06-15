@@ -1,8 +1,7 @@
-FROM eclipse-temurin:21-jdk-alpine
+FROM amazoncorretto:21-alpine
 LABEL org.opencontainers.image.source=https://github.com/mbimbij/trivia
 VOLUME /tmp
-COPY target .
-ARG EXTRACTED=/target/extracted
+ARG EXTRACTED=/backend/target/extracted
 COPY ${EXTRACTED}/dependencies/ ./
 COPY ${EXTRACTED}/spring-boot-loader/ ./
 COPY ${EXTRACTED}/snapshot-dependencies/ ./

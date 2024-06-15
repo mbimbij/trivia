@@ -21,7 +21,7 @@ import {combineLatest, Subscription} from "rxjs";
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartGameButtonComponent implements OnChanges {
+export class StartGameButtonComponent {
 
   @Input() game!: Game
   protected user!: User;
@@ -50,13 +50,13 @@ export class StartGameButtonComponent implements OnChanges {
         this.canStartGameAttr = this.canStartGame();
       });
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['game']) {
-      console.log(`ngOnChanges ${this.constructor.name} - ${this.id} called - `)
-      console.log(changes['game'].currentValue);
-    }
-  }
+  //
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes['game']) {
+  //     console.log(`ngOnChanges ${this.constructor.name} - ${this.id} called - `)
+  //     console.log(changes['game'].currentValue);
+  //   }
+  // }
 
   ngOnDestroy() {
     console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
