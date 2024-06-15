@@ -40,20 +40,11 @@ export class GameComponent {
     console.log(`constructor ${this.id} called`)
     this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
-      this.game$ = gameService.getGame(this.gameId);
+      this.game$ = this.gameService.getGame(this.gameId);
       this.game$.subscribe(game => {
         this.game=game;
       })
     })
-  }
-
-  private setCoinCount() {
-    // TODO améliorer update player.coinCount -> introduire une update via websocket par exemple
-    const index = this.game.players.findIndex(
-      player => player.id === this.player.id);
-    if (index !== -1) {
-      this.player.coinCount = this.game.players[index].coinCount;
-    }
   }
 
   ngOnInit() {
@@ -63,11 +54,15 @@ export class GameComponent {
     // TODO améliorer l'initialisation des subjects et observables en tenant compte des dépendances
     this.userService.getUser().subscribe(updatedUser => this.player = userToPlayer(updatedUser))
 
-    //
-    // this.gameService.getGameLogs(this.gameId)
-    //   .subscribe(gameLogs => {
-    //     this.logs = gameLogs.map(log => log.value)
-    //   })
+  }
+
+  private setCoinCount() {
+    // TODO améliorer update player.coinCount -> introduire une update via websocket par exemple
+    const index = this.game.players.findIndex(
+      player => player.id === this.player.id);
+    if (index !== -1) {
+      this.player.coinCount = this.game.players[index].coinCount;
+    }
   }
 
   protected canPlayTurn() {

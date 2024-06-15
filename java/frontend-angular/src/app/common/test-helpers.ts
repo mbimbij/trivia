@@ -33,6 +33,6 @@ export const mockUser1: User = {
 }
 
 export class MockActivatedRoute {
-  params: Observable<any> = of({id: '123'}); // Mock route params
+  params: Observable<any> = of({id: '1'}); // Mock route params
 }
 

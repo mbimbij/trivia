@@ -274,6 +274,7 @@ public class StepsDefs {
         if (Objects.equals(qaUser.name(), userName)) {
             qaUserClicksOnButtonForGame("start", gameName);
         } else {
+            userStartsGameFromBackend(userName, gameName);
         }
     }
 

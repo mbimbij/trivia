@@ -9,12 +9,15 @@ import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {DebugElement} from "@angular/core";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
+import {GameService} from "../game.service";
+import any = jasmine.any;
 
 describe('GameComponent', () => {
   let component: GameComponent;
   let fixture: ComponentFixture<GameComponent>;
   let htmlElement: HTMLElement;
   let debugElement: DebugElement;
+  let gameService: GameServiceAbstract;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,10 +25,14 @@ describe('GameComponent', () => {
       providers: [
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
         {provide: UserServiceAbstract, useClass: UserServiceMock},
-        {provide: GameServiceAbstract, useClass: GameServiceMock},
       ]
     })
     .compileComponents();
+
+    gameService = new GameServiceMock();
+    spyOn(gameService, `getGame`).and.callThrough();
+
+    TestBed.overrideProvider(GameServiceAbstract, { useValue: gameService });
 
     fixture = TestBed.createComponent(GameComponent);
     component = fixture.componentInstance;
@@ -37,9 +44,11 @@ describe('GameComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(gameService.getGame).toHaveBeenCalledWith(any(Number))
   });
 
   it('should display expected elements eventually', () => {
     expect(htmlElement.querySelector(`[data-testid="player-action-section"]`)).toBeTruthy();
+    expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
   });
 });

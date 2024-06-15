@@ -80,9 +80,9 @@ describe('GameService', () => {
     spyOn(triviaControllerService, `getGameById`).and.returnValue(of(singleGameReturnValue) as Observable<any>);
 
     let service = TestBed.inject(GameService);
-    spyOn(service, `registerGameCreatedHandler`)
-    spyOn(service, `registerGameDeletedHandler`)
-    spyOn(service, `registerGameUpdatedHandler`)
+    spyOn(service, `registerGameCreatedHandler`);
+    spyOn(service, `registerGameDeletedHandler`);
+    spyOn(service, `registerGameUpdatedHandler`);
 
     return service;
   }
