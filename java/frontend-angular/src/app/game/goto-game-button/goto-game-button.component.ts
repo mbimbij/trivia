@@ -15,7 +15,11 @@ import {Game} from "../game";
   ],
   template: `
 <!--     TODO delete state, as the backend is called-->
-    <button [disabled]="!canGotoGame()" (click)="router.navigate(['/games',game.id], { state: game })">
+    <button
+      [attr.data-testid]="'goto-button-'+game.id"
+      [disabled]="!canGotoGame()"
+      (click)="router.navigate(['/games',game.id], { state: game })"
+    >
       go to
     </button>
   `,

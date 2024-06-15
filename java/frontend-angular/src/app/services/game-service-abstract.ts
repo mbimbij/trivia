@@ -20,6 +20,8 @@ export abstract class GameServiceAbstract {
 
   abstract delete(gameId: number): Observable<void> ;
 
+  abstract initGameLogs(gameId: number): void;
+
   abstract getGameLogs(gameId: number): Observable<Array<GameLog>>;
 
 }

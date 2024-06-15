@@ -1,4 +1,7 @@
-<ng-container *ngIf="(game$ | async) as game">
+<div
+  [attr.data-testid]="'player-action-section'"
+  *ngIf="(game$ | async | consoleLog) as game; else waiting_for_data"
+>
   <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
 
   <h2 *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
@@ -14,11 +17,16 @@
   <button type="button" (click)="playTurn()"
           [disabled]="!canPlayTurn()">{{ isCurrentPlayer() ? 'play' : 'play (not your turn)' }}
   </button>
-</ng-container>
+</div>
 
-<ng-container *ngIf="(gameLogs$ | async) as logs">
+<ng-template #waiting_for_data>Waiting for game data</ng-template>
+
+<div
+  [attr.data-testid]="'game-logs-section'"
+  *ngIf="(gameLogs$ | async) as logs"
+>
   <div id="messagesContainer" style="overflow-y: scroll; height:100px;">
     <!--    TODO introduire un style différent pour distinguer les logs des différents joueurs-->
     <div *ngFor="let log of logs">{{ log.value }}</div>
   </div>
-</ng-container>
+</div>

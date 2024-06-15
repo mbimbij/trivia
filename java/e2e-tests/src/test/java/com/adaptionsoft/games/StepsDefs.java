@@ -56,10 +56,9 @@ public class StepsDefs {
     private final Map<String, GameResponseDto> gamesByName = new HashMap<>();
     private static final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
     @Value("${application.frontend-url-base}")
-//    private String frontendUrlBase = "http://localhost:4200";
     private String frontendUrlBase;
     @Value("${application.backend-url-base}")
-    private String backendUrlBase = "http://localhost:8080/backend";
+    private String backendUrlBase;
 
     @PostConstruct
     void postConstruct() {
@@ -75,6 +74,11 @@ public class StepsDefs {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
                 .setHeadless(false)
+                .setFirefoxUserPrefs(
+                        Map.of(
+                                "network.websocket.allowInsecureFromHTTPS", true
+                        )
+                )
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
@@ -115,12 +119,12 @@ public class StepsDefs {
 
     @Given("a logged-in test user on the game-list page")
     public void logged_in_test_user() {
-        if (!isOnGamesListPage(1000)) {
+        if (!isOnGamesListPage(3000)) {
             log.info("redirecting user to the game-list page");
             page.navigate(frontendUrlBase + "/games", new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         }
 
-        if (isOnAuthenticationPage(1000)) {
+        if (isOnAuthenticationPage(3000)) {
             page.locator("css=.firebaseui-idp-password").click();
             page.locator("css=#ui-sign-in-email-input").fill("joseph.mbimbi+test@gmail.com");
             page.locator("css=.firebaseui-id-submit").click();
@@ -137,15 +141,6 @@ public class StepsDefs {
 
     private boolean isOnAuthenticationPage(int timeout) {
         return waitForUrl(frontendUrlBase + "/authentication", timeout);
-    }
-
-    private boolean isOnUrl(String url) {
-        try {
-            assertThat(page.evaluate("window.location.href")).isEqualTo(url);
-            return true;
-        } catch (Throwable e) {
-            return false;
-        }
     }
 
     private boolean waitForUrl(String url, int timeout) {
@@ -199,10 +194,11 @@ public class StepsDefs {
     }
 
     /**
-     * @param userNames Pass null or an empty collection to get gmaes for all users
+     * @param userNames Pass null or an empty collection to get games for all users
      * @return
      */
-    private List<DisplayedGame> getDisplayedGamesForUsers(Collection<String> userNames) {
+    private List<DisplayedGame>
+    getDisplayedGamesForUsers(Collection<String> userNames) {
         Predicate<ElementHandle> predicate = (userNames == null || userNames.isEmpty())
                 ? h -> true
                 : h -> userNames.contains(h.querySelector(".creator-name").textContent().trim());
@@ -242,7 +238,7 @@ public class StepsDefs {
         return Arrays.stream(string.trim().split("\\s*,\\s*")).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void anotherUserJoinsGame(String userName, String gameName) {
+    public void userJoinsGameFromBackend(String userName, String gameName) {
         UserDto user = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/join",
@@ -258,11 +254,11 @@ public class StepsDefs {
         if (Objects.equals(userName, qaUser.name())) {
             qaUserClicksOnButtonForGame("join", gameName);
         } else {
-            anotherUserJoinsGame(userName, gameName);
+            userJoinsGameFromBackend(userName, gameName);
         }
     }
 
-    public void testUserStartsTestGame(String userName, String gameName) {
+    public void userStartsGameFromBackend(String userName, String gameName) {
         UserDto user = getUserByName(userName);
         GameResponseDto game = getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/start",
@@ -274,11 +270,10 @@ public class StepsDefs {
     }
 
     @When("{string} starts {string}")
-    public void testUserStartsTestGameBis(String userName, String gameName) {
+    public void testUserStartsTestGame(String userName, String gameName) {
         if (Objects.equals(qaUser.name(), userName)) {
             qaUserClicksOnButtonForGame("start", gameName);
         } else {
-            testUserStartsTestGame(userName, gameName);
         }
     }
 
@@ -316,6 +311,7 @@ public class StepsDefs {
         Integer gameId = getGameByName(gameName).id();
         Locator button = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
         PlaywrightAssertions.assertThat(button).isVisible();
+        PlaywrightAssertions.assertThat(button).isEnabled();
         button.click();
     }
 
@@ -352,6 +348,13 @@ public class StepsDefs {
         assertThat(waitForUrl(url, 2000)).isTrue();
     }
 
+    @When("i am on the on game page for {string}")
+    public void iAmOnTheOnGamePageFor(String gameName) {
+        Integer gameId = getGameByName(gameName).id();
+        String url = (frontendUrlBase + "/games/%d").formatted(gameId);
+        assertThat(waitForUrl(url, 2000)).isTrue();
+    }
+
     @When("i directly access the game-details page for {string}")
     public void iDirectlyAccessTheGameDetailsPageFor(String gameName) {
         Integer gameId = getGameByName(gameName).id();
@@ -362,5 +365,17 @@ public class StepsDefs {
     @And("i refresh")
     public void iRefresh() {
         page.reload();
+    }
+
+    @Given("\"test-game-2\" started")
+    public void started() {
+        // TODO insert a started game in database directly
+        userJoinsGameFromBackend(user1.name(), game2.name());
+        userStartsGameFromBackend(qaUser.name(), game2.name());
+    }
+
+    @And("the element with testid {string} is visible")
+    public void theFollowingElementsAreVisible(String testId) {
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).isVisible();
     }
 }

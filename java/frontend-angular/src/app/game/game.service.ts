@@ -120,11 +120,8 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
-    return this.openApiService.getGameLogs(gameId)
-  }
-
-  getGameLogs2(gameId: number): Observable<Array<GameLog>> {
     return this.gameLogs$;
+    // return this.openApiService.getGameLogs(gameId)
   }
 
   registerGameCreatedHandler() {
