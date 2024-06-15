@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
+import com.adaptionsoft.games.trivia.domain.exception.PlayerAlreadyJoinedException;
 import com.adaptionsoft.games.trivia.domain.exception.DuplicatePlayerNameException;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidNumberOfPlayersException;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
@@ -41,6 +42,9 @@ public class Players extends EventRaiser {
     }
 
     public void addAfterCreationTime(Player newPlayer) {
+        if(individualPlayers.contains(newPlayer)){
+            throw new PlayerAlreadyJoinedException(newPlayer);
+        }
         if (isNameDuplicate(newPlayer)) {
             throw DuplicatePlayerNameException.onAdd(newPlayer, individualPlayers);
         }

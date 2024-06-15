@@ -10,8 +10,9 @@ import static lombok.AccessLevel.PUBLIC;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Player extends Entity<UserId> {
+    @Setter
     @Getter(PUBLIC)
-    private final String name;
+    private String name;
 
     @With // for testing purposes only
     @Getter(PUBLIC)

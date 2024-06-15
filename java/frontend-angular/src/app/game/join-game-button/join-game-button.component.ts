@@ -4,7 +4,8 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
-import { Game } from '../game';
+import {Game} from '../game';
+import {comparePlayers, compareUserAndPlayer} from "../../common/helpers";
 
 @Component({
   selector: 'app-join-game-button',
@@ -43,7 +44,7 @@ export class JoinGameButtonComponent {
   }
 
   protected isPlayerInGame(): boolean {
-    return this.game.players.some(player => player.name === this.user.name);
+    return this.game.players.some(player => compareUserAndPlayer(this.user, player));
   }
 
   private playersCountsLessThanMax() {
