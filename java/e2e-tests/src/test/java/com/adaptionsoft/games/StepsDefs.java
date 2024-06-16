@@ -74,11 +74,6 @@ public class StepsDefs {
         playwright = Playwright.create();
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
                 .setHeadless(false)
-                .setFirefoxUserPrefs(
-                        Map.of(
-                                "network.websocket.allowInsecureFromHTTPS", true
-                        )
-                )
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
