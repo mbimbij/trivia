@@ -7,11 +7,11 @@ import java.util.Queue;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QuestionsLoaderTest {
+class QuestionsRepositoryTest {
     @Test
     void can_load_properties_from_file() {
-        QuestionsLoader questionsLoader = new QuestionsLoader("src/test/resources/questions-test");
-        Map<Questions.Category, Queue<String>> questions = questionsLoader.loadQuestionsFromDirectory();
+        QuestionsRepository questionsLoader = new QuestionsRepository("src/test/resources/questions-test");
+        Map<Questions.Category, Queue<String>> questions = questionsLoader.getQuestions();
         assertThat(questions).isNotEmpty();
         assertThat(questions.keySet()).containsExactlyInAnyOrder(Questions.Category.values());
         assertThat(questions.values()).map(Queue::size).allSatisfy(size -> assertThat(size).isEqualTo(5));

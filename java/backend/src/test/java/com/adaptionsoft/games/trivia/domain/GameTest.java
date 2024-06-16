@@ -43,7 +43,7 @@ class GameTest {
         IdGenerator idGenerator = new IdGenerator();
         eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
-        gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsLoader("src/main/resources/questions"));
+        gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepository("src/main/resources/questions"));
         game = gameFactory.create("game", player1, player2);
     }
 

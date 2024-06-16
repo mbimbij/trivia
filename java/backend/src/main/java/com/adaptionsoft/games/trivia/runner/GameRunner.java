@@ -3,7 +3,7 @@ package com.adaptionsoft.games.trivia.runner;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameFactory;
-import com.adaptionsoft.games.trivia.domain.QuestionsLoader;
+import com.adaptionsoft.games.trivia.domain.QuestionsRepository;
 import com.adaptionsoft.games.trivia.domain.event.ObserverBasedEventPublisher;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.infra.GameLogsRepositoryInMemory;
@@ -16,7 +16,7 @@ public class GameRunner {
         com.adaptionsoft.games.trivia.microarchitecture.EventPublisher eventPublisher = new ObserverBasedEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         eventPublisher.register(new GameLogsPersister(new GameLogsRepositoryInMemory()));
-        QuestionsLoader questionsLoader = new QuestionsLoader("src/main/resources/questions");
+        QuestionsRepository questionsLoader = new QuestionsRepository("src/main/resources/questions");
         GameFactory gameFactory = new GameFactory(new IdGenerator(), eventPublisher, questionsLoader);
         final String[] strings = new String[]{"Chet", "Pat", "Sue", "Joe", "Vlad"};
         final String string = strings[0];
