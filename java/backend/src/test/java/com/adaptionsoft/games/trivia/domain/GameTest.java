@@ -211,8 +211,19 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(player1()))
-                    .isInstanceOf(DuplicatePlayerNameException.class)
-                    .hasMessageStartingWith("duplicate player name on player join");
+                    .isInstanceOf(PlayerAlreadyJoinedException.class);
+        }
+
+        @Test
+        void cannot_join_game__after_renaming_user() {
+            // GIVEN
+            Game game = TestFixtures.a1playerGame();
+            Player renamedPlayer = game.getPlayersList().stream().findFirst().get();
+            renamedPlayer.setName("new name");
+
+            // WHEN
+            assertThatThrownBy(() -> game.addPlayer(renamedPlayer))
+                    .isInstanceOf(PlayerAlreadyJoinedException.class);
         }
 
         @Test
