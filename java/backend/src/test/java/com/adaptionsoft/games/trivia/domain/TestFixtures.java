@@ -22,7 +22,8 @@ public class TestFixtures {
                 players,
                 new PlayerTurnOrchestrator(null, null, null),
                 players.getCurrent(),
-                CREATED);
+                CREATED,
+                questions());
     }
 
     public static Game a2playersGame() {
@@ -34,7 +35,8 @@ public class TestFixtures {
                 players,
                 new PlayerTurnOrchestrator(null, null, null),
                 players.getCurrent(),
-                CREATED);
+                CREATED,
+                questions());
     }
 
     public static Game a6playersGame() {
@@ -52,7 +54,8 @@ public class TestFixtures {
                 players,
                 new PlayerTurnOrchestrator(null, null, null),
                 players.getCurrent(),
-                CREATED);
+                CREATED,
+                questions());
     }
 
     public static GameId gameId() {

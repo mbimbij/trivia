@@ -54,7 +54,8 @@ public class GameFactory {
                 players,
                 new PlayerTurnOrchestrator(questions, rand, board),
                 players.getCurrent(),
-                CREATED
+                CREATED,
+                questions
         );
 
         eventPublisher.publish(players.getAndClearUncommittedEvents());

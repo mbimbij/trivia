@@ -19,9 +19,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.adaptionsoft.games.trivia.domain.AnswerCode.A;
+import static com.adaptionsoft.games.trivia.domain.AnswerCode.B;
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -163,7 +166,8 @@ class GameTest {
                     players,
                     new PlayerTurnOrchestrator(null, null, null),
                     players.getCurrent(),
-                    CREATED);
+                    CREATED,
+                    questions());
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();
@@ -304,7 +308,69 @@ class GameTest {
                 softAssertions.assertThat(game.getCurrentPlayer()).isEqualTo(player2);
             });
         }
+    }
 
+    @Nested
+    class AnswerQuestion {
+        @Test
+        void current_player_should_be_able_to_answer() {
+            // GIVEN a started game
+            game.startBy(player1);
+
+            // WHEN
+            ThrowableAssert.ThrowingCallable action = () -> game.submitAnswerToCurrentQuestion(player1, A);
+
+            // THEN
+            assertThatCode(action).doesNotThrowAnyException();
+        }
+
+        @Test
+        void player_other_than_current_should_not_be_able_to_play_turn() {
+            game.startBy(player1);
+            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player2, A))
+                    .isInstanceOf(PlayTurnException.class);
+        }
+
+        @Test
+        void cannot_submit_an_answer_if_game_not_started() {
+            assumeThat(game.getState()).isNotEqualTo(STARTED);
+            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
+                    .isInstanceOf(InvalidGameStateException.class);
+        }
+
+        @Test
+        void correct_answer__should_raise_appropriate_event() {
+            // GIVEN a started game
+            game.startBy(player1);
+            int turn = game.getTurn();
+            PlayerAnsweredCorrectlyEvent expectedEvent = new PlayerAnsweredCorrectlyEvent(player1);
+
+            // WHEN
+            game.submitAnswerToCurrentQuestion(player1, A);
+
+            // THEN
+            List<Event> events = eventPublisher.getEvents();
+            assertThat(events).contains(expectedEvent);
+            assertThat(game.getTurn()).isEqualTo(turn + 1);
+        }
+
+        @Test
+        void test_incorrect_answer() {
+            // GIVEN a started game
+            game.startBy(player1);
+            int turn = game.getTurn();
+            PlayerAnsweredIncorrectlyEvent expectedEvent = new PlayerAnsweredIncorrectlyEvent(player1);
+
+            // WHEN first incorrect answer
+            game.submitAnswerToCurrentQuestion(player1, B);
+
+            // THEN player answered incorrectly event is raised
+            List<Event> events = eventPublisher.getEvents();
+            assertThat(events).contains(expectedEvent);
+
+            // AND turn has not been incremented
+            assertThat(game.getTurn()).isEqualTo(turn);
+        }
     }
 
     @Nested
@@ -317,7 +383,14 @@ class GameTest {
             PlayerTurnOrchestrator playerTurnOrchestrator = Mockito.mock(PlayerTurnOrchestrator.class);
             Player player = Mockito.spy(player1());
             Mockito.doReturn(true).when(player).isWinning();
-            Game game = new Game(gameId, null, eventPublisher, players, playerTurnOrchestrator, player, STARTED);
+            Game game = new Game(gameId,
+                    null,
+                    eventPublisher,
+                    players,
+                    playerTurnOrchestrator,
+                    player,
+                    STARTED,
+                    questions());
 
             // WHEN
             game.playTurnBy(player);
@@ -342,8 +415,6 @@ class GameTest {
                 softAssertions.assertThatThrownBy(() -> game.startBy(player1)).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.playTurnBy(player1)).isInstanceOf(InvalidGameStateException.class);
             });
-
-            // THEN
         }
     }
 }

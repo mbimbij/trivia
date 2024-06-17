@@ -23,7 +23,7 @@ public class Game extends Entity<GameId> {
     private final Players players;
     private boolean isGameInProgress = true;
     @Getter
-    int turn = 0;
+    private int turn = 0;
     private Player currentPlayer;
     @Getter
     private Player winner;
@@ -31,6 +31,7 @@ public class Game extends Entity<GameId> {
     @Getter
     @Setter // for testing purposes only
     private State state;
+    private final Questions questions;
 
     public Game(GameId gameId,
                 String name,
@@ -39,7 +40,7 @@ public class Game extends Entity<GameId> {
                 Players players,
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
-                State state) {
+                State state, Questions questions) {
         super(gameId);
         this.name = name;
         this.eventPublisher = eventPublisher;
@@ -47,6 +48,7 @@ public class Game extends Entity<GameId> {
         this.playerTurnOrchestrator = playerTurnOrchestrator;
         this.currentPlayer = currentPlayer;
         this.state = state;
+        this.questions = questions;
         setGameIdToPlayers();
     }
 
@@ -62,7 +64,7 @@ public class Game extends Entity<GameId> {
     }
 
     public void playTurnBy(Player player) {
-        validateGameNotEnded("play turn");
+        validateGameStateIsNot(ENDED, "play turn");
         if (!Objects.equals(player, currentPlayer)) {
             throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
         }
@@ -74,14 +76,38 @@ public class Game extends Entity<GameId> {
         publishDomainEvents();
     }
 
-    private void validateGameNotEnded(String action) {
-        if (state.equals(ENDED)) {
+    public void submitAnswerToCurrentQuestion(Player player, AnswerCode answerCode) {
+        validateGameStateIs(STARTED, "answer question");
+        if (!Objects.equals(player, currentPlayer)) {
+            throw PlayTurnException.notCurrentPlayerException(id, currentPlayer.getId(), currentPlayer.getId());
+        }
+        Question currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+        if (currentQuestion.correctAnswer() == answerCode) {
+            currentPlayer.answerCorrectly();
+            publishDomainEvents();
+            endCurrentPlayerTurn();
+        } else {
+            raise(new PlayerAnsweredIncorrectlyEvent(currentPlayer));
+        }
+        publishDomainEvents();
+    }
+
+    private void validateGameStateIs(State expectedState, String action) {
+        validateGameState(true, expectedState, action);
+    }
+
+    private void validateGameStateIsNot(State expectedState, String action) {
+        validateGameState(false, expectedState, action);
+    }
+
+    private void validateGameState(boolean orNot, State expectedState, String action) {
+        if ((!orNot && state.equals(expectedState)) || (orNot && !state.equals(expectedState))) {
             throw new InvalidGameStateException(this.getId(), this.getState(), action);
         }
     }
 
     private void displayNextPlayerIfGameNotEnded() {
-        if(state != ENDED){
+        if (state != ENDED) {
             raise(new PlayerTurnStartedEvent(currentPlayer));
         }
     }
@@ -122,7 +148,7 @@ public class Game extends Entity<GameId> {
     }
 
     public void startBy(Player player) {
-        validateGameNotEnded("start");
+        validateGameStateIsNot(ENDED, "start");
         if (!Objects.equals(player, players.getCreator())) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
         }
