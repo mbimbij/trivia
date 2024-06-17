@@ -16,18 +16,16 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 public class GameFactory {
     private final IdGenerator idGenerator;
     private final EventPublisher eventPublisher;
-    private final QuestionsRepository questionsLoader;
-    private String questionsPath;
-
+    private final QuestionsRepository questionsRepository;
 
     public Game create(String gameName, String creatorName, String... otherPlayersNames) {
         return create(new Random(), gameName, creatorName, otherPlayersNames);
     }
 
-    public GameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsRepository questionsLoader) {
+    public GameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsRepository questionsRepository) {
         this.idGenerator = idGenerator;
         this.eventPublisher = eventPublisher;
-        this.questionsLoader = questionsLoader;
+        this.questionsRepository = questionsRepository;
     }
 
     public Game create(String gameName, Player creator, Player... players) {
@@ -68,7 +66,7 @@ public class GameFactory {
 
 
     private Questions buildQuestions() {
-        Map<Questions.Category, Queue<String>> questionsByCategory = questionsLoader.getQuestions();
+        Map<Questions.Category, Queue<Question>> questionsByCategory = questionsRepository.getQuestions();
         return new Questions(questionsByCategory);
     }
 }

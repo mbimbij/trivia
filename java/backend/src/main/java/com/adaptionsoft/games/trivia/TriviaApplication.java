@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia;
 import com.adaptionsoft.games.trivia.domain.GameFactory;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
 import com.adaptionsoft.games.trivia.domain.QuestionsRepository;
+import com.adaptionsoft.games.trivia.domain.QuestionsRepositoryTxt;
 import com.adaptionsoft.games.trivia.domain.event.ObserverBasedEventPublisher;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.infra.GameLogsRepositoryInMemory;
@@ -48,7 +49,7 @@ public class TriviaApplication {
 
     @Bean
     public QuestionsRepository questionsLoader(@Value("${application.questions-path}") String questionsPath) {
-        return new QuestionsRepository(questionsPath);
+        return new QuestionsRepositoryTxt(questionsPath);
     }
 
     @Bean

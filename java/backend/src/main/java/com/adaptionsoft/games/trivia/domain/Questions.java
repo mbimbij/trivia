@@ -1,19 +1,21 @@
 package com.adaptionsoft.games.trivia.domain;
 
+import com.speedment.common.mapstream.MapStream;
+
 import java.util.Map;
 import java.util.Queue;
 
 public class Questions {
 
-    private final Map<Category, Queue<String>> questionsByCategory;
+    private final Map<Category, Queue<Question>> questionsByCategory;
 
-    public Questions(Map<Category, Queue<String>> questionsByCategory) {
+    public Questions(Map<Category, Queue<Question>> questionsByCategory) {
         this.questionsByCategory = questionsByCategory;
     }
 
     String drawQuestion(int playerLocation) {
         Category category = Category.getQuestionCategory(playerLocation);
-        return questionsByCategory.get(category).remove();
+        return questionsByCategory.get(category).remove().questionText();
     }
 
     public enum Category {

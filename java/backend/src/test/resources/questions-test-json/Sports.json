@@ -1,0 +1,46 @@
+[
+  {
+    "id": "sports-1",
+    "questionText": "sports question 1",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "A"
+  },
+  {
+    "id": "sports-2",
+    "questionText": "sports question 2",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "sports-3",
+    "questionText": "sports question 3",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "sports-4",
+    "questionText": "sports question 4",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "D"
+  }
+]

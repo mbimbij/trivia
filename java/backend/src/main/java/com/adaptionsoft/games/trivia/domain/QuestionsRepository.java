@@ -2,25 +2,23 @@ package com.adaptionsoft.games.trivia.domain;
 
 import lombok.SneakyThrows;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class QuestionsRepository {
-
-
-    private String directoryPathString;
+public abstract class QuestionsRepository {
+    protected String directoryPathString;
 
     public QuestionsRepository(String directoryPathString) {
         this.directoryPathString = directoryPathString;
     }
 
     @SneakyThrows
-    public Map<Questions.Category, Queue<String>> getQuestions() {
+    public Map<Questions.Category, Queue<Question>> getQuestions() {
         Path directoryPath = Paths.get(this.directoryPathString);
         try (Stream<Path> files = Files.list(directoryPath)) {
             return files.map(this::loadQuestionsFromFile)
@@ -28,17 +26,9 @@ public class QuestionsRepository {
         }
     }
 
-    @SneakyThrows
-    private Map.Entry<Questions.Category, Queue<String>> loadQuestionsFromFile(Path filePath) {
-        try (Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
-            Queue<String> questions = new ArrayDeque<>(lines.toList());
-            String categoryName = categoryNameFromFilePath(filePath);
-            Questions.Category questionCategory = Objects.requireNonNull(Questions.Category.fromString(categoryName));
-            return Map.entry(questionCategory, questions);
-        }
-    }
+    protected abstract Map.Entry<Questions.Category, Queue<Question>> loadQuestionsFromFile(Path filePath);
 
-    private String categoryNameFromFilePath(Path filePath) {
+    protected String categoryNameFromFilePath(Path filePath) {
         return filePath.toFile().getName().split("\\.")[0];
     }
 }

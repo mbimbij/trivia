@@ -1,0 +1,46 @@
+[
+  {
+    "id": "science-1",
+    "questionText": "science question 1",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "A"
+  },
+  {
+    "id": "science-2",
+    "questionText": "science question 2",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "science-3",
+    "questionText": "science question 3",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "science-4",
+    "questionText": "science question 4",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "D"
+  }
+]
