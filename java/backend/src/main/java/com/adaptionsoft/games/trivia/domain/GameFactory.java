@@ -54,7 +54,7 @@ public class GameFactory {
         );
 
         eventPublisher.raise(new GameCreatedEvent(game.getId()));
-        eventPublisher.publishAndClearUncommittedEvents();
+        eventPublisher.flushEvents();
         return game;
     }
 

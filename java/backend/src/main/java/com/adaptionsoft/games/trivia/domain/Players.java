@@ -21,11 +21,10 @@ public class Players extends EventRaiser {
     private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Players(EventPublisher eventPublisher, Player ... individualPlayers) {
+    public Players(EventPublisher eventPublisher, Player creator, Player ... individualPlayers) {
         super(eventPublisher);
-        if(individualPlayers.length > 0){
-            setCreator(individualPlayers[0]);
-        }
+        setCreator(creator);
+        this.individualPlayers.add(creator);
         this.individualPlayers.addAll(Arrays.asList(individualPlayers));
     }
 
@@ -38,10 +37,6 @@ public class Players extends EventRaiser {
         }
     }
 
-    public void add(Player newPlayer) {
-        individualPlayers.add(newPlayer);
-    }
-
     public void addAfterCreationTime(Player newPlayer) {
         if(individualPlayers.contains(newPlayer)){
             throw new PlayerAlreadyJoinedException(newPlayer);
@@ -52,7 +47,7 @@ public class Players extends EventRaiser {
         if (individualPlayers.size() + 1 > MAX_PLAYER_COUNT) {
             throw InvalidNumberOfPlayersException.onAdd();
         }
-        add(newPlayer);
+        individualPlayers.add(newPlayer);
     }
 
     private boolean findDuplicatesAtCreationTime(List<Player> players) {
@@ -93,12 +88,8 @@ public class Players extends EventRaiser {
         return individualPlayers.size();
     }
 
-    public void addCreator(Player creator) {
-        setCreator(creator);
-        add(creator);
-    }
-
     public void setGameId(GameId gameId) {
+        assert gameId != null;
         individualPlayers.forEach(player -> player.setGameId(gameId));
     }
 

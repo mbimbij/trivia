@@ -25,7 +25,6 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GameTest {
 
     private static final PrintStream stdout = System.out;
@@ -33,7 +32,6 @@ class GameTest {
     private GameFactory gameFactory;
     private final Player player1 = player1();
     private final Player player2 = player2();
-    // GIVEN
     private Game game;
 
     @BeforeEach
@@ -61,10 +59,6 @@ class GameTest {
 
     @Nested
     class CreateGame {
-        @Test
-        void cannot_create_game_without_any_player() {
-//            assertThrows(Players.Nu.class, () -> gameFactory.create("game"));
-        }
 
         @Test
         void cannot_create_game_with_more_than_6_players() {
@@ -137,7 +131,7 @@ class GameTest {
                     questions());
 
             // THEN no domain events are produced
-            assertThat(eventPublisher.getEvents()).isEmpty();
+            assertThat(eventPublisher.getPublishedEvents()).isEmpty();
         }
 
         @Test
@@ -151,7 +145,7 @@ class GameTest {
             Game game = gameFactory.create("game", player1, player2);
 
             // THEN the domain events are produced in the correct order
-            List<Event> events = eventPublisher.getEvents();
+            List<Event> events = eventPublisher.getPublishedEvents();
             Assertions.assertArrayEquals(events.toArray(), new Event[]{
                     new PlayerAddedEvent(player1, 1),
                     new PlayerAddedEvent(player2, 2),
@@ -231,7 +225,7 @@ class GameTest {
             // THEN
             assertSoftly(softAssertions -> {
                 softAssertions.assertThat(game.getState()).isEqualTo(State.STARTED);
-                softAssertions.assertThat(eventPublisher.getEvents())
+                softAssertions.assertThat(eventPublisher.getPublishedEvents())
                         .containsOnlyOnce(new GameStartedEvent(game.getId()));
             });
         }
@@ -311,31 +305,39 @@ class GameTest {
             int turn = game.getTurn();
             PlayerAnsweredCorrectlyEvent expectedEvent = new PlayerAnsweredCorrectlyEvent(player1);
 
-            // WHEN
+            // WHEN correct answer
             game.submitAnswerToCurrentQuestion(player1, A);
 
-            // THEN
-            List<Event> events = eventPublisher.getEvents();
-            assertThat(events).contains(expectedEvent);
+            // THEN event is raised
+            assertThat(eventPublisher.getPublishedEvents()).contains(expectedEvent);
+
+            // AND turn is incremented
             assertThat(game.getTurn()).isEqualTo(turn + 1);
+
+            // AND current player has been changed
+            assertThat(game.getCurrentPlayer()).isEqualTo(player2);
         }
 
         @Test
         void test_incorrect_answer() {
             // GIVEN a started game
             game.startBy(player1);
+
+            // AND turn counter at the beginning
             int turn = game.getTurn();
             PlayerAnsweredIncorrectlyEvent expectedEvent = new PlayerAnsweredIncorrectlyEvent(player1);
 
             // WHEN first incorrect answer
             game.submitAnswerToCurrentQuestion(player1, B);
 
-            // THEN player answered incorrectly event is raised
-            List<Event> events = eventPublisher.getEvents();
-            assertThat(events).contains(expectedEvent);
+            // THEN event is raised
+            assertThat(eventPublisher.getPublishedEvents()).contains(expectedEvent);
 
-            // AND turn has not been incremented
+            // AND turn not incremented
             assertThat(game.getTurn()).isEqualTo(turn);
+
+            // AND current player has not been changed
+            assertThat(game.getCurrentPlayer()).isEqualTo(player1);
         }
     }
 
@@ -364,8 +366,8 @@ class GameTest {
             // THEN
             assertSoftly(softAssertions -> {
                 softAssertions.assertThat(game.getState()).isEqualTo(ENDED);
-                softAssertions.assertThat(eventPublisher.getEvents()).contains(new GameEndedEvent(gameId, player.getId()));
-                softAssertions.assertThat(eventPublisher.getEvents()).contains(new PlayerWonEvent(gameId, player));
+                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new GameEndedEvent(gameId, player.getId()));
+                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerWonEvent(gameId, player));
             });
         }
 

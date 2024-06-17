@@ -72,7 +72,7 @@ public class Game extends Entity<GameId> {
         endGameIfCurrentPlayerWon();
         endCurrentPlayerTurn();
         displayNextPlayerIfGameNotEnded();
-        eventPublisher.publishAndClearUncommittedEvents();
+        eventPublisher.flushEvents();
     }
 
     public void submitAnswerToCurrentQuestion(Player player, AnswerCode answerCode) {
@@ -81,13 +81,13 @@ public class Game extends Entity<GameId> {
             throw PlayTurnException.notCurrentPlayerException(id, currentPlayer.getId(), currentPlayer.getId());
         }
         Question currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
-        if (currentQuestion.correctAnswer() == answerCode) {
+        if (currentQuestion.isCorrect(answerCode)) {
             currentPlayer.answerCorrectly();
             endCurrentPlayerTurn();
         } else {
-            raise(new PlayerAnsweredIncorrectlyEvent(currentPlayer));
+            currentPlayer.answerIncorrectly();
         }
-        eventPublisher.publishAndClearUncommittedEvents();
+        eventPublisher.flushEvents();
     }
 
     private void validateGameStateIs(State expectedState, String action) {
@@ -147,7 +147,7 @@ public class Game extends Entity<GameId> {
         // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
         raise(new PlayerTurnStartedEvent(currentPlayer));
-        eventPublisher.publishAndClearUncommittedEvents();
+        eventPublisher.flushEvents();
     }
 
     public Optional<Player> findPlayerById(UserId playerId) {

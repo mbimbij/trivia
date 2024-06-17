@@ -6,9 +6,7 @@ public interface EventPublisher {
 
     void raise(Event... events);
 
-    void publishImmediately(Event... events);
-
     void register(EventListener eventListener);
 
-    void publishAndClearUncommittedEvents();
+    void flushEvents();
 }

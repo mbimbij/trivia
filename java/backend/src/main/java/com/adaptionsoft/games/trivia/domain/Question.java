@@ -14,4 +14,7 @@ public record Question(
         @NotNull
         AnswerCode correctAnswer
 ) {
+    boolean isCorrect(AnswerCode answerCode) {
+        return correctAnswer() == answerCode;
+    }
 }
