@@ -55,8 +55,8 @@ public class PlayerTurnOrchestrator extends EventRaiser {
     }
 
     boolean doAskQuestion() {
-        String question = questions.drawQuestion(currentPlayer.getLocation());
-        raise(new QuestionAskedToPlayerEvent(currentPlayer, question));
+        Question question = questions.drawQuestion(currentPlayer.getLocation());
+        raise(new QuestionAskedToPlayerEvent(currentPlayer, question.questionText()));
         if (isAnsweringCorrectly()) {
             currentPlayer.answerCorrectly();
             return true;

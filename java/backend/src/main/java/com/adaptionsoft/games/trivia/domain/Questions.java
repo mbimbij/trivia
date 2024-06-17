@@ -12,9 +12,9 @@ public class Questions {
         this.questionsByCategory = questionsByCategory;
     }
 
-    String drawQuestion(int playerLocation) {
+    Question drawQuestion(int playerLocation) {
         Category category = Category.getQuestionCategory(playerLocation);
-        return questionsByCategory.get(category).remove().questionText();
+        return questionsByCategory.get(category).remove();
     }
 
     public boolean isValid() {
