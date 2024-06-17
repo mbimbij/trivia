@@ -13,6 +13,11 @@ public class MockEventPublisher extends ObserverBasedEventPublisher implements c
 
     public void clearEvents() {
         events.clear();
+        uncommittedEvents.clear();
+    }
+
+    public Collection<Event> getUncommittedEvents() {
+        return uncommittedEvents;
     }
 
     @Override
@@ -22,7 +27,7 @@ public class MockEventPublisher extends ObserverBasedEventPublisher implements c
     }
 
     @Override
-    public void publish(Event... events) {
+    public void publishImmediately(Event... events) {
         publish(Arrays.asList(events));
     }
 }

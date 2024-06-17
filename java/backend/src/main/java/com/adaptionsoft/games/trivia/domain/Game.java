@@ -6,7 +6,6 @@ import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +40,7 @@ public class Game extends Entity<GameId> {
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
                 State state, Questions questions) {
-        super(gameId);
+        super(gameId, eventPublisher);
         this.name = name;
         this.eventPublisher = eventPublisher;
         this.players = players;
@@ -49,7 +48,8 @@ public class Game extends Entity<GameId> {
         this.currentPlayer = currentPlayer;
         this.state = state;
         this.questions = questions;
-        setGameIdToPlayers();
+        this.players.setGameId(getId());
+        this.players.raisePlayersAddedEvents();
     }
 
     public Player getCreator() {
@@ -70,10 +70,9 @@ public class Game extends Entity<GameId> {
         }
         playerTurnOrchestrator.performTurn(player);
         endGameIfCurrentPlayerWon();
-        publishDomainEvents();
         endCurrentPlayerTurn();
         displayNextPlayerIfGameNotEnded();
-        publishDomainEvents();
+        eventPublisher.publishAndClearUncommittedEvents();
     }
 
     public void submitAnswerToCurrentQuestion(Player player, AnswerCode answerCode) {
@@ -84,12 +83,11 @@ public class Game extends Entity<GameId> {
         Question currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
         if (currentQuestion.correctAnswer() == answerCode) {
             currentPlayer.answerCorrectly();
-            publishDomainEvents();
             endCurrentPlayerTurn();
         } else {
             raise(new PlayerAnsweredIncorrectlyEvent(currentPlayer));
         }
-        publishDomainEvents();
+        eventPublisher.publishAndClearUncommittedEvents();
     }
 
     private void validateGameStateIs(State expectedState, String action) {
@@ -128,17 +126,6 @@ public class Game extends Entity<GameId> {
         turn++;
     }
 
-    private void publishDomainEvents() {
-        List<Event> aggregatedEvents = getAndClearUncommittedEvents();
-        List<Event> currentPlayerEvents = Optional.ofNullable(currentPlayer)
-                .map(EventRaiser::getAndClearUncommittedEvents)
-                .orElse(Collections.emptyList());
-        aggregatedEvents.addAll(currentPlayerEvents);
-        aggregatedEvents.addAll(playerTurnOrchestrator.getAndClearUncommittedEvents());
-        aggregatedEvents.sort(Comparator.comparingInt(Event::getOrderNumber));
-        eventPublisher.publish(aggregatedEvents);
-    }
-
     public void addPlayer(Player player) {
         if (!state.equals(CREATED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
@@ -160,7 +147,7 @@ public class Game extends Entity<GameId> {
         // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
         raise(new PlayerTurnStartedEvent(currentPlayer));
-        publishDomainEvents();
+        eventPublisher.publishAndClearUncommittedEvents();
     }
 
     public Optional<Player> findPlayerById(UserId playerId) {
@@ -180,10 +167,6 @@ public class Game extends Entity<GameId> {
 
     public int getPlayersCount() {
         return players.count();
-    }
-
-    public void setGameIdToPlayers() {
-        players.setGameId(getId());
     }
 
     public enum State {

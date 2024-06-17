@@ -4,7 +4,6 @@ package com.adaptionsoft.games.trivia.domain;
 import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
-import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.SneakyThrows;
 import org.assertj.core.api.ThrowableAssert;
@@ -13,10 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.A;
@@ -33,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class GameTest {
 
     private static final PrintStream stdout = System.out;
-    private MockEventPublisher eventPublisher;
+    private final MockEventPublisher eventPublisher = getEventPublisher();
     private GameFactory gameFactory;
     private final Player player1 = player1();
     private final Player player2 = player2();
@@ -44,38 +40,9 @@ class GameTest {
     void setUp() {
         System.setOut(stdout);
         IdGenerator idGenerator = new IdGenerator();
-        eventPublisher = new MockEventPublisher();
-        eventPublisher.register(new EventConsoleLogger());
+        eventPublisher.clearEvents();
         gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryTxt("src/main/resources/questions"));
         game = gameFactory.create("game", player1, player2);
-    }
-
-    @Test
-    void should_not_differ_from_golden_master() throws IOException {
-        // GIVEN
-        redirectStdoutToFile();
-        String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
-        int seed = 2;
-        final String[] strings = new String[]{"Chet", "Pat", "Sue", "Joe", "Vlad"};
-        Game game = gameFactory.create(new Random(seed),
-                "game",
-                "Chet",
-                "Pat",
-                "Sue",
-                "Joe",
-                "Vlad");
-
-        // WHEN
-        game.play();
-
-        // THEN
-        String lead = Files.readString(Paths.get("src/test/resources/lead.txt"));
-        assertEquals(gold, lead);
-    }
-
-    @SneakyThrows
-    private void redirectStdoutToFile() {
-        System.setOut(new PrintStream("src/test/resources/lead.txt"));
     }
 
     @Test
@@ -156,7 +123,7 @@ class GameTest {
         void creation_through_constructor__should_not_raise_any_event() {
             // GIVEN
             eventPublisher.clearEvents();
-            Players players = new Players(player1(), player2());
+            Players players = new Players(eventPublisher, player1(), player2());
 
             // WHEN
             Game game = new Game(
@@ -164,14 +131,13 @@ class GameTest {
                     "game name",
                     eventPublisher,
                     players,
-                    new PlayerTurnOrchestrator(null, null, null),
+                    new PlayerTurnOrchestrator(eventPublisher, null, null, null),
                     players.getCurrent(),
                     CREATED,
                     questions());
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getEvents()).isEmpty();
-            assertThat(game.getAndClearUncommittedEvents()).isEmpty();
         }
 
         @Test

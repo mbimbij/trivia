@@ -5,6 +5,7 @@ import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLog;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.Id;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,6 +44,7 @@ public class TriviaController {
     private final GameFactory gameFactory;
     private final SimpMessagingTemplate template;
     private final GameLogsRepository gameLogsRepository;
+    private final EventPublisher eventPublisher;
 
     @GetMapping
     public Collection<GameResponseDto> listGames() {
@@ -126,7 +128,7 @@ public class TriviaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
-        Game game = gameFactory.create(requestDto.gameName(), requestDto.getCreatorAsDomainObject());
+        Game game = gameFactory.create(requestDto.gameName(), requestDto.getCreatorAsPlayerDomainObject(eventPublisher));
         gameRepository.save(game);
         template.convertAndSend("/topic/games/created", GameResponseDto.from(game));
         return GameResponseDto.from(game);
@@ -139,7 +141,7 @@ public class TriviaController {
     public GameResponseDto joinGame(@PathVariable("gameId") Integer gameIdInt,
                                     @RequestBody PlayerDto playerDto) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
-        game.addPlayer(playerDto.toDomainObject());
+        game.addPlayer(playerDto.toDomainObject(eventPublisher));
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);

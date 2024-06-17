@@ -16,7 +16,7 @@ class EventPublisherTest {
         eventPublisher.register(eventListener);
 
         // WHEN
-        eventPublisher.publish(new MockEvent());
+        eventPublisher.publishImmediately(new MockEvent());
 
         // THEN
         Assertions.assertThat(eventListener.isHandled()).isTrue();

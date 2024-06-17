@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.application;
 
 import com.adaptionsoft.games.trivia.domain.*;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import com.adaptionsoft.games.trivia.web.*;
 import com.adaptionsoft.games.trivia.websocket.WebSocketConfig;
@@ -8,7 +9,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotBlank;
 import lombok.SneakyThrows;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -46,6 +46,8 @@ class TriviaApplicationShould {
     private MockMvc mvc;
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private EventPublisher eventPublisher;
     @Autowired
     private GameFactory gameFactory;
     @SpyBean
@@ -190,7 +192,7 @@ class TriviaApplicationShould {
         assertThat(gameRepository.findById(game.getId()))
                 .hasValueSatisfying(g -> {
                     assertThat(g.getPlayersCount()).isEqualTo(2);
-                    assertThat(g.getPlayersList()).contains(newPlayerDto.toDomainObject());
+                    assertThat(g.getPlayersList()).contains(newPlayerDto.toDomainObject(eventPublisher));
                 });
     }
 

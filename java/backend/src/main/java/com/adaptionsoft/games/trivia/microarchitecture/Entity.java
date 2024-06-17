@@ -16,9 +16,11 @@ public class Entity<T extends Id<?>> extends EventRaiser {
      * DO NOT CALL directly. Needed for @AllArgsConstructor in Player class only.
      */
     protected Entity() {
+        super(null);
     }
 
-    public Entity(T id) {
+    public Entity(T id, EventPublisher eventPublisher) {
+        super(eventPublisher);
         this.id = id;
     }
 }

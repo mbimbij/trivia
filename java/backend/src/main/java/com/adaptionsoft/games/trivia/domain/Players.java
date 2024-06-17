@@ -4,6 +4,7 @@ import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerAlreadyJoinedException;
 import com.adaptionsoft.games.trivia.domain.exception.DuplicatePlayerNameException;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidNumberOfPlayersException;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,8 @@ public class Players extends EventRaiser {
     private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Players(Player ... individualPlayers) {
+    public Players(EventPublisher eventPublisher, Player ... individualPlayers) {
+        super(eventPublisher);
         if(individualPlayers.length > 0){
             setCreator(individualPlayers[0]);
         }
@@ -38,7 +40,6 @@ public class Players extends EventRaiser {
 
     public void add(Player newPlayer) {
         individualPlayers.add(newPlayer);
-        raise(new PlayerAddedEvent(newPlayer, individualPlayers.size()));
     }
 
     public void addAfterCreationTime(Player newPlayer) {
@@ -99,6 +100,12 @@ public class Players extends EventRaiser {
 
     public void setGameId(GameId gameId) {
         individualPlayers.forEach(player -> player.setGameId(gameId));
-        uncommittedEvents.forEach(event -> event.setGameId(gameId));
+    }
+
+    public void raisePlayersAddedEvents() {
+        for (int i = 0; i < individualPlayers.size(); i++) {
+            Player player = individualPlayers.get(i);
+            raise(new PlayerAddedEvent(player, i+1));
+        }
     }
 }

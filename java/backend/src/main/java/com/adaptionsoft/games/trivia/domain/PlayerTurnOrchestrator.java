@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 
 import java.util.Random;
@@ -11,7 +12,8 @@ public class PlayerTurnOrchestrator extends EventRaiser {
     private final Board board;
     private Player currentPlayer;
 
-    public PlayerTurnOrchestrator(Questions questions, Random rand, Board board) {
+    public PlayerTurnOrchestrator(EventPublisher eventPublisher, Questions questions, Random rand, Board board) {
+        super(eventPublisher);
         this.questions = questions;
         this.rand = rand;
         this.board = board;

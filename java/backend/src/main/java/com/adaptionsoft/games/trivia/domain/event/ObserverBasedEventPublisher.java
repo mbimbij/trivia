@@ -10,8 +10,14 @@ import java.util.List;
 
 public class ObserverBasedEventPublisher implements EventPublisher {
     private final List<EventListener> listeners = new ArrayList<>();
+    protected final List<Event> uncommittedEvents = new ArrayList<>();
 
-    public void publish(Event... events) {
+    @Override
+    public void raise(Event... events) {
+        uncommittedEvents.addAll(Arrays.asList(events));
+    }
+
+    public void publishImmediately(Event... events) {
         publish(Arrays.asList(events));
     }
 
@@ -25,5 +31,11 @@ public class ObserverBasedEventPublisher implements EventPublisher {
 
     public void register(EventListener listener) {
         this.listeners.add(listener);
+    }
+
+    @Override
+    public void publishAndClearUncommittedEvents() {
+        publish(uncommittedEvents);
+        uncommittedEvents.clear();
     }
 }

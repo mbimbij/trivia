@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.*;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -32,8 +33,8 @@ public class Player extends Entity<UserId> {
     @Setter
     private GameId gameId;
 
-    public Player(UserId playerId, String name) {
-        super(playerId);
+    public Player(EventPublisher eventPublisher, UserId playerId, String name) {
+        super(playerId, eventPublisher);
         this.name = name;
     }
 

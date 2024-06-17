@@ -28,7 +28,8 @@ class PlayerTurnOrchestratorTest {
         // GIVEN
         Questions questions = Mockito.spy(TestFixtures.questions());
         PlayerTurnOrchestrator systemUnderTest = spy(
-                new PlayerTurnOrchestrator(questions,
+                new PlayerTurnOrchestrator(eventPublisher,
+                        questions,
                         new Random(),
                         new Board(12))
         );
@@ -46,7 +47,8 @@ class PlayerTurnOrchestratorTest {
         // GIVEN
         Questions questions = Mockito.spy(TestFixtures.questions());
         PlayerTurnOrchestrator systemUnderTest = spy(
-                new PlayerTurnOrchestrator(questions,
+                new PlayerTurnOrchestrator(eventPublisher,
+                        questions,
                         new Random(),
                         new Board(12))
         );
