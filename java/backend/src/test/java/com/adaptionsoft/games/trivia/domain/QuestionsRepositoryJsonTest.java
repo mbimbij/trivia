@@ -15,15 +15,9 @@ class QuestionsRepositoryJsonTest {
         QuestionsRepositoryJson questionsRepository = new QuestionsRepositoryJson("src/test/resources/questions-test-json");
 
         // WHEN
-        Map<Questions.Category, Queue<Question>> questions = questionsRepository.getQuestions();
+        Questions questions = questionsRepository.getQuestions();
 
         // THEN
-        assertThat(questions).containsKeys(GEOGRAPHY, POP, ROCK, SCIENCE, SPORTS);
-        assertThat(questions).allSatisfy((category, categoryQuestions) -> {
-            assertThat(categoryQuestions).hasSize(4);
-            assertThat(categoryQuestions).allSatisfy(question -> {
-                assertThat(question).hasNoNullFieldsOrProperties();
-            });
-        });
+        assertThat(questions.isValid()).isTrue();
     }
 }

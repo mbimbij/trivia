@@ -18,11 +18,12 @@ public abstract class QuestionsRepository {
     }
 
     @SneakyThrows
-    public Map<Questions.Category, Queue<Question>> getQuestions() {
+    public Questions getQuestions() {
         Path directoryPath = Paths.get(this.directoryPathString);
         try (Stream<Path> files = Files.list(directoryPath)) {
-            return files.map(this::loadQuestionsFromFile)
+            Map<Questions.Category, Queue<Question>> questionsMap = files.map(this::loadQuestionsFromFile)
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return new Questions(questionsMap);
         }
     }
 

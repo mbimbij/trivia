@@ -1,8 +1,5 @@
 package com.adaptionsoft.games.trivia.domain;
 
-import java.util.Map;
-import java.util.Queue;
-
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
 
 public class TestFixtures {
@@ -11,19 +8,14 @@ public class TestFixtures {
     private static final GameId GAME_ID = new GameId(GAME_TEST_ID);
 
     public static Questions questions() {
-        String pathString = "src/test/resources/questions-test";
-        return questions(pathString);
-    }
-
-    private static Questions questions(String pathString) {
+        String pathString = "src/test/resources/questions-test-json";
         QuestionsRepository questionsLoader = new QuestionsRepositoryTxt(pathString);
-        Map<Questions.Category, Queue<Question>> questionsMap = questionsLoader.getQuestions();
-        return new Questions(questionsMap);
+        return questionsLoader.getQuestions();
     }
 
     public static Game a1playerGame() {
         Players players = new Players(player1());
-        Game game = new Game(
+        return new Game(
                 GAME_ID,
                 "game name",
                 null,
@@ -31,12 +23,11 @@ public class TestFixtures {
                 new PlayerTurnOrchestrator(null, null, null),
                 players.getCurrent(),
                 CREATED);
-        return game;
     }
 
     public static Game a2playersGame() {
         Players players = new Players(player1(), player2());
-        Game game = new Game(
+        return new Game(
                 GAME_ID,
                 "game name",
                 null,
@@ -44,7 +35,6 @@ public class TestFixtures {
                 new PlayerTurnOrchestrator(null, null, null),
                 players.getCurrent(),
                 CREATED);
-        return game;
     }
 
     public static Game a6playersGame() {
@@ -55,7 +45,7 @@ public class TestFixtures {
                 player(5),
                 player(6)
         );
-        Game game = new Game(
+        return new Game(
                 GAME_ID,
                 "game name",
                 null,
@@ -63,7 +53,6 @@ public class TestFixtures {
                 new PlayerTurnOrchestrator(null, null, null),
                 players.getCurrent(),
                 CREATED);
-        return game;
     }
 
     public static GameId gameId() {

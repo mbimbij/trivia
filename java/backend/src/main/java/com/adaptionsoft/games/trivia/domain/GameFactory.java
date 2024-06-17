@@ -6,8 +6,6 @@ import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.NonNull;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Random;
 
 import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
@@ -42,7 +40,7 @@ public class GameFactory {
     }
 
     public Game create(Random rand, String gameName, @NonNull Player creator, Player... otherPlayers) {
-        Questions questions = buildQuestions();
+        Questions questions = questionsRepository.getQuestions();
         Players players = PlayersFactory.create(creator, otherPlayers);
 
         int squaresCount = 12;
@@ -65,8 +63,4 @@ public class GameFactory {
     }
 
 
-    private Questions buildQuestions() {
-        Map<Questions.Category, Queue<Question>> questionsByCategory = questionsRepository.getQuestions();
-        return new Questions(questionsByCategory);
-    }
 }

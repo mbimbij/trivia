@@ -1,9 +1,8 @@
 package com.adaptionsoft.games.trivia.domain;
 
-import com.speedment.common.mapstream.MapStream;
-
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 public class Questions {
 
@@ -16,6 +15,10 @@ public class Questions {
     String drawQuestion(int playerLocation) {
         Category category = Category.getQuestionCategory(playerLocation);
         return questionsByCategory.get(category).remove().questionText();
+    }
+
+    public boolean isValid() {
+        return questionsByCategory.keySet().containsAll(Set.of(Category.values()));
     }
 
     public enum Category {
