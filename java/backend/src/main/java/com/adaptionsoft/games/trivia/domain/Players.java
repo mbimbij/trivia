@@ -21,11 +21,17 @@ public class Players extends EventRaiser {
     private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Players(EventPublisher eventPublisher, Player creator, Player ... individualPlayers) {
+    public Players(EventPublisher eventPublisher, Player creator, Player... individualPlayers) {
         super(eventPublisher);
+        addCreator(creator);
+//        this.individualPlayers.addAll(Arrays.asList(individualPlayers));
+        Arrays.stream(individualPlayers).forEach(this::add);
+    }
+
+    private void addCreator(Player creator) {
         setCreator(creator);
         this.individualPlayers.add(creator);
-        this.individualPlayers.addAll(Arrays.asList(individualPlayers));
+        raise(new PlayerAddedEvent(creator, this.individualPlayers.size()));
     }
 
     public void validateOnCreation() {
@@ -37,8 +43,8 @@ public class Players extends EventRaiser {
         }
     }
 
-    public void addAfterCreationTime(Player newPlayer) {
-        if(individualPlayers.contains(newPlayer)){
+    public void add(Player newPlayer) {
+        if (individualPlayers.contains(newPlayer)) {
             throw new PlayerAlreadyJoinedException(newPlayer);
         }
         if (isNameDuplicate(newPlayer)) {
@@ -48,6 +54,7 @@ public class Players extends EventRaiser {
             throw InvalidNumberOfPlayersException.onAdd();
         }
         individualPlayers.add(newPlayer);
+        raise(new PlayerAddedEvent(newPlayer, this.individualPlayers.size()));
     }
 
     private boolean findDuplicatesAtCreationTime(List<Player> players) {
@@ -88,15 +95,4 @@ public class Players extends EventRaiser {
         return individualPlayers.size();
     }
 
-    public void setGameId(GameId gameId) {
-        assert gameId != null;
-        individualPlayers.forEach(player -> player.setGameId(gameId));
-    }
-
-    public void raisePlayersAddedEvents() {
-        for (int i = 0; i < individualPlayers.size(); i++) {
-            Player player = individualPlayers.get(i);
-            raise(new PlayerAddedEvent(player, i+1));
-        }
-    }
 }

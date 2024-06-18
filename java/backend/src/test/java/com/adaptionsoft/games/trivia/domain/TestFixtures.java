@@ -18,33 +18,33 @@ public class TestFixtures {
     }
 
     public static Game a1playerGame() {
-        Players players = new Players(eventPublisher, player1());
+        Players players = new Players(getEventPublisher(), player1());
         return new Game(
                 GAME_ID,
                 "game name",
-                null,
+                getEventPublisher(),
                 players,
-                new PlayerTurnOrchestrator(eventPublisher, null, null, null),
+                new PlayerTurnOrchestrator(getEventPublisher(), null, null, null),
                 players.getCurrent(),
                 CREATED,
                 questions());
     }
 
     public static Game a2playersGame() {
-        Players players = new Players(eventPublisher, player1(), player2());
+        Players players = new Players(getEventPublisher(), player1(), player2());
         return new Game(
                 GAME_ID,
                 "game name",
-                null,
+                getEventPublisher(),
                 players,
-                new PlayerTurnOrchestrator(eventPublisher, null, null, null),
+                new PlayerTurnOrchestrator(getEventPublisher(), null, null, null),
                 players.getCurrent(),
                 CREATED,
                 questions());
     }
 
     public static Game a6playersGame() {
-        Players players = new Players(eventPublisher, player1(),
+        Players players = new Players(getEventPublisher(), player1(),
                 player2(),
                 player(3),
                 player(4),
@@ -56,7 +56,7 @@ public class TestFixtures {
                 "game name",
                 null,
                 players,
-                new PlayerTurnOrchestrator(eventPublisher, null, null, null),
+                new PlayerTurnOrchestrator(getEventPublisher(), null, null, null),
                 players.getCurrent(),
                 CREATED,
                 questions());

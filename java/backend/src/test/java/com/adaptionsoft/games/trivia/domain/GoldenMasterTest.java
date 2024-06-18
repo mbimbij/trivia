@@ -22,6 +22,8 @@ import static org.mockito.Mockito.mock;
 class GoldenMasterTest {
 
     private GameFactory gameFactory;
+    private PlayerFactory playerFactory;
+    private final PrintStream console = System.out;
 
     @BeforeEach
     void setUp() {
@@ -30,11 +32,12 @@ class GoldenMasterTest {
         MockEventPublisher eventPublisher = new MockEventPublisher();
         eventPublisher.register(new EventConsoleLogger());
         gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryTxt("src/main/resources/questions"));
+        playerFactory = new PlayerFactory(eventPublisher);
     }
 
     @AfterEach
     void tearDown() {
-        System.setOut(System.out);
+        System.setOut(console);
     }
 
     @Test
@@ -43,14 +46,18 @@ class GoldenMasterTest {
         redirectStdoutToFile();
         String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
         int seed = 2;
-        final String[] strings = new String[]{"Chet", "Pat", "Sue", "Joe", "Vlad"};
+        Player chet = playerFactory.create(new UserId("id-Chet"), "Chet");
+        Player pat = playerFactory.create(new UserId("id-Pat"), "Pat");
+        Player sue = playerFactory.create(new UserId("id-Sue"), "Sue");
+        Player joe = playerFactory.create(new UserId("id-Joe"), "Joe");
+        Player vlad = playerFactory.create(new UserId("id-Vlad"), "Vlad");
         Game game = gameFactory.create(new Random(seed),
                 "game",
-                "Chet",
-                "Pat",
-                "Sue",
-                "Joe",
-                "Vlad");
+                chet,
+                pat,
+                sue,
+                joe,
+                vlad);
 
         // WHEN
         game.play();

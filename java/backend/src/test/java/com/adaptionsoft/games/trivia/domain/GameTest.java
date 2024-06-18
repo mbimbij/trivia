@@ -6,6 +6,7 @@ import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GameTest {
 
-    private static final PrintStream stdout = System.out;
     private final MockEventPublisher eventPublisher = getEventPublisher();
     private GameFactory gameFactory;
     private final Player player1 = player1();
@@ -36,7 +36,6 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        System.setOut(stdout);
         IdGenerator idGenerator = new IdGenerator();
         eventPublisher.clearEvents();
         gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryTxt("src/main/resources/questions"));
@@ -63,18 +62,18 @@ class GameTest {
         @Test
         void cannot_create_game_with_more_than_6_players() {
             assertThrows(InvalidNumberOfPlayersException.class, () -> gameFactory.create("game",
-                    "player1",
-                    "player2",
-                    "player3",
-                    "player4",
-                    "player5",
-                    "player6",
-                    "player7"));
+                    player1(),
+                    player2(),
+                    player(3),
+                    player(4),
+                    player(5),
+                    player(6),
+                    player(7)));
         }
 
         @Test
         void can_create_game_with_1_player() {
-            assertThatCode(() -> gameFactory.create("game", "player1")).doesNotThrowAnyException();
+            assertThatCode(() -> gameFactory.create("game", player1())).doesNotThrowAnyException();
         }
 
         @Test
@@ -84,9 +83,14 @@ class GameTest {
                 int duplicatesCount = random.nextInt(1, Players.MAX_PLAYER_COUNT) + 1;
                 String[] playersNamesWithDuplicates = generatePlayersNamesWithDuplicates(duplicatesCount);
                 System.out.println(Arrays.toString(playersNamesWithDuplicates));
+
                 String creatorName = playersNamesWithDuplicates[0];
                 String[] otherPlayersNames = Arrays.copyOfRange(playersNamesWithDuplicates, 1, playersNamesWithDuplicates.length);
-                assertThrows(DuplicatePlayerNameException.class, () -> gameFactory.create("game", creatorName, otherPlayersNames));
+
+                Player creator = new Player(null, new UserId(RandomStringUtils.random(4)), creatorName);
+                Player[] otherPlayers = Arrays.stream(otherPlayersNames).map(playerName -> new Player(null, new UserId(RandomStringUtils.random(4)), playerName)).toArray(Player[]::new);
+
+                assertThrows(DuplicatePlayerNameException.class, () -> gameFactory.create("game", creator, otherPlayers));
             }
         }
 

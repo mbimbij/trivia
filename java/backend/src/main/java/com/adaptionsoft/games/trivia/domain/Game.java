@@ -34,7 +34,6 @@ public class Game extends Entity<GameId> {
 
     public Game(GameId gameId,
                 String name,
-                // TODO R-1 retirer cet attribut, les joueurs devraient être rajoutés à une partie, pas à un artefact séparé
                 EventPublisher eventPublisher,
                 Players players,
                 PlayerTurnOrchestrator playerTurnOrchestrator,
@@ -48,8 +47,6 @@ public class Game extends Entity<GameId> {
         this.currentPlayer = currentPlayer;
         this.state = state;
         this.questions = questions;
-        this.players.setGameId(getId());
-        this.players.raisePlayersAddedEvents();
     }
 
     public Player getCreator() {
@@ -131,7 +128,7 @@ public class Game extends Entity<GameId> {
             throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
         }
         player.setGameId(id);
-        players.addAfterCreationTime(player);
+        players.add(player);
     }
 
     public void startBy(Player player) {

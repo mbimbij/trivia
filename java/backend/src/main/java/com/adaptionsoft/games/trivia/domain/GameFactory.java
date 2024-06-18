@@ -17,33 +17,26 @@ public class GameFactory {
     private final EventPublisher eventPublisher;
     private final QuestionsRepository questionsRepository;
 
-    public Game create(String gameName, String creatorName, String... otherPlayersNames) {
-        return create(new Random(), gameName, creatorName, otherPlayersNames);
-    }
-
     public Game create(String gameName, Player creator, Player... players) {
         return create(new Random(), gameName, creator, players);
     }
 
-    public Game create(Random rand, String gameName, @NonNull String creatorName, String... playersNames) {
-        Player[] playersArray = Arrays.stream(playersNames)
-                .map((String playerName) -> new Player(eventPublisher, new UserId(playerName), playerName))
-                .toArray(Player[]::new);
-
-        final Player player = new Player(eventPublisher, new UserId(creatorName), creatorName);
-        return create(rand, gameName, player, playersArray);
-    }
-
     public Game create(Random rand, String gameName, @NonNull Player creator, Player... otherPlayers) {
-        Questions questions = questionsRepository.getQuestions();
+        GameId gameId = new GameId(idGenerator.nextId());
+        creator.setGameId(gameId);
+        Arrays.stream(otherPlayers).forEach(player -> {
+            player.setGameId(gameId);
+        });
+
         Players players = PlayersFactory.create(eventPublisher, creator, otherPlayers);
 
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
-        Integer id = idGenerator.nextId();
+        Questions questions = questionsRepository.getQuestions();
+
         Game game = new Game(
-                new GameId(id),
+                gameId,
                 gameName,
                 eventPublisher,
                 players,
@@ -57,6 +50,4 @@ public class GameFactory {
         eventPublisher.flushEvents();
         return game;
     }
-
-
 }
