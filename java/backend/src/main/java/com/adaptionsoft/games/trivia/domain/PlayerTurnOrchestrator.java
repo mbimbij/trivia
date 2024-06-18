@@ -31,16 +31,16 @@ public class PlayerTurnOrchestrator extends EventRaiser {
 
     int rollDice() {
         int roll = rand.nextInt(5) + 1;
-        raise(new PlayerRolledDiceEvent(currentPlayer, roll));
+        raise(new PlayerRolledDiceEvent(currentPlayer, roll, currentPlayer.getTurn()));
         return roll;
     }
 
     void playFromPenaltyBox(int roll) {
         if (isPair(roll)) {
-            raise(new PlayerGotOutOfPenaltyBoxEvent(currentPlayer));
+            raise(new PlayerGotOutOfPenaltyBoxEvent(currentPlayer, currentPlayer.getTurn()));
             playRegularTurn(roll);
         } else {
-            raise(new PlayerStayedInPenaltyBoxEvent(currentPlayer));
+            raise(new PlayerStayedInPenaltyBoxEvent(currentPlayer, currentPlayer.getTurn()));
         }
     }
 
@@ -58,7 +58,7 @@ public class PlayerTurnOrchestrator extends EventRaiser {
 
     boolean doAskQuestion() {
         Question question = questions.drawQuestion(currentPlayer.getLocation());
-        raise(new QuestionAskedToPlayerEvent(currentPlayer, question.questionText()));
+        raise(new QuestionAskedToPlayerEvent(currentPlayer, question.questionText(), currentPlayer.getTurn()));
         if (isAnsweringCorrectly()) {
             currentPlayer.answerCorrectly();
             return true;

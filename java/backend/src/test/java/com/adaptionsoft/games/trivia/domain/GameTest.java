@@ -4,6 +4,7 @@ package com.adaptionsoft.games.trivia.domain;
 import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
+import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -13,10 +14,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
-import static com.adaptionsoft.games.trivia.domain.AnswerCode.A;
-import static com.adaptionsoft.games.trivia.domain.AnswerCode.B;
+import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
 import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -24,9 +29,11 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 class GameTest {
 
+    private final PrintStream console = System.out;
     private final MockEventPublisher eventPublisher = eventPublisher();
     private final GameFactory gameFactory = gameFactory();
     private final PlayerFactory playerFactory = playerFactory();
@@ -36,9 +43,61 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        IdGenerator idGenerator = new IdGenerator();
         eventPublisher.clearEvents();
-        game = gameFactory.create("game", player1, player2);
+        game = gameFactory.create(new Random(2), "game", player1, player2);
+    }
+
+    @AfterEach
+    void tearDown() {
+        System.setOut(console);
+    }
+
+    @Nested
+    public class GoldenMaster {
+        private GameFactory gameFactory;
+        private PlayerFactory playerFactory;
+        private final PrintStream console = System.out;
+
+        @BeforeEach
+        void setUp() {
+            IdGenerator idGenerator = mock(IdGenerator.class);
+            doReturn(1).when(idGenerator).nextId();
+            MockEventPublisher eventPublisher = new MockEventPublisher();
+            eventPublisher.register(new EventConsoleLogger());
+            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryTxt("src/main/resources/questions"));
+            playerFactory = new PlayerFactory(eventPublisher);
+        }
+
+        @AfterEach
+        void tearDown() {
+            System.setOut(console);
+        }
+
+        @Test
+        void should_not_differ_from_golden_master() throws IOException {
+            // GIVEN
+            redirectStdoutToFile();
+            String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
+            int seed = 2;
+            Player chet = playerFactory.create(new UserId("id-Chet"), "Chet");
+            Player pat = playerFactory.create(new UserId("id-Pat"), "Pat");
+            Player sue = playerFactory.create(new UserId("id-Sue"), "Sue");
+            Player joe = playerFactory.create(new UserId("id-Joe"), "Joe");
+            Player vlad = playerFactory.create(new UserId("id-Vlad"), "Vlad");
+            Game game = gameFactory.create(new Random(seed), "game", chet, pat, sue, joe, vlad);
+
+            // WHEN
+            game.play();
+
+            // THEN
+            String lead = Files.readString(Paths.get("src/test/resources/lead.txt"));
+            assertEquals(gold, lead);
+        }
+
+        @SneakyThrows
+        private void redirectStdoutToFile() {
+            System.setOut(new PrintStream("src/test/resources/lead.txt"));
+        }
     }
 
     @Test
@@ -135,10 +194,12 @@ class GameTest {
                     "game name",
                     eventPublisher,
                     players,
-                    new PlayerTurnOrchestrator(eventPublisher, null, null, null),
+                    null,
+                    null,
                     players.getCurrent(),
+                    null,
                     CREATED,
-                    questions());
+                    null);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getPublishedEvents()).isEmpty();
@@ -157,8 +218,8 @@ class GameTest {
             // THEN the domain events are produced in the correct order
             List<Event> events = eventPublisher.getPublishedEvents();
             Assertions.assertArrayEquals(events.toArray(), new Event[]{
-                    new PlayerAddedEvent(player1, 1),
-                    new PlayerAddedEvent(player2, 2),
+                    new PlayerAddedEvent(player1, 1, player1.getTurn()),
+                    new PlayerAddedEvent(player2, 2, player2.getTurn()),
                     new GameCreatedEvent(game.getId())
             });
         }
@@ -286,6 +347,7 @@ class GameTest {
         void current_player_should_be_able_to_answer() {
             // GIVEN a started game
             game.startBy(player1);
+            game.rollDiceBy(game.getCurrentPlayer());
 
             // WHEN
             ThrowableAssert.ThrowingCallable action = () -> game.submitAnswerToCurrentQuestion(player1, A);
@@ -309,11 +371,32 @@ class GameTest {
         }
 
         @Test
-        void correct_answer__should_raise_appropriate_event() {
-            // GIVEN a started game
+        void test_correct_answer() {
+            // GIVEN stdout redirected to a string
+            ByteArrayOutputStream baos = redirectStdoutToString();
+
+            // AND the expected output
+            String expectedOutput = """
+                    Game Id(value=1) started
+                    player1 is the current player
+                    They have rolled a 4
+                    player1's new location is 4
+                    The category is Geography
+                    geography question 1
+                    Answer was correct!!!!
+                    player1 now has 1 Gold Coins.
+                    player2 is the current player
+                    They have rolled a 3
+                    player2's new location is 3
+                    The category is Rock
+                    rock question 1
+                    """;
+
+            // AND a started game
             game.startBy(player1);
+            game.rollDiceBy(game.getCurrentPlayer());
             int turn = game.getTurn();
-            PlayerAnsweredCorrectlyEvent expectedEvent = new PlayerAnsweredCorrectlyEvent(player1);
+            PlayerAnsweredCorrectlyEvent expectedEvent = new PlayerAnsweredCorrectlyEvent(player1, player1.getTurn());
 
             // WHEN correct answer
             game.submitAnswerToCurrentQuestion(player1, A);
@@ -326,29 +409,92 @@ class GameTest {
 
             // AND current player has been changed
             assertThat(game.getCurrentPlayer()).isEqualTo(player2);
+
+            // AND output as expected
+            assertThat(baos.toString()).isEqualTo(expectedOutput);
         }
 
         @Test
         void test_incorrect_answer() {
-            // GIVEN a started game
+            // GIVEN stdout redirected to a string
+            ByteArrayOutputStream baos = redirectStdoutToString();
+
+            // AND the expected output
+            String expectedOutput = """
+                    Game Id(value=1) started
+                    player1 is the current player
+                    They have rolled a 4
+                    player1's new location is 4
+                    The category is Geography
+                    geography question 1
+                    Question was incorrectly answered
+                    geography question 2
+                    Question was incorrectly answered
+                    player1 was sent to the penalty box
+                    player2 is the current player
+                    They have rolled a 3
+                    player2's new location is 3
+                    The category is Rock
+                    rock question 1
+                    """;
+
+            // AND a started game
             game.startBy(player1);
+            game.rollDiceBy(game.getCurrentPlayer());
 
-            // AND turn counter at the beginning
-            int turn = game.getTurn();
-            PlayerAnsweredIncorrectlyEvent expectedEvent = new PlayerAnsweredIncorrectlyEvent(player1);
+            // AND some expected values
+            int turnBefore = game.getTurn();
+            PlayerAnsweredIncorrectlyEvent expectedEvent = new PlayerAnsweredIncorrectlyEvent(player1, player1.getTurn());
+            Question currentQuestionBefore = game.getCurrentQuestion();
+            assertThat(currentQuestionBefore).isNotNull();
 
-            // WHEN first incorrect answer
+            // WHEN first incorrect answer (correct answers order: A,B,C,D,A,B,C,D)
             game.submitAnswerToCurrentQuestion(player1, B);
-
             // THEN event is raised
-            assertThat(eventPublisher.getPublishedEvents()).contains(expectedEvent);
-
+            assertThat(eventPublisher.getPublishedEvents()).containsOnlyOnce(expectedEvent);
             // AND turn not incremented
-            assertThat(game.getTurn()).isEqualTo(turn);
-
+            assertThat(game.getTurn()).isEqualTo(turnBefore);
             // AND current player has not been changed
             assertThat(game.getCurrentPlayer()).isEqualTo(player1);
+            // BUT the current question has been changed
+            assertThat(game.getCurrentQuestion()).isNotEqualTo(currentQuestionBefore);
+
+            // WHEN second consecutive answer (correct answers order: A,B,C,D,A,B,C,D)
+            game.submitAnswerToCurrentQuestion(player1, C);
+            // THEN output as expected
+            assertThat(baos.toString()).isEqualTo(expectedOutput);
         }
+
+        @Test
+        void given_player_in_penalty_box__when_roll_not_pair__then_stay_in_penalty_box() {
+//            Game game = spy(GameTest.this.game);
+//            when(game.rollDice()).thenReturn(3);
+            Random rand = new Random(4);
+            game = GameTest.this.game.withDice(rand);
+            Player currentPlayer = game.getCurrentPlayer();
+            currentPlayer.setInPenaltyBox(true);
+            ByteArrayOutputStream baos = redirectStdoutToString();
+            String expectedOutput = """
+                    Game Id(value=1) started
+                    player1 is the current player
+                    They have rolled a 3
+                    player1 is not getting out of the penalty box
+                    player2 is the current player
+                    """;
+            game.startBy(currentPlayer);
+
+            // WHEN
+            game.rollDiceBy(currentPlayer);
+
+            // THEN
+            assertThat(baos.toString()).isEqualTo(expectedOutput);
+        }
+    }
+
+    private ByteArrayOutputStream redirectStdoutToString() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(baos));
+        return baos;
     }
 
     @Nested
@@ -365,8 +511,10 @@ class GameTest {
                     null,
                     eventPublisher,
                     players,
+                    null,
                     playerTurnOrchestrator,
                     player,
+                    null,
                     STARTED,
                     questions());
 
@@ -377,7 +525,7 @@ class GameTest {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThat(game.getState()).isEqualTo(ENDED);
                 softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new GameEndedEvent(gameId, player.getId()));
-                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerWonEvent(gameId, player));
+                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerWonEvent(gameId, player, player.getTurn()));
             });
         }
 

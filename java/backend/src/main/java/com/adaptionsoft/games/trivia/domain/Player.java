@@ -25,6 +25,7 @@ public class Player extends Entity<UserId> {
     @Getter(PUBLIC)
     private int turn = 1;
     @Getter(PACKAGE)
+    @Setter(PACKAGE)
     private boolean isInPenaltyBox;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
@@ -61,8 +62,8 @@ public class Player extends Entity<UserId> {
 
         addCoin();
         consecutiveCorrectAnswersCount++;
-        raise(new PlayerAnsweredCorrectlyEvent(this),
-                new CoinAddedToPlayerEvent(this)
+        raise(new PlayerAnsweredCorrectlyEvent(this, this.getTurn()),
+                new CoinAddedToPlayerEvent(this, this.getTurn())
         );
     }
 
@@ -81,7 +82,7 @@ public class Player extends Entity<UserId> {
      * Used externally by tests ONLY
      */
     void answerIncorrectly() {
-        raise(new PlayerAnsweredIncorrectlyEvent(this));
+        raise(new PlayerAnsweredIncorrectlyEvent(this, this.getTurn()));
         consecutiveIncorrectAnswersCount++;
         if (consecutiveIncorrectAnswersCount >= 2) {
             goToPenaltyBox();
@@ -91,12 +92,12 @@ public class Player extends Entity<UserId> {
 
     private void goToPenaltyBox() {
         isInPenaltyBox = true;
-        raise(new PlayerSentToPenaltyBoxEvent(this));
+        raise(new PlayerSentToPenaltyBoxEvent(this, this.getTurn()));
     }
 
     void updateLocation(int newLocation) {
         setLocation(newLocation);
         Questions.Category category = Questions.Category.getQuestionCategory(getLocation());
-        raise(new PlayerChangedLocationEvent(this,category));
+        raise(new PlayerChangedLocationEvent(this,category, this.getTurn()));
     }
 }

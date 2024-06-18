@@ -6,9 +6,7 @@ import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
@@ -18,7 +16,6 @@ import static com.adaptionsoft.games.trivia.domain.Game.State.*;
 public class Game extends Entity<GameId> {
     @Getter
     private final String name;
-    private final EventPublisher eventPublisher;
     private final Players players;
     private boolean isGameInProgress = true;
     @Getter
@@ -26,25 +23,81 @@ public class Game extends Entity<GameId> {
     private Player currentPlayer;
     @Getter
     private Player winner;
+    private final Random rand;
+    private final Board board;
     private final PlayerTurnOrchestrator playerTurnOrchestrator;
     @Getter
     @Setter // for testing purposes only
     private State state;
     private final Questions questions;
+    @Getter
+    private Question currentQuestion;
+
+    /**
+     * All args constructor only used for custom withers used in tests
+     */
+    private Game(GameId id,
+                EventPublisher eventPublisher,
+                String name,
+                Players players,
+                boolean isGameInProgress,
+                int turn,
+                Player currentPlayer,
+                Player winner,
+                Random rand,
+                Board board,
+                PlayerTurnOrchestrator playerTurnOrchestrator,
+                State state,
+                Questions questions,
+                Question currentQuestion) {
+        super(id, eventPublisher);
+        this.name = name;
+        this.players = players;
+        this.isGameInProgress = isGameInProgress;
+        this.turn = turn;
+        this.currentPlayer = currentPlayer;
+        this.winner = winner;
+        this.rand = rand;
+        this.board = board;
+        this.playerTurnOrchestrator = playerTurnOrchestrator;
+        this.state = state;
+        this.questions = questions;
+        this.currentQuestion = currentQuestion;
+    }
+
+    public Game withDice(Random rand) {
+        return new Game(id, eventPublisher,
+                name,
+                players,
+                isGameInProgress,
+                turn,
+                currentPlayer,
+                winner,
+                rand,
+                board,
+                playerTurnOrchestrator,
+                state,
+                questions,
+                currentQuestion);
+    }
 
     public Game(GameId gameId,
                 String name,
                 EventPublisher eventPublisher,
                 Players players,
+                Random rand,
                 PlayerTurnOrchestrator playerTurnOrchestrator,
                 Player currentPlayer,
-                State state, Questions questions) {
+                Board board,
+                State state,
+                Questions questions) {
         super(gameId, eventPublisher);
         this.name = name;
-        this.eventPublisher = eventPublisher;
         this.players = players;
+        this.rand = rand;
         this.playerTurnOrchestrator = playerTurnOrchestrator;
         this.currentPlayer = currentPlayer;
+        this.board = board;
         this.state = state;
         this.questions = questions;
     }
@@ -67,8 +120,7 @@ public class Game extends Entity<GameId> {
         }
         playerTurnOrchestrator.performTurn(player);
         endGameIfCurrentPlayerWon();
-        endCurrentPlayerTurn();
-        displayNextPlayerIfGameNotEnded();
+        endTurnAndGoToNextPlayer();
         eventPublisher.flushEvents();
     }
 
@@ -77,12 +129,23 @@ public class Game extends Entity<GameId> {
         if (!Objects.equals(player, currentPlayer)) {
             throw PlayTurnException.notCurrentPlayerException(id, currentPlayer.getId(), currentPlayer.getId());
         }
-        Question currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
         if (currentQuestion.isCorrect(answerCode)) {
             currentPlayer.answerCorrectly();
-            endCurrentPlayerTurn();
+            endTurnAndGoToNextPlayer();
+            currentPlayer.updateLocation(computeNewPlayerLocation(rollDice()));
+            currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+            raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText(), currentPlayer.getTurn()));
         } else {
             currentPlayer.answerIncorrectly();
+            if (currentPlayer.canContinueAfterIncorrectAnswer()) {
+                currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+                raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText(), currentPlayer.getTurn()));
+            } else {
+                endTurnAndGoToNextPlayer();
+                currentPlayer.updateLocation(computeNewPlayerLocation(rollDice()));
+                currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+                raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText(), currentPlayer.getTurn()));
+            }
         }
         eventPublisher.flushEvents();
     }
@@ -101,9 +164,9 @@ public class Game extends Entity<GameId> {
         }
     }
 
-    private void displayNextPlayerIfGameNotEnded() {
+    private void displayCurrentPlayerIfGameNotEnded() {
         if (state != ENDED) {
-            raise(new PlayerTurnStartedEvent(currentPlayer));
+            raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
         }
     }
 
@@ -112,15 +175,18 @@ public class Game extends Entity<GameId> {
             isGameInProgress = false;
             state = ENDED;
             winner = currentPlayer;
-            raise(new PlayerWonEvent(id, currentPlayer));
+            raise(new PlayerWonEvent(id, currentPlayer, currentPlayer.getTurn()));
             raise(new GameEndedEvent(id, currentPlayer.getId()));
         }
     }
 
-    private void endCurrentPlayerTurn() {
+    private void endTurnAndGoToNextPlayer() {
         players.goToNextPlayerTurn();
         currentPlayer = players.getCurrent();
         turn++;
+        if (state != ENDED) {
+            raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
+        }
     }
 
     public void addPlayer(Player player) {
@@ -141,10 +207,33 @@ public class Game extends Entity<GameId> {
         }
         state = STARTED;
         turn = 1;
-        // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
-        raise(new PlayerTurnStartedEvent(currentPlayer));
+        raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
         eventPublisher.flushEvents();
+    }
+
+    int computeNewPlayerLocation(int roll) {
+        return (currentPlayer.getLocation() + roll) % board.getSquaresCount();
+    }
+
+    // TODO extract delegate ?
+    public void rollDiceBy(Player player) {
+        int roll = rollDice();
+        if (player.isInPenaltyBox()) {
+            raise(new PlayerStayedInPenaltyBoxEvent(currentPlayer, currentPlayer.getTurn()));
+            endTurnAndGoToNextPlayer();
+        } else {
+            currentPlayer.updateLocation(computeNewPlayerLocation(roll));
+            currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+            raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText(), turn));
+        }
+        eventPublisher.flushEvents();
+    }
+
+    int rollDice() {
+        int roll = rand.nextInt(5) + 1;
+        raise(new PlayerRolledDiceEvent(currentPlayer, roll, currentPlayer.getTurn()));
+        return roll;
     }
 
     public Optional<Player> findPlayerById(UserId playerId) {

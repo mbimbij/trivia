@@ -31,7 +31,7 @@ public class Players extends EventRaiser {
     private void addCreator(Player creator) {
         setCreator(creator);
         this.individualPlayers.add(creator);
-        raise(new PlayerAddedEvent(creator, this.individualPlayers.size()));
+        raise(new PlayerAddedEvent(creator, this.individualPlayers.size(), creator.getTurn()));
     }
 
     public void validateOnCreation() {
@@ -54,7 +54,7 @@ public class Players extends EventRaiser {
             throw InvalidNumberOfPlayersException.onAdd();
         }
         individualPlayers.add(newPlayer);
-        raise(new PlayerAddedEvent(newPlayer, this.individualPlayers.size()));
+        raise(new PlayerAddedEvent(newPlayer, this.individualPlayers.size(), newPlayer.getTurn()));
     }
 
     private boolean findDuplicatesAtCreationTime(List<Player> players) {

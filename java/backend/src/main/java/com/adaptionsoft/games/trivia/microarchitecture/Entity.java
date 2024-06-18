@@ -1,8 +1,10 @@
 package com.adaptionsoft.games.trivia.microarchitecture;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 
 @Getter

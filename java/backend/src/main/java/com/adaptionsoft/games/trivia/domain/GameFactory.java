@@ -40,8 +40,10 @@ public class GameFactory {
                 gameName,
                 eventPublisher,
                 players,
+                rand,
                 new PlayerTurnOrchestrator(eventPublisher, questions, rand, board),
                 players.getCurrent(),
+                board,
                 CREATED,
                 questions
         );

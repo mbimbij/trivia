@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.microarchitecture;
 
 import com.adaptionsoft.games.trivia.domain.event.Event;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
