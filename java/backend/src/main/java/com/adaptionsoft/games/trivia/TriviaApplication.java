@@ -40,6 +40,11 @@ public class TriviaApplication {
     }
 
     @Bean
+    public PlayerFactory playerFactory(EventPublisher eventPublisher) {
+        return new PlayerFactory(eventPublisher);
+    }
+
+    @Bean
     public GameFactory gameFactory(IdGenerator idGenerator,
                                    EventPublisher eventPublisher,
                                    QuestionsRepository questionsLoader) {

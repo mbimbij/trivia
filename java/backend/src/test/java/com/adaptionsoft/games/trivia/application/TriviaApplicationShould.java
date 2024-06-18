@@ -47,9 +47,9 @@ class TriviaApplicationShould {
     @Autowired
     private GameRepository gameRepository;
     @Autowired
-    private EventPublisher eventPublisher;
-    @Autowired
     private GameFactory gameFactory;
+    @Autowired
+    private PlayerFactory playerFactory;
     @SpyBean
     private IdGenerator idGenerator;
 
@@ -72,8 +72,9 @@ class TriviaApplicationShould {
 
         // and response is empty
         String responseString = mvcResult.getResponse().getContentAsString();
-        Collection<GameResponseDto> response = mapper.readValue(responseString, new TypeReference<>() {
-        });
+        Collection<GameResponseDto> response = mapper.readValue(responseString,
+                new TypeReference<>() {
+                });
         assertThat(response).isEmpty();
     }
 
@@ -95,8 +96,9 @@ class TriviaApplicationShould {
 
         // AND the content is as expected
         String responseString = mvcResult.getResponse().getContentAsString();
-        Collection<GameResponseDto> response = mapper.readValue(responseString, new TypeReference<>() {
-        });
+        Collection<GameResponseDto> response = mapper.readValue(responseString,
+                new TypeReference<>() {
+                });
         assertThat(response)
                 .singleElement()
                 .usingRecursiveComparison()
@@ -107,10 +109,8 @@ class TriviaApplicationShould {
     @Test
     void user_can_create_game() {
         // GIVEN a request
-        String playerId = player1().getId().getValue();
-        String playerName = player1().getName();
-        @NotBlank PlayerDto creatorDtoPlayer = new PlayerDto(playerId, playerName);
-        @NotBlank UserDto creatorDtoUser = new UserDto(playerId, playerName);
+        @NotBlank PlayerDto player1Dto = PlayerDto.from(player1());
+        @NotBlank UserDto creatorDtoUser = new UserDto(player1Dto.id(), player1Dto.name());
 
         String gameName = "game name";
         CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, creatorDtoUser);
@@ -135,9 +135,9 @@ class TriviaApplicationShould {
                 gameName,
                 CREATED.toString(),
                 0,
-                creatorDtoPlayer,
-                List.of(creatorDtoPlayer),
-                creatorDtoPlayer
+                player1Dto,
+                List.of(player1Dto),
+                player1Dto
         );
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
@@ -167,7 +167,9 @@ class TriviaApplicationShould {
         // WHEN a new player joins the game
         @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2());
         ResultActions resultActions = mvc.perform(
-                post("/api/games/{gameId}/players/{playerId}/join", game.getId().getValue(), newPlayerDto.id())
+                post("/api/games/{gameId}/players/{playerId}/join",
+                        game.getId().getValue(),
+                        newPlayerDto.id())
                         .content(mapper.writeValueAsString(newPlayerDto))
                         .contentType(MediaType.APPLICATION_JSON)
         );
@@ -192,7 +194,7 @@ class TriviaApplicationShould {
         assertThat(gameRepository.findById(game.getId()))
                 .hasValueSatisfying(g -> {
                     assertThat(g.getPlayersCount()).isEqualTo(2);
-                    assertThat(g.getPlayersList()).contains(newPlayerDto.toDomainObject(eventPublisher));
+                    assertThat(g.getPlayersList()).contains(playerFactory.fromDto(newPlayerDto));
                 });
     }
 
@@ -202,13 +204,14 @@ class TriviaApplicationShould {
         // GIVEN an existing game
         Player player1 = player1();
         Player player2 = player2();
-        final Player[] players = new Player[]{player1, player2};
         Game game = gameFactory.create("game name", player1, player2);
         gameRepository.save(game);
 
         // WHEN the creator starts the game
         ResultActions resultActions = mvc.perform(
-                post("/api/games/{gameId}/players/{playerId}/start", game.getId().getValue(), player1.getId().getValue())
+                post("/api/games/{gameId}/players/{playerId}/start",
+                        game.getId().getValue(),
+                        player1.getId().getValue())
         );
 
         // THEN the response status is ok
@@ -244,7 +247,9 @@ class TriviaApplicationShould {
 
         // WHEN the current player (creator) starts the game
         ResultActions resultActions = mvc.perform(
-                post("/api/games/{gameId}/players/{playerId}/playTurn", game.getId().getValue(), player1.getId().getValue())
+                post("/api/games/{gameId}/players/{playerId}/playTurn",
+                        game.getId().getValue(),
+                        player1.getId().getValue())
         );
 
         // THEN response status is ok

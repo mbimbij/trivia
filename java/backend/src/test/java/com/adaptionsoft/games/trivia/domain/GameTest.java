@@ -13,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mockito;
 
-import java.io.PrintStream;
 import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.A;
@@ -28,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GameTest {
 
-    private final MockEventPublisher eventPublisher = getEventPublisher();
-    private GameFactory gameFactory;
+    private final MockEventPublisher eventPublisher = eventPublisher();
+    private final GameFactory gameFactory = gameFactory();
+    private final PlayerFactory playerFactory = playerFactory();
     private final Player player1 = player1();
     private final Player player2 = player2();
     private Game game;
@@ -38,7 +38,6 @@ class GameTest {
     void setUp() {
         IdGenerator idGenerator = new IdGenerator();
         eventPublisher.clearEvents();
-        gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryTxt("src/main/resources/questions"));
         game = gameFactory.create("game", player1, player2);
     }
 
@@ -79,6 +78,7 @@ class GameTest {
         @Test
         void cannot_have_multiple_players_with_same_name() {
             Random random = new Random();
+
             for (int i = 0; i < 100; i++) {
                 int duplicatesCount = random.nextInt(1, Players.MAX_PLAYER_COUNT) + 1;
                 String[] playersNamesWithDuplicates = generatePlayersNamesWithDuplicates(duplicatesCount);
@@ -87,11 +87,17 @@ class GameTest {
                 String creatorName = playersNamesWithDuplicates[0];
                 String[] otherPlayersNames = Arrays.copyOfRange(playersNamesWithDuplicates, 1, playersNamesWithDuplicates.length);
 
-                Player creator = new Player(null, new UserId(RandomStringUtils.random(4)), creatorName);
-                Player[] otherPlayers = Arrays.stream(otherPlayersNames).map(playerName -> new Player(null, new UserId(RandomStringUtils.random(4)), playerName)).toArray(Player[]::new);
+                Player creator = playerWithRandomId(creatorName);
+                Player[] otherPlayers = Arrays.stream(otherPlayersNames)
+                        .map(this::playerWithRandomId)
+                        .toArray(Player[]::new);
 
                 assertThrows(DuplicatePlayerNameException.class, () -> gameFactory.create("game", creator, otherPlayers));
             }
+        }
+
+        private Player playerWithRandomId(String creatorName) {
+            return playerFactory.create(new UserId(RandomStringUtils.random(4)), creatorName);
         }
 
         private String[] generatePlayersNamesWithDuplicates(int duplicatesCount) {

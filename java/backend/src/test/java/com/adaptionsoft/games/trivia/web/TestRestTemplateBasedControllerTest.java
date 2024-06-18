@@ -44,7 +44,7 @@ class TestRestTemplateBasedControllerTest {
     void handle_errors() {
         // GIVEN an error is thrown when adding a player
         Game mockGame = Mockito.mock(Game.class);
-        InvalidGameStateException exception = new InvalidGameStateException(TestFixtures.gameId(), Game.State.STARTED, "add player");
+        InvalidGameStateException exception = new InvalidGameStateException(TestFixtures.GAME_TEST_ID, Game.State.STARTED, "add player");
         Mockito.doThrow(exception).when(mockGame).addPlayer(any());
 
         Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(any());

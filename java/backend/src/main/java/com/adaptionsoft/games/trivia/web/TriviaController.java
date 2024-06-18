@@ -42,6 +42,7 @@ public class TriviaController {
 
     private final GameRepository gameRepository;
     private final GameFactory gameFactory;
+    private final PlayerFactory playerFactory;
     private final SimpMessagingTemplate template;
     private final GameLogsRepository gameLogsRepository;
     private final EventPublisher eventPublisher;
@@ -128,7 +129,7 @@ public class TriviaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
-        Game game = gameFactory.create(requestDto.gameName(), requestDto.getCreatorAsPlayerDomainObject(eventPublisher));
+        Game game = gameFactory.create(requestDto.gameName(), playerFactory.fromDto(requestDto.creator()));
         gameRepository.save(game);
         template.convertAndSend("/topic/games/created", GameResponseDto.from(game));
         return GameResponseDto.from(game);
@@ -141,7 +142,7 @@ public class TriviaController {
     public GameResponseDto joinGame(@PathVariable("gameId") Integer gameIdInt,
                                     @RequestBody PlayerDto playerDto) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
-        game.addPlayer(playerDto.toDomainObject(eventPublisher));
+        game.addPlayer(playerFactory.fromDto(playerDto));
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
