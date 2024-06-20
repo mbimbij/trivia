@@ -53,7 +53,7 @@ class GameTest {
         game.startBy(player1);
         assertSoftly(softAssertions -> {
             softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player2, A)).isInstanceOf(PlayTurnException.class);
-            softAssertions.assertThatThrownBy(() -> game.rollDiceAndDrawQuestion(player2)).isInstanceOf(PlayTurnException.class);
+            softAssertions.assertThatThrownBy(() -> game.rollDice(player2)).isInstanceOf(PlayTurnException.class);
             softAssertions.assertThatThrownBy(() -> game.drawQuestion(player2)).isInstanceOf(PlayTurnException.class);
         });
     }
@@ -110,12 +110,19 @@ class GameTest {
             game.startBy(game.getCurrentPlayer());
             do {
                 if (game.getCurrentPlayer().canRollDice()) {
-                    game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
+                    game.rollDice(game.getCurrentPlayer());
+                }
+                if (canDrawQuestion(game, game.getCurrentPlayer())) {
+                    game.drawQuestion(game.getCurrentPlayer());
                 }
                 if (canSubmitAnswer(game)) {
                     game.submitAnswerToCurrentQuestion(game.getCurrentPlayer(), getRandomAnswer(rand));
                 }
             } while (game.isGameInProgress());
+        }
+
+        private boolean canDrawQuestion(Game game, Player currentPlayer) {
+            return game.getCurrentRoll() != null && currentPlayer.getConsecutiveIncorrectAnswersCount() == 0;
         }
 
         private boolean canSubmitAnswer(Game game) {
@@ -361,7 +368,8 @@ class GameTest {
         void current_player_should_be_able_to_answer() {
             // GIVEN a started game
             game.startBy(player1);
-            game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
+            game.rollDice(player1);
+            game.drawQuestion(player1);
 
             // WHEN
             ThrowableAssert.ThrowingCallable action = () -> game.submitAnswerToCurrentQuestion(player1, A);
@@ -397,15 +405,15 @@ class GameTest {
 
             // AND a started game
             game.startBy(player1);
-            game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
+            game.rollDice(game.getCurrentPlayer());
             int turn = game.getTurn();
-            PlayerAnsweredCorrectlyEvent expectedEvent = new PlayerAnsweredCorrectlyEvent(player1, player1.getTurn());
+            game.drawQuestion(player1);
 
             // WHEN correct answer
             game.submitAnswerToCurrentQuestion(player1, A);
 
             // THEN event is raised
-            assertThat(eventPublisher.getPublishedEvents()).contains(expectedEvent);
+            assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerAnsweredCorrectlyEvent(player1, turn));
 
             // AND turn is incremented
             assertThat(game.getTurn()).isEqualTo(turn + 1);
@@ -445,7 +453,8 @@ class GameTest {
 
             // AND a started game
             game.startBy(player1);
-            game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
+            game.rollDice(player1);
+            game.drawQuestion(player1);
 
             // AND some expected values
             int turnBefore = game.getTurn();
@@ -493,7 +502,7 @@ class GameTest {
             game.startBy(currentPlayer);
 
             // WHEN
-            game.rollDiceAndDrawQuestion(currentPlayer);
+            game.rollDice(currentPlayer);
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);
@@ -513,12 +522,11 @@ class GameTest {
                     player1 is getting out of the penalty box
                     player1's new location is 4
                     The category is Geography
-                    geography question 1
                     """;
             game.startBy(currentPlayer);
 
             // WHEN
-            game.rollDiceAndDrawQuestion(currentPlayer);
+            game.rollDice(currentPlayer);
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);
@@ -527,7 +535,7 @@ class GameTest {
         @Test
         void cannot_answer_questions_while_in_penalty_box() {
             game.startBy(player1);
-            game.rollDiceAndDrawQuestion(player1);
+            game.rollDice(player1);
             player1.setInPenaltyBox(true);
 
             assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
@@ -537,7 +545,7 @@ class GameTest {
         @Test
         void cannot_answer_question_before_drawing_one() {
             game.startBy(player1);
-            game.rollDiceAndDrawQuestion(player1);
+            game.rollDice(player1);
             player1.setInPenaltyBox(true);
 
             assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
@@ -597,7 +605,7 @@ class GameTest {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.startBy(player1)).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.rollDiceAndDrawQuestion(player1)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.rollDice(player1)).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A)).isInstanceOf(InvalidGameStateException.class);
             });
         }

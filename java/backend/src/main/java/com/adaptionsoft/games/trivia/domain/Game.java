@@ -66,44 +66,6 @@ public class Game extends Entity<GameId> {
         return players.getCreator();
     }
 
-    public void submitAnswerToCurrentQuestion(Player player, AnswerCode answerCode) {
-        validateGameStateIs(STARTED, "answer question");
-        validateCurrentPlayer(player);
-        validatePlayerNotInPenaltyBox(player, "submit answer");
-        if(currentQuestion == null) {
-            throw new CannotAnswerQuestionBeforeDrawingOneException(id, player.getId());
-        }
-
-        if (currentQuestion.isCorrect(answerCode)) {
-            currentPlayer.answerCorrectly();
-            endGameIfCurrentPlayerWon();
-            if (isGameInProgress) {
-                endTurn();
-            }
-        } else {
-            currentPlayer.answerIncorrectly();
-            if (currentPlayer.canContinueAfterIncorrectAnswer()) {
-                currentQuestion = drawQuestion(currentPlayer);
-            } else {
-                endTurn();
-            }
-        }
-        eventPublisher.flushEvents();
-    }
-
-    public Question drawQuestion(Player currentPlayer) {
-        validateGameStateIs(STARTED, "draw question");
-        validateCurrentPlayer(currentPlayer);
-        validatePlayerNotInPenaltyBox(currentPlayer, "draw question");
-        if(currentRoll == null){
-            throw new CannotDrawQuestionBeforeRollingDiceException(getId(), currentPlayer.getId());
-        }
-
-        Question currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
-        raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
-        return currentQuestion;
-    }
-
     public void addPlayer(Player player) {
         if (!state.equals(CREATED)) {
             throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
@@ -127,7 +89,7 @@ public class Game extends Entity<GameId> {
         eventPublisher.flushEvents();
     }
 
-    public void rollDiceAndDrawQuestion(Player player) {
+    public void rollDice(Player player) {
         validateGameStateIs(STARTED, "answer question");
         validateCurrentPlayer(player);
         if (!player.canRollDice()) {
@@ -135,21 +97,57 @@ public class Game extends Entity<GameId> {
         }
 
         currentRoll = rollDice();
+        raise(new PlayerRolledDiceEvent(currentPlayer, currentRoll, currentPlayer.getTurn()));
         if (player.isInPenaltyBox()) {
             if (isPair(currentRoll)) {
                 player.getOutOfPenaltyBox();
                 raise(new PlayerGotOutOfPenaltyBoxEvent(player, player.getTurn()));
                 player.updateLocation(computeNewPlayerLocation(currentRoll));
-                currentQuestion = drawQuestion(player);
             } else {
                 raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
                 endTurn();
             }
         } else {
             player.updateLocation(computeNewPlayerLocation(currentRoll));
-            currentQuestion = drawQuestion(player);
         }
 
+        eventPublisher.flushEvents();
+    }
+
+    public void drawQuestion(Player currentPlayer) {
+        validateGameStateIs(STARTED, "draw question");
+        validateCurrentPlayer(currentPlayer);
+        validatePlayerNotInPenaltyBox(currentPlayer, "draw question");
+        if(currentRoll == null){
+            throw new CannotDrawQuestionBeforeRollingDiceException(getId(), currentPlayer.getId());
+        }
+
+        this.currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+        raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
+    }
+
+    public void submitAnswerToCurrentQuestion(Player player, AnswerCode answerCode) {
+        validateGameStateIs(STARTED, "answer question");
+        validateCurrentPlayer(player);
+        validatePlayerNotInPenaltyBox(player, "submit answer");
+        if(currentQuestion == null) {
+            throw new CannotAnswerQuestionBeforeDrawingOneException(id, player.getId());
+        }
+
+        if (currentQuestion.isCorrect(answerCode)) {
+            currentPlayer.answerCorrectly();
+            endGameIfCurrentPlayerWon();
+            if (isGameInProgress) {
+                endTurn();
+            }
+        } else {
+            currentPlayer.answerIncorrectly();
+            if (currentPlayer.canContinueAfterIncorrectAnswer()) {
+                drawQuestion(currentPlayer);
+            } else {
+                endTurn();
+            }
+        }
         eventPublisher.flushEvents();
     }
 
@@ -228,7 +226,6 @@ public class Game extends Entity<GameId> {
 
     int rollDice() {
         int roll = rand.nextInt(5) + 1;
-        raise(new PlayerRolledDiceEvent(currentPlayer, roll, currentPlayer.getTurn()));
         return roll;
     }
 }
