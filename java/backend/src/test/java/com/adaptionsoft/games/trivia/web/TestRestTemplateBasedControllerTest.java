@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.GameRepository;
+import com.adaptionsoft.games.trivia.domain.State;
 import com.adaptionsoft.games.trivia.domain.TestFixtures;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
 import jakarta.validation.constraints.NotBlank;
@@ -44,7 +45,7 @@ class TestRestTemplateBasedControllerTest {
     void handle_errors() {
         // GIVEN an error is thrown when adding a player
         Game mockGame = Mockito.mock(Game.class);
-        InvalidGameStateException exception = new InvalidGameStateException(TestFixtures.GAME_TEST_ID, Game.State.STARTED, "add player");
+        InvalidGameStateException exception = new InvalidGameStateException(TestFixtures.GAME_TEST_ID, State.STARTED, "add player");
         Mockito.doThrow(exception).when(mockGame).addPlayer(any());
 
         Mockito.doReturn(Optional.of(mockGame)).when(gameRepository).findById(any());

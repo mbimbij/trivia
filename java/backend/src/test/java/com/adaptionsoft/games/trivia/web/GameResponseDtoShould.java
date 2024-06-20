@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.State.CREATED;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.GAME_TEST_ID_INTEGER;
 import static org.assertj.core.api.Assertions.assertThat;
 

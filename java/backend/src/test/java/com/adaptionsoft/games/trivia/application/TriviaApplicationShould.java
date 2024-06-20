@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.trivia.application;
 
 import com.adaptionsoft.games.trivia.domain.*;
-import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import com.adaptionsoft.games.trivia.web.*;
 import com.adaptionsoft.games.trivia.websocket.WebSocketConfig;
@@ -25,8 +24,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Collection;
 import java.util.List;
 
-import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
-import static com.adaptionsoft.games.trivia.domain.Game.State.STARTED;
+import static com.adaptionsoft.games.trivia.domain.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.State.STARTED;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.player2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -231,44 +230,6 @@ class TriviaApplicationShould {
                 creatorDto,
                 List.of(creatorDto, player2Dto),
                 creatorDto);
-        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
-    }
-
-    @SneakyThrows
-    @Test
-    void let_current_player_play_turn() {
-        // GIVEN an existing started game
-        Player player1 = player1();
-        Player player2 = player2();
-        final Player[] players = new Player[]{player1, player2};
-        Game game = gameFactory.create("game name", player1, player2);
-        gameRepository.save(game);
-        game.startBy(player1);
-
-        // WHEN the current player (creator) starts the game
-        ResultActions resultActions = mvc.perform(
-                post("/api/games/{gameId}/players/{playerId}/playTurn",
-                        game.getId().getValue(),
-                        player1.getId().getValue())
-        );
-
-        // THEN response status is ok
-        ResultActions statusVerifyResultActions = resultActions.andExpect(status().isOk());
-
-        // AND the response body is as expected
-        GameResponseDto actualResponseDto = mapper.readValue(
-                statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
-                new TypeReference<>() {
-                });
-        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
-        @NotBlank PlayerDto otherPlayerDto = PlayerDto.from(player2);
-        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
-                game.getName(),
-                STARTED.toString(),
-                2,
-                creatorDto,
-                List.of(creatorDto, otherPlayerDto),
-                otherPlayerDto);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
 }

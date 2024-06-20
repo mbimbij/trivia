@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.trivia.domain;
 
 
-import com.adaptionsoft.games.trivia.domain.Game.State;
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
@@ -22,7 +21,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
-import static com.adaptionsoft.games.trivia.domain.Game.State.*;
+import static com.adaptionsoft.games.trivia.domain.State.*;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -37,14 +36,26 @@ class GameTest {
     private final MockEventPublisher eventPublisher = eventPublisher();
     private final GameFactory gameFactory = gameFactory();
     private final PlayerFactory playerFactory = playerFactory();
-    private final Player player1 = player1();
-    private final Player player2 = player2();
+    private Player player1;
+    private Player player2;
     private Game game;
 
     @BeforeEach
     void setUp() {
         eventPublisher.clearEvents();
+        player1 = player1();
+        player2 = player2();
         game = gameFactory.create(new Random(2), "game", player1, player2);
+    }
+
+    @Test
+    void player_other_than_current_should_not_be_able_to_do_anything() {
+        game.startBy(player1);
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player2, A)).isInstanceOf(PlayTurnException.class);
+            softAssertions.assertThatThrownBy(() -> game.rollDiceAndDrawQuestion(player2)).isInstanceOf(PlayTurnException.class);
+            softAssertions.assertThatThrownBy(() -> game.drawQuestion(player2)).isInstanceOf(PlayTurnException.class);
+        });
     }
 
     @AfterEach
@@ -74,7 +85,7 @@ class GameTest {
         }
 
         @Test
-        void should_not_differ_from_golden_master() throws IOException {
+        void golden_master_test() throws IOException {
             // GIVEN
             redirectStdoutToFile();
             String gold = Files.readString(Paths.get("src/test/resources/gold.txt"));
@@ -84,34 +95,41 @@ class GameTest {
             Player sue = playerFactory.create(new UserId("id-Sue"), "Sue");
             Player joe = playerFactory.create(new UserId("id-Joe"), "Joe");
             Player vlad = playerFactory.create(new UserId("id-Vlad"), "Vlad");
-            Game game = gameFactory.create(new Random(seed), "game", chet, pat, sue, joe, vlad);
+            Random rand = new Random(seed);
+            Game game = gameFactory.create(rand, "game", chet, pat, sue, joe, vlad);
 
             // WHEN
-            game.play();
+            playEntireGame(game, rand);
 
             // THEN
             String lead = Files.readString(Paths.get("src/test/resources/lead.txt"));
             assertEquals(gold, lead);
         }
 
+        private void playEntireGame(Game game, Random rand) {
+            game.startBy(game.getCurrentPlayer());
+            do {
+                if (game.getCurrentPlayer().canRollDice()) {
+                    game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
+                }
+                if (canSubmitAnswer(game)) {
+                    game.submitAnswerToCurrentQuestion(game.getCurrentPlayer(), getRandomAnswer(rand));
+                }
+            } while (game.isGameInProgress());
+        }
+
+        private boolean canSubmitAnswer(Game game) {
+            return !(game.getCurrentRoll() == null) && !game.getCurrentPlayer().isInPenaltyBox();
+        }
+
+        private AnswerCode getRandomAnswer(Random rand) {
+            return AnswerCode.values()[rand.nextInt(AnswerCode.values().length)];
+        }
+
         @SneakyThrows
         private void redirectStdoutToFile() {
             System.setOut(new PrintStream("src/test/resources/lead.txt"));
         }
-    }
-
-    @Test
-    void should_not_add_duplicate_in_set() {
-        // GIVEN
-        Set<Game> games = new HashSet<>();
-        games.add(game);
-
-        // WHEN
-        game.playTurnBy(game.getCurrentPlayer());
-        games.add(game);
-
-        // THEN
-        assertThat(games).hasSize(1);
     }
 
     @Nested
@@ -194,7 +212,6 @@ class GameTest {
                     "game name",
                     eventPublisher,
                     players,
-                    null,
                     null,
                     players.getCurrent(),
                     null,
@@ -326,18 +343,15 @@ class GameTest {
     }
 
     @Nested
-    class PlayTurn {
+    class DrawQuestion {
         @Test
-        void player_other_than_current_should_not_be_able_to_play_turn() {
-            assertThatThrownBy(() -> game.playTurnBy(player2)).isInstanceOf(PlayTurnException.class);
-        }
+        void cannot_draw_question__before_rolling_dice() {
+            // GIVEN a started game
+            game.startBy(player1);
 
-        @Test
-        void current_player_should_be_able_to_play_turn() {
-            assertSoftly(softAssertions -> {
-                softAssertions.assertThatCode(() -> game.playTurnBy(player1)).doesNotThrowAnyException();
-                softAssertions.assertThat(game.getCurrentPlayer()).isEqualTo(player2);
-            });
+            // WHEN
+            assertThatThrownBy(() -> game.drawQuestion(player1))
+                    .isInstanceOf(CannotDrawQuestionBeforeRollingDiceException.class);
         }
     }
 
@@ -347,20 +361,13 @@ class GameTest {
         void current_player_should_be_able_to_answer() {
             // GIVEN a started game
             game.startBy(player1);
-            game.rollDiceBy(game.getCurrentPlayer());
+            game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
 
             // WHEN
             ThrowableAssert.ThrowingCallable action = () -> game.submitAnswerToCurrentQuestion(player1, A);
 
             // THEN
             assertThatCode(action).doesNotThrowAnyException();
-        }
-
-        @Test
-        void player_other_than_current_should_not_be_able_to_play_turn() {
-            game.startBy(player1);
-            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player2, A))
-                    .isInstanceOf(PlayTurnException.class);
         }
 
         @Test
@@ -386,15 +393,11 @@ class GameTest {
                     Answer was correct!!!!
                     player1 now has 1 Gold Coins.
                     player2 is the current player
-                    They have rolled a 3
-                    player2's new location is 3
-                    The category is Rock
-                    rock question 1
                     """;
 
             // AND a started game
             game.startBy(player1);
-            game.rollDiceBy(game.getCurrentPlayer());
+            game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
             int turn = game.getTurn();
             PlayerAnsweredCorrectlyEvent expectedEvent = new PlayerAnsweredCorrectlyEvent(player1, player1.getTurn());
 
@@ -409,6 +412,12 @@ class GameTest {
 
             // AND current player has been changed
             assertThat(game.getCurrentPlayer()).isEqualTo(player2);
+
+            // AND current question has been set to null
+            assertThat(game.getCurrentQuestion()).isNull();
+
+            // AND current roll has been set to null
+            assertThat(game.getCurrentRoll()).isNull();
 
             // AND output as expected
             assertThat(baos.toString()).isEqualTo(expectedOutput);
@@ -432,15 +441,11 @@ class GameTest {
                     Question was incorrectly answered
                     player1 was sent to the penalty box
                     player2 is the current player
-                    They have rolled a 3
-                    player2's new location is 3
-                    The category is Rock
-                    rock question 1
                     """;
 
             // AND a started game
             game.startBy(player1);
-            game.rollDiceBy(game.getCurrentPlayer());
+            game.rollDiceAndDrawQuestion(game.getCurrentPlayer());
 
             // AND some expected values
             int turnBefore = game.getTurn();
@@ -457,20 +462,24 @@ class GameTest {
             // AND current player has not been changed
             assertThat(game.getCurrentPlayer()).isEqualTo(player1);
             // BUT the current question has been changed
-            assertThat(game.getCurrentQuestion()).isNotEqualTo(currentQuestionBefore);
+            assertThat(game.getCurrentQuestion())
+                    .isNotNull()
+                    .isNotEqualTo(currentQuestionBefore);
 
             // WHEN second consecutive answer (correct answers order: A,B,C,D,A,B,C,D)
             game.submitAnswerToCurrentQuestion(player1, C);
             // THEN output as expected
             assertThat(baos.toString()).isEqualTo(expectedOutput);
+            // AND the current question has been set to null
+            assertThat(game.getCurrentQuestion()).isNull();
+            // AND current roll has been set to null
+            assertThat(game.getCurrentRoll()).isNull();
         }
 
         @Test
         void given_player_in_penalty_box__when_roll_not_pair__then_stay_in_penalty_box() {
-//            Game game = spy(GameTest.this.game);
-//            when(game.rollDice()).thenReturn(3);
             Random rand = new Random(4);
-            game = GameTest.this.game.withDice(rand);
+            game.setRand(rand);
             Player currentPlayer = game.getCurrentPlayer();
             currentPlayer.setInPenaltyBox(true);
             ByteArrayOutputStream baos = redirectStdoutToString();
@@ -484,10 +493,55 @@ class GameTest {
             game.startBy(currentPlayer);
 
             // WHEN
-            game.rollDiceBy(currentPlayer);
+            game.rollDiceAndDrawQuestion(currentPlayer);
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);
+        }
+
+        @Test
+        void given_player_in_penalty_box__when_roll_pair__then_get_out_in_penalty_box() {
+            Random rand = new Random(2);
+            game.setRand(rand);
+            Player currentPlayer = game.getCurrentPlayer();
+            currentPlayer.setInPenaltyBox(true);
+            ByteArrayOutputStream baos = redirectStdoutToString();
+            String expectedOutput = """
+                    Game Id(value=1) started
+                    player1 is the current player
+                    They have rolled a 4
+                    player1 is getting out of the penalty box
+                    player1's new location is 4
+                    The category is Geography
+                    geography question 1
+                    """;
+            game.startBy(currentPlayer);
+
+            // WHEN
+            game.rollDiceAndDrawQuestion(currentPlayer);
+
+            // THEN
+            assertThat(baos.toString()).isEqualTo(expectedOutput);
+        }
+
+        @Test
+        void cannot_answer_questions_while_in_penalty_box() {
+            game.startBy(player1);
+            game.rollDiceAndDrawQuestion(player1);
+            player1.setInPenaltyBox(true);
+
+            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
+                    .isInstanceOf(ExecuteActionInPenaltyBoxException.class);
+        }
+
+        @Test
+        void cannot_answer_question_before_drawing_one() {
+            game.startBy(player1);
+            game.rollDiceAndDrawQuestion(player1);
+            player1.setInPenaltyBox(true);
+
+            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
+                    .isInstanceOf(ExecuteActionInPenaltyBoxException.class);
         }
     }
 
@@ -500,32 +554,36 @@ class GameTest {
     @Nested
     class EndGame {
         @Test
-        void game_should_end__if_current_player_is_winning() {
-            // GIVEN
-            GameId gameId = new GameId(1);
-            Players players = Mockito.mock(Players.class);
-            PlayerTurnOrchestrator playerTurnOrchestrator = Mockito.mock(PlayerTurnOrchestrator.class);
-            Player player = Mockito.spy(player1());
-            Mockito.doReturn(true).when(player).isWinning();
-            Game game = new Game(gameId,
-                    null,
-                    eventPublisher,
-                    players,
-                    null,
-                    playerTurnOrchestrator,
-                    player,
-                    null,
-                    STARTED,
-                    questions());
+        void game_should_end__after_answering__if_current_player_is_winning() {
+            // GIVEN a started game with current player about to win
+            Player currentPlayer = Mockito.spy(player1);
+            Mockito.doReturn(true).when(currentPlayer).isWinning();
+            Question currentQuestion = mock(Question.class);
+            doReturn(true).when(currentQuestion).isCorrect(any());
+
+            Game game = a2playersGame();
+            game.setState(STARTED);
+            game.setCurrentPlayer(currentPlayer);
+            game.setCurrentQuestion(currentQuestion);
+
+            // AND stdout redirected to a string
+            ByteArrayOutputStream baos = redirectStdoutToString();
+            String expectedOutput = """
+                    Answer was correct!!!!
+                    player1 now has 1 Gold Coins.
+                    player Id(value=id-player1) won game Id(value=1)
+                    game Id(value=1) ended with winner player1
+                    """;
 
             // WHEN
-            game.playTurnBy(player);
+            game.submitAnswerToCurrentQuestion(currentPlayer, A);
 
             // THEN
             assertSoftly(softAssertions -> {
                 softAssertions.assertThat(game.getState()).isEqualTo(ENDED);
-                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new GameEndedEvent(gameId, player.getId()));
-                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerWonEvent(gameId, player, player.getTurn()));
+                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new GameEndedEvent(game.getId(), currentPlayer.getName()));
+                softAssertions.assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerWonEvent(game.getId(), currentPlayer, currentPlayer.getTurn()));
+                softAssertions.assertThat(baos.toString()).isEqualTo(expectedOutput);
             });
         }
 
@@ -539,7 +597,8 @@ class GameTest {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.startBy(player1)).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.playTurnBy(player1)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.rollDiceAndDrawQuestion(player1)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A)).isInstanceOf(InvalidGameStateException.class);
             });
         }
     }

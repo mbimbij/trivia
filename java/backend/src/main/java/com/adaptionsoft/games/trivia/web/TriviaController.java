@@ -159,19 +159,6 @@ public class TriviaController {
         return GameResponseDto.from(game);
     }
 
-    @PostMapping("/{gameId}/players/{playerId}/playTurn")
-    public GameResponseDto playTurn(@PathVariable("gameId") Integer gameIdInt,
-                                    @PathVariable("playerId") String playerIdString) {
-
-        Game game = findGameOrThrow(new GameId(gameIdInt));
-        Player player = findPlayerOrThrow(game, new UserId(playerIdString));
-
-        game.playTurnBy(player);
-        gameRepository.save(game);
-        notifyGameUpdatedViaWebsocket(game);
-        return GameResponseDto.from(game);
-    }
-
     private void notifyGameUpdatedViaWebsocket(Game game) {
         template.convertAndSend("/topic/games/%d".formatted(game.getId().getValue()), GameResponseDto.from(game));
     }

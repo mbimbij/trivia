@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
+import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.*;
@@ -10,27 +11,23 @@ import static lombok.AccessLevel.PUBLIC;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Getter
 public class Player extends Entity<UserId> {
     @Setter
-    @Getter(PUBLIC)
     private String name;
 
     @With // for testing purposes only
-    @Getter(PUBLIC)
     private int coinCount;
 
-    @Getter(PUBLIC)
     @Setter
     private int location;
-    @Getter(PUBLIC)
     private int turn = 1;
-    @Getter(PACKAGE)
     @Setter(PACKAGE)
     private boolean isInPenaltyBox;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
+    @Setter // for testing purposes only
     private int consecutiveIncorrectAnswersCount;
-    @Getter
     @Setter
     private GameId gameId;
 
@@ -55,6 +52,7 @@ public class Player extends Entity<UserId> {
     /**
      * Used externally by tests ONLY
      */
+    // TODO déplacer vers Game ?
     void answerCorrectly() {
         if (isOnAStreak()) {
             addCoin();
@@ -62,6 +60,7 @@ public class Player extends Entity<UserId> {
 
         addCoin();
         consecutiveCorrectAnswersCount++;
+        consecutiveIncorrectAnswersCount = 0;
         raise(new PlayerAnsweredCorrectlyEvent(this, this.getTurn()),
                 new CoinAddedToPlayerEvent(this, this.getTurn())
         );
@@ -81,6 +80,7 @@ public class Player extends Entity<UserId> {
     /**
      * Used externally by tests ONLY
      */
+    // TODO déplacer vers Game ?
     void answerIncorrectly() {
         raise(new PlayerAnsweredIncorrectlyEvent(this, this.getTurn()));
         consecutiveIncorrectAnswersCount++;
@@ -96,8 +96,21 @@ public class Player extends Entity<UserId> {
     }
 
     void updateLocation(int newLocation) {
+        if(isInPenaltyBox){
+            throw new CannotUpdateLocationFromPenaltyBoxException(gameId, id);
+        }
         setLocation(newLocation);
         Questions.Category category = Questions.Category.getQuestionCategory(getLocation());
         raise(new PlayerChangedLocationEvent(this,category, this.getTurn()));
+    }
+
+    public boolean canRollDice() {
+        return isInPenaltyBox || consecutiveIncorrectAnswersCount == 0;
+    }
+
+    public void getOutOfPenaltyBox() {
+        isInPenaltyBox = false;
+        consecutiveCorrectAnswersCount = 0;
+        consecutiveIncorrectAnswersCount = 0;
     }
 }

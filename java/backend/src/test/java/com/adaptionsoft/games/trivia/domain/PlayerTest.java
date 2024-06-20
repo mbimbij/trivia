@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.trivia.domain;
 
+import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +9,9 @@ import org.mockito.Mockito;
 
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 class PlayerTest {
 
@@ -116,6 +119,51 @@ class PlayerTest {
             softAssertions.assertThat(player1).isEqualTo(player2);
             softAssertions.assertThat(player1).isNotEqualTo(player3);
             softAssertions.assertThat(player2).isNotEqualTo(player3);
+        });
+    }
+
+    @Test
+    void getting_out_of_penalty_box_set_inner_state_correctly() {
+        // GIVEN
+        player.answerCorrectly();
+        player.answerIncorrectly();
+        player.answerIncorrectly();
+        player.answerCorrectly();
+
+        // WHEN
+        player.getOutOfPenaltyBox();
+
+        // THEN
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(player.isInPenaltyBox()).isFalse();
+            softAssertions.assertThat(player.getConsecutiveCorrectAnswersCount()).isEqualTo(0);
+            softAssertions.assertThat(player.getConsecutiveIncorrectAnswersCount()).isEqualTo(0);
+        });
+    }
+
+    @Test
+    void cannot_update_location__if_in_penalty_box() {
+        // GIVEN
+        player.setInPenaltyBox(true);
+
+        assertThatCode(() -> player.updateLocation(3))
+                .isInstanceOf(CannotUpdateLocationFromPenaltyBoxException.class);
+    }
+
+    @Test
+    void correct_answer__should_reset_incorrect_answer_counter() {
+        // GIVEN
+        player.answerCorrectly();
+        player.answerIncorrectly();
+
+        // WHEN
+        player.answerCorrectly();
+
+        // THEN
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(player.isInPenaltyBox()).isFalse();
+            softAssertions.assertThat(player.getConsecutiveCorrectAnswersCount()).isEqualTo(1);
+            softAssertions.assertThat(player.getConsecutiveIncorrectAnswersCount()).isEqualTo(0);
         });
     }
 }
