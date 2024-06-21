@@ -31,7 +31,7 @@ public class GameFactory {
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
-        Questions questions = questionsRepository.getQuestions();
+        QuestionsDeck questions = questionsRepository.getQuestions();
 
         Game game = new Game(
                 gameId,

@@ -4,6 +4,9 @@ import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 
+import java.util.Map;
+
+import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -30,7 +33,7 @@ public class TestFixtures {
         return mock;
     }
 
-    public static Questions questions() {
+    public static QuestionsDeck questions() {
         QuestionsRepository questionsLoader = questionsRepository();
         return questionsLoader.getQuestions();
     }
@@ -75,5 +78,20 @@ public class TestFixtures {
             eventPublisher.register(new EventConsoleLogger());
         }
         return eventPublisher;
+    }
+
+    public static Question questionTest() {
+        return new Question("id-question-test",
+                "question test",
+                Map.of(
+                        A, "Question A",
+                        B, "Question B",
+                        C, "Question C",
+                        D, "Question D"
+                ), A);
+    }
+
+    public static LoadedQuestionsDeck loadedQuestionsDeck() {
+        return new LoadedQuestionsDeck(questionTest());
     }
 }

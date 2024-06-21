@@ -26,12 +26,12 @@ import java.util.List;
 
 import static com.adaptionsoft.games.trivia.domain.State.CREATED;
 import static com.adaptionsoft.games.trivia.domain.State.STARTED;
-import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
-import static com.adaptionsoft.games.trivia.domain.TestFixtures.player2;
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TriviaController.class)
@@ -51,11 +51,19 @@ class TriviaApplicationShould {
     private PlayerFactory playerFactory;
     @SpyBean
     private IdGenerator idGenerator;
+    private Player player1;
+    private Player player2;
+    private @NotBlank PlayerDto player1Dto;
+    private @NotBlank PlayerDto player2Dto;
 
     @BeforeEach
     void setUp() {
         gameRepository.deleteAll();
         Mockito.reset(idGenerator);
+        player1 = player1();
+        player2 = player2();
+        player1Dto = PlayerDto.from(player1);
+        player2Dto = PlayerDto.from(player2);
     }
 
     @SneakyThrows
@@ -108,11 +116,11 @@ class TriviaApplicationShould {
     @Test
     void user_can_create_game() {
         // GIVEN a request
-        @NotBlank PlayerDto player1Dto = PlayerDto.from(player1());
-        @NotBlank UserDto creatorDtoUser = new UserDto(player1Dto.id(), player1Dto.name());
+        @NotBlank PlayerDto player1Dto = PlayerDto.from(player1);
+        @NotBlank UserDto user1Dto = new UserDto(player1Dto.id(), player1Dto.name());
 
         String gameName = "game name";
-        CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, creatorDtoUser);
+        CreateGameRequestDto requestDto = new CreateGameRequestDto(gameName, user1Dto);
 
         // AND a set id generation strategy
         int gameIdInt = 2;
@@ -136,7 +144,9 @@ class TriviaApplicationShould {
                 0,
                 player1Dto,
                 List.of(player1Dto),
-                player1Dto
+                player1Dto,
+                null,
+                null
         );
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
@@ -159,8 +169,7 @@ class TriviaApplicationShould {
     @Test
     void user_can_join_game() {
         // GIVEN an existing game
-        Player creator = player1();
-        Game game = gameFactory.create("game name", creator);
+        Game game = gameFactory.create("game name", player1);
         gameRepository.save(game);
 
         // WHEN a new player joins the game
@@ -179,14 +188,16 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        @NotBlank PlayerDto creatorDto = PlayerDto.from(creator);
+        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 CREATED.toString(),
                 0,
                 creatorDto,
                 List.of(creatorDto, newPlayerDto),
-                creatorDto);
+                creatorDto,
+                null,
+                null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the player is added to the game
@@ -201,8 +212,6 @@ class TriviaApplicationShould {
     @Test
     void creator_can_start_game() {
         // GIVEN an existing game
-        Player player1 = player1();
-        Player player2 = player2();
         Game game = gameFactory.create("game name", player1, player2);
         gameRepository.save(game);
 
@@ -221,15 +230,52 @@ class TriviaApplicationShould {
                 statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
-        @NotBlank PlayerDto player2Dto = PlayerDto.from(player2);
+
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),
                 1,
-                creatorDto,
-                List.of(creatorDto, player2Dto),
-                creatorDto);
+                player1Dto,
+                List.of(player1Dto, player2Dto),
+                player1Dto, null, null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
+
+    @SneakyThrows
+    @Test
+    void can_roll_dice() {
+        // GIVEN a started game
+        Game game = gameFactory.create("game", player1, player2);
+        game.setDice(new LoadedDice(3));
+        game.setQuestionsDeck(loadedQuestionsDeck());
+        game.start(player1);
+        gameRepository.save(game);
+
+        // WHEN player1 rolls the dice
+        ResultActions resultActions = mvc.perform(
+                post("/api/games/{gameId}/players/{playerId}/rollDice",
+                        game.getId().getValue(),
+                        player1.getId().getValue())
+        );
+
+        // THEN the response status is CREATED
+        MvcResult result = resultActions.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        // AND the response body is as expected
+        GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
+        QuestionDto expectedCurrentQuestionDto = QuestionDto.from(questionTest());
+
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
+                game.getName(),
+                STARTED.toString(),
+                1,
+                player1Dto,
+                List.of(player1Dto, player2Dto),
+                player1Dto, expectedCurrentQuestionDto, 3);
+        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
+
+    }
+
 }

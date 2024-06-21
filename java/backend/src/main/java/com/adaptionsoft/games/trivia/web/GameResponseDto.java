@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.trivia.web;
 
+import com.adaptionsoft.games.trivia.domain.Dice;
 import com.adaptionsoft.games.trivia.domain.Game;
 import jakarta.validation.constraints.NotBlank;
 import lombok.With;
@@ -24,8 +25,10 @@ public record GameResponseDto(
         Collection<PlayerDto> players,
         @NotBlank
         PlayerDto currentPlayer,
-        PlayerDto winner
-) {
+        PlayerDto winner,
+        QuestionDto currentQuestion,
+        Integer currentRoll
+        ) {
 
     public GameResponseDto(@NotBlank Integer id,
                            @NotBlank String name,
@@ -36,7 +39,9 @@ public record GameResponseDto(
                            PlayerDto creator,
                            Collection<PlayerDto> players,
                            @NotBlank
-                           PlayerDto currentPlayer) {
+                           PlayerDto currentPlayer,
+                           QuestionDto currentQuestion,
+                           Integer currentRoll) {
         this(id,
                 name,
                 state,
@@ -44,7 +49,9 @@ public record GameResponseDto(
                 creator,
                 players,
                 currentPlayer,
-                null);
+                null,
+                currentQuestion,
+                currentRoll);
     }
 
     public static GameResponseDto from(Game game) {
@@ -54,6 +61,8 @@ public record GameResponseDto(
                 .map(PlayerDto::from)
                 .orElse(null);
         PlayerDto winnerDto = Optional.ofNullable(game.getWinner()).map(PlayerDto::from).orElse(null);
+        QuestionDto questionDto = QuestionDto.from(game.getCurrentQuestion());
+        Integer currentRoll = Optional.ofNullable(game.getCurrentRoll()).map(Dice.Roll::value).orElse(null);
         return new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 game.getState().toString(),
@@ -61,7 +70,9 @@ public record GameResponseDto(
                 creatorDto,
                 playersDto,
                 currentPlayerDto,
-                winnerDto);
+                winnerDto,
+                questionDto,
+                currentRoll);
     }
 
 }

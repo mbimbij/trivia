@@ -29,7 +29,8 @@ public class Game extends Entity<GameId> {
     @Getter
     @Setter // for testing purposes only
     private State state;
-    private final Questions questions;
+    @Setter
+    private QuestionsDeck questionsDeck;
     @Getter
     @Setter
     private Question currentQuestion;
@@ -41,7 +42,7 @@ public class Game extends Entity<GameId> {
                 State state, EventPublisher eventPublisher,
                 Board board,
                 Dice dice,
-                Questions questions,
+                QuestionsDeck questionsDeck,
                 Player creator,
                 Player ... otherPlayers) {
         super(gameId, eventPublisher);
@@ -51,7 +52,7 @@ public class Game extends Entity<GameId> {
         this.currentPlayer = this.players.getCurrent();
         this.board = board;
         this.state = state;
-        this.questions = questions;
+        this.questionsDeck = questionsDeck;
     }
 
     public Optional<Player> findPlayerById(UserId playerId) {
@@ -73,7 +74,7 @@ public class Game extends Entity<GameId> {
         players.add(player);
     }
 
-    public void startBy(Player player) {
+    public void start(Player player) {
         validateGameStateIsNot(ENDED, "start");
         if (!Objects.equals(player, players.getCreator())) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
@@ -85,6 +86,7 @@ public class Game extends Entity<GameId> {
         turn = 1;
         raise(new GameStartedEvent(id));
         raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
+
         eventPublisher.flushEvents();
     }
 
@@ -96,7 +98,7 @@ public class Game extends Entity<GameId> {
         }
 
         currentRoll = dice.roll();
-        raise(new PlayerRolledDiceEvent(currentPlayer, currentRoll, currentPlayer.getTurn()));
+        raise(new PlayerRolledDiceEvent(player, currentRoll, currentPlayer.getTurn()));
         if (player.isInPenaltyBox()) {
             rollDiceFromPenaltyBox(player);
         } else {
@@ -125,7 +127,7 @@ public class Game extends Entity<GameId> {
             throw new CannotDrawQuestionBeforeRollingDiceException(getId(), currentPlayer.getId());
         }
 
-        this.currentQuestion = questions.drawQuestion(currentPlayer.getLocation());
+        this.currentQuestion = questionsDeck.drawQuestion(currentPlayer.getLocation());
         raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
     }
 

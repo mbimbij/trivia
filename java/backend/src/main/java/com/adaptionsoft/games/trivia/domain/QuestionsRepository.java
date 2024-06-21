@@ -18,16 +18,16 @@ public abstract class QuestionsRepository {
     }
 
     @SneakyThrows
-    public Questions getQuestions() {
+    public QuestionsDeck getQuestions() {
         Path directoryPath = Paths.get(this.directoryPathString);
         try (Stream<Path> files = Files.list(directoryPath)) {
-            Map<Questions.Category, Queue<Question>> questionsMap = files.map(this::loadQuestionsFromFile)
+            Map<QuestionsDeck.Category, Queue<Question>> questionsMap = files.map(this::loadQuestionsFromFile)
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return new Questions(questionsMap);
+            return new QuestionsDeck(questionsMap);
         }
     }
 
-    protected abstract Map.Entry<Questions.Category, Queue<Question>> loadQuestionsFromFile(Path filePath);
+    protected abstract Map.Entry<QuestionsDeck.Category, Queue<Question>> loadQuestionsFromFile(Path filePath);
 
     protected String categoryNameFromFilePath(Path filePath) {
         return filePath.toFile().getName().split("\\.")[0];

@@ -29,6 +29,15 @@ class GameResponseDtoShould {
     private GameResponseDto buildExpectedGameDto(Game game) {
         @NotBlank PlayerDto player1 = PlayerDto.from(game.getCreator());
         List<PlayerDto> players = game.getPlayersList().stream().map(PlayerDto::from).toList();
-        return new GameResponseDto(GAME_TEST_ID_INTEGER, game.getName(), CREATED.toString(), 0, player1, players, player1);
+        QuestionDto questionDto = QuestionDto.from(game.getCurrentQuestion());
+        return new GameResponseDto(GAME_TEST_ID_INTEGER,
+                game.getName(),
+                CREATED.toString(),
+                0,
+                player1,
+                players,
+                player1,
+                questionDto,
+                game.getCurrentRoll().value());
     }
 }

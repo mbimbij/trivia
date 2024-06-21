@@ -12,6 +12,7 @@ public record PlayerDto(
         int coinCount
 ) {
     public static PlayerDto from(Player player) {
+        if (player == null) return null;
         return new PlayerDto(player.getId().getValue(),
                 player.getName(),
                 player.getCoinCount());

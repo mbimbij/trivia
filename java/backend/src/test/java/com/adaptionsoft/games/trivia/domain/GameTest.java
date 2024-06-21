@@ -50,7 +50,7 @@ class GameTest {
 
     @Test
     void player_other_than_current_should_not_be_able_to_do_anything() {
-        game.startBy(player1);
+        game.start(player1);
         assertSoftly(softAssertions -> {
             softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player2, A)).isInstanceOf(PlayTurnException.class);
             softAssertions.assertThatThrownBy(() -> game.rollDice(player2)).isInstanceOf(PlayTurnException.class);
@@ -107,7 +107,7 @@ class GameTest {
         }
 
         private void playEntireGame(Game game, Random rand) {
-            game.startBy(game.getCurrentPlayer());
+            game.start(game.getCurrentPlayer());
             do {
                 if (game.getCurrentPlayer().canRollDice()) {
                     game.rollDice(game.getCurrentPlayer());
@@ -313,7 +313,7 @@ class GameTest {
         @Test
         void creator_can_start_game() {
             // WHEN
-            game.startBy(player1);
+            game.start(player1);
 
             // THEN
             assertSoftly(softAssertions -> {
@@ -326,7 +326,7 @@ class GameTest {
         @Test
         void joined_player_cannot_start_game() {
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> game.startBy(player2)).isInstanceOf(StartException.class);
+                softAssertions.assertThatThrownBy(() -> game.start(player2)).isInstanceOf(StartException.class);
                 softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
             });
         }
@@ -337,7 +337,7 @@ class GameTest {
             game = gameFactory.create("game", player1);
 
             // WHEN
-            ThrowableAssert.ThrowingCallable callable = () -> game.startBy(player1);
+            ThrowableAssert.ThrowingCallable callable = () -> game.start(player1);
 
             // THEN
             assertSoftly(softAssertions -> {
@@ -352,7 +352,7 @@ class GameTest {
         @Test
         void cannot_draw_question__before_rolling_dice() {
             // GIVEN a started game
-            game.startBy(player1);
+            game.start(player1);
 
             // WHEN
             assertThatThrownBy(() -> game.drawQuestion(player1))
@@ -365,7 +365,7 @@ class GameTest {
         @Test
         void current_player_should_be_able_to_answer() {
             // GIVEN a started game
-            game.startBy(player1);
+            game.start(player1);
             game.rollDice(player1);
             game.drawQuestion(player1);
 
@@ -402,7 +402,7 @@ class GameTest {
                     """;
 
             // AND a started game
-            game.startBy(player1);
+            game.start(player1);
             game.rollDice(game.getCurrentPlayer());
             int turn = game.getTurn();
             game.drawQuestion(player1);
@@ -450,7 +450,7 @@ class GameTest {
                     """;
 
             // AND a started game
-            game.startBy(player1);
+            game.start(player1);
             game.rollDice(player1);
             game.drawQuestion(player1);
 
@@ -497,7 +497,7 @@ class GameTest {
                     player1 is not getting out of the penalty box
                     player2 is the current player
                     """;
-            game.startBy(currentPlayer);
+            game.start(currentPlayer);
 
             // WHEN
             game.rollDice(currentPlayer);
@@ -521,7 +521,7 @@ class GameTest {
                     player1's new location is 2
                     The category is Sports
                     """;
-            game.startBy(currentPlayer);
+            game.start(currentPlayer);
 
             // WHEN
             game.rollDice(currentPlayer);
@@ -532,7 +532,7 @@ class GameTest {
 
         @Test
         void cannot_answer_questions_while_in_penalty_box() {
-            game.startBy(player1);
+            game.start(player1);
             game.rollDice(player1);
             player1.setInPenaltyBox(true);
 
@@ -542,7 +542,7 @@ class GameTest {
 
         @Test
         void cannot_answer_question_before_drawing_one() {
-            game.startBy(player1);
+            game.start(player1);
             game.rollDice(player1);
             player1.setInPenaltyBox(true);
 
@@ -602,7 +602,7 @@ class GameTest {
             // WHEN
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.startBy(player1)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.start(player1)).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.rollDice(player1)).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A)).isInstanceOf(InvalidGameStateException.class);
             });

@@ -4,11 +4,11 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-public class Questions {
+public class QuestionsDeck {
 
     private final Map<Category, Queue<Question>> questionsByCategory;
 
-    public Questions(Map<Category, Queue<Question>> questionsByCategory) {
+    public QuestionsDeck(Map<Category, Queue<Question>> questionsByCategory) {
         this.questionsByCategory = questionsByCategory;
     }
 

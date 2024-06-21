@@ -16,7 +16,7 @@ public class QuestionsRepositoryTxt extends QuestionsRepository {
 
     @Override
     @SneakyThrows
-    protected Map.Entry<Questions.Category, Queue<Question>> loadQuestionsFromFile(Path filePath) {
+    protected Map.Entry<QuestionsDeck.Category, Queue<Question>> loadQuestionsFromFile(Path filePath) {
         try (Stream<String> lines = Files.lines(filePath, StandardCharsets.UTF_8)) {
             Queue<Question> questions = new ArrayDeque<>(lines
                     .map(s ->
@@ -24,7 +24,7 @@ public class QuestionsRepositoryTxt extends QuestionsRepository {
                     .toList()
             );
             String categoryName = categoryNameFromFilePath(filePath);
-            Questions.Category questionCategory = Objects.requireNonNull(Questions.Category.fromString(categoryName));
+            QuestionsDeck.Category questionCategory = Objects.requireNonNull(QuestionsDeck.Category.fromString(categoryName));
             return Map.entry(questionCategory, questions);
         }
     }

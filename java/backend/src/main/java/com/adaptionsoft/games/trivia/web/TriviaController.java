@@ -153,7 +153,20 @@ public class TriviaController {
                                      @PathVariable("playerId") String playerIdString) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
-        game.startBy(player);
+        game.start(player);
+        gameRepository.save(game);
+        notifyGameUpdatedViaWebsocket(game);
+        return GameResponseDto.from(game);
+    }
+
+    @PostMapping("/{gameId}/players/{playerId}/rollDice")
+    @ResponseStatus(HttpStatus.CREATED)
+    public GameResponseDto rollDice(@PathVariable("gameId") Integer gameIdInt,
+                                     @PathVariable("playerId") String playerIdString) {
+        Game game = findGameOrThrow(new GameId(gameIdInt));
+        Player player = findPlayerOrThrow(game, new UserId(playerIdString));
+        game.rollDice(player);
+        game.drawQuestion(player);
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);

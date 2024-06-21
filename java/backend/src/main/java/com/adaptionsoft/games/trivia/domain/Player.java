@@ -7,7 +7,6 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.*;
 
 import static lombok.AccessLevel.PACKAGE;
-import static lombok.AccessLevel.PUBLIC;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
@@ -100,7 +99,7 @@ public class Player extends Entity<UserId> {
             throw new CannotUpdateLocationFromPenaltyBoxException(gameId, id);
         }
         setLocation(newLocation);
-        Questions.Category category = Questions.Category.getQuestionCategory(getLocation());
+        QuestionsDeck.Category category = QuestionsDeck.Category.getQuestionCategory(getLocation());
         raise(new PlayerChangedLocationEvent(this,category, this.getTurn()));
     }
 
