@@ -24,7 +24,6 @@ public class Players extends EventRaiser {
     public Players(EventPublisher eventPublisher, Player creator, Player... individualPlayers) {
         super(eventPublisher);
         addCreator(creator);
-//        this.individualPlayers.addAll(Arrays.asList(individualPlayers));
         Arrays.stream(individualPlayers).forEach(this::add);
     }
 

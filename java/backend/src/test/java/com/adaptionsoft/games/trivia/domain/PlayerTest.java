@@ -7,6 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -165,5 +169,15 @@ class PlayerTest {
             softAssertions.assertThat(player.getConsecutiveCorrectAnswersCount()).isEqualTo(1);
             softAssertions.assertThat(player.getConsecutiveIncorrectAnswersCount()).isEqualTo(0);
         });
+    }
+
+    @Test
+    void name() {
+        Random random = new Random();
+        Set<Integer> integers = new HashSet<Integer>();
+        for (int i = 0; i < 1000; i++) {
+            integers.add(random.nextInt(6));
+        }
+        System.out.println(integers);
     }
 }

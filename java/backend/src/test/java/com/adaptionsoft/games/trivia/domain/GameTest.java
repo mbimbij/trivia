@@ -219,11 +219,10 @@ class GameTest {
                     "game name",
                     eventPublisher,
                     players,
-                    null,
                     players.getCurrent(),
                     null,
-                    CREATED,
-                    null);
+                    null,
+                    CREATED, null);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getPublishedEvents()).isEmpty();
@@ -394,10 +393,10 @@ class GameTest {
             String expectedOutput = """
                     Game Id(value=1) started
                     player1 is the current player
-                    They have rolled a 4
-                    player1's new location is 4
-                    The category is Geography
-                    geography question 1
+                    They have rolled a 5
+                    player1's new location is 5
+                    The category is Pop
+                    pop question 1
                     Answer was correct!!!!
                     player1 now has 1 Gold Coins.
                     player2 is the current player
@@ -440,12 +439,12 @@ class GameTest {
             String expectedOutput = """
                     Game Id(value=1) started
                     player1 is the current player
-                    They have rolled a 4
-                    player1's new location is 4
-                    The category is Geography
-                    geography question 1
+                    They have rolled a 5
+                    player1's new location is 5
+                    The category is Pop
+                    pop question 1
                     Question was incorrectly answered
-                    geography question 2
+                    pop question 2
                     Question was incorrectly answered
                     player1 was sent to the penalty box
                     player2 is the current player
@@ -487,8 +486,8 @@ class GameTest {
 
         @Test
         void given_player_in_penalty_box__when_roll_not_pair__then_stay_in_penalty_box() {
-            Random rand = new Random(4);
-            game.setRand(rand);
+            Dice dice = new LoadedDice(3);
+            game.setDice(dice);
             Player currentPlayer = game.getCurrentPlayer();
             currentPlayer.setInPenaltyBox(true);
             ByteArrayOutputStream baos = redirectStdoutToString();
@@ -510,18 +509,18 @@ class GameTest {
 
         @Test
         void given_player_in_penalty_box__when_roll_pair__then_get_out_in_penalty_box() {
-            Random rand = new Random(2);
-            game.setRand(rand);
+            Dice dice = new LoadedDice(2);
+            game.setDice(dice);
             Player currentPlayer = game.getCurrentPlayer();
             currentPlayer.setInPenaltyBox(true);
             ByteArrayOutputStream baos = redirectStdoutToString();
             String expectedOutput = """
                     Game Id(value=1) started
                     player1 is the current player
-                    They have rolled a 4
+                    They have rolled a 2
                     player1 is getting out of the penalty box
-                    player1's new location is 4
-                    The category is Geography
+                    player1's new location is 2
+                    The category is Sports
                     """;
             game.startBy(currentPlayer);
 

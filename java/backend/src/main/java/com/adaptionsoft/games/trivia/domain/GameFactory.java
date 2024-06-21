@@ -40,11 +40,10 @@ public class GameFactory {
                 gameName,
                 eventPublisher,
                 players,
-                rand,
                 players.getCurrent(),
                 board,
-                CREATED,
-                questions
+                new Dice(rand),
+                CREATED, questions
         );
 
         eventPublisher.raise(new GameCreatedEvent(game.getId()));

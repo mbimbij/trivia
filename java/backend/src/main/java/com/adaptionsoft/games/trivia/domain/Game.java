@@ -15,6 +15,8 @@ public class Game extends Entity<GameId> {
     @Getter
     private final String name;
     private final Players players;
+    @Setter
+    private Dice dice;
     @Getter
     private boolean isGameInProgress = true;
     @Getter
@@ -23,8 +25,6 @@ public class Game extends Entity<GameId> {
     private Player currentPlayer;
     @Getter
     private Player winner;
-    @Setter
-    private Random rand;
     private final Board board;
     @Getter
     @Setter // for testing purposes only
@@ -34,21 +34,21 @@ public class Game extends Entity<GameId> {
     @Setter
     private Question currentQuestion;
     @Getter
-    private Integer currentRoll;
+    private Dice.Roll currentRoll;
 
     public Game(GameId gameId,
                 String name,
                 EventPublisher eventPublisher,
                 Players players,
-                Random rand,
                 Player currentPlayer,
                 Board board,
+                Dice dice,
                 State state,
                 Questions questions) {
         super(gameId, eventPublisher);
         this.name = name;
         this.players = players;
-        this.rand = rand;
+        this.dice = dice;
         this.currentPlayer = currentPlayer;
         this.board = board;
         this.state = state;
@@ -96,22 +96,26 @@ public class Game extends Entity<GameId> {
             throw new RollDiceException(id, player.getId());
         }
 
-        currentRoll = rollDice();
+        currentRoll = dice.roll();
         raise(new PlayerRolledDiceEvent(currentPlayer, currentRoll, currentPlayer.getTurn()));
         if (player.isInPenaltyBox()) {
-            if (isPair(currentRoll)) {
-                player.getOutOfPenaltyBox();
-                raise(new PlayerGotOutOfPenaltyBoxEvent(player, player.getTurn()));
-                player.updateLocation(computeNewPlayerLocation(currentRoll));
-            } else {
-                raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
-                endTurn();
-            }
+            rollDiceFromPenaltyBox(player);
         } else {
-            player.updateLocation(computeNewPlayerLocation(currentRoll));
+            board.movePlayer(player, currentRoll);
         }
 
         eventPublisher.flushEvents();
+    }
+
+    private void rollDiceFromPenaltyBox(Player player) {
+        if (currentRoll.isPair()) {
+            player.getOutOfPenaltyBox();
+            raise(new PlayerGotOutOfPenaltyBoxEvent(player, player.getTurn()));
+            board.movePlayer(player, currentRoll);
+        } else {
+            raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
+            endTurn();
+        }
     }
 
     public void drawQuestion(Player currentPlayer) {
@@ -212,20 +216,5 @@ public class Game extends Entity<GameId> {
         players.goToNextPlayerTurn();
         currentPlayer = players.getCurrent();
         displayCurrentPlayerIfGameNotEnded();
-    }
-
-    int computeNewPlayerLocation(int roll) {
-        return (currentPlayer.getLocation() + roll) % board.getSquaresCount();
-    }
-    // TODO extract delegate ?
-
-    boolean isPair(int roll) {
-        return roll % 2 == 0;
-    }
-    // TODO extract delegate ?
-
-    int rollDice() {
-        int roll = rand.nextInt(5) + 1;
-        return roll;
     }
 }
