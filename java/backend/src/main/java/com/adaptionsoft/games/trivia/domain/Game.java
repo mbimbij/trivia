@@ -38,18 +38,17 @@ public class Game extends Entity<GameId> {
 
     public Game(GameId gameId,
                 String name,
-                EventPublisher eventPublisher,
-                Players players,
-                Player currentPlayer,
+                State state, EventPublisher eventPublisher,
                 Board board,
                 Dice dice,
-                State state,
-                Questions questions) {
+                Questions questions,
+                Player creator,
+                Player ... otherPlayers) {
         super(gameId, eventPublisher);
         this.name = name;
-        this.players = players;
+        this.players = new Players(eventPublisher, creator, otherPlayers);
         this.dice = dice;
-        this.currentPlayer = currentPlayer;
+        this.currentPlayer = this.players.getCurrent();
         this.board = board;
         this.state = state;
         this.questions = questions;

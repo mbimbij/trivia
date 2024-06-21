@@ -21,10 +21,10 @@ public class Players extends EventRaiser {
     private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Players(EventPublisher eventPublisher, Player creator, Player... individualPlayers) {
+    public Players(EventPublisher eventPublisher, Player creator, Player... otherPlayers) {
         super(eventPublisher);
         addCreator(creator);
-        Arrays.stream(individualPlayers).forEach(this::add);
+        Arrays.stream(otherPlayers).forEach(this::add);
     }
 
     private void addCreator(Player creator) {

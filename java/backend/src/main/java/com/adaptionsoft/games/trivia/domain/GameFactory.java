@@ -28,8 +28,6 @@ public class GameFactory {
             player.setGameId(gameId);
         });
 
-        Players players = PlayersFactory.create(eventPublisher, creator, otherPlayers);
-
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
@@ -38,12 +36,12 @@ public class GameFactory {
         Game game = new Game(
                 gameId,
                 gameName,
-                eventPublisher,
-                players,
-                players.getCurrent(),
+                CREATED, eventPublisher,
                 board,
                 new Dice(rand),
-                CREATED, questions
+                questions,
+                creator,
+                otherPlayers
         );
 
         eventPublisher.raise(new GameCreatedEvent(game.getId()));

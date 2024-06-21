@@ -211,18 +211,17 @@ class GameTest {
         void creation_through_constructor__should_not_raise_any_event() {
             // GIVEN
             eventPublisher.clearEvents();
-            Players players = new Players(eventPublisher, player1(), player2());
 
             // WHEN
             Game game = new Game(
                     new GameId(1),
                     "game name",
-                    eventPublisher,
-                    players,
-                    players.getCurrent(),
+                    CREATED, eventPublisher,
                     null,
                     null,
-                    CREATED, null);
+                    null,
+                    player1,
+                    player2);
 
             // THEN no domain events are produced
             assertThat(eventPublisher.getPublishedEvents()).isEmpty();
