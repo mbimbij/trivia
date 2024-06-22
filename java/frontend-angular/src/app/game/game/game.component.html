@@ -1,6 +1,6 @@
 <div
-  [attr.data-testid]="'player-action-section'"
-  *ngIf="(game$ | async | consoleLog) as game; else waiting_for_data"
+  [attr.data-testid]="'game-header-section'"
+  *ngIf="(game$ | async) as game; else waiting_for_data"
 >
   <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
 
@@ -10,16 +10,22 @@
 
   <button (click)="router.navigate(['games'])">go back</button>
   <br>
-  <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && isCurrentPlayer()">- <b>Your Turn !</b></span></p>
+  <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
   <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
   <p>Current Player - "{{ game.currentPlayer.name }}"</p>
-
-  <button type="button" (click)="playTurn()"
-          [disabled]="!canPlayTurn()">{{ isCurrentPlayer() ? 'play' : 'play (not your turn)' }}
-  </button>
+  <div
+    *ngIf="game.isCurrentPlayer(player)"
+    [attr.data-testid]="'player-action-section'"
+  >
+    <hr>
+    <app-roll-dice [game]="game" [player]="player"></app-roll-dice>
+    <app-answer-question [player]="player" [game]="game" [question]="game.currentQuestion!"></app-answer-question>
+    <hr>
+  </div>
 </div>
 
 <ng-template #waiting_for_data>Waiting for game data</ng-template>
+
 
 <div
   [attr.data-testid]="'game-logs-section'"

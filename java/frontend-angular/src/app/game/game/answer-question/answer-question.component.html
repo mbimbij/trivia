@@ -1,0 +1,14 @@
+<div
+  [attr.data-testid]="'answer-question'"
+  *ngIf="canAnswerQuestion"
+>
+{{question.questionText}}
+  <br>
+  <button>A</button> <span>{{question.availableAnswers['A']}}</span>
+  <br>
+  <button>B</button> <span>{{question.availableAnswers['B']}}</span>
+  <br>
+  <button>C</button> <span>{{question.availableAnswers['C']}}</span>
+  <br>
+  <button>D</button> <span>{{question.availableAnswers['D']}}</span>
+</div>

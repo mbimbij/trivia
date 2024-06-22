@@ -20,7 +20,7 @@ public class QuestionsRepositoryJson extends QuestionsRepository {
     protected Map.Entry<QuestionsDeck.Category, Queue<Question>> loadQuestionsFromFile(Path filePath) {
         String categoryName = categoryNameFromFilePath(filePath);
         QuestionsDeck.Category questionCategory = Objects.requireNonNull(QuestionsDeck.Category.fromString(categoryName));
-        Queue<Question> questions = mapper.readValue(filePath.toFile(), new TypeReference<Queue<Question>>() {
+        Queue<Question> questions = mapper.readValue(filePath.toFile(), new TypeReference<>() {
         });
         return Map.entry(questionCategory, questions);
     }

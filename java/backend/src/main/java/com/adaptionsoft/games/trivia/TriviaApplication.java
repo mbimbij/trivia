@@ -53,7 +53,7 @@ public class TriviaApplication {
 
     @Bean
     public QuestionsRepository questionsLoader(@Value("${application.questions-path}") String questionsPath) {
-        return new QuestionsRepositoryTxt(questionsPath);
+        return new QuestionsRepositoryJson(questionsPath);
     }
 
     @Bean

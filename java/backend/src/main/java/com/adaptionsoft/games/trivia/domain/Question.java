@@ -10,7 +10,7 @@ public record Question(
         @NotNull
         String questionText,
         @NotNull
-        Map<AnswerCode, String> availableAnswers,
+        AvailableAswers availableAnswers,
         @NotNull
         AnswerCode correctAnswer
 ) {

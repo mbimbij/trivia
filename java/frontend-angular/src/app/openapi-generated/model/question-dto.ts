@@ -11,11 +11,9 @@
  */
 
 
-export interface PlayerDto { 
+export interface QuestionDto { 
     id: string;
-    name: string;
-    coinCount: number;
-    isInPenaltyBox: boolean;
-    consecutiveIncorrectAnswersCount: number;
+    questionText: string;
+    availableAnswers: { [key: string]: string; };
 }
 

@@ -1,5 +1,5 @@
 <button (click)="router.navigate(['/games'])">go back</button>
-<ng-container *ngIf="(game$ | async | consoleLog) as game; else waiting_for_data">
+<ng-container *ngIf="(game$ | async) as game; else waiting_for_data">
   <table>
     <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
     <tr>

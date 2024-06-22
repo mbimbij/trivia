@@ -11,11 +11,12 @@
  */
 
 
-export interface PlayerDto { 
-    id: string;
-    name: string;
-    coinCount: number;
-    isInPenaltyBox: boolean;
-    consecutiveIncorrectAnswersCount: number;
-}
+export type AnswerCode = 'A' | 'B' | 'C' | 'D';
+
+export const AnswerCode = {
+    A: 'A' as AnswerCode,
+    B: 'B' as AnswerCode,
+    C: 'C' as AnswerCode,
+    D: 'D' as AnswerCode
+};
 

@@ -83,12 +83,13 @@ public class TestFixtures {
     public static Question questionTest() {
         return new Question("id-question-test",
                 "question test",
-                Map.of(
-                        A, "Question A",
-                        B, "Question B",
-                        C, "Question C",
-                        D, "Question D"
-                ), A);
+                new AvailableAswers(
+                        "Question A",
+                        "Question B",
+                        "Question C",
+                        "Question D"
+                ),
+                A);
     }
 
     public static LoadedQuestionsDeck loadedQuestionsDeck() {

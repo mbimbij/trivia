@@ -1,11 +1,10 @@
 import {Component, Input} from '@angular/core';
-import {GameResponseDto} from "../../openapi-generated";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 import {Game} from '../game';
-import {comparePlayers, compareUserAndPlayer} from "../../common/helpers";
+import {compareUserAndPlayer} from "../../common/helpers";
 
 @Component({
   selector: 'app-join-game-button',

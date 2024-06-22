@@ -2,14 +2,14 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -171,13 +171,21 @@ class PlayerTest {
         });
     }
 
+    @SneakyThrows
     @Test
     void name() {
-        Random random = new Random();
-        Set<Integer> integers = new HashSet<Integer>();
-        for (int i = 0; i < 1000; i++) {
-            integers.add(random.nextInt(6));
+        Map<QuestionsDeck.Category, List<Question>> questions = new HashMap<>();
+        for (QuestionsDeck.Category category : QuestionsDeck.Category.values()) {
+            questions.put(category, new ArrayList<>());
+            for (int i = 0; i < 100; i++) {
+                questions.get(category).add(new Question(
+                        "%s-%d".formatted(category, i),
+                        "question %s %d".formatted(category, i),
+                        new AvailableAswers("answer A","answer B","answer C","answer D"),
+                        AnswerCode.values()[i%4]
+                ));
+            }
         }
-        System.out.println(integers);
+        System.out.println(new ObjectMapper().writeValueAsString(questions));
     }
 }

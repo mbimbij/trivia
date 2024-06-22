@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
 import static com.adaptionsoft.games.trivia.domain.State.*;
@@ -75,7 +78,7 @@ class GameTest {
             doReturn(1).when(idGenerator).nextId();
             MockEventPublisher eventPublisher = new MockEventPublisher();
             eventPublisher.register(new EventConsoleLogger());
-            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryTxt("src/main/resources/questions"));
+            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/main/resources/questions-json"));
             playerFactory = new PlayerFactory(eventPublisher);
         }
 
@@ -126,7 +129,7 @@ class GameTest {
         }
 
         private boolean canSubmitAnswer(Game game) {
-            return !(game.getCurrentRoll() == null) && !game.getCurrentPlayer().isInPenaltyBox();
+            return game.getCurrentRoll() != null && !game.getCurrentPlayer().isInPenaltyBox();
         }
 
         private AnswerCode getRandomAnswer(Random rand) {

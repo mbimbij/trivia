@@ -7,7 +7,6 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventListener;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-
 public class GameLogsPersister implements EventListener {
     private final GameLogsRepository gameLogsRepository;
 

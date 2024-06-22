@@ -1,6 +1,10 @@
 package com.adaptionsoft.games.trivia.application;
 
 import com.adaptionsoft.games.trivia.domain.*;
+import com.adaptionsoft.games.trivia.domain.event.MockEventPublisher;
+import com.adaptionsoft.games.trivia.domain.event.QuestionAskedToPlayerEvent;
+import com.adaptionsoft.games.trivia.domain.gamelogs.GameLog;
+import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import com.adaptionsoft.games.trivia.web.*;
 import com.adaptionsoft.games.trivia.websocket.WebSocketConfig;
@@ -38,7 +42,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TriviaController.class)
 @ActiveProfiles("test")
-@Import(WebSocketConfig.class)
+@Import({
+        WebSocketConfig.class,
+        MyTestConfiguration.class
+})
 class TriviaBackendTest {
 
     @Autowired
@@ -47,6 +54,10 @@ class TriviaBackendTest {
     private MockMvc mvc;
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private GameLogsRepository gameLogsRepository;
+    @Autowired
+    private MockEventPublisher eventPublisher;
     @Autowired
     private GameFactory gameFactory;
     @Autowired
@@ -228,21 +239,6 @@ class TriviaBackendTest {
 
         // THEN the http response is as expected
         ResultActions statusVerifyResultActions = resultActions.andExpect(status().isBadRequest());
-//        GameResponseDto actualResponseDto = mapper.readValue(
-//                statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
-//                new TypeReference<>() {
-//                });
-//        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
-//        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
-//                game.getName(),
-//                CREATED.toString(),
-//                0,
-//                creatorDto,
-//                List.of(creatorDto, player2Dto),
-//                creatorDto,
-//                null,
-//                null);
-//        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
 
     @SneakyThrows
@@ -349,6 +345,16 @@ class TriviaBackendTest {
                 expectedCurrentQuestionDto,
                 3);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
+
+        // AND the event is published
+        System.out.println();
+        assertThat(eventPublisher.getPublishedEvents()).containsOnlyOnce(
+                        new QuestionAskedToPlayerEvent(player1, questionTest().questionText(), 1));
+
+        // AND the game log line is available
+        assertThat(gameLogsRepository.getLogsForGame(game.getId())).containsOnlyOnce(
+                new GameLog(game.getId(), questionTest().questionText())
+        );
     }
 
     @SneakyThrows

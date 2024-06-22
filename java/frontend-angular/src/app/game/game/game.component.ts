@@ -1,15 +1,16 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {comparePlayers, generateRandomString, userToPlayer, userToPlayerDto} from "../../common/helpers";
-import {GameService} from "../game.service";
+import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {Game} from "../game";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {RollDiceComponent} from "./roll-dice/roll-dice.component";
+import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
 
 @Component({
   selector: 'app-game',
@@ -18,18 +19,20 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
     NgForOf,
     NgIf,
     AsyncPipe,
-    ConsoleLogPipe
+    ConsoleLogPipe,
+    RollDiceComponent,
+    AnswerQuestionComponent
   ],
   templateUrl: './game.component.html',
-  styleUrl: './game.component.css'
+  styleUrl: './game.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent {
   private readonly id: string;
-  protected player!: Player;
+  @Input("player") protected player!: Player;
   private gameId!: number;
-  protected game!: Game;
+  @Input("game") private game!: Game;
   protected game$!: Observable<Game>
-  protected logs: Array<string> = [];
   protected gameLogs$!: Observable<GameLog[]>;
 
   constructor(private route: ActivatedRoute,
@@ -42,7 +45,7 @@ export class GameComponent {
       this.gameId = Number.parseInt(value['id']);
       this.game$ = this.gameService.getGame(this.gameId);
       this.game$.subscribe(game => {
-        this.game=game;
+        this.game = game;
       })
     })
   }
@@ -52,8 +55,9 @@ export class GameComponent {
     this.gameLogs$ = this.gameService.getGameLogs(this.gameId);
 
     // TODO améliorer l'initialisation des subjects et observables en tenant compte des dépendances
-    this.userService.getUser().subscribe(updatedUser => this.player = userToPlayer(updatedUser))
-
+    this.userService.getUser().subscribe(updatedUser => {
+      return this.player = userToPlayer(updatedUser);
+    })
   }
 
   private setCoinCount() {
@@ -65,12 +69,6 @@ export class GameComponent {
     }
   }
 
-  protected canPlayTurn() {
-    // TODO empêcher la fonction d'être appelée 36 fois
-    // console.log(`canPlayTurn called`)
-    return this.isCurrentPlayer() && !this.isGameEnded;
-  }
-
   get isGameEnded(): boolean {
     return this.game.state === "ended";
   }
@@ -78,14 +76,6 @@ export class GameComponent {
   protected isCurrentPlayer() {
     return comparePlayers(this.player, this.game.currentPlayer)
   }
-
-  protected playTurn() {
-    this.gameService.playTurn(this.gameId, this.player.id).subscribe(value => {
-      this.game = value
-      this.setCoinCount();
-    });
-  }
-
   private ngAfterViewChecked() {
     this.scrollLogsToBottom()
   }
@@ -97,11 +87,23 @@ export class GameComponent {
     }
   }
 
-  private addLogs = (gameLog: GameLog) => {
-    this.logs.push(gameLog.value);
-  }
-
   protected playerWon(): boolean {
     return comparePlayers(this.player, this.game.winner)
+  }
+
+  /**
+   * For tests only
+   * @param player
+   */
+  setPlayer(player: Player) {
+    this.player = player
+  }
+
+  /**
+   * For tests only
+   * @param game
+   */
+  setGame(game: Game) {
+    this.game$ = of(game)
   }
 }

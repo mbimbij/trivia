@@ -125,6 +125,7 @@ public class Game extends Entity<GameId> {
 
         this.currentQuestion = questionsDeck.drawQuestion(currentPlayer.getLocation());
         raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
+        eventPublisher.flushEvents();
     }
 
     public boolean answerCurrentQuestion(Player player, AnswerCode answerCode) {

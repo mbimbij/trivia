@@ -1,5 +1,5 @@
 import {Observable} from "rxjs";
-import {GameLog, GameResponseDto} from "../openapi-generated";
+import {GameLog, GameResponseDto, QuestionDto} from "../openapi-generated";
 import {User} from "../user/user";
 import {Game} from "../game/game";
 
@@ -16,7 +16,11 @@ export abstract class GameServiceAbstract {
 
   abstract start(gameId: number, userId: string): Observable<Game>;
 
-  abstract playTurn(gameId: number, userId: string): Observable<Game>;
+  abstract rollDice(gameId: number, userId: string): Observable<Game>;
+
+  abstract drawQuestion(gameId: number, userId: string): Observable<QuestionDto>;
+
+  abstract answerQuestion(gameId: number, userId: string, answerCode: string): Observable<boolean>;
 
   abstract delete(gameId: number): Observable<void> ;
 
