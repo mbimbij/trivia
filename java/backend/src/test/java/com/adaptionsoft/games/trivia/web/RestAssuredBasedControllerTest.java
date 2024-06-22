@@ -57,7 +57,7 @@ class RestAssuredBasedControllerTest {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(new InvalidGameStateException(null, null, "add player"))
                 .when(triviaController)
-                .joinGame(anyInt(), any());
+                .joinGame(anyInt(), anyString(), any(PlayerDto.class));
 
         // WHEN a new player tries to join the game
         //@formatter:off
@@ -90,9 +90,6 @@ class RestAssuredBasedControllerTest {
                 .post("/api/games/{gameId}/players/{playerId}/playTurn", 0, 0)
         .then()
                 .statusCode(403)
-//                .body("timestamp", notNullValue())
-//                .body("status", equalTo(409))
-//                .body("message", notNullValue())
         ;
         //@formatter:on
     }

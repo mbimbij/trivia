@@ -52,7 +52,7 @@ class GameTest {
     void player_other_than_current_should_not_be_able_to_do_anything() {
         game.start(player1);
         assertSoftly(softAssertions -> {
-            softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player2, A)).isInstanceOf(PlayTurnException.class);
+            softAssertions.assertThatThrownBy(() -> game.answerCurrentQuestion(player2, A)).isInstanceOf(PlayTurnException.class);
             softAssertions.assertThatThrownBy(() -> game.rollDice(player2)).isInstanceOf(PlayTurnException.class);
             softAssertions.assertThatThrownBy(() -> game.drawQuestion(player2)).isInstanceOf(PlayTurnException.class);
         });
@@ -116,7 +116,7 @@ class GameTest {
                     game.drawQuestion(game.getCurrentPlayer());
                 }
                 if (canSubmitAnswer(game)) {
-                    game.submitAnswerToCurrentQuestion(game.getCurrentPlayer(), getRandomAnswer(rand));
+                    game.answerCurrentQuestion(game.getCurrentPlayer(), getRandomAnswer(rand));
                 }
             } while (game.isGameInProgress());
         }
@@ -370,7 +370,7 @@ class GameTest {
             game.drawQuestion(player1);
 
             // WHEN
-            ThrowableAssert.ThrowingCallable action = () -> game.submitAnswerToCurrentQuestion(player1, A);
+            ThrowableAssert.ThrowingCallable action = () -> game.answerCurrentQuestion(player1, A);
 
             // THEN
             assertThatCode(action).doesNotThrowAnyException();
@@ -379,7 +379,7 @@ class GameTest {
         @Test
         void cannot_submit_an_answer_if_game_not_started() {
             assumeThat(game.getState()).isNotEqualTo(STARTED);
-            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
+            assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A))
                     .isInstanceOf(InvalidGameStateException.class);
         }
 
@@ -408,7 +408,7 @@ class GameTest {
             game.drawQuestion(player1);
 
             // WHEN correct answer
-            game.submitAnswerToCurrentQuestion(player1, A);
+            game.answerCurrentQuestion(player1, A);
 
             // THEN event is raised
             assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerAnsweredCorrectlyEvent(player1, turn));
@@ -461,7 +461,7 @@ class GameTest {
             assertThat(currentQuestionBefore).isNotNull();
 
             // WHEN first incorrect answer (correct answers order: A,B,C,D,A,B,C,D)
-            game.submitAnswerToCurrentQuestion(player1, B);
+            game.answerCurrentQuestion(player1, B);
             // THEN event is raised
             assertThat(eventPublisher.getPublishedEvents()).containsOnlyOnce(expectedEvent);
             // AND turn not incremented
@@ -474,7 +474,7 @@ class GameTest {
                     .isNotEqualTo(currentQuestionBefore);
 
             // WHEN second consecutive answer (correct answers order: A,B,C,D,A,B,C,D)
-            game.submitAnswerToCurrentQuestion(player1, C);
+            game.answerCurrentQuestion(player1, C);
             // THEN output as expected
             assertThat(baos.toString()).isEqualTo(expectedOutput);
             // AND the current question has been set to null
@@ -536,7 +536,7 @@ class GameTest {
             game.rollDice(player1);
             player1.setInPenaltyBox(true);
 
-            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
+            assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A))
                     .isInstanceOf(ExecuteActionInPenaltyBoxException.class);
         }
 
@@ -546,7 +546,7 @@ class GameTest {
             game.rollDice(player1);
             player1.setInPenaltyBox(true);
 
-            assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A))
+            assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A))
                     .isInstanceOf(ExecuteActionInPenaltyBoxException.class);
         }
     }
@@ -582,7 +582,7 @@ class GameTest {
                     """;
 
             // WHEN
-            game.submitAnswerToCurrentQuestion(currentPlayer, A);
+            game.answerCurrentQuestion(currentPlayer, A);
 
             // THEN
             assertSoftly(softAssertions -> {
@@ -604,7 +604,7 @@ class GameTest {
                 softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.start(player1)).isInstanceOf(InvalidGameStateException.class);
                 softAssertions.assertThatThrownBy(() -> game.rollDice(player1)).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.submitAnswerToCurrentQuestion(player1, A)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A)).isInstanceOf(InvalidGameStateException.class);
             });
         }
     }

@@ -37,7 +37,7 @@ class TriviaControllerTest {
     void given_game_not_found__should_thrown_exception() {
         Mockito.doReturn(Optional.empty()).when(gameRepository).findById(any());
         assertSoftly(softAssertions -> {
-            softAssertions.assertThatThrownBy(() -> controller.joinGame(-1, Mockito.mock(PlayerDto.class)))
+            softAssertions.assertThatThrownBy(() -> controller.joinGame(-1, null, Mockito.mock(PlayerDto.class)))
                     .isInstanceOf(GameNotFoundException.class);
             softAssertions.assertThatThrownBy(() -> controller.startGame(-1, "notExistingPlayer"))
                     .isInstanceOf(GameNotFoundException.class);

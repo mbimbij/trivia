@@ -5,7 +5,6 @@ import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLog;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
-import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.Id;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,16 +14,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RequiredArgsConstructor
@@ -32,8 +33,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping(
         value = "/api/games",
         produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE
+                APPLICATION_JSON_VALUE,
+                APPLICATION_PROBLEM_JSON_VALUE
         }
 )
 @CrossOrigin(origins = "${application.allowed-origins}", methods = {DELETE, GET, POST, OPTIONS})
@@ -45,7 +46,6 @@ public class TriviaController {
     private final PlayerFactory playerFactory;
     private final SimpMessagingTemplate template;
     private final GameLogsRepository gameLogsRepository;
-    private final EventPublisher eventPublisher;
 
     @GetMapping
     public Collection<GameResponseDto> listGames() {
@@ -57,7 +57,7 @@ public class TriviaController {
             responseCode = "200",
             content = {
                     @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            mediaType = APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = GameResponseDto.class)
                     )
             }
@@ -67,7 +67,7 @@ public class TriviaController {
             description = "game not found",
             content = {
                     @Content(
-                            mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                            mediaType = APPLICATION_PROBLEM_JSON_VALUE,
                             examples = {
                                     @ExampleObject(value = "{\"type\":\"about:blank\",\"title\":\"Not Found\",\"status\":404,\"instance\":\"/games/777\"}")
                             }
@@ -136,11 +136,13 @@ public class TriviaController {
     }
 
     @PostMapping("/{gameId}/players/{playerId}/join")
-    // FIXME map {playerId} path param to method parameter, validate & test
-    // TODO empêcher un même joueur de rejoindre s'il est deja présent (vérification de l'id)
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto joinGame(@PathVariable("gameId") Integer gameIdInt,
+                                    @PathVariable("playerId") String playerId,
                                     @RequestBody PlayerDto playerDto) {
+        if(!Objects.equals(playerId, playerDto.id())){
+            throw new PlayerIdMismatchException(playerId, playerDto.id());
+        }
         Game game = findGameOrThrow(new GameId(gameIdInt));
         game.addPlayer(playerFactory.fromDto(playerDto));
         gameRepository.save(game);
@@ -162,18 +164,43 @@ public class TriviaController {
     @PostMapping("/{gameId}/players/{playerId}/rollDice")
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto rollDice(@PathVariable("gameId") Integer gameIdInt,
-                                     @PathVariable("playerId") String playerIdString) {
+                                    @PathVariable("playerId") String playerIdString) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.rollDice(player);
+        gameRepository.save(game);
+        notifyGameUpdatedViaWebsocket(game);
+        return GameResponseDto.from(game);
+    }
+
+    @PostMapping("/{gameId}/players/{playerId}/drawQuestion")
+    @ResponseStatus(HttpStatus.CREATED)
+    public GameResponseDto drawQuestion(@PathVariable("gameId") Integer gameIdInt,
+                                        @PathVariable("playerId") String playerIdString) {
+        Game game = findGameOrThrow(new GameId(gameIdInt));
+        Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.drawQuestion(player);
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
 
+    @PostMapping("/{gameId}/players/{playerId}/answer/{answerCode}")
+    public boolean answer(@PathVariable("gameId") Integer gameIdInt,
+                                  @PathVariable("playerId") String playerIdString,
+                                  @PathVariable("answerCode") AnswerCode answerCode) {
+        Game game = findGameOrThrow(new GameId(gameIdInt));
+        Player player = findPlayerOrThrow(game, new UserId(playerIdString));
+        boolean isAnswerCorrect = game.answerCurrentQuestion(player, answerCode);
+        gameRepository.save(game);
+        notifyGameUpdatedViaWebsocket(game);
+        return isAnswerCorrect;
+    }
+
     private void notifyGameUpdatedViaWebsocket(Game game) {
-        template.convertAndSend("/topic/games/%d".formatted(game.getId().getValue()), GameResponseDto.from(game));
+        Integer gameIdInt = game.getId().getValue();
+        template.convertAndSend("/topic/games/%d".formatted(gameIdInt),
+                GameResponseDto.from(game));
     }
 
     private Game findGameOrThrow(GameId gameId) {

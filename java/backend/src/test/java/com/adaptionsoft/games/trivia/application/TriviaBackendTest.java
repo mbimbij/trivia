@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Collection;
 import java.util.List;
 
+import static com.adaptionsoft.games.trivia.domain.AnswerCode.A;
+import static com.adaptionsoft.games.trivia.domain.AnswerCode.B;
 import static com.adaptionsoft.games.trivia.domain.State.CREATED;
 import static com.adaptionsoft.games.trivia.domain.State.STARTED;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
@@ -37,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TriviaController.class)
 @ActiveProfiles("test")
 @Import(WebSocketConfig.class)
-class TriviaApplicationShould {
+class TriviaBackendTest {
 
     @Autowired
     private ObjectMapper mapper;
@@ -210,6 +212,41 @@ class TriviaApplicationShould {
 
     @SneakyThrows
     @Test
+    void given_player_id_mismatch_between_url_path_and_body__when_join_game_then_400() {
+        // GIVEN an existing game
+        Game game = gameFactory.create("game name", player1);
+        gameRepository.save(game);
+
+        // WHEN a new player joins the game
+        ResultActions resultActions = mvc.perform(
+                post("/api/games/{gameId}/players/{playerId}/join",
+                        game.getId().getValue(),
+                        player1Dto.id())
+                        .content(mapper.writeValueAsString(player2Dto))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // THEN the http response is as expected
+        ResultActions statusVerifyResultActions = resultActions.andExpect(status().isBadRequest());
+//        GameResponseDto actualResponseDto = mapper.readValue(
+//                statusVerifyResultActions.andReturn().getResponse().getContentAsString(),
+//                new TypeReference<>() {
+//                });
+//        @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
+//        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
+//                game.getName(),
+//                CREATED.toString(),
+//                0,
+//                creatorDto,
+//                List.of(creatorDto, player2Dto),
+//                creatorDto,
+//                null,
+//                null);
+//        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
+    }
+
+    @SneakyThrows
+    @Test
     void creator_can_start_game() {
         // GIVEN an existing game
         Game game = gameFactory.create("game name", player1, player2);
@@ -247,13 +284,48 @@ class TriviaApplicationShould {
         // GIVEN a started game
         Game game = gameFactory.create("game", player1, player2);
         game.setDice(new LoadedDice(3));
-        game.setQuestionsDeck(loadedQuestionsDeck());
         game.start(player1);
         gameRepository.save(game);
 
         // WHEN player1 rolls the dice
         ResultActions resultActions = mvc.perform(
                 post("/api/games/{gameId}/players/{playerId}/rollDice",
+                        game.getId().getValue(),
+                        player1.getId().getValue())
+        );
+
+        // THEN the response status is CREATED
+        MvcResult result = resultActions.andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        // AND the response body is as expected
+        GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
+
+        GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
+                game.getName(),
+                STARTED.toString(),
+                1,
+                player1Dto,
+                List.of(player1Dto, player2Dto),
+                player1Dto, null, 3);
+        assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
+
+    }
+
+    @SneakyThrows
+    @Test
+    void can_draw_question() {
+        // GIVEN a started game
+        Game game = gameFactory.create("game", player1, player2);
+        game.setCurrentRoll(new Dice.Roll(3));
+        game.setQuestionsDeck(loadedQuestionsDeck());
+        game.start(player1);
+        gameRepository.save(game);
+
+        // WHEN player1 rolls the dice
+        ResultActions resultActions = mvc.perform(
+                post("/api/games/{gameId}/players/{playerId}/drawQuestion",
                         game.getId().getValue(),
                         player1.getId().getValue())
         );
@@ -273,9 +345,64 @@ class TriviaApplicationShould {
                 1,
                 player1Dto,
                 List.of(player1Dto, player2Dto),
-                player1Dto, expectedCurrentQuestionDto, 3);
+                player1Dto,
+                expectedCurrentQuestionDto,
+                3);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
+    }
 
+    @SneakyThrows
+    @Test
+    void answer_correctly() {
+        // GIVEN a started game
+        Game game = gameFactory.create("game", player1, player2);
+        game.setCurrentRoll(new Dice.Roll(3));
+        game.setCurrentQuestion(questionTest());
+        game.start(player1);
+        gameRepository.save(game);
+
+        // WHEN player1 rolls the dice
+        ResultActions resultActions = mvc.perform(
+                post("/api/games/{gameId}/players/{playerId}/answer/{answerCode}",
+                        game.getId().getValue(), player1.getId().getValue(), A)
+        );
+
+        // THEN the response status is OK
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        // AND the response body is as expected
+        boolean actualResponse = mapper.readValue(result.getResponse().getContentAsString(), Boolean.class);
+
+        assertThat(actualResponse).isEqualTo(true);
+    }
+
+    @SneakyThrows
+    @Test
+    void answer_incorrectly() {
+        // GIVEN a started game
+        Game game = gameFactory.create("game", player1, player2);
+        game.setCurrentRoll(new Dice.Roll(3));
+        game.setCurrentQuestion(questionTest());
+        game.start(player1);
+        gameRepository.save(game);
+
+        // WHEN player1 rolls the dice
+        ResultActions resultActions = mvc.perform(
+                post("/api/games/{gameId}/players/{playerId}/answer/{answerCode}",
+                        game.getId().getValue(), player1.getId().getValue(), B)
+        );
+
+        // THEN the response status is OK
+        MvcResult result = resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        // AND the response body is as expected
+        boolean actualResponse = mapper.readValue(result.getResponse().getContentAsString(), Boolean.class);
+
+        assertThat(actualResponse).isEqualTo(false);
     }
 
 }

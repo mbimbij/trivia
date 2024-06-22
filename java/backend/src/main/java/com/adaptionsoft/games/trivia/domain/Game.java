@@ -11,28 +11,24 @@ import java.util.*;
 import static com.adaptionsoft.games.trivia.domain.State.*;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Setter // for testing purposes only
 public class Game extends Entity<GameId> {
     @Getter
     private final String name;
     private final Players players;
-    @Setter
     private Dice dice;
     @Getter
     private boolean isGameInProgress = true;
     @Getter
     private int turn = 0;
-    @Setter
     private Player currentPlayer;
     @Getter
     private Player winner;
     private final Board board;
     @Getter
-    @Setter // for testing purposes only
     private State state;
-    @Setter
     private QuestionsDeck questionsDeck;
     @Getter
-    @Setter
     private Question currentQuestion;
     @Getter
     private Dice.Roll currentRoll;
@@ -131,15 +127,19 @@ public class Game extends Entity<GameId> {
         raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
     }
 
-    public void submitAnswerToCurrentQuestion(Player player, AnswerCode answerCode) {
+    public boolean answerCurrentQuestion(Player player, AnswerCode answerCode) {
         validateGameStateIs(STARTED, "answer question");
         validateCurrentPlayer(player);
-        validatePlayerNotInPenaltyBox(player, "submit answer");
+        validatePlayerNotInPenaltyBox(player, "answer current question");
+
+        boolean isAnswerCorrect = false;
+
         if(currentQuestion == null) {
             throw new CannotAnswerQuestionBeforeDrawingOneException(id, player.getId());
         }
 
         if (currentQuestion.isCorrect(answerCode)) {
+            isAnswerCorrect = true;
             currentPlayer.answerCorrectly();
             endGameIfCurrentPlayerWon();
             if (isGameInProgress) {
@@ -154,6 +154,7 @@ public class Game extends Entity<GameId> {
             }
         }
         eventPublisher.flushEvents();
+        return isAnswerCorrect;
     }
 
     public Player getCurrentPlayer() {
