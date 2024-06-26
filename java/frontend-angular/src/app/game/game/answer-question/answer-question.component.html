@@ -2,13 +2,16 @@
   [attr.data-testid]="'answer-question'"
   *ngIf="canAnswerQuestion"
 >
-{{question.questionText}}
+  <h2>{{ question.questionText }}</h2>
+  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.A).subscribe()">A</button>
+  <span>{{ question.availableAnswers['A'] }}</span>
   <br>
-  <button>A</button> <span>{{question.availableAnswers['A']}}</span>
+  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.B).subscribe()">B</button>
+  <span>{{ question.availableAnswers['B'] }}</span>
   <br>
-  <button>B</button> <span>{{question.availableAnswers['B']}}</span>
+  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.C).subscribe()">C</button>
+  <span>{{ question.availableAnswers['C'] }}</span>
   <br>
-  <button>C</button> <span>{{question.availableAnswers['C']}}</span>
-  <br>
-  <button>D</button> <span>{{question.availableAnswers['D']}}</span>
+  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.D).subscribe()">D</button>
+  <span>{{ question.availableAnswers['D'] }}</span>
 </div>

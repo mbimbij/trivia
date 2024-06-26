@@ -1,8 +1,9 @@
 import {Component, Input, SimpleChanges} from '@angular/core';
-import {QuestionDto} from "../../../openapi-generated";
+import {AnswerCode, QuestionDto} from "../../../openapi-generated";
 import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
+import {GameServiceAbstract} from "../../../services/game-service-abstract";
 
 @Component({
   selector: 'app-answer-question',
@@ -19,6 +20,9 @@ export class AnswerQuestionComponent {
   @Input() player!: Player;
   protected canAnswerQuestion!: boolean;
 
+  constructor(protected gameService: GameServiceAbstract) {
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['player']){
       this.player = changes['player'].currentValue;
@@ -28,4 +32,6 @@ export class AnswerQuestionComponent {
     }
     this.canAnswerQuestion = this.game.canAnswerQuestion(this.player)
   }
+
+  protected readonly AnswerCode = AnswerCode;
 }
