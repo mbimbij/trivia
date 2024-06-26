@@ -5,7 +5,7 @@ import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable, of} from "rxjs";
+import {combineLatest, Observable, of, Subscription} from "rxjs";
 import {Game} from "../game";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
@@ -29,11 +29,13 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
 })
 export class GameComponent {
   private readonly id: string;
-  @Input("player") protected player!: Player;
+  protected player!: Player;
   private gameId!: number;
-  @Input("game") private game!: Game;
+  private game!: Game;
   protected game$!: Observable<Game>
   protected gameLogs$!: Observable<GameLog[]>;
+
+  private userGameSubscription: Subscription | undefined;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
@@ -43,21 +45,23 @@ export class GameComponent {
     console.log(`constructor ${this.id} called`)
     this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
+
       this.game$ = this.gameService.getGame(this.gameId);
-      this.game$.subscribe(game => {
-        this.game = game;
-      })
+      let user$ = this.userService.getUser();
+
+      this.userGameSubscription = combineLatest([user$, this.game$])
+        .subscribe(([user, game]) => {
+          this.game = game;
+          let playerFromUser = userToPlayer(user);
+          this.player = game.getCurrentStateOf(playerFromUser);
+          // this.player = playerFromUser
+        });
     })
   }
 
   ngOnInit() {
     this.gameService.initGameLogs(this.gameId);
     this.gameLogs$ = this.gameService.getGameLogs(this.gameId);
-
-    // TODO améliorer l'initialisation des subjects et observables en tenant compte des dépendances
-    this.userService.getUser().subscribe(updatedUser => {
-      return this.player = userToPlayer(updatedUser);
-    })
   }
 
   private setCoinCount() {

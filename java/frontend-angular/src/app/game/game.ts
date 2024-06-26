@@ -75,10 +75,14 @@ export class Game {
   }
 
   public canDrawQuestion(player: Player): boolean {
-    return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion == undefined && player.consecutiveIncorrectAnswersCount == 0
+    return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion == undefined
   }
 
   public canAnswerQuestion(player: Player): boolean {
     return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion != undefined
+  }
+
+  public getCurrentStateOf(player: Player): Player {
+    return this.players.find(p => p.id === player.id)!
   }
 }

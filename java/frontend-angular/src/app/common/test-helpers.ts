@@ -32,7 +32,7 @@ export const mockGame1: Game = getMockGame1();
 
 export const mockGame2: Game = getMockGame2();
 
-function getMockQuestion1() {
+export function getMockQuestion1() {
   return {
     id: "question-1", questionText: "question 1", availableAnswers: {
       "A": "answer A",

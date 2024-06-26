@@ -1,6 +1,6 @@
 <div
   [attr.data-testid]="'answer-question'"
-  *ngIf="canAnswerQuestion"
+  *ngIf="canAnswerQuestion || false"
 >
   <h2>{{ question.questionText }}</h2>
   <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.A).subscribe()">A</button>
