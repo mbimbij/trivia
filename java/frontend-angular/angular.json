@@ -61,6 +61,7 @@
               "namedChunks": true
             },
             "local-docker": {
+              "outputPath": "../backend/src/main/resources/static",
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -71,6 +72,22 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.local-docker.ts"
+                }
+              ]
+
+            },
+            "local-ide-embedded": {
+              "outputPath": "../backend/src/main/resources/static",
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local-ide-embedded.ts"
                 }
               ]
 

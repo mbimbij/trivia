@@ -62,6 +62,7 @@ public class StepsDefs {
     private String backendUrlBase;
     private GameResponseDto currentGame;
     private String currentPlayerName;
+    private Duration pollInterval = Duration.ofSeconds(1);
 
     @PostConstruct
     void postConstruct() {
@@ -176,7 +177,7 @@ public class StepsDefs {
     @Then("the following games are displayed for users \"{strings}\"")
     public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
-                .pollInterval(Duration.ofMillis(500))
+                .pollInterval(pollInterval)
                 .untilAsserted(
                         () -> assertThat(getDisplayedGamesForUsers(userNames)).isEqualTo(expected)
                 );
@@ -185,7 +186,7 @@ public class StepsDefs {
     @Then("the following games are displayed")
     public void theFollowingGamesAreDisplayed(Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
-                .pollInterval(Duration.ofMillis(500))
+                .pollInterval(pollInterval)
                 .untilAsserted(
                         () -> assertThat(getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
                 );
@@ -429,7 +430,7 @@ public class StepsDefs {
     @And("displayed game logs ends with logs matching")
     public void displayedGameLogsEndsWithLogsMatching(List<String> expectedLogs) {
         await().atMost(Duration.ofSeconds(5))
-                .pollInterval(Duration.ofMillis(500))
+                .pollInterval(pollInterval)
                 .untilAsserted(
                         () -> GameLogsVerifier.verifyMatch(getGameLogs(), expectedLogs)
                 );
