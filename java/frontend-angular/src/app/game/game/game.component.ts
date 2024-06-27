@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -21,7 +21,8 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
     AsyncPipe,
     ConsoleLogPipe,
     RollDiceComponent,
-    AnswerQuestionComponent
+    AnswerQuestionComponent,
+    NgClass
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',

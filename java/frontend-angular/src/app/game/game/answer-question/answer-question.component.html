@@ -3,15 +3,35 @@
   *ngIf="canAnswerQuestion || false"
 >
   <h2>{{ question.questionText }}</h2>
-  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.A).subscribe()">A</button>
+  <button
+    [attr.data-testid]="'answer-A'"
+    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.A).subscribe()"
+  >
+    A
+  </button>
   <span>{{ question.availableAnswers['A'] }}</span>
   <br>
-  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.B).subscribe()">B</button>
+  <button
+    [attr.data-testid]="'answer-B'"
+    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.B).subscribe()"
+  >
+    B
+  </button>
   <span>{{ question.availableAnswers['B'] }}</span>
   <br>
-  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.C).subscribe()">C</button>
+  <button
+    [attr.data-testid]="'answer-C'"
+    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.C).subscribe()"
+  >
+    C
+  </button>
   <span>{{ question.availableAnswers['C'] }}</span>
   <br>
-  <button (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.D).subscribe()">D</button>
+  <button
+    [attr.data-testid]="'answer-D'"
+    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.D).subscribe()"
+  >
+    D
+  </button>
   <span>{{ question.availableAnswers['D'] }}</span>
 </div>

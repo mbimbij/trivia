@@ -95,8 +95,18 @@ export class GameService extends GameServiceAbstract {
     this.rxStompService.watch(`/topic/games/${gameId}/logs`)
       .subscribe((message: IMessage) => {
         let newGameLog = JSON.parse(message.body) as GameLog;
-        this.gameLogsSubjects.next([...this.gameLogsSubjects.value, newGameLog])
+        this.handleNewGameLog(newGameLog);
       });
+  }
+
+  public handleNewGameLog(newGameLog: GameLog) {
+    let logsToAdd = newGameLog.value
+      .split('\n')
+      .filter(value => value.trim())
+      .map((m) => {
+        return {gameId: 1, value: m} as GameLog;
+      });
+    this.gameLogsSubjects.next(this.gameLogsSubjects.value.concat(logsToAdd))
   }
 
   override create(name: string, user: User): Observable<Game> {
