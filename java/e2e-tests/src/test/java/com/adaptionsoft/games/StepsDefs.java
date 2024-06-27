@@ -428,15 +428,23 @@ public class StepsDefs {
 
     @And("displayed game logs ends with logs matching")
     public void displayedGameLogsEndsWithLogsMatching(List<String> expectedLogs) {
+        await().atMost(Duration.ofSeconds(5))
+                .pollInterval(Duration.ofMillis(500))
+                .untilAsserted(
+                        () -> GameLogsVerifier.verifyMatch(getGameLogs(), expectedLogs)
+                );
+    }
+
+    private static List<String> getGameLogs() {
         List<String> actualLogs = page.querySelectorAll(".log-line")
                 .stream()
                 .map(ElementHandle::textContent).toList();
-        GameLogsVerifier.verifyMatch(actualLogs, expectedLogs);
+        return actualLogs;
     }
 
     @Given("qa-user is put in the penalty box")
     public void qaUserIsPutInThePenaltyBox() {
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/testOnly/{gameId}/players/{playerId}/goToPenaltyBox",
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/testkit/games/{gameId}/players/{playerId}/goToPenaltyBox",
                 null,
                 GameResponseDto.class,
                 game2.id(),
@@ -447,7 +455,7 @@ public class StepsDefs {
 
     @And("a loaded dice returning a {int}")
     public void aLoadedDiceReturningA(int number) {
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/testOnly/{gameId}/setLoadedDice/{number}",
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/testkit/games/{gameId}/setLoadedDice/{number}",
                 null,
                 GameResponseDto.class,
                 game2.id(),

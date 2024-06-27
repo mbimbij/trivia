@@ -197,29 +197,6 @@ public class TriviaController {
         return isAnswerCorrect;
     }
 
-    // TODO put in a separate controller
-    @PostMapping("/testOnly/{gameId}/players/{playerId}/goToPenaltyBox")
-    public GameResponseDto goToPenaltyBox(@PathVariable("gameId") Integer gameIdInt,
-                                  @PathVariable("playerId") String playerIdString) {
-        Game game = findGameOrThrow(new GameId(gameIdInt));
-        Player player = findPlayerOrThrow(game, new UserId(playerIdString));
-        player.goToPenaltyBox();
-        gameRepository.save(game);
-        notifyGameUpdatedViaWebsocket(game);
-        return GameResponseDto.from(game);
-    }
-
-    // TODO put in a separate controller
-    @PostMapping("/testOnly/{gameId}/setLoadedDice/{number}")
-    public GameResponseDto setLoadedDice(@PathVariable("gameId") int gameIdInt,
-                                  @PathVariable("number") int number) {
-        Game game = findGameOrThrow(new GameId(gameIdInt));
-        game.setDice(new LoadedDice(number));
-        gameRepository.save(game);
-        notifyGameUpdatedViaWebsocket(game);
-        return GameResponseDto.from(game);
-    }
-
     private void notifyGameUpdatedViaWebsocket(Game game) {
         Integer gameIdInt = game.getId().getValue();
         template.convertAndSend("/topic/games/%d".formatted(gameIdInt),

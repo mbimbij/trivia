@@ -1,8 +1,5 @@
 package com.adaptionsoft.games;
 
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.SoftAssertions;
-
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
