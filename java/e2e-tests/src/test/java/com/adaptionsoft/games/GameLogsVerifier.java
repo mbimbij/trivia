@@ -16,6 +16,7 @@ public class GameLogsVerifier {
         });
 
         List<String> logsToCompare = actualLogs.reversed().subList(0, expectedLogs.size()).reversed();
+
         assertThat(logsToCompare).zipSatisfy(
                 expectedLogs,
                 (actualLog, expectedLog) -> {

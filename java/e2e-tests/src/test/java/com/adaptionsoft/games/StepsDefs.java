@@ -390,7 +390,7 @@ public class StepsDefs {
     }
 
     @ParameterType("(is|is not)")
-    public IS_OR_NOT isOrNot (String stringValue) {
+    public IS_OR_NOT isOrNot(String stringValue) {
         return IS_OR_NOT.fromString(stringValue);
     }
 
@@ -414,16 +414,13 @@ public class StepsDefs {
     }
 
     @ParameterType("(A|B|C|D)")
-    public AnswerCode answerCode (String stringValue) {
+    public AnswerCode answerCode(String stringValue) {
         return AnswerCode.valueOf(stringValue);
     }
 
     @Then("qa-user clicks on answer {answerCode}")
     public void qaUserClicksOnTheAnswer(AnswerCode answerCode) {
         Locator locator = page.getByTestId("answer-%s".formatted(answerCode));
-        List<String> logLines = page.querySelectorAll(".log-line").stream().map(ElementHandle::textContent).toList();
-        assertThat(logLines).isNotEmpty();
-
         PlaywrightAssertions.assertThat(locator).isVisible();
         PlaywrightAssertions.assertThat(locator).isEnabled();
         locator.click();
@@ -435,6 +432,28 @@ public class StepsDefs {
                 .stream()
                 .map(ElementHandle::textContent).toList();
         GameLogsVerifier.verifyMatch(actualLogs, expectedLogs);
+    }
+
+    @Given("qa-user is put in the penalty box")
+    public void qaUserIsPutInThePenaltyBox() {
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/testOnly/{gameId}/players/{playerId}/goToPenaltyBox",
+                null,
+                GameResponseDto.class,
+                game2.id(),
+                qaUser.id());
+        this.game2 = responseEntity.getBody();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @And("a loaded dice returning a {int}")
+    public void aLoadedDiceReturningA(int number) {
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/testOnly/{gameId}/setLoadedDice/{number}",
+                null,
+                GameResponseDto.class,
+                game2.id(),
+                number);
+        this.game2 = responseEntity.getBody();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     public enum IS_OR_NOT {

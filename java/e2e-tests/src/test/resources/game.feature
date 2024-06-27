@@ -14,27 +14,74 @@ Feature: On-Going Game Page
     Then the element with testid "game-header-section" is visible
     And the element with testid "game-logs-section" is visible
 
-  Scenario: Play a turn outside penalty box
-    Given current player is not in the penalty box
-    Then the element with testid "roll-dice" is visible
-    And the element with testid "answer-question" is not visible
-    And displayed game logs ends with logs matching
-      | Game Id\\(value=[0-9]*\\) started |
-      | qa-user is the current player     |
-    When qa-user clicks on the element with testid "roll-dice"
-    Then the element with testid "roll-dice" is not visible
-    And the element with testid "answer-question" is visible
-    And displayed game logs ends with logs matching
-      | qa-user is the current player  |
-      | They have rolled a \\d         |
-      | qa-user's new location is \\d+ |
-      | The category is .*             |
-      | question .*                    |
-    When qa-user clicks on answer A
-    Then the element with testid "roll-dice" is not visible
-    And the element with testid "answer-question" is not visible
-    And displayed game logs ends with logs matching
-      | question .*                       |
-      | Answer was correct!!!!            |
-      | qa-user now has 1 Gold Coins.     |
-      | test-user-1 is the current player |
+  Rule: Play a turn outside penalty box
+    Scenario: Play a turn outside penalty box - Correct answer
+      Given current player is not in the penalty box
+      Then the element with testid "roll-dice" is visible
+      And the element with testid "answer-question" is not visible
+      And displayed game logs ends with logs matching
+        | Game Id\\(value=[0-9]*\\) started |
+        | qa-user is the current player     |
+      When qa-user clicks on the element with testid "roll-dice"
+      Then the element with testid "roll-dice" is not visible
+      And the element with testid "answer-question" is visible
+      And displayed game logs ends with logs matching
+        | qa-user is the current player  |
+        | They have rolled a \\d         |
+        | qa-user's new location is \\d+ |
+        | The category is .*             |
+        | question .*                    |
+      When qa-user clicks on answer A
+      Then the element with testid "roll-dice" is not visible
+      And the element with testid "answer-question" is not visible
+      And displayed game logs ends with logs matching
+        | question .*                       |
+        | Answer was correct!!!!            |
+        | qa-user now has 1 Gold Coins.     |
+        | test-user-1 is the current player |
+
+    Scenario: Play a turn outside penalty box - First incorrect answer, Second correct answer
+      When qa-user clicks on the element with testid "roll-dice"
+      When qa-user clicks on answer B
+      Then the element with testid "roll-dice" is not visible
+      And the element with testid "answer-question" is visible
+      And displayed game logs ends with logs matching
+        | question .*                       |
+        | Question was incorrectly answered |
+        | question .*                       |
+      When qa-user clicks on answer B
+      Then the element with testid "roll-dice" is not visible
+      And the element with testid "answer-question" is not visible
+      And displayed game logs ends with logs matching
+        | question .*                       |
+        | Answer was correct!!!!            |
+        | qa-user now has 1 Gold Coins.     |
+        | test-user-1 is the current player |
+
+    Scenario: Play a turn outside penalty box - First incorrect answer, Second incorrect answer
+      When qa-user clicks on the element with testid "roll-dice"
+      And qa-user clicks on answer B
+      And qa-user clicks on answer C
+      Then the element with testid "roll-dice" is not visible
+      And the element with testid "answer-question" is not visible
+      And displayed game logs ends with logs matching
+        | question .*                         |
+        | Question was incorrectly answered   |
+        | qa-user was sent to the penalty box |
+        | test-user-1 is the current player   |
+
+  Rule: Play a turn inside penalty box
+    Scenario: Play a turn inside penalty box - odd roll dice - stay in penalty box
+      Given qa-user is put in the penalty box
+      And a loaded dice returning a 3
+      When qa-user clicks on the element with testid "roll-dice"
+      Then the element with testid "roll-dice" is not visible
+      And the element with testid "answer-question" is not visible
+      And displayed game logs ends with logs matching
+        | qa-user is the current player                 |
+        | qa-user was sent to the penalty box           |
+        | They have rolled a 3                          |
+        | qa-user is not getting out of the penalty box |
+        | test-user-1 is the current player             |
+
+

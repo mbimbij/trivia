@@ -89,7 +89,7 @@ public class Player extends Entity<UserId> {
         consecutiveCorrectAnswersCount = 0;
     }
 
-    private void goToPenaltyBox() {
+    public void goToPenaltyBox() {
         isInPenaltyBox = true;
         raise(new PlayerSentToPenaltyBoxEvent(this, this.getTurn()));
     }

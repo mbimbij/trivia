@@ -2,20 +2,15 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import java.util.*;
-
-import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
+import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 class PlayerTest {
 
@@ -174,18 +169,13 @@ class PlayerTest {
     @SneakyThrows
     @Test
     void name() {
-        Map<QuestionsDeck.Category, List<Question>> questions = new HashMap<>();
-        for (QuestionsDeck.Category category : QuestionsDeck.Category.values()) {
-            questions.put(category, new ArrayList<>());
-            for (int i = 0; i < 100; i++) {
-                questions.get(category).add(new Question(
-                        "%s-%d".formatted(category, i),
-                        "question %s %d".formatted(category, i),
-                        new AvailableAswers("answer A","answer B","answer C","answer D"),
-                        AnswerCode.values()[i%4]
-                ));
-            }
-        }
-        System.out.println(new ObjectMapper().writeValueAsString(questions));
+//        List<String> list1 = List.of("A", "B", "C", "D", "E", "F");
+//        List<String> list2 = List.of("A", "B", "C");
+//        io.vavr.collection.List<String> vavrList1 = io.vavr.collection.List.ofAll(list1);
+//        io.vavr.collection.List<String> vavrList2 = io.vavr.collection.List.ofAll(list2);
+//        io.vavr.collection.List<Tuple2<String, String>> vavrListZip = vavrList1.zip(vavrList2);
+//        List<String[]> list = Streams.zip(list1.stream(), list2.stream(), (string, string2) -> new String[]{string, string2}).toList();
+//        assertThat(list1).zipSatisfy(list2,
+//                (string, string2) -> assertThat(string).isEqualTo(string2));
     }
 }
