@@ -4,71 +4,48 @@ import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Queue;
 import java.util.Random;
 
-import static com.adaptionsoft.games.trivia.domain.Game.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.State.CREATED;
 
-
+@RequiredArgsConstructor
 public class GameFactory {
     private final IdGenerator idGenerator;
     private final EventPublisher eventPublisher;
-    private final QuestionsLoader questionsLoader;
-    private String questionsPath;
-
-
-    public Game create(String gameName, String creatorName, String... otherPlayersNames) {
-        return create(new Random(), gameName, creatorName, otherPlayersNames);
-    }
-
-    public GameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
-        this.idGenerator = idGenerator;
-        this.eventPublisher = eventPublisher;
-        this.questionsLoader = questionsLoader;
-    }
+    private final QuestionsRepository questionsRepository;
 
     public Game create(String gameName, Player creator, Player... players) {
         return create(new Random(), gameName, creator, players);
     }
 
-    public Game create(Random rand, String gameName, @NonNull String creatorName, String... playersNames) {
-        Player[] playersArray = Arrays.stream(playersNames)
-                .map((String playerName) -> new Player(new UserId(playerName),playerName))
-                .toArray(Player[]::new);
-
-        final Player player = new Player(new UserId(creatorName), creatorName);
-        return create(rand, gameName, player, playersArray);
-    }
-
     public Game create(Random rand, String gameName, @NonNull Player creator, Player... otherPlayers) {
-        Questions questions = buildQuestions();
-        Players players = PlayersFactory.create(creator, otherPlayers);
+        GameId gameId = new GameId(idGenerator.nextId());
+        creator.setGameId(gameId);
+        Arrays.stream(otherPlayers).forEach(player -> {
+            player.setGameId(gameId);
+        });
 
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 
-        Integer id = idGenerator.nextId();
+        QuestionsDeck questions = questionsRepository.getQuestions();
+
         Game game = new Game(
-                new GameId(id),
+                gameId,
                 gameName,
-                eventPublisher,
-                players,
-                new PlayerTurnOrchestrator(questions, rand, board),
-                players.getCurrent(),
-                CREATED
+                CREATED, eventPublisher,
+                board,
+                new Dice(rand),
+                questions,
+                creator,
+                otherPlayers
         );
 
-        eventPublisher.publish(players.getAndClearUncommittedEvents());
-        eventPublisher.publish(new GameCreatedEvent(game.getId()));
+        eventPublisher.raise(new GameCreatedEvent(game.getId()));
+        eventPublisher.flushEvents();
         return game;
-    }
-
-
-    private Questions buildQuestions() {
-        Map<Questions.Category, Queue<String>> questionsByCategory = questionsLoader.loadQuestionsFromDirectory();
-        return new Questions(questionsByCategory);
     }
 }

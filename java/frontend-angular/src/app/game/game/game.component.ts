@@ -1,15 +1,16 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {comparePlayers, generateRandomString, userToPlayer, userToPlayerDto} from "../../common/helpers";
-import {GameService} from "../game.service";
+import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable} from "rxjs";
+import {combineLatest, Observable, of, Subscription} from "rxjs";
 import {Game} from "../game";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {RollDiceComponent} from "./roll-dice/roll-dice.component";
+import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
 
 @Component({
   selector: 'app-game',
@@ -18,19 +19,24 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
     NgForOf,
     NgIf,
     AsyncPipe,
-    ConsoleLogPipe
+    ConsoleLogPipe,
+    RollDiceComponent,
+    AnswerQuestionComponent,
+    NgClass
   ],
   templateUrl: './game.component.html',
-  styleUrl: './game.component.css'
+  styleUrl: './game.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent {
   private readonly id: string;
   protected player!: Player;
   private gameId!: number;
-  protected game!: Game;
+  private game!: Game;
   protected game$!: Observable<Game>
-  protected logs: Array<string> = [];
   protected gameLogs$!: Observable<GameLog[]>;
+
+  private userGameSubscription: Subscription | undefined;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
@@ -40,20 +46,23 @@ export class GameComponent {
     console.log(`constructor ${this.id} called`)
     this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
+
       this.game$ = this.gameService.getGame(this.gameId);
-      this.game$.subscribe(game => {
-        this.game=game;
-      })
+      let user$ = this.userService.getUser();
+
+      this.userGameSubscription = combineLatest([user$, this.game$])
+        .subscribe(([user, game]) => {
+          this.game = game;
+          let playerFromUser = userToPlayer(user);
+          this.player = game.getCurrentStateOf(playerFromUser);
+          // this.player = playerFromUser
+        });
     })
   }
 
   ngOnInit() {
     this.gameService.initGameLogs(this.gameId);
     this.gameLogs$ = this.gameService.getGameLogs(this.gameId);
-
-    // TODO améliorer l'initialisation des subjects et observables en tenant compte des dépendances
-    this.userService.getUser().subscribe(updatedUser => this.player = userToPlayer(updatedUser))
-
   }
 
   private setCoinCount() {
@@ -65,12 +74,6 @@ export class GameComponent {
     }
   }
 
-  protected canPlayTurn() {
-    // TODO empêcher la fonction d'être appelée 36 fois
-    // console.log(`canPlayTurn called`)
-    return this.isCurrentPlayer() && !this.isGameEnded;
-  }
-
   get isGameEnded(): boolean {
     return this.game.state === "ended";
   }
@@ -78,14 +81,6 @@ export class GameComponent {
   protected isCurrentPlayer() {
     return comparePlayers(this.player, this.game.currentPlayer)
   }
-
-  protected playTurn() {
-    this.gameService.playTurn(this.gameId, this.player.id).subscribe(value => {
-      this.game = value
-      this.setCoinCount();
-    });
-  }
-
   private ngAfterViewChecked() {
     this.scrollLogsToBottom()
   }
@@ -97,11 +92,23 @@ export class GameComponent {
     }
   }
 
-  private addLogs = (gameLog: GameLog) => {
-    this.logs.push(gameLog.value);
-  }
-
   protected playerWon(): boolean {
     return comparePlayers(this.player, this.game.winner)
+  }
+
+  /**
+   * For tests only
+   * @param player
+   */
+  setPlayer(player: Player) {
+    this.player = player
+  }
+
+  /**
+   * For tests only
+   * @param game
+   */
+  setGame(game: Game) {
+    this.game$ = of(game)
   }
 }

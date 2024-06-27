@@ -8,11 +8,13 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/answer-code.ts
 model/create-game-request-dto.ts
 model/game-log.ts
 model/game-response-dto.ts
 model/models.ts
 model/player-dto.ts
+model/question-dto.ts
 model/user-dto.ts
 param.ts
 variables.ts

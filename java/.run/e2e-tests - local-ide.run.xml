@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="e2e-tests - local-ide" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+    <option name="CUCUMBER_CORE_VERSION" value="5" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/.env" />
+    </option>
+    <option name="FILE_PATH" value="$PROJECT_DIR$/e2e-tests" />
+    <option name="GLUE" value="com.adaptionsoft.games" />
+    <option name="MAIN_CLASS_NAME" value="io.cucumber.core.cli.Main" />
+    <module name="e2e-tests" />
+    <option name="PROGRAM_PARAMETERS" value=" --plugin org.jetbrains.plugins.cucumber.java.run.CucumberJvm5SMFormatter" />
+    <shortenClasspath name="NONE" />
+    <option name="SUGGESTED_NAME" value="All Features in: e2e-tests" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.include=local-ide" />
+    <option name="WORKING_DIRECTORY" value="$MODULE_WORKING_DIR$" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="io.cucumber.core.cli.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Player;
-import com.adaptionsoft.games.trivia.domain.UserId;
 import jakarta.validation.constraints.NotBlank;
 
 public record PlayerDto(
@@ -10,20 +9,18 @@ public record PlayerDto(
         @NotBlank
         String name,
         @NotBlank
-        int coinCount
+        int coinCount,
+        @NotBlank
+        boolean isInPenaltyBox,
+        @NotBlank
+        int consecutiveIncorrectAnswersCount
 ) {
-
     public static PlayerDto from(Player player) {
+        if (player == null) return null;
         return new PlayerDto(player.getId().getValue(),
                 player.getName(),
-                player.getCoinCount());
-    }
-
-    public PlayerDto(@NotBlank String id, @NotBlank String name) {
-        this(id, name, 0);
-    }
-
-    public Player toDomainObject() {
-        return new Player(new UserId(id), name);
+                player.getCoinCount(),
+                player.isInPenaltyBox(),
+                player.getConsecutiveIncorrectAnswersCount());
     }
 }

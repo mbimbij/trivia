@@ -50,13 +50,6 @@ export class StartGameButtonComponent {
         this.canStartGameAttr = this.canStartGame();
       });
   }
-  //
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes['game']) {
-  //     console.log(`ngOnChanges ${this.constructor.name} - ${this.id} called - `)
-  //     console.log(changes['game'].currentValue);
-  //   }
-  // }
 
   ngOnDestroy() {
     console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)

@@ -3,24 +3,24 @@ import {User} from "../user/user";
 import {Player} from "../user/player";
 
 // TODO move these functions into appropriate classes
-export function comparePlayerDto(user1: UserDto, user2: UserDto): boolean {
+export function compareUserDtos(user1: UserDto, user2: UserDto): boolean {
   return user1 !== null && user2 !== null && user1.constructor === user2.constructor && user1.id === user2.id;
 }
 
-export function compareUserAndPlayer(user: User, player: PlayerDto): boolean {
+export function compareUserAndPlayer(user: User, player: PlayerDto | Player): boolean {
   return user !== null && player !== null && user.id === player.id;
 }
 
-export function comparePlayers(player1?: PlayerDto, player2?: PlayerDto): boolean {
+export function comparePlayers(player1?: Player, player2?: Player): boolean {
   return player1 !== null && player2 !== null && player1?.id === player2?.id;
 }
 
 export function userToPlayerDto(user: User): PlayerDto {
-  return {id: user.id, name: user.name, coinCount: 0}
+  return {id: user.id, name: user.name, coinCount: 0, isInPenaltyBox: false, consecutiveIncorrectAnswersCount:0}
 }
 
 export function userToPlayer(user: User): Player {
-  return new Player(user.id, user.name, 0)
+  return new Player(user.id, user.name, 0, false, 0)
 }
 
 export function userToUserDto(user: User): UserDto {
@@ -28,12 +28,21 @@ export function userToUserDto(user: User): UserDto {
 }
 
 export function playerDtoToPlayer(dto: PlayerDto): Player {
-  return new Player(dto.id, dto.name, dto.coinCount)
-
+  return new Player(dto.id,
+    dto.name,
+    dto.coinCount,
+    dto.isInPenaltyBox,
+    dto.consecutiveIncorrectAnswersCount)
 }
 
 export function playerToPlayerDto(player: Player): PlayerDto {
-  return {id: player.id, name: player.name, coinCount: player.coinCount}
+  return {
+    id: player.id,
+    name: player.name,
+    coinCount: player.coinCount,
+    isInPenaltyBox: player.isInPenaltyBox,
+    consecutiveIncorrectAnswersCount: player.consecutiveIncorrectAnswersCount
+  }
 }
 
 export function generateRandomString(length: number): string {

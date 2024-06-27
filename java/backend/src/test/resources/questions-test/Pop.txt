@@ -1,5 +1,0 @@
-Pop Question from file 1
-Pop Question from file 2
-Pop Question from file 3
-Pop Question from file 4
-Pop Question from file 5

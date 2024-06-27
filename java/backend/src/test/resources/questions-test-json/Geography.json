@@ -1,0 +1,46 @@
+[
+  {
+    "id": "geo-1",
+    "questionText": "geography question 1",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "A"
+  },
+  {
+    "id": "geo-2",
+    "questionText": "geography question 2",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "B"
+  },
+  {
+    "id": "geo-3",
+    "questionText": "geography question 3",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "C"
+  },
+  {
+    "id": "geo-4",
+    "questionText": "geography question 4",
+    "availableAnswers": {
+      "A": "answer A",
+      "B": "answer B",
+      "C": "answer C",
+      "D": "answer D"
+    },
+    "correctAnswer": "D"
+  }
+]

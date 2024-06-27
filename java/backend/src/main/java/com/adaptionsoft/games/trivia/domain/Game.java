@@ -1,116 +1,65 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
-import com.adaptionsoft.games.trivia.domain.exception.InvalidGameStateException;
-import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
-import com.adaptionsoft.games.trivia.domain.exception.StartException;
+import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.*;
 
-import static com.adaptionsoft.games.trivia.domain.Game.State.*;
+import static com.adaptionsoft.games.trivia.domain.State.*;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Setter // for testing purposes only
 public class Game extends Entity<GameId> {
     @Getter
     private final String name;
-    private final EventPublisher eventPublisher;
     private final Players players;
+    private Dice dice;
+    @Getter
     private boolean isGameInProgress = true;
     @Getter
-    int turn = 0;
+    private int turn = 0;
     private Player currentPlayer;
     @Getter
     private Player winner;
-    private final PlayerTurnOrchestrator playerTurnOrchestrator;
+    private final Board board;
     @Getter
-    @Setter // for testing purposes only
     private State state;
+    private QuestionsDeck questionsDeck;
+    @Getter
+    private Question currentQuestion;
+    @Getter
+    private Dice.Roll currentRoll;
 
     public Game(GameId gameId,
                 String name,
-                // TODO R-1 retirer cet attribut, les joueurs devraient être rajoutés à une partie, pas à un artefact séparé
-                EventPublisher eventPublisher,
-                Players players,
-                PlayerTurnOrchestrator playerTurnOrchestrator,
-                Player currentPlayer,
-                State state) {
-        super(gameId);
+                State state, EventPublisher eventPublisher,
+                Board board,
+                Dice dice,
+                QuestionsDeck questionsDeck,
+                Player creator,
+                Player ... otherPlayers) {
+        super(gameId, eventPublisher);
         this.name = name;
-        this.eventPublisher = eventPublisher;
-        this.players = players;
-        this.playerTurnOrchestrator = playerTurnOrchestrator;
-        this.currentPlayer = currentPlayer;
+        this.players = new Players(eventPublisher, creator, otherPlayers);
+        this.dice = dice;
+        this.currentPlayer = this.players.getCurrent();
+        this.board = board;
         this.state = state;
-        setGameIdToPlayers();
+        this.questionsDeck = questionsDeck;
+    }
+
+    public Optional<Player> findPlayerById(UserId playerId) {
+        return players.getIndividualPlayers()
+                .stream()
+                .filter(player -> Objects.equals(player.getId(), playerId))
+                .findAny();
     }
 
     public Player getCreator() {
         return players.getCreator();
-    }
-
-    public void play() {
-        startBy(currentPlayer);
-        do {
-            playTurnBy(currentPlayer);
-        } while (isGameInProgress);
-    }
-
-    public void playTurnBy(Player player) {
-        validateGameNotEnded("play turn");
-        if (!Objects.equals(player, currentPlayer)) {
-            throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
-        }
-        playerTurnOrchestrator.performTurn(player);
-        endGameIfCurrentPlayerWon();
-        publishDomainEvents();
-        endCurrentPlayerTurn();
-        displayNextPlayerIfGameNotEnded();
-        publishDomainEvents();
-    }
-
-    private void validateGameNotEnded(String action) {
-        if (state.equals(ENDED)) {
-            throw new InvalidGameStateException(this.getId(), this.getState(), action);
-        }
-    }
-
-    private void displayNextPlayerIfGameNotEnded() {
-        if(state != ENDED){
-            raise(new PlayerTurnStartedEvent(currentPlayer));
-        }
-    }
-
-    private void endGameIfCurrentPlayerWon() {
-        if (currentPlayer.isWinning()) {
-            isGameInProgress = false;
-            state = ENDED;
-            winner = currentPlayer;
-            raise(new PlayerWonEvent(id, currentPlayer));
-            raise(new GameEndedEvent(id, currentPlayer.getId()));
-        }
-    }
-
-    private void endCurrentPlayerTurn() {
-        players.goToNextPlayerTurn();
-        currentPlayer = players.getCurrent();
-        turn++;
-    }
-
-    private void publishDomainEvents() {
-        List<Event> aggregatedEvents = getAndClearUncommittedEvents();
-        List<Event> currentPlayerEvents = Optional.ofNullable(currentPlayer)
-                .map(EventRaiser::getAndClearUncommittedEvents)
-                .orElse(Collections.emptyList());
-        aggregatedEvents.addAll(currentPlayerEvents);
-        aggregatedEvents.addAll(playerTurnOrchestrator.getAndClearUncommittedEvents());
-        aggregatedEvents.sort(Comparator.comparingInt(Event::getOrderNumber));
-        eventPublisher.publish(aggregatedEvents);
     }
 
     public void addPlayer(Player player) {
@@ -118,11 +67,11 @@ public class Game extends Entity<GameId> {
             throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
         }
         player.setGameId(id);
-        players.addAfterCreationTime(player);
+        players.add(player);
     }
 
-    public void startBy(Player player) {
-        validateGameNotEnded("start");
+    public void start(Player player) {
+        validateGameStateIsNot(ENDED, "start");
         if (!Objects.equals(player, players.getCreator())) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
         }
@@ -131,17 +80,82 @@ public class Game extends Entity<GameId> {
         }
         state = STARTED;
         turn = 1;
-        // TODO repenser / clarifier la logique d'émission et publication des events, la cohérence avec des transactions, etc.
         raise(new GameStartedEvent(id));
-        raise(new PlayerTurnStartedEvent(currentPlayer));
-        publishDomainEvents();
+        raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
+
+        eventPublisher.flushEvents();
     }
 
-    public Optional<Player> findPlayerById(UserId playerId) {
-        return players.getIndividualPlayers()
-                .stream()
-                .filter(player -> Objects.equals(player.getId(), playerId))
-                .findAny();
+    public void rollDice(Player player) {
+        validateGameStateIs(STARTED, "answer question");
+        validateCurrentPlayer(player);
+        if (!player.canRollDice()) {
+            throw new RollDiceException(id, player.getId());
+        }
+
+        currentRoll = dice.roll();
+        raise(new PlayerRolledDiceEvent(player, currentRoll, currentPlayer.getTurn()));
+        if (player.isInPenaltyBox()) {
+            rollDiceFromPenaltyBox(player);
+        } else {
+            board.movePlayer(player, currentRoll);
+        }
+
+        eventPublisher.flushEvents();
+    }
+
+    private void rollDiceFromPenaltyBox(Player player) {
+        if (currentRoll.isPair()) {
+            player.getOutOfPenaltyBox();
+            raise(new PlayerGotOutOfPenaltyBoxEvent(player, player.getTurn()));
+            board.movePlayer(player, currentRoll);
+        } else {
+            raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
+            endTurn();
+        }
+    }
+
+    public void drawQuestion(Player currentPlayer) {
+        validateGameStateIs(STARTED, "draw question");
+        validateCurrentPlayer(currentPlayer);
+        validatePlayerNotInPenaltyBox(currentPlayer, "draw question");
+        if(currentRoll == null){
+            throw new CannotDrawQuestionBeforeRollingDiceException(getId(), currentPlayer.getId());
+        }
+
+        this.currentQuestion = questionsDeck.drawQuestion(currentPlayer.getLocation());
+        raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
+        eventPublisher.flushEvents();
+    }
+
+    public boolean answerCurrentQuestion(Player player, AnswerCode answerCode) {
+        validateGameStateIs(STARTED, "answer question");
+        validateCurrentPlayer(player);
+        validatePlayerNotInPenaltyBox(player, "answer current question");
+
+        boolean isAnswerCorrect = false;
+
+        if(currentQuestion == null) {
+            throw new CannotAnswerQuestionBeforeDrawingOneException(id, player.getId());
+        }
+
+        if (currentQuestion.isCorrect(answerCode)) {
+            isAnswerCorrect = true;
+            currentPlayer.answerCorrectly();
+            endGameIfCurrentPlayerWon();
+            if (isGameInProgress) {
+                endTurn();
+            }
+        } else {
+            currentPlayer.answerIncorrectly();
+            if (currentPlayer.canContinueAfterIncorrectAnswer()) {
+                drawQuestion(currentPlayer);
+            } else {
+                endTurn();
+            }
+        }
+        eventPublisher.flushEvents();
+        return isAnswerCorrect;
     }
 
     public Player getCurrentPlayer() {
@@ -156,26 +170,54 @@ public class Game extends Entity<GameId> {
         return players.count();
     }
 
-    public void setGameIdToPlayers() {
-        players.setGameId(getId());
-    }
-
-    public enum State {
-        CREATED("created"),
-        STARTED("started"),
-        ENDED("ended"),
-        ;
-
-        private final String value;
-
-        State(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
+    private void validateCurrentPlayer(Player player) {
+        if (!Objects.equals(player, currentPlayer)) {
+            throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
         }
     }
 
+    private void validatePlayerNotInPenaltyBox(Player player, String actionName) {
+        if(player.isInPenaltyBox()){
+            throw new ExecuteActionInPenaltyBoxException(getId(), player, actionName);
+        }
+    }
+
+    private void validateGameStateIs(State expectedState, String action) {
+        validateGameState(true, expectedState, action);
+    }
+
+    private void validateGameStateIsNot(State expectedState, String action) {
+        validateGameState(false, expectedState, action);
+    }
+
+    private void validateGameState(boolean orNot, State expectedState, String action) {
+        if ((!orNot && state.equals(expectedState)) || (orNot && !state.equals(expectedState))) {
+            throw new InvalidGameStateException(this.getId(), this.getState(), action);
+        }
+    }
+
+    private void displayCurrentPlayerIfGameNotEnded() {
+        if (state != ENDED) {
+            raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
+        }
+    }
+
+    private void endGameIfCurrentPlayerWon() {
+        if (currentPlayer.isWinning()) {
+            isGameInProgress = false;
+            state = ENDED;
+            winner = currentPlayer;
+            raise(new PlayerWonEvent(id, currentPlayer, currentPlayer.getTurn()));
+            raise(new GameEndedEvent(id, currentPlayer.getName()));
+        }
+    }
+
+    private void endTurn() {
+        currentQuestion = null;
+        currentRoll = null;
+        turn++;
+        players.goToNextPlayerTurn();
+        currentPlayer = players.getCurrent();
+        displayCurrentPlayerIfGameNotEnded();
+    }
 }

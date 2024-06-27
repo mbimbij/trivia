@@ -1,8 +1,10 @@
 package com.adaptionsoft.games.trivia.microarchitecture;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 
 @Getter
@@ -16,9 +18,11 @@ public class Entity<T extends Id<?>> extends EventRaiser {
      * DO NOT CALL directly. Needed for @AllArgsConstructor in Player class only.
      */
     protected Entity() {
+        super(null);
     }
 
-    public Entity(T id) {
+    public Entity(T id, EventPublisher eventPublisher) {
+        super(eventPublisher);
         this.id = id;
     }
 }

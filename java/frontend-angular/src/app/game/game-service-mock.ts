@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {GameServiceAbstract} from "../services/game-service-abstract";
-import {Observable, of} from "rxjs";
-import {GameLog} from "../openapi-generated";
+import {BehaviorSubject, Observable, of} from "rxjs";
+import {AnswerCode, GameLog, QuestionDto} from "../openapi-generated";
 import {mockGame1, mockGame2} from "../common/test-helpers";
 import {User} from "../user/user";
 import {Game} from "./game";
@@ -9,13 +9,24 @@ import {Game} from "./game";
 @Injectable({
   providedIn: 'root'
 })
-export class GameServiceMock extends GameServiceAbstract  {
+export class GameServiceMock extends GameServiceAbstract {
+  private gameSubject = new BehaviorSubject(mockGame1);
+
+  override rollDice(gameId: number, userId: string): Observable<Game> {
+      throw new Error("Method not implemented.");
+  }
+  override drawQuestion(gameId: number, userId: string): Observable<QuestionDto> {
+      throw new Error("Method not implemented.");
+  }
+  override answerQuestion(gameId: number, userId: string, answerCode: AnswerCode): Observable<boolean> {
+      throw new Error("Method not implemented.");
+  }
   override initGameLogs(gameId: number): void {
   }
   override initGamesList(): void {
   }
   override create(name: string, user: User): Observable<Game> {
-    return of(mockGame1);
+    return this.gameSubject.asObservable();
   }
 
   override delete(gameId: number): Observable<void> {
@@ -30,11 +41,11 @@ export class GameServiceMock extends GameServiceAbstract  {
   }
 
   override getGame(gameId: number): Observable<Game> {
-    return of(mockGame1);
+    return this.gameSubject.asObservable();
   }
 
-  override playTurn(gameId: number, userId: string): Observable<Game> {
-    return of(mockGame1);
+  setGame(game: Game){
+    this.gameSubject.next(game);
   }
 
   getGames(): Observable<Array<Game>> {

@@ -1,7 +1,6 @@
 import {Player} from "../user/player";
-import {GameResponseDto} from "../openapi-generated";
-import {playerDtoToPlayer, playerToPlayerDto, userToPlayer} from "../common/helpers";
-import {Nobody} from "../user/user";
+import {GameResponseDto, QuestionDto} from "../openapi-generated";
+import {comparePlayers, playerDtoToPlayer, playerToPlayerDto} from "../common/helpers";
 
 export class Game {
   id: number
@@ -11,9 +10,20 @@ export class Game {
   creator: Player;
   currentPlayer: Player;
   players: Player[];
-  winner?: Player
+  winner: Player | undefined
+  currentQuestion: QuestionDto | undefined
+  currentRoll: number | undefined
 
-  constructor(id: number, name: string, state: string, turn: number, creator: Player, currentPlayer: Player, players: Player[], winner?: Player) {
+  constructor(id: number,
+              name: string,
+              state: string,
+              turn: number,
+              creator: Player,
+              currentPlayer: Player,
+              players: Player[],
+              winner?: Player,
+              currentQuestion?: QuestionDto,
+              currentRoll?: number) {
     this.id = id;
     this.name = name;
     this.state = state;
@@ -22,6 +32,8 @@ export class Game {
     this.currentPlayer = currentPlayer;
     this.players = players;
     this.winner = winner;
+    this.currentQuestion = currentQuestion;
+    this.currentRoll = currentRoll;
   }
 
   static fromDto(dto: GameResponseDto): Game {
@@ -34,7 +46,9 @@ export class Game {
       dto.players.map(
         playerDto => playerDtoToPlayer(playerDto)
       ),
-      dto.winner ? playerDtoToPlayer(dto.winner) : undefined
+      dto.winner ? playerDtoToPlayer(dto.winner) : undefined,
+      dto.currentQuestion,
+      dto.currentRoll
     )
   }
 
@@ -46,21 +60,29 @@ export class Game {
       turn: this.turn,
       creator: playerToPlayerDto(this.creator),
       currentPlayer: playerToPlayerDto(this.currentPlayer),
-      players: this.players.map(player => playerToPlayerDto(player))
+      players: this.players.map(player => playerToPlayerDto(player)),
+      currentQuestion: this.currentQuestion,
+      currentRoll: this.currentRoll,
     }
   }
-}
 
-export class NoGame extends Game {
-  constructor(id: number) {
-    super(id,
-      "none",
-      "none",
-      -1,
-      userToPlayer(Nobody.instance),
-      userToPlayer(Nobody.instance),
-      [userToPlayer(Nobody.instance)],
-      userToPlayer(Nobody.instance)
-    );
+  public isCurrentPlayer(player: Player): boolean {
+    return comparePlayers(player, this.currentPlayer)
+  }
+
+  public canRollDice(player: Player): boolean {
+    return this.isCurrentPlayer(player) && this.currentRoll == undefined
+  }
+
+  public canDrawQuestion(player: Player): boolean {
+    return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion == undefined
+  }
+
+  public canAnswerQuestion(player: Player): boolean {
+    return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion != undefined
+  }
+
+  public getCurrentStateOf(player: Player): Player {
+    return this.players.find(p => p.id === player.id)!
   }
 }

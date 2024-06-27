@@ -69,6 +69,53 @@ describe('GameService', () => {
     expect(service.registerGameUpdatedHandler).toHaveBeenCalledTimes(1)
   });
 
+  const testCases = [
+    {log: "message", expectedLogsCount: 1},
+    {log: "message1\nmessage2", expectedLogsCount: 2},
+    {log: "message1\nmessage2\nmessage3", expectedLogsCount: 3},
+    {log: "message1\n", expectedLogsCount: 1},
+    {log: "\nmessage1\n\n", expectedLogsCount: 1},
+    {log: "message1\n\nmessage2", expectedLogsCount: 2},
+    {log: "message1\n\n\n\nmessage2\n", expectedLogsCount: 2},
+  ]
+
+  testCases.forEach(
+    (
+      {log, expectedLogsCount},
+      tcNum
+    ) => {
+      it(`GIVEN case number ${tcNum}, then expected result should be ${expectedLogsCount}`,
+        () => {
+          // GIVEN
+          let service = createService();
+          let newGameLog = {gameId: 1, value: log};
+
+          // WHEN
+          service.handleNewGameLog(newGameLog);
+
+          // THEN new game log is split into multiple lines
+          service.getGameLogs(1).subscribe(logs => {
+            expect(logs).toHaveSize(expectedLogsCount);
+          })
+        }
+      );
+    }
+  )
+
+  it('should add multiple game log lines if text contains line break', () => {
+    // GIVEN
+    let service = createService();
+    let newGameLog = {gameId: 1, value: "message1\nmessage2"};
+
+    // WHEN
+    service.handleNewGameLog(newGameLog);
+
+    // THEN new game log is split into multiple lines
+    service.getGameLogs(1).subscribe(logs => {
+      expect(logs).toHaveSize(2);
+    })
+  });
+
   function createService(gameListReturnValues: GameResponseDto[] = defaultGameListReturnValues,
                          singleGameReturnValue: GameResponseDto = defaultSingleGameReturnValue
   ) {

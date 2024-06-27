@@ -1,8 +1,6 @@
 package com.adaptionsoft.games.trivia;
 
-import com.adaptionsoft.games.trivia.domain.GameFactory;
-import com.adaptionsoft.games.trivia.domain.GameRepository;
-import com.adaptionsoft.games.trivia.domain.QuestionsLoader;
+import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.domain.event.ObserverBasedEventPublisher;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.infra.GameLogsRepositoryInMemory;
@@ -42,13 +40,20 @@ public class TriviaApplication {
     }
 
     @Bean
-    public GameFactory gameFactory(IdGenerator idGenerator, EventPublisher eventPublisher, QuestionsLoader questionsLoader) {
+    public PlayerFactory playerFactory(EventPublisher eventPublisher) {
+        return new PlayerFactory(eventPublisher);
+    }
+
+    @Bean
+    public GameFactory gameFactory(IdGenerator idGenerator,
+                                   EventPublisher eventPublisher,
+                                   QuestionsRepository questionsLoader) {
         return new GameFactory(idGenerator, eventPublisher, questionsLoader);
     }
 
     @Bean
-    public QuestionsLoader questionsLoader(@Value("${application.questions-path}") String questionsPath) {
-        return new QuestionsLoader(questionsPath);
+    public QuestionsRepository questionsLoader(@Value("${application.questions-path}") String questionsPath) {
+        return new QuestionsRepositoryJson(questionsPath);
     }
 
     @Bean

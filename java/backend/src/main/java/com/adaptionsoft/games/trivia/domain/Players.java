@@ -4,6 +4,7 @@ import com.adaptionsoft.games.trivia.domain.event.PlayerAddedEvent;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerAlreadyJoinedException;
 import com.adaptionsoft.games.trivia.domain.exception.DuplicatePlayerNameException;
 import com.adaptionsoft.games.trivia.domain.exception.InvalidNumberOfPlayersException;
+import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.EventRaiser;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,11 +21,16 @@ public class Players extends EventRaiser {
     private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
-    public Players(Player ... individualPlayers) {
-        if(individualPlayers.length > 0){
-            setCreator(individualPlayers[0]);
-        }
-        this.individualPlayers.addAll(Arrays.asList(individualPlayers));
+    public Players(EventPublisher eventPublisher, Player creator, Player... otherPlayers) {
+        super(eventPublisher);
+        addCreator(creator);
+        Arrays.stream(otherPlayers).forEach(this::add);
+    }
+
+    private void addCreator(Player creator) {
+        setCreator(creator);
+        this.individualPlayers.add(creator);
+        raise(new PlayerAddedEvent(creator, this.individualPlayers.size(), creator.getTurn()));
     }
 
     public void validateOnCreation() {
@@ -37,12 +43,7 @@ public class Players extends EventRaiser {
     }
 
     public void add(Player newPlayer) {
-        individualPlayers.add(newPlayer);
-        raise(new PlayerAddedEvent(newPlayer, individualPlayers.size()));
-    }
-
-    public void addAfterCreationTime(Player newPlayer) {
-        if(individualPlayers.contains(newPlayer)){
+        if (individualPlayers.contains(newPlayer)) {
             throw new PlayerAlreadyJoinedException(newPlayer);
         }
         if (isNameDuplicate(newPlayer)) {
@@ -51,7 +52,8 @@ public class Players extends EventRaiser {
         if (individualPlayers.size() + 1 > MAX_PLAYER_COUNT) {
             throw InvalidNumberOfPlayersException.onAdd();
         }
-        add(newPlayer);
+        individualPlayers.add(newPlayer);
+        raise(new PlayerAddedEvent(newPlayer, this.individualPlayers.size(), newPlayer.getTurn()));
     }
 
     private boolean findDuplicatesAtCreationTime(List<Player> players) {
@@ -92,13 +94,4 @@ public class Players extends EventRaiser {
         return individualPlayers.size();
     }
 
-    public void addCreator(Player creator) {
-        setCreator(creator);
-        add(creator);
-    }
-
-    public void setGameId(GameId gameId) {
-        individualPlayers.forEach(player -> player.setGameId(gameId));
-        uncommittedEvents.forEach(event -> event.setGameId(gameId));
-    }
 }

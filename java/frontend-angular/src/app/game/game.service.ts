@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "../services/game-service-abstract";
 import {BehaviorSubject, map, Observable, of, ReplaySubject} from "rxjs";
-import {GameLog, GameResponseDto, TriviaControllerService} from "../openapi-generated";
+import {AnswerCode, GameLog, GameResponseDto, QuestionDto, TriviaControllerService} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
@@ -22,6 +22,20 @@ export class GameService extends GameServiceAbstract {
   constructor(private openApiService: TriviaControllerService,
               private rxStompService: RxStompService) {
     super();
+  }
+
+  override rollDice(gameId: number, userId: string): Observable<Game> {
+    return this.openApiService.rollDice(gameId, userId)
+      .pipe(map(Game.fromDto));
+  }
+
+  override drawQuestion(gameId: number, userId: string): Observable<QuestionDto> {
+    return this.openApiService.drawQuestion(gameId, userId)
+      .pipe(map(value => value.currentQuestion!));
+  }
+
+  override answerQuestion(gameId: number, userId: string, answerCode: AnswerCode): Observable<boolean> {
+    return this.openApiService.answer(gameId, userId, answerCode);
   }
 
   override getGames() {
@@ -81,8 +95,18 @@ export class GameService extends GameServiceAbstract {
     this.rxStompService.watch(`/topic/games/${gameId}/logs`)
       .subscribe((message: IMessage) => {
         let newGameLog = JSON.parse(message.body) as GameLog;
-        this.gameLogsSubjects.next([...this.gameLogsSubjects.value, newGameLog])
+        this.handleNewGameLog(newGameLog);
       });
+  }
+
+  public handleNewGameLog(newGameLog: GameLog) {
+    let logsToAdd = newGameLog.value
+      .split('\n')
+      .filter(value => value.trim())
+      .map((m) => {
+        return {gameId: 1, value: m} as GameLog;
+      });
+    this.gameLogsSubjects.next(this.gameLogsSubjects.value.concat(logsToAdd))
   }
 
   override create(name: string, user: User): Observable<Game> {
@@ -104,11 +128,6 @@ export class GameService extends GameServiceAbstract {
     return this.openApiService.deleteGameById(gameId)
   }
 
-  override playTurn(gameId: number, userId: string): Observable<Game> {
-    return this.openApiService.playTurn(gameId, userId)
-      .pipe(map(Game.fromDto));
-  }
-
   override start(gameId: number, userId: string): Observable<Game> {
     return this.openApiService.startGame(gameId, userId)
       .pipe(map(Game.fromDto));
@@ -121,7 +140,6 @@ export class GameService extends GameServiceAbstract {
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
     return this.gameLogs$;
-    // return this.openApiService.getGameLogs(gameId)
   }
 
   registerGameCreatedHandler() {
@@ -181,7 +199,6 @@ export class GameService extends GameServiceAbstract {
   }
 
   private deleteGameFromSubjects(gameId: number) {
-    console.log(`coucou deleteGame$`)
     this.gamesSubject.next([...this.gamesSubject.value.filter(game => game.id !== gameId)])
   }
 
