@@ -1,6 +1,6 @@
-package com.adaptionsoft.games.utils;
+package com.adaptionsoft.games.tests;
 
-import com.adaptionsoft.games.stepdefs.OngoingGameStepsDefs;
+import com.adaptionsoft.games.stepdefs.OngoingGameStepDefs;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -23,7 +23,7 @@ class TestOfTests {
                 "The category is .*",
                 "question .*"
         );
-        OngoingGameStepsDefs.verifyGameLogsMatch(actualLogs, expectedLogs);
+        OngoingGameStepDefs.verifyGameLogsMatch(actualLogs, expectedLogs);
     }
 
     @Test

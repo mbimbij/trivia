@@ -5,64 +5,64 @@ Feature: On-Going Game Page
     And 2 existing games
     And "test-game-2" started
     And a logged-in test user on the game-list page
-    And qa-user clicks on "goto" button for "test-game-2"
+    And current game is "test-game-2"
+    And qa-user goes to the game
     And i am on the on game page for "test-game-2"
 
   Scenario: Go to game from game-list page
-    Then the element with testid "game-header-section" is visible
-    And the element with testid "game-logs-section" is visible
+    Then qa-user can see the element with testid "game-header-section"
+    And qa-user can see the element with testid "game-logs-section"
 
   Rule: Play a turn outside penalty box
     Scenario: Play a turn outside penalty box - Correct answer
-      Given current player is not in the penalty box
-      Then the element with testid "roll-dice" is visible
-      And the element with testid "answer-question" is not visible
-      And displayed game logs end with logs matching
+      Then qa-user can see the roll dice button
+      And qa-user cannot see the answer question section
+      And qa-user sees game logs ending as following
         | Game Id\\(value=[0-9]*\\) started |
         | qa-user is the current player     |
-      When qa-user clicks on the element with testid "roll-dice"
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is visible
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      Then qa-user cannot see the roll dice button
+      And qa-user can see the answer question section
+      And qa-user sees game logs ending as following
         | qa-user is the current player  |
         | They have rolled a \\d         |
         | qa-user's new location is \\d+ |
         | The category is .*             |
         | question .*                    |
-      When qa-user clicks on answer A
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is not visible
-      And displayed game logs end with logs matching
+      When qa-user answers A
+      Then qa-user cannot see the roll dice button
+      And qa-user cannot see the answer question section
+      And qa-user sees game logs ending as following
         | question .*                       |
         | Answer was correct!!!!            |
         | qa-user now has 1 Gold Coins.     |
         | test-user-1 is the current player |
 
     Scenario: Play a turn outside penalty box - First incorrect answer, Second correct answer
-      When qa-user clicks on the element with testid "roll-dice"
-      When qa-user clicks on answer B
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is visible
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      When qa-user answers B
+      Then qa-user cannot see the roll dice button
+      And qa-user can see the answer question section
+      And qa-user sees game logs ending as following
         | question .*                       |
         | Question was incorrectly answered |
         | question .*                       |
-      When qa-user clicks on answer B
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is not visible
-      And displayed game logs end with logs matching
+      When qa-user answers B
+      Then qa-user cannot see the roll dice button
+      And qa-user cannot see the answer question section
+      And qa-user sees game logs ending as following
         | question .*                       |
         | Answer was correct!!!!            |
         | qa-user now has 1 Gold Coins.     |
         | test-user-1 is the current player |
 
     Scenario: Play a turn outside penalty box - First incorrect answer, Second incorrect answer
-      When qa-user clicks on the element with testid "roll-dice"
-      And qa-user clicks on answer B
-      And qa-user clicks on answer C
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is not visible
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      And qa-user answers B
+      And qa-user answers C
+      Then qa-user cannot see the roll dice button
+      And qa-user cannot see the answer question section
+      And qa-user sees game logs ending as following
         | question .*                         |
         | Question was incorrectly answered   |
         | qa-user was sent to the penalty box |
@@ -71,16 +71,16 @@ Feature: On-Going Game Page
   Rule: Play a turn inside penalty box
     Scenario: Can roll dice from penalty box
       Given qa-user is put in the penalty box
-      Then the element with testid "roll-dice" is visible
-      And the element with testid "answer-question" is not visible
+      Then qa-user can see the roll dice button
+      And qa-user cannot see the answer question section
 
     Scenario: Play a turn inside penalty box - odd roll dice - stay in penalty box
       Given qa-user is put in the penalty box
       And a loaded dice returning a 3
-      When qa-user clicks on the element with testid "roll-dice"
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is not visible
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      Then qa-user cannot see the roll dice button
+      And qa-user cannot see the answer question section
+      And qa-user sees game logs ending as following
         | qa-user is the current player                 |
         | qa-user was sent to the penalty box           |
         | They have rolled a 3                          |
@@ -90,10 +90,10 @@ Feature: On-Going Game Page
     Scenario: An even roll dice gets you out of in penalty box
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
-      When qa-user clicks on the element with testid "roll-dice"
-      Then the element with testid "roll-dice" is not visible
-      And the element with testid "answer-question" is visible
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      Then qa-user cannot see the roll dice button
+      And qa-user can see the answer question section
+      And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
@@ -102,9 +102,9 @@ Feature: On-Going Game Page
     Scenario: Answer correctly after getting out of the penalty box
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
-      When qa-user clicks on the element with testid "roll-dice"
-      And qa-user clicks on answer A
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      And qa-user answers A
+      And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
@@ -116,10 +116,10 @@ Feature: On-Going Game Page
     Scenario: Answer incorrectly then correctly after getting out of the penalty box
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
-      When qa-user clicks on the element with testid "roll-dice"
-      And qa-user clicks on answer B
-      And qa-user clicks on answer B
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      And qa-user answers B
+      And qa-user answers B
+      And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
@@ -133,10 +133,10 @@ Feature: On-Going Game Page
     Scenario: Answer incorrectly then incorrect again after getting out of the penalty box
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
-      When qa-user clicks on the element with testid "roll-dice"
-      And qa-user clicks on answer B
-      And qa-user clicks on answer C
-      And displayed game logs end with logs matching
+      When qa-user rolls the dice
+      And qa-user answers B
+      And qa-user answers C
+      And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |

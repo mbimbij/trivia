@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.domain;
 
-import com.adaptionsoft.games.stepdefs.StepsDefs;
+import com.adaptionsoft.games.stepdefs.StepDefs;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import jakarta.annotation.PostConstruct;
@@ -15,13 +15,12 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
+@Getter
 public class TestContext {
     private final Map<String, GameResponseDto> gamesByName = new HashMap<String, GameResponseDto>();
     private final String frontendUrlBase;
     private final String backendUrlBase;
-    @Getter
     private UserDto qaUser;
-    @Getter
     private Map<String, UserDto> usersByName;
     @Value("${test.qa-user-id}")
     private String qaUserId;
@@ -47,7 +46,7 @@ public class TestContext {
         return gamesByName.get(gameName);
     }
 
-    public void deleteGame(GameResponseDto game, StepsDefs stepsDefs) {
+    public void deleteGame(GameResponseDto game, StepDefs stepsDefs) {
         if (game != null) {
             stepsDefs.getRestTemplate().delete(stepsDefs.getBackendUrlBase() + "/games/{gameId}", game.id());
             gamesByName.remove(game.name());
@@ -58,7 +57,7 @@ public class TestContext {
         gamesByName.put(gameName1, game);
     }
 
-    public UserDto getUserDtoByName(String userName, StepsDefs stepsDefs) {
+    public UserDto getUserDtoByName(String userName, StepDefs stepsDefs) {
         assertThat(stepsDefs.getUsersByName()).containsKey(userName);
         return stepsDefs.getUsersByName().get(userName);
     }

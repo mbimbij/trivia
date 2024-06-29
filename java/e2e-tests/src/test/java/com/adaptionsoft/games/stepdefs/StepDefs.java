@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.stepdefs;
 
+import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
-import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
@@ -26,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
@@ -34,21 +33,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @RequiredArgsConstructor
-public class StepsDefs {
+public class StepDefs {
 
-    private static final Logger log = LoggerFactory.getLogger(StepsDefs.class);
-    private static Playwright playwright;
-    @Getter
-    private static Page page;
+    private static final Logger log = LoggerFactory.getLogger(StepDefs.class);
 
     @Getter
     private final RestTemplate restTemplate = new RestTemplate();
 
     private final String userName1 = "test-user-1";
     private final String userName2 = "test-user-2";
-    private final String qaUserName = "qa-user";
     private final UserDto user1 = new UserDto("id-test-user-1", userName1);
     private final UserDto user2 = new UserDto("id-test-user-2", userName2);
+
+    public final FrontendActor qaFrontendActor;
+    private final Page page;
+    private BackendActor qaBackendActor;
+    private BackendActor backendActor1;
+    private BackendActor backendActor2;
+
     private final TestContext testContext;
     @Value("${test.qa-user-id}")
     private String qaUserId;
@@ -56,10 +58,6 @@ public class StepsDefs {
     private String qaUserPassword;
     @Getter
     private Map<String, UserDto> usersByName;
-
-    public UserDto getQaUser() {
-        return testContext.getQaUser();
-    }
 
     private GameResponseDto game1;
     private GameResponseDto game2;
@@ -72,36 +70,26 @@ public class StepsDefs {
     @Value("${test.backend-url-base}")
     private String backendUrlBase;
 
+    private final TestProperties testProperties;
+
+    public Page getPage() {
+        return page;
+    }
+
     @PostConstruct
     void postConstruct() {
         usersByName = Map.of(
                 userName1, user1,
                 userName2, user2);
-    }
 
-
-    @BeforeAll
-    public static void beforeAll() throws Exception {
-        playwright = Playwright.create();
-        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false)
-//                .setSlowMo(1000)
-                ;
-        Browser browser = playwright.firefox().launch(launchOptions);
-        Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
-        BrowserContext newContext = browser.newContext(contextOptions);
-        page = newContext.newPage();
-        page.onConsoleMessage(currentScenarioConsoleMessages::add);
+        qaBackendActor = new BackendActor(testContext.getQaUserId(), userName1, testProperties.getBackendUrlBase());
+        backendActor1 = new BackendActor("id-test-user-1", userName1, testProperties.getBackendUrlBase());
+        backendActor2 = new BackendActor("id-test-user-2", userName2, testProperties.getBackendUrlBase());
     }
 
     @Before
     public void setUp() {
         currentScenarioConsoleMessages.clear();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        playwright.close();
     }
 
     @After
@@ -151,17 +139,13 @@ public class StepsDefs {
         }
     }
 
-    @Given("a test user")
-    public void anTestUser() {
-    }
-
     @Given("2 existing games")
     public void games() {
         String gameName1 = "test-game-1";
         game1 = createGame(gameName1, user1);
         testContext.putGame(gameName1, game1);
         String gameName2 = "test-game-2";
-        game2 = createGame(gameName2, getQaUser());
+        game2 = createGame(gameName2, testContext.getQaUser());
         testContext.putGame(gameName2, game2);
     }
 
@@ -174,12 +158,12 @@ public class StepsDefs {
         return responseEntity.getBody();
     }
 
-    @Then("the following games are displayed for users \"{strings}\"")
+    @Then("qa-user sees the following games, filtered for creators \"{strings}\"")
     public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
-                        () -> assertThat(getDisplayedGamesForUsers(userNames)).isEqualTo(expected)
+                        () -> assertThat(qaFrontendActor.getDisplayedGamesForUsers(userNames, this)).isEqualTo(expected)
                 );
     }
 
@@ -188,41 +172,8 @@ public class StepsDefs {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
-                        () -> assertThat(getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
+                        () -> assertThat(qaFrontendActor.getDisplayedGamesForUsers(emptyList(), this)).isEqualTo(expected)
                 );
-    }
-
-    /**
-     * @param userNames Pass null or an empty collection to get games for all users
-     * @return
-     */
-    private List<DisplayedGame>
-    getDisplayedGamesForUsers(Collection<String> userNames) {
-        Predicate<ElementHandle> predicate = (userNames == null || userNames.isEmpty())
-                ? h -> true
-                : h -> userNames.contains(h.querySelector(".creator-name").textContent().trim());
-        return page.querySelectorAll(".game-row").stream()
-                .filter(predicate)
-                .map(this::convertToObject)
-                .toList();
-    }
-
-    public DisplayedGame convertToObject(ElementHandle elementHandle) {
-        return new DisplayedGame(
-                elementHandle.querySelector(".name").textContent().trim(),
-                elementHandle.querySelector(".creator-name").textContent().trim(),
-                elementHandle.querySelector(".players-names").textContent().trim(),
-                elementHandle.querySelector(".state").textContent().trim(),
-                getButtonState(elementHandle, "start"),
-                getButtonState(elementHandle, "join"),
-                elementHandle.querySelector(".join").textContent().trim(),
-                getButtonState(elementHandle, "goto"),
-                getButtonState(elementHandle, "delete")
-        );
-    }
-
-    private Boolean getButtonState(ElementHandle elementHandle, String buttonName) {
-        return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button")).map(ElementHandle::isEnabled).orElse(null);
     }
 
 
@@ -239,7 +190,7 @@ public class StepsDefs {
 
     @When("{string} joins {string}")
     public void userJoinsGame(String userName, String gameName) {
-        if (Objects.equals(userName, getQaUser().name())) {
+        if (Objects.equals(userName, testContext.getQaUser().name())) {
             qaUserClicksOnButtonForGame("join", gameName);
         } else {
             userJoinsGameFromBackend(userName, gameName);
@@ -259,7 +210,7 @@ public class StepsDefs {
 
     @When("{string} starts {string}")
     public void testUserStartsTestGame(String userName, String gameName) {
-        if (Objects.equals(getQaUser().name(), userName)) {
+        if (Objects.equals(testContext.getQaUser().name(), userName)) {
             qaUserClicksOnButtonForGame("start", gameName);
         } else {
             userStartsGameFromBackend(userName, gameName);
@@ -347,8 +298,8 @@ public class StepsDefs {
     @Given("\"test-game-2\" started")
     public void started() {
         // TODO insert a started game in database directly
-        userJoinsGameFromBackend(user1.name(), game2.name());
-        userStartsGameFromBackend(testContext.getQaUser().name(), game2.name());
+        backendActor1.join(game2);
+        qaBackendActor.start(game2);
     }
 
     @ParameterType("(is|is not)")
@@ -362,28 +313,6 @@ public class StepsDefs {
         PlaywrightAssertions.assertThat(locator).isVisible();
         PlaywrightAssertions.assertThat(locator).isEnabled();
         locator.click();
-    }
-
-    @Given("qa-user is put in the penalty box")
-    public void qaUserIsPutInThePenaltyBox() {
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/testkit/games/{gameId}/players/{playerId}/goToPenaltyBox",
-                null,
-                GameResponseDto.class,
-                game2.id(),
-                getQaUser().id());
-        this.game2 = responseEntity.getBody();
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @And("a loaded dice returning a {int}")
-    public void aLoadedDiceReturningA(int number) {
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/testkit/games/{gameId}/setLoadedDice/{number}",
-                null,
-                GameResponseDto.class,
-                game2.id(),
-                number);
-        this.game2 = responseEntity.getBody();
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
 }
