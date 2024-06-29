@@ -1,9 +1,7 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.views.DisplayedGame;
-import com.adaptionsoft.games.utils.GameLogsVerifier;
 import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
@@ -11,7 +9,6 @@ import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.WaitUntilState;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -57,8 +54,12 @@ public class StepsDefs {
     private String qaUserId;
     @Value("${test.qa-user-password}")
     private String qaUserPassword;
-    private UserDto qaUser;
+    @Getter
     private Map<String, UserDto> usersByName;
+
+    public UserDto getQaUser() {
+        return testContext.getQaUser();
+    }
 
     private GameResponseDto game1;
     private GameResponseDto game2;
@@ -70,17 +71,14 @@ public class StepsDefs {
     @Getter
     @Value("${test.backend-url-base}")
     private String backendUrlBase;
-    private GameResponseDto currentGame;
-    private final Duration pollInterval = Duration.ofSeconds(1);
 
     @PostConstruct
     void postConstruct() {
-        qaUser = new UserDto(qaUserId, qaUserName);
         usersByName = Map.of(
                 userName1, user1,
-                userName2, user2,
-                qaUserName, qaUser);
+                userName2, user2);
     }
+
 
     @BeforeAll
     public static void beforeAll() throws Exception {
@@ -163,7 +161,7 @@ public class StepsDefs {
         game1 = createGame(gameName1, user1);
         testContext.putGame(gameName1, game1);
         String gameName2 = "test-game-2";
-        game2 = createGame(gameName2, qaUser);
+        game2 = createGame(gameName2, getQaUser());
         testContext.putGame(gameName2, game2);
     }
 
@@ -179,7 +177,7 @@ public class StepsDefs {
     @Then("the following games are displayed for users \"{strings}\"")
     public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
-                .pollInterval(pollInterval)
+                .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
                         () -> assertThat(getDisplayedGamesForUsers(userNames)).isEqualTo(expected)
                 );
@@ -188,7 +186,7 @@ public class StepsDefs {
     @Then("the following games are displayed")
     public void theFollowingGamesAreDisplayed(Collection<DisplayedGame> expected) {
         await().atMost(Duration.ofSeconds(5))
-                .pollInterval(pollInterval)
+                .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
                         () -> assertThat(getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
                 );
@@ -227,20 +225,9 @@ public class StepsDefs {
         return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button")).map(ElementHandle::isEnabled).orElse(null);
     }
 
-    @DataTableType
-    public Collection<DisplayedGame> displayedGames(DataTable dataTable) {
-        return TestUtils.convertDatatableList(dataTable, DisplayedGame.class);
-    }
-
-    @ParameterType(
-            value = ".+",
-            name = "strings")
-    public Collection<String> strings(String string) {
-        return Arrays.stream(string.trim().split("\\s*,\\s*")).collect(Collectors.toCollection(ArrayList::new));
-    }
 
     public void userJoinsGameFromBackend(String userName, String gameName) {
-        UserDto user = getUserDtoByName(userName);
+        UserDto user = testContext.getUserDtoByName(userName, this);
         GameResponseDto game = testContext.getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/join",
                 new UserDto(user.id(), user.name()),
@@ -252,7 +239,7 @@ public class StepsDefs {
 
     @When("{string} joins {string}")
     public void userJoinsGame(String userName, String gameName) {
-        if (Objects.equals(userName, qaUser.name())) {
+        if (Objects.equals(userName, getQaUser().name())) {
             qaUserClicksOnButtonForGame("join", gameName);
         } else {
             userJoinsGameFromBackend(userName, gameName);
@@ -260,7 +247,7 @@ public class StepsDefs {
     }
 
     public void userStartsGameFromBackend(String userName, String gameName) {
-        UserDto user = getUserDtoByName(userName);
+        UserDto user = testContext.getUserDtoByName(userName, this);
         GameResponseDto game = testContext.getGameByName(gameName);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/start",
                 new UserDto(user.id(), user.name()),
@@ -272,7 +259,7 @@ public class StepsDefs {
 
     @When("{string} starts {string}")
     public void testUserStartsTestGame(String userName, String gameName) {
-        if (Objects.equals(qaUser.name(), userName)) {
+        if (Objects.equals(getQaUser().name(), userName)) {
             qaUserClicksOnButtonForGame("start", gameName);
         } else {
             userStartsGameFromBackend(userName, gameName);
@@ -281,7 +268,7 @@ public class StepsDefs {
 
     @When("{string} creates a game named {string}")
     public void testUserCreatesAGameNamed(String userName, String gameName) {
-        UserDto creator = getUserDtoByName(userName);
+        UserDto creator = testContext.getUserDtoByName(userName, this);
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games",
                 new CreateGameRequestDto(gameName, creator),
                 GameResponseDto.class);
@@ -292,15 +279,10 @@ public class StepsDefs {
 
     @When("{string} deletes the game named {string}")
     public void deletesTheGameNamed(String userName, String gameName) {
-        UserDto creator = getUserDtoByName(userName);
+        UserDto creator = testContext.getUserDtoByName(userName, this);
         GameResponseDto game = testContext.getGameByName(gameName);
         restTemplate.delete(backendUrlBase + "/games/{gameId}", game.id());
         testContext.deleteGame(game, this);
-    }
-
-    private UserDto getUserDtoByName(String userName) {
-        assertThat(usersByName).containsKey(userName);
-        return usersByName.get(userName);
     }
 
     private GameResponseDto getGameByName(String gameName) {
@@ -366,23 +348,7 @@ public class StepsDefs {
     public void started() {
         // TODO insert a started game in database directly
         userJoinsGameFromBackend(user1.name(), game2.name());
-        userStartsGameFromBackend(qaUser.name(), game2.name());
-    }
-
-    @And("the element with testid {string} {isOrNot} visible")
-    public void theFollowingElementsAreVisible(String testId, IS_OR_NOT isOrNotVisible) {
-        switch (isOrNotVisible) {
-            case IS -> PlaywrightAssertions.assertThat(page.getByTestId(testId)).isVisible();
-            case IS_NOT -> PlaywrightAssertions.assertThat(page.getByTestId(testId)).not().isVisible();
-        }
-    }
-
-    @Given("current player {isOrNot} in the penalty box")
-    public void currentPlayerIsInThePenaltyBox(IS_OR_NOT isOrNotInThePenaltyBox) {
-        switch (isOrNotInThePenaltyBox) {
-            case IS -> assertThat(currentGame.currentPlayer().isInPenaltyBox()).isTrue();
-            case IS_NOT -> assertThat(currentGame.currentPlayer().isInPenaltyBox()).isFalse();
-        }
+        userStartsGameFromBackend(testContext.getQaUser().name(), game2.name());
     }
 
     @ParameterType("(is|is not)")
@@ -398,42 +364,13 @@ public class StepsDefs {
         locator.click();
     }
 
-    @ParameterType("(A|B|C|D)")
-    public AnswerCode answerCode(String stringValue) {
-        return AnswerCode.valueOf(stringValue);
-    }
-
-    @Then("qa-user clicks on answer {answerCode}")
-    public void qaUserClicksOnTheAnswer(AnswerCode answerCode) {
-        Locator locator = page.getByTestId("answer-%s".formatted(answerCode));
-        PlaywrightAssertions.assertThat(locator).isVisible();
-        PlaywrightAssertions.assertThat(locator).isEnabled();
-        locator.click();
-    }
-
-    @And("displayed game logs ends with logs matching")
-    public void displayedGameLogsEndsWithLogsMatching(List<String> expectedLogs) {
-        await().atMost(Duration.ofSeconds(5))
-                .pollInterval(pollInterval)
-                .untilAsserted(
-                        () -> GameLogsVerifier.verifyMatch(getGameLogs(), expectedLogs)
-                );
-    }
-
-    private static List<String> getGameLogs() {
-        List<String> actualLogs = page.querySelectorAll(".log-line")
-                .stream()
-                .map(ElementHandle::textContent).toList();
-        return actualLogs;
-    }
-
     @Given("qa-user is put in the penalty box")
     public void qaUserIsPutInThePenaltyBox() {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/testkit/games/{gameId}/players/{playerId}/goToPenaltyBox",
                 null,
                 GameResponseDto.class,
                 game2.id(),
-                qaUser.id());
+                getQaUser().id());
         this.game2 = responseEntity.getBody();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -447,27 +384,6 @@ public class StepsDefs {
                 number);
         this.game2 = responseEntity.getBody();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    public enum IS_OR_NOT {
-        IS("is"),
-        IS_NOT("is not"),
-        ;
-
-        private final String value;
-
-        IS_OR_NOT(String value) {
-            this.value = value;
-        }
-
-        public static IS_OR_NOT fromString(String text) {
-            for (IS_OR_NOT b : IS_OR_NOT.values()) {
-                if (b.value.equalsIgnoreCase(text)) {
-                    return b;
-                }
-            }
-            throw new IllegalArgumentException("No constant with text " + text + " found");
-        }
     }
 
 }

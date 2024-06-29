@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan
 @EnableConfigurationProperties(TestProperties.class)
-public class E2EConfiguration {
+public class E2eTestsSpringConfiguration {
     @Bean
     public TestContext testContext(TestProperties testProperties) {
         return new TestContext(testProperties.getFrontendUrlBase(), testProperties.getBackendUrlBase());

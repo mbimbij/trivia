@@ -7,8 +7,10 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.wnameless.json.unflattener.JsonUnflattener;
 import io.cucumber.datatable.DataTable;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 
@@ -51,4 +53,7 @@ public class TestUtils {
     private static <T> T convertMapToObject(Map<String, String> map, Class<T> clazz) {
         return objectMapper.readValue(JsonUnflattener.unflatten(objectMapper.writeValueAsString(map)), clazz);
     }
+
+
+    public static final Duration pollInterval = Duration.ofSeconds(1);
 }

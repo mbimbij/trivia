@@ -17,13 +17,13 @@ Feature: On-Going Game Page
       Given current player is not in the penalty box
       Then the element with testid "roll-dice" is visible
       And the element with testid "answer-question" is not visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | Game Id\\(value=[0-9]*\\) started |
         | qa-user is the current player     |
       When qa-user clicks on the element with testid "roll-dice"
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | qa-user is the current player  |
         | They have rolled a \\d         |
         | qa-user's new location is \\d+ |
@@ -32,7 +32,7 @@ Feature: On-Going Game Page
       When qa-user clicks on answer A
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is not visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | question .*                       |
         | Answer was correct!!!!            |
         | qa-user now has 1 Gold Coins.     |
@@ -43,14 +43,14 @@ Feature: On-Going Game Page
       When qa-user clicks on answer B
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | question .*                       |
         | Question was incorrectly answered |
         | question .*                       |
       When qa-user clicks on answer B
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is not visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | question .*                       |
         | Answer was correct!!!!            |
         | qa-user now has 1 Gold Coins.     |
@@ -62,7 +62,7 @@ Feature: On-Going Game Page
       And qa-user clicks on answer C
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is not visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | question .*                         |
         | Question was incorrectly answered   |
         | qa-user was sent to the penalty box |
@@ -80,7 +80,7 @@ Feature: On-Going Game Page
       When qa-user clicks on the element with testid "roll-dice"
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is not visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | qa-user is the current player                 |
         | qa-user was sent to the penalty box           |
         | They have rolled a 3                          |
@@ -93,7 +93,7 @@ Feature: On-Going Game Page
       When qa-user clicks on the element with testid "roll-dice"
       Then the element with testid "roll-dice" is not visible
       And the element with testid "answer-question" is visible
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
@@ -104,7 +104,7 @@ Feature: On-Going Game Page
       And a loaded dice returning a 4
       When qa-user clicks on the element with testid "roll-dice"
       And qa-user clicks on answer A
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
@@ -119,7 +119,7 @@ Feature: On-Going Game Page
       When qa-user clicks on the element with testid "roll-dice"
       And qa-user clicks on answer B
       And qa-user clicks on answer B
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
@@ -136,7 +136,7 @@ Feature: On-Going Game Page
       When qa-user clicks on the element with testid "roll-dice"
       And qa-user clicks on answer B
       And qa-user clicks on answer C
-      And displayed game logs ends with logs matching
+      And displayed game logs end with logs matching
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
         | The category is .*                        |
