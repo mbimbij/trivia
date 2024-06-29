@@ -1,4 +1,4 @@
-package com.adaptionsoft.games;
+package com.adaptionsoft.games.utils;
 
 import java.util.List;
 

@@ -1,2 +1,2 @@
-application.frontend-url-base: http://localhost:8110
-application.backend-url-base: http://localhost:8110/api
+test.frontend-url-base: http://localhost:8110
+test.backend-url-base: http://localhost:8110/api

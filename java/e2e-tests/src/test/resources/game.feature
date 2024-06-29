@@ -7,8 +7,6 @@ Feature: On-Going Game Page
     And a logged-in test user on the game-list page
     And qa-user clicks on "goto" button for "test-game-2"
     And i am on the on game page for "test-game-2"
-    And current game is "test-game-2"
-    And current player is "qa-user"
 
   Scenario: Go to game from game-list page
     Then the element with testid "game-header-section" is visible

@@ -1,6 +1,5 @@
-package com.adaptionsoft.games;
+package com.adaptionsoft.games.utils;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
