@@ -51,7 +51,7 @@ Feature: List games
   Rule: Changes on one's own game
     Scenario: create, join & start game created by qa-user updates the UI
 #      TODO use the UI and not API when qa-user creates a game
-      When "qa-user" creates a game named "newGame"
+      When qa-user creates a game named "newGame"
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name        | creator | players | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-2 | qa-user | qa-user | created | null          | null         | already joined | false        | true           |

@@ -1,9 +1,6 @@
 package com.adaptionsoft.games;
 
-import com.adaptionsoft.games.domain.FrontendActor;
-import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.TestProperties;
-import com.adaptionsoft.games.domain.TestRunnerActor;
+import com.adaptionsoft.games.domain.*;
 import com.microsoft.playwright.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,14 +32,44 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public FrontendActor qaFrontendActor(TestContext testContext, Page page){
-        FrontendActor frontendActor = new FrontendActor(testContext.getQaUserId(), testContext.getQaUserName(), page, testContext);
+    public FrontendActor qaFrontendActor(TestContext testContext, Page page, TestProperties testProperties) {
+        FrontendActor frontendActor = new FrontendActor(testContext.getQaUserId(),
+                TestContext.QA_USER_NAME,
+                page,
+                testContext,
+                testProperties.getFrontendUrlBase(),
+                testProperties.getQaUserEmail(),
+                testProperties.getQaUserPassword());
         frontendActor.registerBrowserLogs();
         return frontendActor;
     }
 
     @Bean
-    public TestRunnerActor testRunnerActor(TestContext testContext){
+    public TestRunnerActor testRunnerActor(TestContext testContext) {
         return new TestRunnerActor(testContext.getBackendUrlBase());
+    }
+
+    @Bean
+    public BackendActor qaBackendActor(TestProperties testProperties, TestContext testContext) {
+        return new BackendActor(testProperties.getQaUserId(),
+                TestContext.QA_USER_NAME,
+                testProperties.getBackendUrlBase(),
+                testContext);
+    }
+
+    @Bean
+    public BackendActor backendActor1(TestProperties testProperties, TestContext testContext) {
+        return new BackendActor(TestContext.ID_TEST_USER_1,
+                TestContext.TEST_USER_NAME_1,
+                testProperties.getBackendUrlBase(),
+                testContext);
+    }
+
+    @Bean
+    public BackendActor backendActor2(TestProperties testProperties, TestContext testContext) {
+        return new BackendActor(TestContext.ID_TEST_USER_2,
+                TestContext.TEST_USER_NAME_2,
+                testProperties.getBackendUrlBase(),
+                testContext);
     }
 }

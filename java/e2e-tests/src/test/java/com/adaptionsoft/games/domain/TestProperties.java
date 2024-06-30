@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class TestProperties {
     private String qaUserId;
+    private String qaUserEmail;
     private String qaUserPassword;
     private String frontendUrlBase;
     private String backendUrlBase;

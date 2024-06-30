@@ -2,8 +2,10 @@ package com.adaptionsoft.games.domain;
 
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public abstract class TestActor {
     @NotBlank
@@ -11,7 +13,8 @@ public abstract class TestActor {
     @NotBlank
     protected final String name;
 
-    public abstract void join(GameResponseDto game);
+    public abstract void createGame(String gameName);
+    public abstract void join(int gameId);
     public abstract void start(GameResponseDto game);
     public abstract void rollDice();
 }

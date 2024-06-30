@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.domain;
 
+import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import jakarta.validation.constraints.NotBlank;
@@ -12,22 +13,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BackendActor extends TestActor {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String backendUrlBase;
+    private final TestContext testContext;
 
-    public BackendActor(@NotBlank String id, @NotBlank String name, String backendUrlBase) {
+    public BackendActor(@NotBlank String id, @NotBlank String name, String backendUrlBase, TestContext testContext) {
         super(id, name);
         this.backendUrlBase = backendUrlBase;
-    }
-
-    public static BackendActor from(UserDto userDto, String backendUrlBase) {
-        return new BackendActor(userDto.id(), userDto.name(), backendUrlBase);
+        this.testContext = testContext;
     }
 
     @Override
-    public void join(GameResponseDto game) {
+    public void createGame(String gameName) {
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games",
+                new CreateGameRequestDto(gameName, new UserDto(this.id, this.name)),
+                GameResponseDto.class,
+                this.id);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        testContext.putGameId(gameName, responseEntity.getBody().id());
+    }
+
+    @Override
+    public void join(int gameId) {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/join",
                 new UserDto(this.id, this.name),
                 GameResponseDto.class,
-                game.id(),
+                gameId,
                 this.id);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }

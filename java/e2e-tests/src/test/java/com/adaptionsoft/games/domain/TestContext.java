@@ -1,6 +1,5 @@
 package com.adaptionsoft.games.domain;
 
-import com.adaptionsoft.games.stepdefs.StepDefs;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import jakarta.annotation.PostConstruct;
@@ -8,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RequiredArgsConstructor
 @Getter
 public class TestContext {
-    private final Map<String, GameResponseDto> gamesByName = new HashMap<String, GameResponseDto>();
+    public static final String QA_USER_NAME = "qa-user";
+    public static final String ID_TEST_USER_1 = "id-test-user-1";
+    public static final String TEST_USER_NAME_1 = "test-user-1";
+    public static final String ID_TEST_USER_2 = "id-test-user-2";
+    public static final String TEST_USER_NAME_2 = "test-user-2";
+    private final Map<String, Integer> gameIdByName = new HashMap<>();
     private final String frontendUrlBase;
     private final String backendUrlBase;
     private UserDto qaUser;
@@ -26,39 +31,37 @@ public class TestContext {
     private String qaUserId;
     @Value("${test.qa-user-password}")
     private String qaUserPassword;
-    private final String userName1 = "test-user-1";
-    private final String userName2 = "test-user-2";
-    private final String qaUserName = "qa-user";
-    private final UserDto user1 = new UserDto("id-test-user-1", userName1);
-    private final UserDto user2 = new UserDto("id-test-user-2", userName2);
+    private final UserDto user1 = new UserDto(ID_TEST_USER_1, TEST_USER_NAME_1);
+    private final UserDto user2 = new UserDto(ID_TEST_USER_2, TEST_USER_NAME_2);
 
     @PostConstruct
     void postConstruct() {
-        qaUser = new UserDto(qaUserId, qaUserName);
+        qaUser = new UserDto(qaUserId, QA_USER_NAME);
         usersByName = Map.of(
-                userName1, user1,
-                userName2, user2,
-                qaUserName, qaUser);
+                TEST_USER_NAME_1, user1,
+                TEST_USER_NAME_2, user2,
+                QA_USER_NAME, qaUser);
     }
 
-    public GameResponseDto getGameByName(String gameName) {
-        Assertions.assertThat(gamesByName).containsKey(gameName);
-        return gamesByName.get(gameName);
+    public int getGameIdForName(String gameName) {
+        Assertions.assertThat(gameIdByName).containsKey(gameName);
+        return gameIdByName.get(gameName);
     }
 
-    public void deleteGame(GameResponseDto game, StepDefs stepsDefs) {
-        if (game != null) {
-            stepsDefs.getRestTemplate().delete(stepsDefs.getBackendUrlBase() + "/games/{gameId}", game.id());
-            gamesByName.remove(game.name());
+    public void deleteGame(String gameName) {
+        Integer gameId = gameIdByName.get(gameName);
+        if (gameId != null) {
+            new RestTemplate().delete(backendUrlBase + "/games/{gameId}", gameId);
+            gameIdByName.remove(gameName);
         }
     }
 
-    public void putGame(String gameName1, GameResponseDto game) {
-        gamesByName.put(gameName1, game);
+    public void putGameId(String gameName, int gameId) {
+        gameIdByName.put(gameName, gameId);
     }
 
-    public UserDto getUserDtoByName(String userName, StepDefs stepsDefs) {
-        assertThat(stepsDefs.getUsersByName()).containsKey(userName);
-        return stepsDefs.getUsersByName().get(userName);
+    public UserDto getUserDtoByName(String userName) {
+        assertThat(usersByName).containsKey(userName);
+        return usersByName.get(userName);
     }
 }

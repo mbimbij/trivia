@@ -30,8 +30,6 @@ public class OngoingGameStepDefs {
     private final Page page;
     private final FrontendActor qaActor;
     private final TestRunnerActor testRunnerActor;
-    private String gameName;
-    private GameResponseDto game;
     private Integer gameId;
 
     public static void verifyGameLogsMatch(List<String> actualLogs, List<String> expectedLogs) {
@@ -51,7 +49,7 @@ public class OngoingGameStepDefs {
 
     @When("i am on the on game page for {string}")
     public void iAmOnTheOnGamePageFor(String gameName) {
-        Integer gameId = testContext.getGameByName(gameName).id();
+        Integer gameId = testContext.getGameIdForName(gameName);
         String url = (testProperties.getFrontendUrlBase() + "/games/%d").formatted(gameId);
         PlaywrightAssertions.assertThat(page).hasURL(url);
     }
@@ -102,14 +100,12 @@ public class OngoingGameStepDefs {
 
     @And("a loaded dice returning a {int}")
     public void aLoadedDiceReturningA(int number) {
-        testRunnerActor.setLoadedDiceForGame(game.id(), number);
+        testRunnerActor.setLoadedDiceForGame(gameId, number);
     }
 
     @And("current game is {string}")
     public void currentGameIs(String gameName) {
-        this.gameName = gameName;
-        this.game = testContext.getGameByName(gameName);
-        this.gameId = this.game.id();
+        this.gameId = testContext.getGameIdForName(gameName);
     }
 
     @And("qa-user goes to the game")

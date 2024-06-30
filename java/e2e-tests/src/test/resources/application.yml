@@ -1,2 +1,3 @@
 test.qa-user-id: ${QA_USER_ID}
+test.qa-user-email: ${QA_USER_EMAIL}
 test.qa-user-password: ${QA_USER_PASSWORD}
