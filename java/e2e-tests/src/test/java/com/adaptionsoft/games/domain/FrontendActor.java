@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class FrontendActor extends TestActor {
@@ -143,7 +144,7 @@ public class FrontendActor extends TestActor {
         return page.querySelectorAll(".game-row").stream()
                 .filter(predicate)
                 .map(this::convertToObject)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private DisplayedGame convertToObject(ElementHandle elementHandle) {
@@ -165,17 +166,15 @@ public class FrontendActor extends TestActor {
     }
 
     public void login() {
-        if (!isLoggedIn()) {
-            log.info("%s is logging in".formatted(name));
-            page.navigate(frontendUrlBase + "/authentication");
-            page.locator("css=.firebaseui-idp-password").click();
-            page.locator("css=#ui-sign-in-email-input").fill(email);
-            page.locator("css=.firebaseui-id-submit").click();
-            page.locator("css=#ui-sign-in-password-input").fill(password);
-            page.locator("css=.firebaseui-id-submit").click();
-            page.waitForURL(frontendUrlBase + "/games");
-            setLoggedIn(true);
-        }
+        log.info("%s is logging in".formatted(name));
+        page.navigate(frontendUrlBase + "/authentication");
+        page.locator("css=.firebaseui-idp-password").click();
+        page.locator("css=#ui-sign-in-email-input").fill(email);
+        page.locator("css=.firebaseui-id-submit").click();
+        page.locator("css=#ui-sign-in-password-input").fill(password);
+        page.locator("css=.firebaseui-id-submit").click();
+        page.waitForURL(frontendUrlBase + "/games");
+        setLoggedIn(true);
         log.info("%s is logged in".formatted(name));
     }
 

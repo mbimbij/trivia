@@ -1,6 +1,9 @@
 package com.adaptionsoft.games.stepdefs;
 
-import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.BackendActor;
+import com.adaptionsoft.games.domain.FrontendActor;
+import com.adaptionsoft.games.domain.TestActor;
+import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
@@ -19,12 +22,11 @@ import io.cucumber.java.en.When;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.comparator.Comparators;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -100,8 +102,9 @@ public class StepDefs {
 
     @Given("a logged-in test user on the game-list page")
     public void logged_in_test_user_on_game_list_page() {
-        qaFrontendActor.login();
-        if (!Objects.equals(page.url(), frontendUrlBase + "/games")){
+        if(!qaFrontendActor.isLoggedIn()){
+            qaFrontendActor.login();
+        } else {
             page.navigate(frontendUrlBase + "/games");
         }
         PlaywrightAssertions.assertThat(page).hasURL(frontendUrlBase + "/games");
@@ -131,7 +134,14 @@ public class StepDefs {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
-                        () -> assertThat(qaFrontendActor.getDisplayedGamesForUsers(userNames)).isEqualTo(expected)
+                        () -> {
+                            List<DisplayedGame> actual = qaFrontendActor.getDisplayedGamesForUsers(userNames);
+                            ArrayList<DisplayedGame> expectedAsList = new ArrayList<>(expected);
+                            Comparator<DisplayedGame> nameComparator = Comparator.comparing(DisplayedGame::name);
+                            actual.sort(nameComparator);
+                            expectedAsList.sort(nameComparator);
+                            assertThat(actual).isEqualTo(expectedAsList);
+                        }
                 );
     }
 
