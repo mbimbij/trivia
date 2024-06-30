@@ -30,7 +30,7 @@ Feature: Game Details Page
       | test-game-1 | test-user-1 | test-user-2 | null | true | join           | false | null | true | join           | false | null | null | game started | false |
 
   Scenario Outline: Verify Game Details Displayed - On a newly created game
-    When "<creator>" creates a game named "<game>"
+    When <creator> creates a game named "<game>"
     When i click on game details link for "<game>"
     Then i am on the on game details page for "<game>"
     And the following games are displayed
@@ -57,7 +57,7 @@ Feature: Game Details Page
 
   Scenario Outline: Verify Game Details Displayed - Direct url access and refresh
     When i directly access the game-details page for "<game>"
-    And i refresh
+    And qa-user refresh
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |

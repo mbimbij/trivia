@@ -14,20 +14,20 @@ Feature: List games
 
   Rule: Changes on another user's game
     Scenario: another player creating a game updates the display
-      When "test-user-1" creates a game named "newGame"
+      When test-user-1 creates a game named "newGame"
       Then qa-user sees the following games, filtered for creators "test-user-1, qa-user"
         | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-1 | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
         | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
         | newGame     | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
       And no error is displayed in the console
-      When "test-user-1" deletes the game named "test-game-1"
+      When test-user-1 deletes the game named "test-game-1"
       Then qa-user sees the following games, filtered for creators "test-user-1, qa-user"
         | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
         | newGame     | test-user-1 | test-user-1 | created | null          | true         | join           | false        | false          |
       And no error is displayed in the console
-      When "test-user-1" deletes the game named "newGame"
+      When test-user-1 deletes the game named "newGame"
       Then qa-user sees the following games, filtered for creators "test-user-1, qa-user"
         | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |

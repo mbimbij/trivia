@@ -2,7 +2,6 @@ package com.adaptionsoft.games.domain;
 
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.microsoft.playwright.ConsoleMessage;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Locator;
@@ -51,14 +50,9 @@ public class FrontendActor extends TestActor {
     }
 
     public void registerBrowserLogs() {
-        this.page.onConsoleMessage(e -> isAdd(e));
+        this.page.onConsoleMessage(currentScenarioConsoleMessages::add);
     }
 
-    private boolean isAdd(ConsoleMessage e) {
-        return currentScenarioConsoleMessages.add(e);
-    }
-
-    @Override
     public void createGame(String gameName) {
         page.getByTestId("create-game-name").fill(gameName);
         Locator button = page.getByTestId("create-game-validate");
@@ -74,8 +68,8 @@ public class FrontendActor extends TestActor {
     }
 
     @Override
-    public void start(GameResponseDto game) {
-        String startButtonTestid = "%s-button-%d".formatted("start", game.id());
+    public void start(int gameId) {
+        String startButtonTestid = "%s-button-%d".formatted("start", gameId);
         clickByTestid(startButtonTestid);
     }
 

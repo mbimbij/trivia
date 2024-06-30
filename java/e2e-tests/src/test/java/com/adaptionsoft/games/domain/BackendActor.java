@@ -4,11 +4,11 @@ import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.context.event.ContextStartedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,14 +23,15 @@ public class BackendActor extends TestActor {
         this.testContext = testContext;
     }
 
-    @Override
-    public void createGame(String gameName) {
+    public GameResponseDto createGame(String gameName) {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games",
                 new CreateGameRequestDto(gameName, new UserDto(this.id, this.name)),
                 GameResponseDto.class,
                 this.id);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        testContext.putGameId(gameName, responseEntity.getBody().id());
+        GameResponseDto gameResponseDto = responseEntity.getBody();
+        testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
+        return gameResponseDto;
     }
 
     @Override
@@ -44,11 +45,12 @@ public class BackendActor extends TestActor {
     }
 
     @Override
-    public void start(GameResponseDto game) {
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/start",
+    public void start(int gameId) {
+        String url = backendUrlBase + "/games/{gameId}/players/{userId}/start";
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
                 new UserDto(this.id, this.name),
                 GameResponseDto.class,
-                game.id(),
+                gameId,
                 this.id);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -58,4 +60,9 @@ public class BackendActor extends TestActor {
         throw new UnsupportedOperationException();
     }
 
+    public void deleteGame(String gameName) {
+        int gameId = testContext.getGameIdForName(gameName);
+        restTemplate.delete(backendUrlBase + "/games/{gameId}", gameId);
+        testContext.removeGameId(gameName);
+    }
 }

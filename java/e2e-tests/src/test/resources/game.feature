@@ -3,9 +3,9 @@ Feature: On-Going Game Page
   Background:
     Given previous test data cleared
     And 2 existing games
-    And "test-game-2" started
-    And a logged-in test user on the game-list page
     And current game is "test-game-2"
+    And a logged-in test user on the game-list page
+    And game started
     And qa-user goes to the game
     And i am on the on game page for "test-game-2"
 

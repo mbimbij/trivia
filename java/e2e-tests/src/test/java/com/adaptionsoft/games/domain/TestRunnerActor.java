@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestRunnerActor {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String backendUrlBase;
+    private final TestContext testContext;
 
     public void setLoadedDiceForGame(int gameId, int number) {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(
@@ -30,5 +31,20 @@ public class TestRunnerActor {
                 gameId,
                 qaUserId);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    public void deleteTestGames() {
+        restTemplate.delete(backendUrlBase + "/games/tests");
+        deleteGame(TestContext.TEST_GAME_NAME_1);
+        deleteGame(TestContext.TEST_GAME_NAME_2);
+        deleteGame(TestContext.NEW_TEST_GAME_NAME);
+    }
+
+    private void deleteGame(String gameName) {
+        Integer gameId = testContext.getGameIdForName(gameName);
+        if(gameId != null){
+            restTemplate.delete(backendUrlBase + "/games/{gameId}", gameId);
+            testContext.removeGameId(gameName);
+        }
     }
 }

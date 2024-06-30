@@ -1,11 +1,7 @@
 package com.adaptionsoft.games.stepdefs;
 
-import com.adaptionsoft.games.domain.FrontendActor;
-import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.TestProperties;
-import com.adaptionsoft.games.domain.TestRunnerActor;
+import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
@@ -13,7 +9,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.Duration;
 import java.util.List;
@@ -22,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.awaitility.Awaitility.await;
 
-@RequiredArgsConstructor
 public class OngoingGameStepDefs {
 
     private final TestContext testContext;
@@ -30,7 +25,25 @@ public class OngoingGameStepDefs {
     private final Page page;
     private final FrontendActor qaActor;
     private final TestRunnerActor testRunnerActor;
+    private final BackendActor backendActor1;
+    private final BackendActor qaBackendActor;
     private Integer gameId;
+
+    public OngoingGameStepDefs(TestContext testContext,
+                               TestProperties testProperties,
+                               Page page,
+                               FrontendActor qaActor,
+                               TestRunnerActor testRunnerActor,
+                               @Qualifier("backendActor1") BackendActor backendActor1,
+                               @Qualifier("qaBackendActor") BackendActor qaBackendActor) {
+        this.testContext = testContext;
+        this.testProperties = testProperties;
+        this.page = page;
+        this.qaActor = qaActor;
+        this.testRunnerActor = testRunnerActor;
+        this.backendActor1 = backendActor1;
+        this.qaBackendActor = qaBackendActor;
+    }
 
     public static void verifyGameLogsMatch(List<String> actualLogs, List<String> expectedLogs) {
         assertSoftly(soft -> {
@@ -45,6 +58,13 @@ public class OngoingGameStepDefs {
                 (actualLog, expectedLog) -> {
                     assertThat(actualLog).matches(expectedLog);
                 });
+    }
+
+    @Given("game started")
+    public void started() {
+        // TODO insert a started game in database directly
+        backendActor1.join(gameId);
+        qaBackendActor.start(gameId);
     }
 
     @When("i am on the on game page for {string}")
@@ -115,7 +135,7 @@ public class OngoingGameStepDefs {
 
     @Given("qa-user is put in the penalty box")
     public void qaUserIsPutInThePenaltyBox() {
-        testRunnerActor.putQaUserInPenaltyBox(gameId, testContext.getQaUserId());
+        testRunnerActor.putQaUserInPenaltyBox(gameId, testProperties.getQaUserId());
     }
 
 }
