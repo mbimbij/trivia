@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.comparator.Comparators;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -37,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @Slf4j
-public class StepDefs {
+public class GameListStepDefs {
 
     @Getter
     private final RestTemplate restTemplate = new RestTemplate();
@@ -61,12 +60,12 @@ public class StepDefs {
     @Value("${test.backend-url-base}")
     private String backendUrlBase;
 
-    public StepDefs(Page page,
-                    FrontendActor qaFrontendActor,
-                    @Qualifier("qaBackendActor") BackendActor qaBackendActor,
-                    @Qualifier("backendActor1") BackendActor backendActor1,
-                    @Qualifier("backendActor2") BackendActor backendActor2,
-                    TestContext testContext) {
+    public GameListStepDefs(Page page,
+                            FrontendActor qaFrontendActor,
+                            @Qualifier("qaBackendActor") BackendActor qaBackendActor,
+                            @Qualifier("backendActor1") BackendActor backendActor1,
+                            @Qualifier("backendActor2") BackendActor backendActor2,
+                            TestContext testContext) {
         this.page = page;
         this.qaFrontendActor = qaFrontendActor;
         this.qaBackendActor = qaBackendActor;
@@ -105,9 +104,8 @@ public class StepDefs {
         if(!qaFrontendActor.isLoggedIn()){
             qaFrontendActor.login();
         } else {
-            page.navigate(frontendUrlBase + "/games");
+            qaFrontendActor.gotoGamesPageByUrl();
         }
-        PlaywrightAssertions.assertThat(page).hasURL(frontendUrlBase + "/games");
     }
 
     @Given("2 existing games")
@@ -136,11 +134,7 @@ public class StepDefs {
                 .untilAsserted(
                         () -> {
                             List<DisplayedGame> actual = qaFrontendActor.getDisplayedGamesForUsers(userNames);
-                            ArrayList<DisplayedGame> expectedAsList = new ArrayList<>(expected);
-                            Comparator<DisplayedGame> nameComparator = Comparator.comparing(DisplayedGame::name);
-                            actual.sort(nameComparator);
-                            expectedAsList.sort(nameComparator);
-                            assertThat(actual).isEqualTo(expectedAsList);
+                            assertThat(actual).isEqualTo(expected);
                         }
                 );
     }
@@ -153,7 +147,6 @@ public class StepDefs {
                         () -> assertThat(qaFrontendActor.getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
                 );
     }
-
 
     public void userJoinsGameFromBackend(String userName, String gameName) {
         UserDto user = testContext.getUserDtoByName(userName);
@@ -224,11 +217,7 @@ public class StepDefs {
 
     @When("qa-user clicks on {string} button for {string}")
     public void qaUserClicksOnButtonForGame(String buttonName, String gameName) {
-        int gameId = testContext.getGameIdForName(gameName);
-        Locator button = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
-        PlaywrightAssertions.assertThat(button).isVisible();
-        PlaywrightAssertions.assertThat(button).isEnabled();
-        button.click();
+        qaFrontendActor.clickOnButtonForGame_GameList(buttonName, gameName);
     }
 
     @Given("previous test data cleared")
@@ -285,14 +274,6 @@ public class StepDefs {
     @ParameterType("(is|is not)")
     public IS_OR_NOT isOrNot(String stringValue) {
         return IS_OR_NOT.fromString(stringValue);
-    }
-
-    @When("qa-user clicks on the element with testid {string}")
-    public void qaUserClicksOnTheElementWithTestid(String testId) {
-        Locator locator = page.getByTestId(testId);
-        PlaywrightAssertions.assertThat(locator).isVisible();
-        PlaywrightAssertions.assertThat(locator).isEnabled();
-        locator.click();
     }
 
 }

@@ -27,18 +27,20 @@ public class FrontendActor extends TestActor {
     private final String frontendUrlBase;
     private final String email;
     private final String password;
+    private final TestContext testContext;
 
     public FrontendActor(@NotBlank String id,
                          @NotBlank String name,
                          Page page,
                          String frontendUrlBase,
                          String email,
-                         String password) {
+                         String password, TestContext testContext) {
         super(id, name);
         this.page = page;
         this.frontendUrlBase = frontendUrlBase;
         this.email = email;
         this.password = password;
+        this.testContext = testContext;
     }
 
     public List<String> getErrorLogs() {
@@ -83,6 +85,15 @@ public class FrontendActor extends TestActor {
         PlaywrightAssertions.assertThat(locator).isVisible();
         PlaywrightAssertions.assertThat(locator).isEnabled();
         locator.click();
+    }
+
+    // TODO refacto vers un POM (Page Object Model)
+    public void clickOnButtonForGame_GameList(String buttonName, String gameName) {
+        int gameId = testContext.getGameIdForName(gameName);
+        Locator button = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
+        PlaywrightAssertions.assertThat(button).isVisible();
+        PlaywrightAssertions.assertThat(button).isEnabled();
+        button.click();
     }
 
     private void clickByTestid(String buttonTestId) {
@@ -184,5 +195,10 @@ public class FrontendActor extends TestActor {
 
     public void clearConsoleLogs() {
         currentScenarioConsoleMessages.clear();
+    }
+
+    public void gotoGamesPageByUrl() {
+        page.navigate(frontendUrlBase + "/games");
+        page.waitForURL(frontendUrlBase + "/games");
     }
 }

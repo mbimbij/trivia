@@ -5,6 +5,11 @@ import com.microsoft.playwright.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.ContextStoppedEvent;
+import org.springframework.context.event.EventListener;
+
+import java.nio.file.Path;
 
 @ComponentScan
 @EnableConfigurationProperties(TestProperties.class)
@@ -26,7 +31,10 @@ public class E2eTestsSpringConfiguration {
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
-        Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
+        Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
+                .setRecordVideoDir(Path.of("videos"))
+                .setRecordVideoSize(640, 480)
+                ;
         BrowserContext newContext = browser.newContext(contextOptions);
         return newContext.newPage();
     }
@@ -38,7 +46,8 @@ public class E2eTestsSpringConfiguration {
                 page,
                 testProperties.getFrontendUrlBase(),
                 testProperties.getQaUserEmail(),
-                testProperties.getQaUserPassword());
+                testProperties.getQaUserPassword(),
+                testContext);
         frontendActor.registerBrowserLogs();
         return frontendActor;
     }
@@ -70,5 +79,9 @@ public class E2eTestsSpringConfiguration {
                 TestContext.TEST_USER_NAME_2,
                 testProperties.getBackendUrlBase(),
                 testContext);
+    }
+    @EventListener
+    public void handleContextRefreshEvent(ContextRefreshedEvent event) {
+        System.out.println("Context Closed Event received.");
     }
 }

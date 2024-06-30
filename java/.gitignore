@@ -3,7 +3,7 @@ target/
 .attach_*
 *.dtmp
 *.bkp
-java/e2e-tests/videos
+e2e-tests/videos
 **/*.env
 **/creds
 backend/src/main/resources/static

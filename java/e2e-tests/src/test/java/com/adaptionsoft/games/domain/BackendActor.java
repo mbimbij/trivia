@@ -4,6 +4,8 @@ import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.context.event.ContextStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -55,4 +57,5 @@ public class BackendActor extends TestActor {
     public void rollDice() {
         throw new UnsupportedOperationException();
     }
+
 }
