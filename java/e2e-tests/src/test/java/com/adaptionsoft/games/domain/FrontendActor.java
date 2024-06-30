@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.domain;
 
 import com.adaptionsoft.games.domain.views.DisplayedGame;
-import com.adaptionsoft.games.stepdefs.StepDefs;
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.microsoft.playwright.ConsoleMessage;
@@ -19,7 +18,6 @@ import java.util.function.Predicate;
 @Slf4j
 public class FrontendActor extends TestActor {
     private final Page page;
-    private final TestContext testContext;
     private final List<ConsoleMessage> currentScenarioConsoleMessages = new ArrayList<>();
     private final String ROLL_DICE_BUTTON_TESTID = "roll-dice";
     private final String ANSWER_QUESTION_SECTION_TESTID = "answer-question";
@@ -29,10 +27,14 @@ public class FrontendActor extends TestActor {
     private final String email;
     private final String password;
 
-    public FrontendActor(@NotBlank String id, @NotBlank String name, Page page, TestContext testContext, String frontendUrlBase, String email, String password) {
+    public FrontendActor(@NotBlank String id,
+                         @NotBlank String name,
+                         Page page,
+                         String frontendUrlBase,
+                         String email,
+                         String password) {
         super(id, name);
         this.page = page;
-        this.testContext = testContext;
         this.frontendUrlBase = frontendUrlBase;
         this.email = email;
         this.password = password;

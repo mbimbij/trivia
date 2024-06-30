@@ -18,6 +18,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,17 +34,11 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+@Slf4j
 public class StepDefs {
-
-    private static final Logger log = LoggerFactory.getLogger(StepDefs.class);
 
     @Getter
     private final RestTemplate restTemplate = new RestTemplate();
-
-    private final String userName1 = "test-user-1";
-    private final String userName2 = "test-user-2";
-    private final UserDto user1 = new UserDto("id-test-user-1", userName1);
-    private final UserDto user2 = new UserDto("id-test-user-2", userName2);
 
     private final Page page;
     private final FrontendActor qaFrontendActor;
@@ -115,10 +110,10 @@ public class StepDefs {
     @Given("2 existing games")
     public void games() {
         String gameName1 = "test-game-1";
-        game1 = createGame(gameName1, user1);
+        game1 = createGame(gameName1, backendActor1.toUserDto());
         testContext.putGameId(gameName1, game1.id());
         String gameName2 = "test-game-2";
-        game2 = createGame(gameName2, testContext.getQaUser());
+        game2 = createGame(gameName2, qaBackendActor.toUserDto());
         testContext.putGameId(gameName2, game2.id());
     }
 

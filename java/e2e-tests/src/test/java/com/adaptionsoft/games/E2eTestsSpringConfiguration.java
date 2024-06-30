@@ -36,7 +36,6 @@ public class E2eTestsSpringConfiguration {
         FrontendActor frontendActor = new FrontendActor(testContext.getQaUserId(),
                 TestContext.QA_USER_NAME,
                 page,
-                testContext,
                 testProperties.getFrontendUrlBase(),
                 testProperties.getQaUserEmail(),
                 testProperties.getQaUserPassword());
