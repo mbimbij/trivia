@@ -24,7 +24,7 @@ public class OngoingGameStepDefs {
     private final TestProperties testProperties;
     private final Page page;
     private final FrontendActor qaActor;
-    private final TestRunnerActor testRunnerActor;
+    private final Janitor testRunnerActor;
     private final BackendActor backendActor1;
     private final BackendActor qaBackendActor;
     private Integer gameId;
@@ -33,7 +33,7 @@ public class OngoingGameStepDefs {
                                TestProperties testProperties,
                                Page page,
                                FrontendActor qaActor,
-                               TestRunnerActor testRunnerActor,
+                               Janitor testRunnerActor,
                                @Qualifier("backendActor1") BackendActor backendActor1,
                                @Qualifier("qaBackendActor") BackendActor qaBackendActor) {
         this.testContext = testContext;

@@ -6,10 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import static com.adaptionsoft.games.domain.TestContext.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
-public class TestRunnerActor {
+public class Janitor {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String backendUrlBase;
     private final TestContext testContext;
@@ -35,13 +36,12 @@ public class TestRunnerActor {
 
     public void deleteTestGames() {
         restTemplate.delete(backendUrlBase + "/games/tests");
-        deleteGame(TestContext.TEST_GAME_NAME_1);
-        deleteGame(TestContext.TEST_GAME_NAME_2);
-        deleteGame(TestContext.CREATED_GAME_NAME);
+        deleteGame(TEST_GAME_NAME_1, testContext.getGameIdForName(TEST_GAME_NAME_1));
+        deleteGame(TEST_GAME_NAME_2, testContext.getGameIdForName(TEST_GAME_NAME_2));
+        deleteGame(CREATED_GAME_NAME, testContext.getGameIdForName(CREATED_GAME_NAME));
     }
 
-    private void deleteGame(String gameName) {
-        Integer gameId = testContext.getGameIdForName(gameName);
+    private void deleteGame(String gameName, Integer gameId) {
         if(gameId != null){
             restTemplate.delete(backendUrlBase + "/games/{gameId}", gameId);
             testContext.removeGameId(gameName);

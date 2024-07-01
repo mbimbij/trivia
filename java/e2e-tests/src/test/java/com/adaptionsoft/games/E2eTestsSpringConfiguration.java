@@ -37,45 +37,45 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public FrontendActor qaFrontendActor(TestContext testContext, Page page, TestProperties testProperties) {
+    public FrontendActor qaFrontendActor(Page page, TestProperties testProperties) {
         FrontendActor frontendActor = new FrontendActor(testProperties.getQaUserId(),
                 TestContext.QA_FRONTEND_USER_NAME,
                 page,
                 testProperties.getFrontendUrlBase(),
                 testProperties.getQaUserEmail(),
-                testProperties.getQaUserPassword(),
-                testContext);
+                testProperties.getQaUserPassword()
+        );
         frontendActor.registerBrowserLogs();
         return frontendActor;
     }
 
     @Bean
-    public TestRunnerActor testRunnerActor(TestContext testContext, TestProperties testProperties) {
-        return new TestRunnerActor(testProperties.getBackendUrlBase(), testContext);
+    public Janitor testRunnerActor(TestContext testContext, TestProperties testProperties) {
+        return new Janitor(testProperties.getBackendUrlBase(), testContext);
     }
 
     @Bean
-    public BackendActor qaBackendActor(TestProperties testProperties, TestContext testContext) {
+    public BackendActor qaBackendActor(TestProperties testProperties) {
         return new BackendActor(testProperties.getQaUserId(),
                 TestContext.QA_FRONTEND_USER_NAME,
-                testProperties.getBackendUrlBase(),
-                testContext);
+                testProperties.getBackendUrlBase()
+        );
     }
 
     @Bean
-    public BackendActor backendActor1(TestProperties testProperties, TestContext testContext) {
+    public BackendActor backendActor1(TestProperties testProperties) {
         return new BackendActor(TestContext.ID_TEST_USER_1,
                 TestContext.TEST_USER_NAME_1,
-                testProperties.getBackendUrlBase(),
-                testContext);
+                testProperties.getBackendUrlBase()
+        );
     }
 
     @Bean
-    public BackendActor backendActor2(TestProperties testProperties, TestContext testContext) {
+    public BackendActor backendActor2(TestProperties testProperties) {
         return new BackendActor(TestContext.ID_TEST_USER_2,
                 TestContext.TEST_USER_NAME_2,
-                testProperties.getBackendUrlBase(),
-                testContext);
+                testProperties.getBackendUrlBase()
+        );
     }
 
     @Bean

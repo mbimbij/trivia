@@ -26,20 +26,18 @@ public class FrontendActor extends TestActor {
     private final String frontendUrlBase;
     private final String email;
     private final String password;
-    private final TestContext testContext;
 
     public FrontendActor(@NotBlank String id,
                          @NotBlank String name,
                          Page page,
                          String frontendUrlBase,
                          String email,
-                         String password, TestContext testContext) {
+                         String password) {
         super(id, name);
         this.page = page;
         this.frontendUrlBase = frontendUrlBase;
         this.email = email;
         this.password = password;
-        this.testContext = testContext;
     }
 
     public List<String> getErrorLogs() {
@@ -81,9 +79,8 @@ public class FrontendActor extends TestActor {
         locator.click();
     }
 
-    // TODO refacto vers un POM (Page Object Model)
-    public void clickOnButtonForGame_GameList(String buttonName, String gameName) {
-        int gameId = testContext.getGameIdForName(gameName);
+    // TODO refacto vers un POM (Page Object Model) par exemple
+    public void clickOnButtonForGame_GameList(String buttonName, int gameId) {
         Locator button = page.getByTestId("%s-button-%d".formatted(buttonName, gameId));
         PlaywrightAssertions.assertThat(button).isVisible();
         PlaywrightAssertions.assertThat(button).isEnabled();

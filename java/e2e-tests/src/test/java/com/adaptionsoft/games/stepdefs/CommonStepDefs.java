@@ -2,6 +2,7 @@ package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
+import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.java.After;
@@ -15,6 +16,7 @@ import io.cucumber.java.en.When;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,14 +24,14 @@ import static org.awaitility.Awaitility.await;
 
 public class CommonStepDefs {
     private final FrontendActor qaFrontendActor;
-    private final TestRunnerActor testRunnerActor;
+    private final Janitor testRunnerActor;
     private final TestContext testContext;
     private final ActorService actorService;
     private final BackendActor backendActor1;
     private final BackendActor qaBackendActor;
 
     public CommonStepDefs(FrontendActor qaFrontendActor,
-                          TestRunnerActor testRunnerActor,
+                          Janitor testRunnerActor,
                           TestContext testContext,
                           ActorService actorService,
                           BackendActor backendActor1,
@@ -59,8 +61,10 @@ public class CommonStepDefs {
 
     @Given("2 existing games")
     public void games() {
-        backendActor1.createGame(TestContext.TEST_GAME_NAME_1);
-        qaBackendActor.createGame(TestContext.TEST_GAME_NAME_2);
+        GameResponseDto gameResponseDto = backendActor1.createGame(TestContext.TEST_GAME_NAME_1);
+        testContext.putGameId(TestContext.TEST_GAME_NAME_1, Objects.requireNonNull(gameResponseDto).id());
+        GameResponseDto gameResponseDto2 = qaBackendActor.createGame(TestContext.TEST_GAME_NAME_2);
+        testContext.putGameId(TestContext.TEST_GAME_NAME_2, Objects.requireNonNull(gameResponseDto2).id());
     }
 
     @Then("the following games are displayed")
