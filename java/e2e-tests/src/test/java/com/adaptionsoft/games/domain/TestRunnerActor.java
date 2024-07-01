@@ -37,7 +37,7 @@ public class TestRunnerActor {
         restTemplate.delete(backendUrlBase + "/games/tests");
         deleteGame(TestContext.TEST_GAME_NAME_1);
         deleteGame(TestContext.TEST_GAME_NAME_2);
-        deleteGame(TestContext.NEW_TEST_GAME_NAME);
+        deleteGame(TestContext.CREATED_GAME_NAME);
     }
 
     private void deleteGame(String gameName) {

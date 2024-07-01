@@ -16,7 +16,7 @@ public class TestContext {
 
     public static final String TEST_GAME_NAME_1 = "test-game-1";
     public static final String TEST_GAME_NAME_2 = "test-game-2";
-    public static final String NEW_TEST_GAME_NAME = "newGame";
+    public static final String CREATED_GAME_NAME = "newGame";
 
     private final Map<String, Integer> gameIdByName = new HashMap<>();
 
