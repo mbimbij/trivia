@@ -1,4 +1,4 @@
-package com.adaptionsoft.games;
+package com.adaptionsoft.games.utils;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,10 +9,14 @@ import com.github.wnameless.json.unflattener.JsonUnflattener;
 import io.cucumber.datatable.DataTable;
 import lombok.SneakyThrows;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 
 public class TestUtils {
+    public static final Duration pollInterval = Duration.ofMillis(500);
+
+    // TODO adresser les warnings
     private static ObjectMapper objectMapper = new ObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
             .registerModule(new JavaTimeModule())
@@ -20,6 +24,7 @@ public class TestUtils {
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true)
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_VALUES, true);
+
 
     @SneakyThrows
     public static <T> T convertDatatableSingleObject(DataTable dataTable, Class<T> clazz) {
@@ -51,4 +56,5 @@ public class TestUtils {
     private static <T> T convertMapToObject(Map<String, String> map, Class<T> clazz) {
         return objectMapper.readValue(JsonUnflattener.unflatten(objectMapper.writeValueAsString(map)), clazz);
     }
+
 }

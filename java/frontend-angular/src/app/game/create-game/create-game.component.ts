@@ -14,12 +14,16 @@ import {Observable} from "rxjs";
   ],
   template: `
     <label for="newGameName">Create Game</label>
-    <input #newGameName
-           type="text" id="newGameName"
-           required minlength="1" maxlength="100" size="20"
-           (keyup.enter)="createGame(newGameName.value)"
+    <input
+      [attr.data-testid]="'create-game-name'"
+      #newGameName
+      type="text" id="newGameName"
+      required minlength="1" maxlength="100" size="20"
+      (keyup.enter)="createGame(newGameName.value)"
     />
-    <button (click)="createGame(newGameName.value)">create</button>
+    <button
+      [attr.data-testid]="'create-game-validate'"
+      (click)="createGame(newGameName.value)">create</button>
   `,
   styleUrl: './create-game.component.css'
 })

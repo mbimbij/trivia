@@ -1,4 +1,4 @@
-package com.adaptionsoft.games;
+package com.adaptionsoft.games.domain.views;
 
 public record DisplayedGame(
         String name,

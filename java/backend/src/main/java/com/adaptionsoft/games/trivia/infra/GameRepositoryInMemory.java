@@ -9,11 +9,13 @@ import java.util.*;
 
 @RequiredArgsConstructor
 public class GameRepositoryInMemory implements GameRepository {
-    private final Set<Game> games = new HashSet<>();
+    private final List<Game> games = new ArrayList<>();
 
     @Override
     public void save(Game game) {
-        games.add(game);
+        if (!games.contains(game)) {
+            games.add(game);
+        }
     }
 
     @Override
