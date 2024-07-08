@@ -30,9 +30,4 @@ public class TypeMappers {
     public AnswerCode answerCode(String stringValue) {
         return AnswerCode.valueOf(stringValue);
     }
-
-    @ParameterType("(is|is not)")
-    public IS_OR_NOT isOrNot(String stringValue) {
-        return IS_OR_NOT.fromString(stringValue);
-    }
 }

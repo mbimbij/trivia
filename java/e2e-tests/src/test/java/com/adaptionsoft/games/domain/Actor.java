@@ -4,18 +4,19 @@ import com.adaptionsoft.games.trivia.web.UserDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @RequiredArgsConstructor
-public abstract class TestActor {
+public class Actor {
     @NotBlank
     protected final String id;
     @NotBlank
     protected final String name;
+    @Getter
+    @Setter
+    protected boolean isLoggedIn = false;
 
-    public abstract void join(int gameId);
-    public abstract void start(int game);
-    public abstract void rollDice();
     public UserDto toUserDto(){
         return new UserDto(id, name);
     }

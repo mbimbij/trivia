@@ -1,6 +1,9 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.pageObjects.Backend;
+import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
+import com.adaptionsoft.games.domain.pageObjects.OngoingGamePage;
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Page;
@@ -9,6 +12,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.Duration;
@@ -18,32 +23,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.awaitility.Awaitility.await;
 
+@Slf4j
+@RequiredArgsConstructor
 public class OngoingGameStepDefs {
 
     private final TestContext testContext;
     private final TestProperties testProperties;
     private final Page page;
     private final FrontendActor qaActor;
-    private final Janitor testRunnerActor;
-    private final BackendActor backendActor1;
-    private final BackendActor qaBackendActor;
+    private final Janitor janitor;
+    private final ActorService actorService;
+    private final GameRowActions gameRowActions;
+    private final OngoingGamePage ongoingGamePage;
+    private final Backend backend;
     private Integer gameId;
-
-    public OngoingGameStepDefs(TestContext testContext,
-                               TestProperties testProperties,
-                               Page page,
-                               FrontendActor qaActor,
-                               Janitor testRunnerActor,
-                               @Qualifier("backendActor1") BackendActor backendActor1,
-                               @Qualifier("qaBackendActor") BackendActor qaBackendActor) {
-        this.testContext = testContext;
-        this.testProperties = testProperties;
-        this.page = page;
-        this.qaActor = qaActor;
-        this.testRunnerActor = testRunnerActor;
-        this.backendActor1 = backendActor1;
-        this.qaBackendActor = qaBackendActor;
-    }
 
     public static void verifyGameLogsMatch(List<String> actualLogs, List<String> expectedLogs) {
         assertSoftly(soft -> {
@@ -63,8 +56,9 @@ public class OngoingGameStepDefs {
     @Given("game started")
     public void started() {
         // TODO insert a started game in database directly
-        backendActor1.join(gameId);
-        qaBackendActor.start(gameId);
+        assertThat(gameId).isNotNull();
+        backend.joinGame(gameId, actorService.getBackendActor1().toUserDto());
+        backend.startGame(gameId, actorService.getQaBackendActor().getId());
     }
 
     @When("i am on the on game page for {string}")
@@ -76,27 +70,27 @@ public class OngoingGameStepDefs {
 
     @And("qa-user can see the element with testid {string}")
     public void theFollowingElementsAreVisible(String testId) {
-        qaActor.verifyCanSeeElementWithTestid(testId);
+        ongoingGamePage.verifyCanSeeElementWithTestid(testId);
     }
 
     @And("qa-user can see the roll dice button")
     public void qaUserCanSeeTheRollDiceButton() {
-        qaActor.verifyCanSeeRollDiceButton();
+        ongoingGamePage.verifyCanSeeRollDiceButton();
     }
 
     @And("qa-user can see the answer question section")
     public void qaUserCanSeeTheAnswerQuestionSection() {
-        qaActor.verifyCanSeeAnswerQuestionSection();
+        ongoingGamePage.verifyCanSeeAnswerQuestionSection();
     }
 
     @And("qa-user cannot see the roll dice button")
     public void qaUserCannotSeeTheRollDiceButton() {
-        qaActor.verifyCannotSeeRollDiceButton();
+        ongoingGamePage.verifyCannotSeeRollDiceButton();
     }
 
     @Then("qa-user answers {answerCode}")
     public void qaUserClicksOnTheAnswer(AnswerCode answerCode) {
-        qaActor.answerQuestionWith(answerCode);
+        ongoingGamePage.answerQuestionWith(answerCode, qaActor);
     }
 
     @And("qa-user sees game logs ending as following")
@@ -104,23 +98,23 @@ public class OngoingGameStepDefs {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
-                        () -> verifyGameLogsMatch(qaActor.getGameLogs(), expectedLogs)
+                        () -> verifyGameLogsMatch(ongoingGamePage.getGameLogs(), expectedLogs)
                 );
     }
 
     @When("qa-user rolls the dice")
     public void qaUserRollsTheDice() {
-        qaActor.rollDice();
+        ongoingGamePage.rollDice();
     }
 
     @And("qa-user cannot see the answer question section")
     public void qaUserCannotSeeTheAnswerQuestionSection() {
-        qaActor.verifyCannotSeeAnswerQuestionSection();
+        ongoingGamePage.verifyCannotSeeAnswerQuestionSection();
     }
 
     @And("a loaded dice returning a {int}")
     public void aLoadedDiceReturningA(int number) {
-        testRunnerActor.setLoadedDiceForGame(gameId, number);
+        janitor.setLoadedDiceForGame(gameId, number);
     }
 
     @And("current game is {string}")
@@ -130,12 +124,12 @@ public class OngoingGameStepDefs {
 
     @And("qa-user goes to the game")
     public void qaUserGoesToTheGame() {
-        qaActor.gotoGame(gameId);
+        gameRowActions.goTo(gameId);
     }
 
     @Given("qa-user is put in the penalty box")
     public void qaUserIsPutInThePenaltyBox() {
-        testRunnerActor.putQaUserInPenaltyBox(gameId, testProperties.getQaUserId());
+        janitor.putQaUserInPenaltyBox(gameId, testProperties.getQaUserId());
     }
 
 }

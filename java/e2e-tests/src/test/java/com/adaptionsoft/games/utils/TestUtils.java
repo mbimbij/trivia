@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class TestUtils {
     public static final Duration pollInterval = Duration.ofMillis(500);
+    public static final Duration maxWaitDuration = Duration.ofSeconds(5);
 
     // TODO adresser les warnings
     private static ObjectMapper objectMapper = new ObjectMapper()

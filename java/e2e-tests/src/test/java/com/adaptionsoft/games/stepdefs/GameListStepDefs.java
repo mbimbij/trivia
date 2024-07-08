@@ -1,16 +1,14 @@
 package com.adaptionsoft.games.stepdefs;
 
-import com.adaptionsoft.games.domain.BackendActor;
-import com.adaptionsoft.games.domain.FrontendActor;
-import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -21,31 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @Slf4j
+@RequiredArgsConstructor
 public class GameListStepDefs {
 
-    private final FrontendActor qaFrontendActor;
-    private final BackendActor qaBackendActor;
-    private final BackendActor backendActor1;
     private final TestContext testContext;
-
-    public GameListStepDefs(FrontendActor qaFrontendActor,
-                            @Qualifier("qaBackendActor") BackendActor qaBackendActor,
-                            @Qualifier("backendActor1") BackendActor backendActor1,
-                            TestContext testContext) {
-        this.qaFrontendActor = qaFrontendActor;
-        this.qaBackendActor = qaBackendActor;
-        this.backendActor1 = backendActor1;
-        this.testContext = testContext;
-    }
-
-    @Given("a logged-in test user on the game-list page")
-    public void logged_in_test_user_on_game_list_page() {
-        if(!qaFrontendActor.isLoggedIn()){
-            qaFrontendActor.login();
-        } else {
-            qaFrontendActor.gotoGamesPageByUrl();
-        }
-    }
+    private final GamesListPage gamesListPage;
+    private final GameRowActions gameRowActions;
+    private final ActorService actorService;
+    private final Backend backend;
 
     @Then("qa-user sees the following games, filtered for creators \"{strings}\"")
     public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
@@ -53,7 +34,7 @@ public class GameListStepDefs {
                 .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
                         () -> {
-                            List<DisplayedGame> actual = qaFrontendActor.getDisplayedGamesForUsers(userNames);
+                            List<DisplayedGame> actual = gamesListPage.getDisplayedGamesForUsers(userNames);
                             assertThat(actual).isEqualTo(expected);
                         }
                 );
@@ -61,26 +42,28 @@ public class GameListStepDefs {
 
     @When("test-user-1 creates a game named {string}")
     public void testUserCreatesAGameNamed(String gameName) {
-        GameResponseDto gameResponseDto = backendActor1.createGame(gameName);
+        Actor backendActor1 = actorService.getActorByLookupName(TestContext.TEST_USER_NAME_1);
+        GameResponseDto gameResponseDto = backend.createGame(gameName, backendActor1.toUserDto());
         testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
     }
 
     @When("qa-user creates a game named {string}")
     public void qaUserCreatesAGameNamed(String gameName) {
-        GameResponseDto gameResponseDto = qaBackendActor.createGame(gameName);
+        Actor qaBackendActor = actorService.getActorByLookupName(TestContext.QA_FRONTEND_USER_NAME);
+        GameResponseDto gameResponseDto = backend.createGame(gameName, qaBackendActor.toUserDto());
         testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
     }
 
-    @When("test-user-1 deletes the game named {string}")
-    public void deletesTheGameNamed(String gameName) {
+    @When("{string} deletes {string} from the backend")
+    public void deletesTheGameNamed(String userName, String gameName) {
         Integer gameId = testContext.getGameIdForName(gameName);
-        backendActor1.deleteGame(gameId);
+        backend.deleteGame(gameId);
         testContext.removeGameId(gameName);
     }
 
-    @When("qa-user clicks on {string} button for {string}")
-    public void qaUserClicksOnButtonForGame(String buttonName, String gameName) {
+    @When("\"qa-user\" deletes {string} from the frontend")
+    public void deletesFromTheFrontend(String gameName) {
         Integer gameId = testContext.getGameIdForName(gameName);
-        qaFrontendActor.clickOnButtonForGame_GameList(buttonName, gameId);
+        gameRowActions.delete(gameId);
     }
 }

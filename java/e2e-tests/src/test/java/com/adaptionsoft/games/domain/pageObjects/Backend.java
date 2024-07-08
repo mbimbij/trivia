@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.domain;
+package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
@@ -10,51 +10,42 @@ import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BackendActor extends TestActor {
+public class Backend {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String backendUrlBase;
 
-    public BackendActor(@NotBlank String id, @NotBlank String name, String backendUrlBase) {
-        super(id, name);
+    public Backend(String backendUrlBase) {
         this.backendUrlBase = backendUrlBase;
     }
 
-    public GameResponseDto createGame(String gameName) {
+    public GameResponseDto createGame(String gameName, UserDto userDto) {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games",
-                new CreateGameRequestDto(gameName, new UserDto(this.id, this.name)),
-                GameResponseDto.class,
-                this.id);
+                new CreateGameRequestDto(gameName, userDto),
+                GameResponseDto.class);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         return responseEntity.getBody();
     }
 
-    @Override
-    public void join(int gameId) {
+    public void joinGame(int gameId, UserDto userDto) {
         ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(backendUrlBase + "/games/{gameId}/players/{userId}/join",
-                new UserDto(this.id, this.name),
+                userDto,
                 GameResponseDto.class,
                 gameId,
-                this.id);
+                userDto.id());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
-
-    @Override
-    public void start(int gameId) {
-        String url = backendUrlBase + "/games/{gameId}/players/{userId}/start";
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
-                new UserDto(this.id, this.name),
-                GameResponseDto.class,
-                gameId,
-                this.id);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Override
-    public void rollDice() {
-        throw new UnsupportedOperationException();
-    }
-
+    
     public void deleteGame(int gameId) {
         restTemplate.delete(backendUrlBase + "/games/{gameId}", gameId);
+    }
+
+    public void startGame(int gameId, @NotBlank String userId) {
+        String url = backendUrlBase + "/games/{gameId}/players/{userId}/start";
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
+                null,
+                GameResponseDto.class,
+                gameId,
+                userId);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

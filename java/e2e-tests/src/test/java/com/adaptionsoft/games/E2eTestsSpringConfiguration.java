@@ -1,6 +1,7 @@
 package com.adaptionsoft.games;
 
 import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.microsoft.playwright.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -38,15 +39,14 @@ public class E2eTestsSpringConfiguration {
 
     @Bean
     public FrontendActor qaFrontendActor(Page page, TestProperties testProperties) {
-        FrontendActor frontendActor = new FrontendActor(testProperties.getQaUserId(),
+        return new FrontendActor(testProperties.getQaUserId(),
                 TestContext.QA_FRONTEND_USER_NAME,
-                page,
-                testProperties.getFrontendUrlBase(),
-                testProperties.getQaUserEmail(),
-                testProperties.getQaUserPassword()
-        );
-        frontendActor.registerBrowserLogs();
-        return frontendActor;
+                page);
+    }
+
+    @Bean
+    public Console consoleLogs(Page page) {
+        return new Console(page);
     }
 
     @Bean
@@ -55,37 +55,40 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public BackendActor qaBackendActor(TestProperties testProperties) {
-        return new BackendActor(testProperties.getQaUserId(),
-                TestContext.QA_FRONTEND_USER_NAME,
-                testProperties.getBackendUrlBase()
-        );
-    }
-
-    @Bean
-    public BackendActor backendActor1(TestProperties testProperties) {
-        return new BackendActor(TestContext.ID_TEST_USER_1,
-                TestContext.TEST_USER_NAME_1,
-                testProperties.getBackendUrlBase()
-        );
-    }
-
-    @Bean
-    public BackendActor backendActor2(TestProperties testProperties) {
-        return new BackendActor(TestContext.ID_TEST_USER_2,
-                TestContext.TEST_USER_NAME_2,
-                testProperties.getBackendUrlBase()
-        );
-    }
-
-    @Bean
     public ActorService actorService(FrontendActor qaFrontendActor,
-                                     BackendActor qaBackendActor,
-                                     BackendActor backendActor1,
-                                     BackendActor backendActor2) {
-        return new ActorService(qaFrontendActor,
-                qaBackendActor,
-                backendActor1,
-                backendActor2);
+                                     TestProperties testProperties) {
+        return new ActorService(testProperties,
+                qaFrontendActor
+        );
+    }
+
+    @Bean
+    public AuthenticationPage authenticationPage(TestProperties testProperties, Page page, GamesListPage gamesListPage) {
+        return new AuthenticationPage(testProperties.getFrontendUrlBase(), page, gamesListPage);
+    }
+
+    @Bean
+    public GamesListPage gamesListPage(TestProperties testProperties, Page page) {
+        return new GamesListPage(testProperties.getFrontendUrlBase(), page);
+    }
+
+    @Bean
+    public GameRowActions gameRowActions(Page page) {
+        return new GameRowActions(page);
+    }
+
+    @Bean
+    public OngoingGamePage ongoingGamePage(Page page) {
+        return new OngoingGamePage(page);
+    }
+
+    @Bean
+    public CreateGameUiElement createGameUiElement(Page page, Console console) {
+        return new CreateGameUiElement(page, console);
+    }
+
+    @Bean
+    public Backend backend(TestProperties testProperties) {
+        return new Backend(testProperties.getBackendUrlBase());
     }
 }

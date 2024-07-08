@@ -1,17 +1,17 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
-import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.adaptionsoft.games.utils.TestUtils;
-import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.util.Collection;
@@ -22,49 +22,42 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
+@Slf4j
+@RequiredArgsConstructor
 public class CommonStepDefs {
     private final FrontendActor qaFrontendActor;
-    private final Janitor testRunnerActor;
+    private final Janitor janitor;
     private final TestContext testContext;
     private final ActorService actorService;
-    private final BackendActor backendActor1;
-    private final BackendActor qaBackendActor;
 
-    public CommonStepDefs(FrontendActor qaFrontendActor,
-                          Janitor testRunnerActor,
-                          TestContext testContext,
-                          ActorService actorService,
-                          BackendActor backendActor1,
-                          BackendActor qaBackendActor) {
-        this.qaFrontendActor = qaFrontendActor;
-        this.testRunnerActor = testRunnerActor;
-        this.testContext = testContext;
-        this.actorService = actorService;
-        this.backendActor1 = backendActor1;
-        this.qaBackendActor = qaBackendActor;
-    }
-
-    @Before
-    public void setUp() {
-        qaFrontendActor.clearConsoleLogs();
-    }
-
-    @After
-    public void tearDown() {
-        testRunnerActor.deleteTestGames();
-    }
-
-    @AfterAll
-    public static void afterAll() {
-        PlaywrightSingleton.getInstance().close();
-    }
+    private final AuthenticationPage authenticationPage;
+    private final GamesListPage gamesListPage;
+    private final GameRowActions gameDetailsPage;
+    private final Console console;
+    private final Backend backend;
+    private final TestProperties testProperties;
 
     @Given("2 existing games")
     public void games() {
-        GameResponseDto gameResponseDto = backendActor1.createGame(TestContext.TEST_GAME_NAME_1);
+        Actor backendActor1 = actorService.getActorByLookupName(TestContext.TEST_USER_NAME_1);
+        Actor qaBackendActor = actorService.getActorByLookupName(TestContext.QA_BACKEND_LOOKUP_NAME);
+        GameResponseDto gameResponseDto = backend.createGame(TestContext.TEST_GAME_NAME_1, backendActor1.toUserDto());
         testContext.putGameId(TestContext.TEST_GAME_NAME_1, Objects.requireNonNull(gameResponseDto).id());
-        GameResponseDto gameResponseDto2 = qaBackendActor.createGame(TestContext.TEST_GAME_NAME_2);
+        GameResponseDto gameResponseDto2 = backend.createGame(TestContext.TEST_GAME_NAME_2, qaBackendActor.toUserDto());
         testContext.putGameId(TestContext.TEST_GAME_NAME_2, Objects.requireNonNull(gameResponseDto2).id());
+    }
+
+    @SneakyThrows
+    @Given("a logged-in test user on the game-list page")
+    public void logged_in_test_user_on_game_list_page() {
+        if(!qaFrontendActor.isLoggedIn()){
+            authenticationPage.loginViaEmailAndPassword(testProperties.getQaUserEmail(), testProperties.getQaUserPassword());
+            qaFrontendActor.setLoggedIn(true);
+            // TODO find a better way to wait for websocket connection for game state update
+            Thread.sleep(1000);
+        }else {
+            gamesListPage.navigateTo();
+        }
     }
 
     @Then("the following games are displayed")
@@ -72,20 +65,21 @@ public class CommonStepDefs {
         await().atMost(Duration.ofSeconds(5))
                 .pollInterval(TestUtils.pollInterval)
                 .untilAsserted(
-                        () -> assertThat(qaFrontendActor.getDisplayedGamesForUsers(emptyList())).isEqualTo(expected)
+                        () -> assertThat(gamesListPage.getDisplayedGamesForUsers(emptyList()))
+                                .isEqualTo(expected)
                 );
     }
 
-    @When("{string} joins {string}")
-    public void userJoinsGame(String userName, String gameName) {
+    @When("{string} joins {string} from the backend")
+    public void userJoinsGameFromTheBackend(String userName, String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
-        TestActor testActor = actorService.getActorByName(userName);
-        testActor.join(gameId);
+        Actor testActor = actorService.getActorByLookupName(userName);
+        backend.joinGame(gameId, testActor.toUserDto());
     }
 
     @And("no error is displayed in the console")
     public void noErrorIsDisplayedInTheConsole() {
-        List<String> errorLogs = qaFrontendActor.getErrorLogs();
+        List<String> errorLogs = console.getErrorLogs();
         String errorLogsString = String.join("\n", errorLogs);
         String failMessage = "The following error logs were present%n%s".formatted(errorLogsString);
         assertThat(errorLogs)
@@ -93,15 +87,22 @@ public class CommonStepDefs {
                 .isEmpty();
     }
 
-    @When("{string} starts {string}")
+    @When("{string} starts {string} from the backend")
     public void testUserStartsTestGame(String userName, String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
-        TestActor testActor = actorService.getActorByName(userName);
-        testActor.start(gameId);
+        Actor testActor = actorService.getActorByLookupName(userName);
+        backend.startGame(gameId, testActor.toUserDto().id());
+    }
+
+    @When("{string} starts {string} from the frontend")
+    public void testUserStartsTestGameFromTheFrontend(String userName, String gameName) {
+        int gameId = testContext.getGameIdForName(gameName);
+        Actor testActor = actorService.getActorByLookupName(userName);
+        gameDetailsPage.start(gameId);
     }
 
     @Given("previous test data cleared")
     public void previousTestDataCleared() {
-        testRunnerActor.deleteTestGames();
+        janitor.deleteTestGames();
     }
 }
