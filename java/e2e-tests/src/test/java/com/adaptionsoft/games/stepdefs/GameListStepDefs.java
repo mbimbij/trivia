@@ -25,6 +25,7 @@ public class GameListStepDefs {
     private final TestContext testContext;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameRowActions;
+    private final CreateGameUiElement createGameUiElement;
     private final ActorService actorService;
     private final Backend backend;
 
@@ -49,9 +50,8 @@ public class GameListStepDefs {
 
     @When("qa-user creates a game named {string}")
     public void qaUserCreatesAGameNamed(String gameName) {
-        Actor qaBackendActor = actorService.getActorByLookupName(TestContext.QA_FRONTEND_USER_NAME);
-        GameResponseDto gameResponseDto = backend.createGame(gameName, qaBackendActor.toUserDto());
-        testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
+        int createdGameId = createGameUiElement.createGame(gameName);
+        testContext.putGameId(gameName, createdGameId);
     }
 
     @When("{string} deletes {string} from the backend")

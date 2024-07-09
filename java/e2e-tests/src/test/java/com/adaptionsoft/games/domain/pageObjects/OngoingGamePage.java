@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
-import com.adaptionsoft.games.domain.FrontendActor;
+import com.adaptionsoft.games.domain.Actor;
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Locator;
@@ -55,7 +55,7 @@ public class OngoingGamePage extends UiElementObject {
                 .map(ElementHandle::textContent).toList();
     }
 
-    public void answerQuestionWith(AnswerCode answerCode, FrontendActor frontendActor) {
+    public void answerQuestionWith(AnswerCode answerCode, Actor actor) {
         Locator locator = page.getByTestId("answer-%s".formatted(answerCode));
         PlaywrightAssertions.assertThat(locator).isVisible();
         PlaywrightAssertions.assertThat(locator).isEnabled();

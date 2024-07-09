@@ -38,13 +38,6 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public FrontendActor qaFrontendActor(Page page, TestProperties testProperties) {
-        return new FrontendActor(testProperties.getQaUserId(),
-                TestContext.QA_FRONTEND_USER_NAME,
-                page);
-    }
-
-    @Bean
     public Console consoleLogs(Page page) {
         return new Console(page);
     }
@@ -55,10 +48,8 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public ActorService actorService(FrontendActor qaFrontendActor,
-                                     TestProperties testProperties) {
-        return new ActorService(testProperties,
-                qaFrontendActor
+    public ActorService actorService(TestProperties testProperties) {
+        return new ActorService(testProperties
         );
     }
 
@@ -83,8 +74,8 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public CreateGameUiElement createGameUiElement(Page page, Console console) {
-        return new CreateGameUiElement(page, console);
+    public CreateGameUiElement createGameUiElement(Page page, Console console, TestContext testContext) {
+        return new CreateGameUiElement(page, console, testContext);
     }
 
     @Bean

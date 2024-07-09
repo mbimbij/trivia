@@ -25,7 +25,6 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 @RequiredArgsConstructor
 public class CommonStepDefs {
-    private final FrontendActor qaFrontendActor;
     private final Janitor janitor;
     private final TestContext testContext;
     private final ActorService actorService;
@@ -50,9 +49,11 @@ public class CommonStepDefs {
     @SneakyThrows
     @Given("a logged-in test user on the game-list page")
     public void logged_in_test_user_on_game_list_page() {
-        if(!qaFrontendActor.isLoggedIn()){
+        Actor qaActor = actorService.getQaFrontendActor();
+
+        if(!qaActor.isLoggedIn()){
             authenticationPage.loginViaEmailAndPassword(testProperties.getQaUserEmail(), testProperties.getQaUserPassword());
-            qaFrontendActor.setLoggedIn(true);
+            qaActor.setLoggedIn(true);
             // TODO find a better way to wait for websocket connection for game state update
             Thread.sleep(1000);
         }else {
