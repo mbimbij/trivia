@@ -39,7 +39,8 @@ export class CreateGameComponent {
 
   protected createGame(newGameName: string) {
     this.gameService.create(newGameName, this.user)
-      .subscribe(() => {
+      .subscribe(newGame => {
+        console.log(`created game: ${newGame.id}`)
       })
   }
 }

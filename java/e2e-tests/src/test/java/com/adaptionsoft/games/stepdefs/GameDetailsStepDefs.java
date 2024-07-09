@@ -2,6 +2,7 @@ package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.TestProperties;
+import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
@@ -14,6 +15,7 @@ public class GameDetailsStepDefs {
     private final TestContext testContext;
     private final Page page;
     private final TestProperties testProperties;
+    private final GameRowActions gameDetailsPage;
 
     @And("i click on game details link for {string}")
     public void iClickOnGameDetailsLinkFor(String gameName) {
@@ -23,7 +25,6 @@ public class GameDetailsStepDefs {
         PlaywrightAssertions.assertThat(locator).hasAttribute("href", link);
         locator.click();
     }
-
 
     @When("i am on the on game details page for {string}")
     public void iAmOnTheOnGameDetailsPageFor(String gameName) {
@@ -37,6 +38,12 @@ public class GameDetailsStepDefs {
         page.reload();
     }
 
+
+    @When("\"qa-user\" joins {string} from the frontend")
+    public void userJoinsGameFromTheFrontend(String gameName) {
+        int gameId = testContext.getGameIdForName(gameName);
+        gameDetailsPage.join(gameId);
+    }
 
     @When("i directly access the game-details page for {string}")
     public void iDirectlyAccessTheGameDetailsPageFor(String gameName) {
