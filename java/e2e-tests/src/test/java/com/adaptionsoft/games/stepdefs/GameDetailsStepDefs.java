@@ -39,7 +39,7 @@ public class GameDetailsStepDefs {
     }
 
 
-    @When("\"qa-user\" joins {string} from the frontend")
+    @When("qa-user joins {string} from the frontend")
     public void userJoinsGameFromTheFrontend(String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
         gameDetailsPage.join(gameId);

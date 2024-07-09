@@ -47,10 +47,8 @@ public class CommonStepDefs {
     }
 
     @SneakyThrows
-    @Given("a logged-in test user on the game-list page")
-    public void logged_in_test_user_on_game_list_page() {
-        Actor qaActor = actorService.getQaFrontendActor();
-
+    @Given("{actor} on the game-list page")
+    public void logged_in_test_user_on_game_list_page(Actor qaActor) {
         if(!qaActor.isLoggedIn()){
             authenticationPage.loginViaEmailAndPassword(testProperties.getQaUserEmail(), testProperties.getQaUserPassword());
             qaActor.setLoggedIn(true);
@@ -71,11 +69,10 @@ public class CommonStepDefs {
                 );
     }
 
-    @When("{string} joins {string} from the backend")
-    public void userJoinsGameFromTheBackend(String userName, String gameName) {
+    @When("{actor} joins {string} from the backend")
+    public void userJoinsGameFromTheBackend(Actor actor, String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
-        Actor testActor = actorService.getActorByLookupName(userName);
-        backend.joinGame(gameId, testActor.toUserDto());
+        backend.joinGame(gameId, actor.toUserDto());
     }
 
     @And("no error is displayed in the console")
@@ -88,17 +85,15 @@ public class CommonStepDefs {
                 .isEmpty();
     }
 
-    @When("{string} starts {string} from the backend")
-    public void testUserStartsTestGame(String userName, String gameName) {
+    @When("{actor} starts {string} from the backend")
+    public void testUserStartsTestGame(Actor actor, String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
-        Actor testActor = actorService.getActorByLookupName(userName);
-        backend.startGame(gameId, testActor.toUserDto().id());
+        backend.startGame(gameId, actor.toUserDto().id());
     }
 
-    @When("{string} starts {string} from the frontend")
-    public void testUserStartsTestGameFromTheFrontend(String userName, String gameName) {
+    @When("{actor} starts {string} from the frontend")
+    public void testUserStartsTestGameFromTheFrontend(Actor actor, String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
-        Actor testActor = actorService.getActorByLookupName(userName);
         gameDetailsPage.start(gameId);
     }
 

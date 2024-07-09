@@ -88,8 +88,7 @@ public class OngoingGameStepDefs {
 
     @Then("qa-user answers {answerCode}")
     public void qaUserClicksOnTheAnswer(AnswerCode answerCode) {
-        Actor qaActor = actorService.getQaFrontendActor();
-        ongoingGamePage.answerQuestionWith(answerCode, qaActor);
+        ongoingGamePage.answerQuestionWith(answerCode);
     }
 
     @And("qa-user sees game logs ending as following")

@@ -26,7 +26,6 @@ public class GameListStepDefs {
     private final GamesListPage gamesListPage;
     private final GameRowActions gameRowActions;
     private final CreateGameUiElement createGameUiElement;
-    private final ActorService actorService;
     private final Backend backend;
 
     @Then("qa-user sees the following games, filtered for creators \"{strings}\"")
@@ -41,15 +40,14 @@ public class GameListStepDefs {
                 );
     }
 
-    @When("test-user-1 creates a game named {string}")
-    public void testUserCreatesAGameNamed(String gameName) {
-        Actor backendActor1 = actorService.getActorByLookupName(TestContext.TEST_USER_NAME_1);
-        GameResponseDto gameResponseDto = backend.createGame(gameName, backendActor1.toUserDto());
+    @When("{actor} creates a game named {string} from the backend")
+    public void testUserCreatesAGameNamed(Actor actor, String gameName) {
+        GameResponseDto gameResponseDto = backend.createGame(gameName, actor.toUserDto());
         testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
     }
 
-    @When("qa-user creates a game named {string}")
-    public void qaUserCreatesAGameNamed(String gameName) {
+    @When("{actor} creates a game named {string} from the frontend")
+    public void qaUserCreatesAGameNamed(Actor actor, String gameName) {
         int createdGameId = createGameUiElement.createGame(gameName);
         testContext.putGameId(gameName, createdGameId);
     }
@@ -61,7 +59,7 @@ public class GameListStepDefs {
         testContext.removeGameId(gameName);
     }
 
-    @When("\"qa-user\" deletes {string} from the frontend")
+    @When("qa-user deletes {string} from the frontend")
     public void deletesFromTheFrontend(String gameName) {
         Integer gameId = testContext.getGameIdForName(gameName);
         gameRowActions.delete(gameId);
