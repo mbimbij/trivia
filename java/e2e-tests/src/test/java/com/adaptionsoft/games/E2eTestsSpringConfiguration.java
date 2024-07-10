@@ -24,15 +24,16 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public Page qaFrontendActorPage(Playwright playwright) {
+    public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
                 .setHeadless(false)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
-                .setRecordVideoDir(Path.of("videos"))
-                .setRecordVideoSize(640, 480);
+//                .setRecordVideoDir(Path.of("videos"))
+//                .setRecordVideoSize(640, 480)
+                ;
         BrowserContext newContext = browser.newContext(contextOptions);
         return newContext.newPage();
     }

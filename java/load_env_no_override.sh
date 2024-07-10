@@ -8,9 +8,6 @@ else
     ENV_FILE_PATH="$SCRIPTPATH/$1"
 fi
 
-#echo "coucou $(dirname "$0")"
-#echo "coucou $ENV_FILE_PATH"
-
 export $(grep -v '^#' $ENV_FILE_PATH | while read -r line; do
   VAR=$(echo "$line" | cut -d '=' -f 1)
   if [ -z "${!VAR}" ]; then
