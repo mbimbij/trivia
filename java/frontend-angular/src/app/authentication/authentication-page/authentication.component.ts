@@ -28,7 +28,7 @@ export class AuthenticationComponent {
 
   constructor(protected authenticationService: FirebaseAuthenticationService,
               protected userService: UserServiceAbstract,
-              private router: Router) {
+              protected router: Router) {
   }
 
   successCallback($event: FirebaseUISignInSuccessWithAuthResult) {

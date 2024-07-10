@@ -6,3 +6,12 @@
   background-color: blueviolet;
   color: white;
 }
+
+#app-logo{
+  cursor: pointer
+}
+
+#anonymous-icon{
+  padding-top: 10px;
+  padding-right: 5px
+}
