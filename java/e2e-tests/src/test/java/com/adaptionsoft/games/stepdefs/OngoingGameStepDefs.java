@@ -14,7 +14,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.time.Duration;
 import java.util.List;
@@ -30,7 +29,6 @@ public class OngoingGameStepDefs {
     private final TestContext testContext;
     private final TestProperties testProperties;
     private final Page page;
-    private final FrontendActor qaActor;
     private final Janitor janitor;
     private final ActorService actorService;
     private final GameRowActions gameRowActions;
@@ -90,7 +88,7 @@ public class OngoingGameStepDefs {
 
     @Then("qa-user answers {answerCode}")
     public void qaUserClicksOnTheAnswer(AnswerCode answerCode) {
-        ongoingGamePage.answerQuestionWith(answerCode, qaActor);
+        ongoingGamePage.answerQuestionWith(answerCode);
     }
 
     @And("qa-user sees game logs ending as following")

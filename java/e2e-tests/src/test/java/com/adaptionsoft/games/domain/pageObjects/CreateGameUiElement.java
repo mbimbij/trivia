@@ -1,37 +1,42 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
+import com.adaptionsoft.games.domain.TestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import lombok.SneakyThrows;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateGameUiElement extends UiElementObject {
     private final Console console;
-    public CreateGameUiElement(Page page, Console console) {
+    private final TestContext testContext;
+
+    public CreateGameUiElement(Page page, Console console, TestContext testContext) {
         super(page);
         this.console = console;
+        this.testContext = testContext;
     }
 
     // TODO ajouter un test de création de partie depuis le frontend
-    public void createGame(String gameName) {
+    @SneakyThrows
+    public int createGame(String gameName) {
         page.getByTestId("create-game-name").fill(gameName);
         Locator button = page.getByTestId("create-game-validate");
         PlaywrightAssertions.assertThat(button).isVisible();
         PlaywrightAssertions.assertThat(button).isEnabled();
-        button.click();
-        page.evaluate("console.log('coucou')");
-        page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(consoleMessage -> {
-            return consoleMessage.text().matches("created game:");
-        }),() -> {});
-        System.out.println();
-//        Awaitility.await()
-//                .atMost(TestUtils.maxWaitDuration)
-//                .pollInterval(TestUtils.pollInterval)
-//                .until(() -> !console.findLogsMatching("created game:").isEmpty());
-//        List<String> gameCreatedLogs = console.findLogsMatching("created game:");
-//        assertThat(gameCreatedLogs).hasSize(1);
-//        String first = gameCreatedLogs.getFirst();
-//        System.out.println();
+
+        AtomicReference<String> logText = new AtomicReference<>();
+        page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(
+                        consoleMessage -> {
+                            String text = consoleMessage.text();
+                            logText.set(text);
+                            return text.startsWith("created game: ");
+                        }),
+                button::click);
+
+        return Integer.parseInt(logText.get().split("created game: ")[1]);
     }
 }

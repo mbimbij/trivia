@@ -18,7 +18,7 @@ public class Players extends EventRaiser {
     @Setter
     private Player creator;
     @Getter
-    private List<Player> individualPlayers = new ArrayList<>();
+    private final List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
 
     public Players(EventPublisher eventPublisher, Player creator, Player... otherPlayers) {

@@ -40,7 +40,7 @@ public class Game extends Entity<GameId> {
                 Dice dice,
                 QuestionsDeck questionsDeck,
                 Player creator,
-                Player ... otherPlayers) {
+                Player... otherPlayers) {
         super(gameId, eventPublisher);
         this.name = name;
         this.players = new Players(eventPublisher, creator, otherPlayers);
@@ -72,18 +72,27 @@ public class Game extends Entity<GameId> {
 
     public void start(Player player) {
         validateGameStateIsNot(ENDED, "start");
-        if (!Objects.equals(player, players.getCreator())) {
+        if (!isCreator(player)) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
         }
-        if (players.count() < Players.MIN_PLAYER_COUNT_AT_START_TIME) {
+        if (playersCountLessThanMinimumRequired()) {
             throw StartException.invalidNumberOfPlayers(id, players.count());
         }
+
         state = STARTED;
         turn = 1;
-        raise(new GameStartedEvent(id));
-        raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
+        raise(new GameStartedEvent(id),
+                new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
 
         eventPublisher.flushEvents();
+    }
+
+    private boolean isCreator(Player player) {
+        return Objects.equals(player, players.getCreator());
+    }
+
+    private boolean playersCountLessThanMinimumRequired() {
+        return players.count() < Players.MIN_PLAYER_COUNT_AT_START_TIME;
     }
 
     public void rollDice(Player player) {
@@ -119,7 +128,7 @@ public class Game extends Entity<GameId> {
         validateGameStateIs(STARTED, "draw question");
         validateCurrentPlayer(currentPlayer);
         validatePlayerNotInPenaltyBox(currentPlayer, "draw question");
-        if(currentRoll == null){
+        if (currentRoll == null) {
             throw new CannotDrawQuestionBeforeRollingDiceException(getId(), currentPlayer.getId());
         }
 
@@ -135,7 +144,7 @@ public class Game extends Entity<GameId> {
 
         boolean isAnswerCorrect = false;
 
-        if(currentQuestion == null) {
+        if (currentQuestion == null) {
             throw new CannotAnswerQuestionBeforeDrawingOneException(id, player.getId());
         }
 
@@ -177,7 +186,7 @@ public class Game extends Entity<GameId> {
     }
 
     private void validatePlayerNotInPenaltyBox(Player player, String actionName) {
-        if(player.isInPenaltyBox()){
+        if (player.isInPenaltyBox()) {
             throw new ExecuteActionInPenaltyBoxException(getId(), player, actionName);
         }
     }
