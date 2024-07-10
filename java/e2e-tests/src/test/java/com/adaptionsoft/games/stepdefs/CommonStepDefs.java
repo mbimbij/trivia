@@ -5,6 +5,7 @@ import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
+import com.microsoft.playwright.Page;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -28,13 +29,13 @@ public class CommonStepDefs {
     private final Janitor janitor;
     private final TestContext testContext;
     private final ActorService actorService;
-
     private final AuthenticationPage authenticationPage;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameDetailsPage;
     private final Console console;
     private final Backend backend;
     private final TestProperties testProperties;
+    private final Page page;
 
     @Given("2 existing games")
     public void games() {
@@ -100,5 +101,10 @@ public class CommonStepDefs {
     @Given("previous test data cleared")
     public void previousTestDataCleared() {
         janitor.deleteTestGames();
+    }
+
+    @When("qa-user reloads the page")
+    public void qaUserReloadsThePage() {
+        page.reload();
     }
 }

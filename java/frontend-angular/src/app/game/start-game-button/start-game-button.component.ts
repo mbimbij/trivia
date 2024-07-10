@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
@@ -30,7 +30,8 @@ export class StartGameButtonComponent {
 
   constructor(private service: GameServiceAbstract,
               private userService: UserServiceAbstract,
-              private gameService: GameServiceAbstract)  {
+              private gameService: GameServiceAbstract,
+              private cdr: ChangeDetectorRef)  {
     this.id = generateRandomString(4);
     console.log(`constructor ${this.constructor.name} - ${this.id} called`)
   }
@@ -48,11 +49,12 @@ export class StartGameButtonComponent {
         this.user = user;
         this.game = game;
         this.canStartGameAttr = this.canStartGame();
+        this.cdr.markForCheck()
       });
   }
 
   ngOnDestroy() {
-    console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
+    // console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
     this.userGameSubscription?.unsubscribe()
     this.startActionSubscription?.unsubscribe()
   }

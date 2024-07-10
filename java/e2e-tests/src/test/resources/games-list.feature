@@ -12,6 +12,16 @@ Feature: List games
       | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
     And no error is displayed in the console
 
+  Scenario: start button still displayed after reloading page (a bug present at some point)
+    When test-user-1 joins "test-game-2" from the backend
+    Then qa-user sees the following games, filtered for creators "qa-user"
+      | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+      | test-game-2 | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
+    When qa-user reloads the page
+    Then qa-user sees the following games, filtered for creators "qa-user"
+      | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+      | test-game-2 | qa-user | qa-user,test-user-1 | created | true          | null         | already joined | false        | true           |
+
   Rule: Changes on another user's game
     Scenario: another player creating a game updates the display
       When test-user-1 creates a game named "newGame" from the backend
@@ -29,8 +39,8 @@ Feature: List games
       And no error is displayed in the console
       When "test-user-1" deletes "newGame" from the backend
       Then qa-user sees the following games, filtered for creators "test-user-1, qa-user"
-        | name        | creator     | players     | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-        | test-game-2 | qa-user     | qa-user     | created | null          | null         | already joined | false        | true           |
+        | name        | creator | players | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-2 | qa-user | qa-user | created | null          | null         | already joined | false        | true           |
       And no error is displayed in the console
 
     Scenario: join & start game of other players updates the display
@@ -96,4 +106,3 @@ Feature: List games
         | name | creator | players | state | start_enabled | join_enabled | join_text | goto_enabled | delete_enabled |
       And no error is displayed in the console
 
-# TODO test when qa-user joins a game: {own, others} x {newly-create, existing}
