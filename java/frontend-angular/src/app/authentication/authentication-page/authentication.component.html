@@ -8,6 +8,11 @@
   />
   <button
     style="display: block; margin: auto"
+    (click)="router.navigate(['/games'])"
+    *ngIf="authenticationService.loggedIn"
+  >back to games</button>
+  <button
+    style="display: block; margin: auto"
     (click)="authenticationService.logout();"
     *ngIf="authenticationService.loggedIn"
   >Logout</button>

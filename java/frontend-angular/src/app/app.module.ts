@@ -23,23 +23,25 @@ import {AuthenticationServiceAbstract} from "./services/authentication-service.a
 import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
 import {FirebaseUserService} from "./adapters/user/firebase-user.service";
 import {UserServiceAbstract} from "./services/user-service.abstract";
+import {NavbarComponent} from "./game/navbar/navbar.component";
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    ApiModule,
-    CreateGameComponent,
-    FormsModule,
-    AppRoutingModule,
-    GameListComponent,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule,
-    FirebaseUIModule.forRoot(firebaseUiAuthConfig)
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        ApiModule,
+        CreateGameComponent,
+        FormsModule,
+        AppRoutingModule,
+        GameListComponent,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireAuthModule,
+        FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+        NavbarComponent
+    ],
   providers: [
     {provide: GameServiceAbstract, useClass: GameService},
     {provide: AuthenticationServiceAbstract, useClass: FirebaseAuthenticationService},

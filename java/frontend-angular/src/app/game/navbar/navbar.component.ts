@@ -8,6 +8,7 @@ import {AsyncPipe, KeyValuePipe, NgIf} from "@angular/common";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -22,7 +23,8 @@ import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 export class NavbarComponent {
   user$: Observable<User>;
 
-  constructor(private userService: UserServiceAbstract) {
+  constructor(private userService: UserServiceAbstract,
+  protected router: Router) {
     this.user$ = this.userService.getUser();
   }
 }
