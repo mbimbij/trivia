@@ -61,25 +61,25 @@ Sue is the current player
 They have rolled a 3
 Sue's new location is 4
 The category is Geography
-question Geography 0
-Question was incorrectly answered
-question Geography 1
-Question was incorrectly answered
-Sue was sent to the penalty box
+What is the name of the tallest mountain in the world?
+Answer was correct!!!!
+Sue now has 2 Gold Coins.
 Joe is the current player
-They have rolled a 3
-Joe's new location is 5
-The category is Pop
-question Pop 2
+They have rolled a 4
+Joe's new location is 6
+The category is Science
+question Science 1
+Question was incorrectly answered
+question Science 2
 Answer was correct!!!!
 Joe now has 2 Gold Coins.
 Vlad is the current player
 They have rolled a 1
 Vlad's new location is 4
 The category is Geography
-question Geography 2
+Which country has the largest population in the world?
 Question was incorrectly answered
-question Geography 3
+What are the names of the seventh continent of the world? Asia, Africa, North America, South America, Antarctica, Europe and ?
 Question was incorrectly answered
 Vlad was sent to the penalty box
 Chet is the current player
@@ -90,18 +90,24 @@ They have rolled a 5
 Pat is not getting out of the penalty box
 Sue is the current player
 They have rolled a 1
-Sue is not getting out of the penalty box
-Joe is the current player
-They have rolled a 5
-Joe's new location is 10
+Sue's new location is 5
 The category is Pop
+question Pop 2
+Question was incorrectly answered
 question Pop 3
 Question was incorrectly answered
+Sue was sent to the penalty box
+Joe is the current player
+They have rolled a 4
+Joe's new location is 10
+The category is Pop
 question Pop 4
 Question was incorrectly answered
-Joe was sent to the penalty box
+question Pop 5
+Answer was correct!!!!
+Joe now has 3 Gold Coins.
 Vlad is the current player
-They have rolled a 5
+They have rolled a 1
 Vlad is not getting out of the penalty box
 Chet is the current player
 They have rolled a 2
@@ -117,260 +123,257 @@ Pat is the current player
 They have rolled a 3
 Pat is not getting out of the penalty box
 Sue is the current player
-They have rolled a 5
-Sue is not getting out of the penalty box
-Joe is the current player
-They have rolled a 3
-Joe is not getting out of the penalty box
-Vlad is the current player
 They have rolled a 4
-Vlad is getting out of the penalty box
-Vlad's new location is 8
-The category is Rock
-question Rock 1
-Question was incorrectly answered
-question Rock 2
-Question was incorrectly answered
-Vlad was sent to the penalty box
-Chet is the current player
-They have rolled a 3
-Chet is not getting out of the penalty box
-Pat is the current player
-They have rolled a 3
-Pat is not getting out of the penalty box
-Sue is the current player
-They have rolled a 2
-Sue is getting out of the penalty box
-Sue's new location is 6
-The category is Science
-question Science 1
-Question was incorrectly answered
-question Science 2
-Answer was correct!!!!
-Sue now has 2 Gold Coins.
-Joe is the current player
-They have rolled a 1
-Joe is not getting out of the penalty box
-Vlad is the current player
-They have rolled a 1
-Vlad is not getting out of the penalty box
-Chet is the current player
-They have rolled a 5
-Chet is not getting out of the penalty box
-Pat is the current player
-They have rolled a 4
-Pat is getting out of the penalty box
-Pat's new location is 6
-The category is Science
-question Science 3
-Answer was correct!!!!
-Pat now has 1 Gold Coins.
-Sue is the current player
-They have rolled a 6
-Sue's new location is 0
-The category is Pop
-question Pop 5
-Question was incorrectly answered
-question Pop 6
-Answer was correct!!!!
-Sue now has 3 Gold Coins.
-Joe is the current player
-They have rolled a 5
-Joe is not getting out of the penalty box
-Vlad is the current player
-They have rolled a 2
-Vlad is getting out of the penalty box
-Vlad's new location is 10
-The category is Pop
-question Pop 7
-Question was incorrectly answered
-question Pop 8
-Question was incorrectly answered
-Vlad was sent to the penalty box
-Chet is the current player
-They have rolled a 1
-Chet is not getting out of the penalty box
-Pat is the current player
-They have rolled a 5
-Pat's new location is 11
-The category is Science
-question Science 4
-Question was incorrectly answered
-question Science 5
-Question was incorrectly answered
-Pat was sent to the penalty box
-Sue is the current player
-They have rolled a 3
-Sue's new location is 3
-The category is Rock
-question Rock 3
-Question was incorrectly answered
-question Rock 4
-Question was incorrectly answered
-Sue was sent to the penalty box
-Joe is the current player
-They have rolled a 4
-Joe is getting out of the penalty box
-Joe's new location is 2
-The category is Sports
-question Sports 6
-Question was incorrectly answered
-question Sports 7
-Answer was correct!!!!
-Joe now has 3 Gold Coins.
-Vlad is the current player
-They have rolled a 1
-Vlad is not getting out of the penalty box
-Chet is the current player
-They have rolled a 5
-Chet is not getting out of the penalty box
-Pat is the current player
-They have rolled a 5
-Pat is not getting out of the penalty box
-Sue is the current player
-They have rolled a 6
 Sue is getting out of the penalty box
 Sue's new location is 9
 The category is Geography
-question Geography 4
+What are the names of the fifth oceans of the world? Atlantic, Pacific, Indian, Arctic, and ?
 Question was incorrectly answered
-question Geography 5
+What is the name of the longest river in the world?
 Question was incorrectly answered
 Sue was sent to the penalty box
 Joe is the current player
-They have rolled a 4
-Joe's new location is 6
-The category is Science
-question Science 6
-Question was incorrectly answered
-question Science 7
-Question was incorrectly answered
-Joe was sent to the penalty box
-Vlad is the current player
-They have rolled a 4
-Vlad is getting out of the penalty box
-Vlad's new location is 2
-The category is Sports
-question Sports 8
-Answer was correct!!!!
-Vlad now has 2 Gold Coins.
-Chet is the current player
-They have rolled a 4
-Chet is getting out of the penalty box
-Chet's new location is 11
-The category is Science
-question Science 8
-Answer was correct!!!!
-Chet now has 1 Gold Coins.
-Pat is the current player
-They have rolled a 2
-Pat is getting out of the penalty box
-Pat's new location is 1
-The category is Science
-question Science 9
-Question was incorrectly answered
-question Science 10
-Question was incorrectly answered
-Pat was sent to the penalty box
-Sue is the current player
-They have rolled a 1
-Sue is not getting out of the penalty box
-Joe is the current player
-They have rolled a 5
-Joe is not getting out of the penalty box
-Vlad is the current player
-They have rolled a 5
-Vlad's new location is 7
-The category is Sports
-question Sports 9
-Answer was correct!!!!
-Vlad now has 3 Gold Coins.
-Chet is the current player
-They have rolled a 5
-Chet's new location is 4
-The category is Geography
-question Geography 6
-Question was incorrectly answered
-question Geography 7
-Question was incorrectly answered
-Chet was sent to the penalty box
-Pat is the current player
 They have rolled a 3
-Pat is not getting out of the penalty box
-Sue is the current player
-They have rolled a 1
-Sue is not getting out of the penalty box
-Joe is the current player
-They have rolled a 2
-Joe is getting out of the penalty box
-Joe's new location is 8
-The category is Rock
-question Rock 5
-Question was incorrectly answered
-question Rock 6
-Question was incorrectly answered
-Joe was sent to the penalty box
-Vlad is the current player
-They have rolled a 4
-Vlad's new location is 11
+Joe's new location is 1
 The category is Science
-question Science 11
+question Science 3
 Question was incorrectly answered
-question Science 12
-Question was incorrectly answered
-Vlad was sent to the penalty box
-Chet is the current player
-They have rolled a 5
-Chet is not getting out of the penalty box
-Pat is the current player
-They have rolled a 5
-Pat is not getting out of the penalty box
-Sue is the current player
-They have rolled a 3
-Sue is not getting out of the penalty box
-Joe is the current player
-They have rolled a 4
-Joe is getting out of the penalty box
-Joe's new location is 0
-The category is Pop
-question Pop 9
+question Science 4
 Answer was correct!!!!
 Joe now has 4 Gold Coins.
 Vlad is the current player
 They have rolled a 3
 Vlad is not getting out of the penalty box
 Chet is the current player
-They have rolled a 4
+They have rolled a 2
 Chet is getting out of the penalty box
-Chet's new location is 8
-The category is Rock
-question Rock 7
+Chet's new location is 9
+The category is Geography
+What American city is the Golden Gate Bridge located in?
+Answer was correct!!!!
+Chet now has 1 Gold Coins.
+Pat is the current player
+They have rolled a 1
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 5
+Sue is not getting out of the penalty box
+Joe is the current player
+They have rolled a 4
+Joe's new location is 5
+The category is Pop
+question Pop 6
 Question was incorrectly answered
-question Rock 8
+question Pop 7
+Question was incorrectly answered
+Joe was sent to the penalty box
+Vlad is the current player
+They have rolled a 6
+Vlad is getting out of the penalty box
+Vlad's new location is 10
+The category is Pop
+question Pop 8
+Question was incorrectly answered
+question Pop 9
+Question was incorrectly answered
+Vlad was sent to the penalty box
+Chet is the current player
+They have rolled a 2
+Chet's new location is 11
+The category is Science
+question Science 5
+Question was incorrectly answered
+question Science 6
+Answer was correct!!!!
+Chet now has 2 Gold Coins.
+Pat is the current player
+They have rolled a 1
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 5
+Sue is not getting out of the penalty box
+Joe is the current player
+They have rolled a 3
+Joe is not getting out of the penalty box
+Vlad is the current player
+They have rolled a 6
+Vlad is getting out of the penalty box
+Vlad's new location is 4
+The category is Geography
+question Geography 6
+Answer was correct!!!!
+Vlad now has 2 Gold Coins.
+Chet is the current player
+They have rolled a 5
+Chet's new location is 4
+The category is Geography
+Where is the Eiffel Tower located?
+Question was incorrectly answered
+What present-day Italian city does Mt. Vesuvius overlook?
+Question was incorrectly answered
+Chet was sent to the penalty box
+Pat is the current player
+They have rolled a 3
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 3
+Sue is not getting out of the penalty box
+Joe is the current player
+They have rolled a 1
+Joe is not getting out of the penalty box
+Vlad is the current player
+They have rolled a 5
+Vlad's new location is 9
+The category is Geography
+What country are the Great Pyramids of Giza located in?
+Question was incorrectly answered
+What is the name of the smallest country in the world?
+Question was incorrectly answered
+Vlad was sent to the penalty box
+Chet is the current player
+They have rolled a 2
+Chet is getting out of the penalty box
+Chet's new location is 6
+The category is Science
+question Science 7
+Question was incorrectly answered
+question Science 8
 Question was incorrectly answered
 Chet was sent to the penalty box
 Pat is the current player
 They have rolled a 5
 Pat is not getting out of the penalty box
 Sue is the current player
-They have rolled a 2
+They have rolled a 6
 Sue is getting out of the penalty box
-Sue's new location is 11
-The category is Science
-question Science 13
+Sue's new location is 3
+The category is Rock
+question Rock 1
 Question was incorrectly answered
-question Science 14
+question Rock 2
 Question was incorrectly answered
 Sue was sent to the penalty box
 Joe is the current player
-They have rolled a 5
-Joe's new location is 5
-The category is Pop
-question Pop 10
+They have rolled a 4
+Joe is getting out of the penalty box
+Joe's new location is 9
+The category is Geography
+What is the capital of the American State of California?
 Question was incorrectly answered
-question Pop 11
+How many States does the United States consist of?
 Question was incorrectly answered
 Joe was sent to the penalty box
+Vlad is the current player
+They have rolled a 4
+Vlad is getting out of the penalty box
+Vlad's new location is 1
+The category is Science
+question Science 9
+Answer was correct!!!!
+Vlad now has 3 Gold Coins.
+Chet is the current player
+They have rolled a 1
+Chet is not getting out of the penalty box
+Pat is the current player
+They have rolled a 5
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 5
+Sue is not getting out of the penalty box
+Joe is the current player
+They have rolled a 4
+Joe is getting out of the penalty box
+Joe's new location is 1
+The category is Science
+question Science 10
+Question was incorrectly answered
+question Science 11
+Question was incorrectly answered
+Joe was sent to the penalty box
+Vlad is the current player
+They have rolled a 6
+Vlad's new location is 7
+The category is Sports
+question Sports 6
+Question was incorrectly answered
+question Sports 7
+Question was incorrectly answered
+Vlad was sent to the penalty box
+Chet is the current player
+They have rolled a 2
+Chet is getting out of the penalty box
+Chet's new location is 8
+The category is Rock
+question Rock 3
+Answer was correct!!!!
+Chet now has 3 Gold Coins.
+Pat is the current player
+They have rolled a 6
+Pat is getting out of the penalty box
+Pat's new location is 8
+The category is Rock
+question Rock 4
+Question was incorrectly answered
+question Rock 5
+Question was incorrectly answered
+Pat was sent to the penalty box
+Sue is the current player
+They have rolled a 3
+Sue is not getting out of the penalty box
+Joe is the current player
+They have rolled a 5
+Joe is not getting out of the penalty box
+Vlad is the current player
+They have rolled a 5
+Vlad is not getting out of the penalty box
+Chet is the current player
+They have rolled a 3
+Chet's new location is 11
+The category is Science
+question Science 12
+Question was incorrectly answered
+question Science 13
+Answer was correct!!!!
+Chet now has 4 Gold Coins.
+Pat is the current player
+They have rolled a 3
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 4
+Sue is getting out of the penalty box
+Sue's new location is 7
+The category is Sports
+question Sports 8
+Answer was correct!!!!
+Sue now has 3 Gold Coins.
+Joe is the current player
+They have rolled a 1
+Joe is not getting out of the penalty box
+Vlad is the current player
+They have rolled a 5
+Vlad is not getting out of the penalty box
+Chet is the current player
+They have rolled a 2
+Chet's new location is 1
+The category is Science
+question Science 14
+Question was incorrectly answered
+question Science 15
+Question was incorrectly answered
+Chet was sent to the penalty box
+Pat is the current player
+They have rolled a 5
+Pat is not getting out of the penalty box
+Sue is the current player
+They have rolled a 6
+Sue's new location is 1
+The category is Science
+question Science 16
+Answer was correct!!!!
+Sue now has 4 Gold Coins.
+Joe is the current player
+They have rolled a 1
+Joe is not getting out of the penalty box
 Vlad is the current player
 They have rolled a 1
 Vlad is not getting out of the penalty box
@@ -378,94 +381,184 @@ Chet is the current player
 They have rolled a 1
 Chet is not getting out of the penalty box
 Pat is the current player
-They have rolled a 1
-Pat is not getting out of the penalty box
-Sue is the current player
 They have rolled a 2
-Sue is getting out of the penalty box
-Sue's new location is 1
-The category is Science
-question Science 15
-Answer was correct!!!!
-Sue now has 4 Gold Coins.
-Joe is the current player
-They have rolled a 6
-Joe is getting out of the penalty box
-Joe's new location is 11
-The category is Science
-question Science 16
-Answer was correct!!!!
-Joe now has 5 Gold Coins.
-Vlad is the current player
-They have rolled a 3
-Vlad is not getting out of the penalty box
-Chet is the current player
-They have rolled a 4
-Chet is getting out of the penalty box
-Chet's new location is 0
+Pat is getting out of the penalty box
+Pat's new location is 10
 The category is Pop
-question Pop 12
+question Pop 10
 Question was incorrectly answered
-question Pop 13
+question Pop 11
 Question was incorrectly answered
-Chet was sent to the penalty box
-Pat is the current player
-They have rolled a 5
-Pat is not getting out of the penalty box
+Pat was sent to the penalty box
 Sue is the current player
-They have rolled a 6
-Sue's new location is 7
-The category is Sports
-question Sports 10
+They have rolled a 2
+Sue's new location is 3
+The category is Rock
+question Rock 6
 Question was incorrectly answered
-question Sports 11
-Answer was correct!!!!
-Sue now has 5 Gold Coins.
+question Rock 7
+Question was incorrectly answered
+Sue was sent to the penalty box
 Joe is the current player
 They have rolled a 2
-Joe's new location is 1
-The category is Science
-question Science 17
+Joe is getting out of the penalty box
+Joe's new location is 3
+The category is Rock
+question Rock 8
 Question was incorrectly answered
-question Science 18
+question Rock 9
 Question was incorrectly answered
 Joe was sent to the penalty box
 Vlad is the current player
-They have rolled a 2
+They have rolled a 6
 Vlad is getting out of the penalty box
 Vlad's new location is 1
 The category is Science
-question Science 19
-Question was incorrectly answered
-question Science 20
-Question was incorrectly answered
-Vlad was sent to the penalty box
+question Science 17
+Answer was correct!!!!
+Vlad now has 4 Gold Coins.
 Chet is the current player
-They have rolled a 6
+They have rolled a 2
 Chet is getting out of the penalty box
-Chet's new location is 6
-The category is Science
-question Science 21
+Chet's new location is 3
+The category is Rock
+question Rock 10
 Question was incorrectly answered
-question Science 22
+question Rock 11
 Question was incorrectly answered
 Chet was sent to the penalty box
 Pat is the current player
 They have rolled a 2
 Pat is getting out of the penalty box
-Pat's new location is 3
+Pat's new location is 0
+The category is Pop
+question Pop 12
+Question was incorrectly answered
+question Pop 13
+Answer was correct!!!!
+Pat now has 1 Gold Coins.
+Sue is the current player
+They have rolled a 5
+Sue is not getting out of the penalty box
+Joe is the current player
+They have rolled a 6
+Joe is getting out of the penalty box
+Joe's new location is 9
+The category is Geography
+What planet is closest to Earth?
+Question was incorrectly answered
+Which country is also called The Netherlands?
+Answer was correct!!!!
+Joe now has 5 Gold Coins.
+Vlad is the current player
+They have rolled a 2
+Vlad's new location is 3
 The category is Rock
-question Rock 9
+question Rock 12
+Question was incorrectly answered
+question Rock 13
+Question was incorrectly answered
+Vlad was sent to the penalty box
+Chet is the current player
+They have rolled a 5
+Chet is not getting out of the penalty box
+Pat is the current player
+They have rolled a 5
+Pat's new location is 5
+The category is Pop
+question Pop 14
 Answer was correct!!!!
 Pat now has 2 Gold Coins.
 Sue is the current player
-They have rolled a 2
+They have rolled a 6
+Sue is getting out of the penalty box
 Sue's new location is 9
 The category is Geography
-question Geography 8
+What country lies above Mexico?
 Question was incorrectly answered
-question Geography 9
+Where are the Spanish Steps located?
+Question was incorrectly answered
+Sue was sent to the penalty box
+Joe is the current player
+They have rolled a 2
+Joe's new location is 11
+The category is Science
+question Science 18
+Question was incorrectly answered
+question Science 19
+Question was incorrectly answered
+Joe was sent to the penalty box
+Vlad is the current player
+They have rolled a 5
+Vlad is not getting out of the penalty box
+Chet is the current player
+They have rolled a 4
+Chet is getting out of the penalty box
+Chet's new location is 7
+The category is Sports
+question Sports 9
+Question was incorrectly answered
+question Sports 10
+Question was incorrectly answered
+Chet was sent to the penalty box
+Pat is the current player
+They have rolled a 3
+Pat's new location is 8
+The category is Rock
+question Rock 14
 Answer was correct!!!!
-Sue now has 6 Gold Coins.
-player Id(value=id-Sue) won game Id(value=1)
-game Id(value=1) ended with winner Sue
+Pat now has 3 Gold Coins.
+Sue is the current player
+They have rolled a 6
+Sue is getting out of the penalty box
+Sue's new location is 3
+The category is Rock
+question Rock 15
+Question was incorrectly answered
+question Rock 16
+Answer was correct!!!!
+Sue now has 5 Gold Coins.
+Joe is the current player
+They have rolled a 3
+Joe is not getting out of the penalty box
+Vlad is the current player
+They have rolled a 2
+Vlad is getting out of the penalty box
+Vlad's new location is 5
+The category is Pop
+question Pop 15
+Answer was correct!!!!
+Vlad now has 5 Gold Coins.
+Chet is the current player
+They have rolled a 3
+Chet is not getting out of the penalty box
+Pat is the current player
+They have rolled a 6
+Pat's new location is 2
+The category is Sports
+question Sports 11
+Question was incorrectly answered
+question Sports 12
+Question was incorrectly answered
+Pat was sent to the penalty box
+Sue is the current player
+They have rolled a 2
+Sue's new location is 5
+The category is Pop
+question Pop 16
+Question was incorrectly answered
+question Pop 17
+Question was incorrectly answered
+Sue was sent to the penalty box
+Joe is the current player
+They have rolled a 6
+Joe is getting out of the penalty box
+Joe's new location is 5
+The category is Pop
+question Pop 18
+Question was incorrectly answered
+question Pop 19
+Answer was correct!!!!
+Joe now has 6 Gold Coins.
+player Id(value=id-Joe) won game Id(value=1)
+game Id(value=1) ended with winner Joe

@@ -7,6 +7,11 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -72,9 +77,10 @@ class PlayerTest {
     }
 
     @Test
-    void should_win_after_collecting_12_coins() {
-        assertThat(player.withCoinCount(6).isWinning()).isFalse();
-        assertThat(player.withCoinCount(10).isWinning()).isFalse();
+    void should_win_after_collecting_6_coins() {
+        assertThat(player.withCoinCount(2).isWinning()).isFalse();
+        assertThat(player.withCoinCount(6).isWinning()).isTrue();
+        assertThat(player.withCoinCount(10).isWinning()).isTrue();
         assertThat(player.withCoinCount(12).isWinning()).isTrue();
         assertThat(player.withCoinCount(20).isWinning()).isTrue();
     }
@@ -169,13 +175,23 @@ class PlayerTest {
     @SneakyThrows
     @Test
     void name() {
-//        List<String> list1 = List.of("A", "B", "C", "D", "E", "F");
-//        List<String> list2 = List.of("A", "B", "C");
-//        io.vavr.collection.List<String> vavrList1 = io.vavr.collection.List.ofAll(list1);
-//        io.vavr.collection.List<String> vavrList2 = io.vavr.collection.List.ofAll(list2);
-//        io.vavr.collection.List<Tuple2<String, String>> vavrListZip = vavrList1.zip(vavrList2);
-//        List<String[]> list = Streams.zip(list1.stream(), list2.stream(), (string, string2) -> new String[]{string, string2}).toList();
-//        assertThat(list1).zipSatisfy(list2,
-//                (string, string2) -> assertThat(string).isEqualTo(string2));
+        List<String> answers = new ArrayList<>(List.of(
+                "Mount Logan",
+                "Mount Rushmore",
+                "Mount Columbia",
+                "Mount Temple"
+        ));
+        Collections.shuffle(answers);
+        System.out.println("""
+                "A": "%s",
+                "B": "%s",
+                "C": "%s",
+                "D": "%s"
+                """.formatted(
+                        answers.get(0),
+                        answers.get(1),
+                        answers.get(2),
+                        answers.get(3)
+        ));
     }
 }
