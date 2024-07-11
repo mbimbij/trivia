@@ -40,7 +40,7 @@ public class Player extends Entity<UserId> {
     }
 
     boolean isWinning() {
-        return (coinCount >= 12);
+        return (coinCount >= 6);
     }
 
     boolean canContinueAfterIncorrectAnswer() {
