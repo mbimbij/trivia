@@ -1,10 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {GameResponseDto} from "../../openapi-generated";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Game} from "../game";
 
 @Component({
@@ -18,16 +17,23 @@ import {Game} from "../game";
   `,
   styleUrl: './delete-game-button.component.css'
 })
-export class DeleteGameButtonComponent {
+export class DeleteGameButtonComponent implements OnDestroy {
   @Input() game!: Game;
   private user!: User;
   private user$: Observable<User>;
+  private userSubscription: Subscription;
+  private gameSubscription?: Subscription;
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
     this.user$ = userService.getUser();
-    this.user$.subscribe(updatedUser => this.user = updatedUser)
+    this.userSubscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }
+
+  ngOnDestroy(): void {
+        this.userSubscription.unsubscribe();
+        this.gameSubscription?.unsubscribe();
+    }
   protected canDeleteGame() {
     // TODO empêcher la fonction d'être appelée 36 fois
     // console.log(`canDeleteGame called`)
@@ -35,6 +41,6 @@ export class DeleteGameButtonComponent {
   }
 
   protected deleteGame() {
-    this.gameService.delete(this.game.id).subscribe(() => {});
+    this.gameSubscription = this.gameService.delete(this.game.id).subscribe(() => {});
   }
 }

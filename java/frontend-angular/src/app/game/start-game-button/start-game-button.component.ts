@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges
+} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
@@ -21,7 +29,7 @@ import {combineLatest, Subscription} from "rxjs";
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartGameButtonComponent {
+export class StartGameButtonComponent implements OnDestroy {
 
   @Input() game!: Game
   protected user!: User;
@@ -33,14 +41,14 @@ export class StartGameButtonComponent {
               private gameService: GameServiceAbstract,
               private cdr: ChangeDetectorRef)  {
     this.id = generateRandomString(4);
-    console.log(`constructor ${this.constructor.name} - ${this.id} called`)
+    // console.log(`constructor ${this.constructor.name} - ${this.id} called`)
   }
 
   private userGameSubscription: Subscription | undefined;
   private startActionSubscription: Subscription | undefined;
 
   ngOnInit() {
-    console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
+    // console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
     let user$ = this.userService.getUser();
     let game$ = this.gameService.getGame(this.game.id);
 

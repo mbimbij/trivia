@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
 import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {flatMap, mergeMap, of, pipe} from "rxjs";
+import {flatMap, mergeMap, of, pipe, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-roll-dice',
@@ -23,12 +23,17 @@ import {flatMap, mergeMap, of, pipe} from "rxjs";
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceComponent implements OnChanges {
+export class RollDiceComponent implements OnChanges, OnDestroy {
   protected canRollDice: boolean | undefined;
   @Input() game!: Game;
   @Input() player!: Player;
+  private subscription?: Subscription;
 
   constructor(protected gameService: GameServiceAbstract) {
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -42,7 +47,7 @@ export class RollDiceComponent implements OnChanges {
   }
 
   rollDice() {
-    this.gameService.rollDice(this.game.id, this.player.id)
+    this.subscription = this.gameService.rollDice(this.game.id, this.player.id)
       .pipe(
         mergeMap(game => {
             if (game.canDrawQuestion(this.player)) {

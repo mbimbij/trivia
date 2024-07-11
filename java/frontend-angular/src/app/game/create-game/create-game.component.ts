@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-create-game',
@@ -27,20 +27,27 @@ import {Observable} from "rxjs";
   `,
   styleUrl: './create-game.component.css'
 })
-export class CreateGameComponent {
+export class CreateGameComponent implements OnDestroy{
   private user: User = Nobody.instance;
   private user$: Observable<User>;
+  private userSubscription: Subscription;
+  private newGameSubscription?: Subscription;
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
     this.user$ = userService.getUser();
-    this.user$.subscribe(updatedUser => this.user = updatedUser)
+    this.userSubscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }
 
+  ngOnDestroy(): void {
+        this.userSubscription.unsubscribe();
+        this.newGameSubscription?.unsubscribe();
+    }
+
   protected createGame(newGameName: string) {
-    this.gameService.create(newGameName, this.user)
+    this.newGameSubscription = this.gameService.create(newGameName, this.user)
       .subscribe(newGame => {
         console.log(`created game: ${newGame.id}`)
-      })
+      });
   }
 }
