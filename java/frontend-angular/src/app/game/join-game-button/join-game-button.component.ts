@@ -1,8 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Game} from '../game';
 import {compareUserAndPlayer} from "../../common/helpers";
 
@@ -24,18 +24,24 @@ import {compareUserAndPlayer} from "../../common/helpers";
   `,
   styleUrl: './join-game-button.component.css'
 })
-export class JoinGameButtonComponent {
+export class JoinGameButtonComponent implements OnDestroy {
 
   @Input() game!: Game
   protected user: User = Nobody.instance;
   user$: Observable<User>;
+  private subscription: Subscription;
+  private subscription2?: Subscription;
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
     this.user$ = userService.getUser();
-    this.user$.subscribe(updatedUser => this.user = updatedUser)
+    this.subscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }
 
+  ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+        this.subscription2?.unsubscribe();
+    }
   canJoin(): boolean {
     // TODO empêcher cette fonction d'être appelée 36 fois
     // console.log(`canJoin called`)
@@ -55,8 +61,8 @@ export class JoinGameButtonComponent {
   }
 
   joinGame() {
-    this.gameService.join(this.game, this.user)
+    this.subscription2 = this.gameService.join(this.game, this.user)
       .subscribe(() => {
-      })
+      });
   }
 }

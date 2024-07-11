@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, map, Observable} from "rxjs";
+import {Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
 import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -7,34 +7,41 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseUserService extends UserServiceAbstract {
+export class FirebaseUserService extends UserServiceAbstract implements OnDestroy{
   userSubject = new BehaviorSubject<User>(Nobody.instance);
+  private subscription1?: Subscription;
+  private subscription2?: Subscription;
 
   constructor(private afAuth: AngularFireAuth) {
     super();
     this.updateUserSubject();
   }
 
+  ngOnDestroy(): void {
+        this.subscription1?.unsubscribe();
+        this.subscription2?.unsubscribe();
+    }
+
   override getUser(): Observable<User> {
     return this.userSubject.asObservable()
   }
 
   override renameUser(newUserName: string): void {
-    this.afAuth.user
+    this.subscription1 = this.afAuth.user
       .subscribe(user => {
         user?.updateProfile({displayName: newUserName})
           .then(() => {
             this.updateUserSubject()
           })
-      })
+      });
   }
 
   private updateUserSubject() {
-    this.afAuth.user.pipe(map(user => this.buildDomainUser(user))).subscribe(
+    this.subscription2 = this.afAuth.user.pipe(map(user => this.buildDomainUser(user))).subscribe(
       value => {
         this.userSubject.next(value);
       }
-    )
+    );
   }
 
   private buildDomainUser(user: firebase.default.User | null) {

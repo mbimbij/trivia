@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
@@ -28,7 +28,7 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameComponent {
+export class GameComponent implements OnDestroy {
   private readonly id: string;
   protected player!: Player;
   private gameId!: number;
@@ -37,6 +37,7 @@ export class GameComponent {
   protected gameLogs$!: Observable<GameLog[]>;
 
   private userGameSubscription: Subscription | undefined;
+  private routeParamsSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
@@ -44,7 +45,7 @@ export class GameComponent {
               private gameService: GameServiceAbstract) {
     this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
     console.log(`constructor ${this.id} called`)
-    this.route.params.subscribe(value => {
+    this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
 
       this.game$ = this.gameService.getGame(this.gameId);
@@ -57,7 +58,12 @@ export class GameComponent {
           this.player = game.getCurrentStateOf(playerFromUser);
           // this.player = playerFromUser
         });
-    })
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userGameSubscription?.unsubscribe();
+    this.routeParamsSubscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -81,6 +87,7 @@ export class GameComponent {
   protected isCurrentPlayer() {
     return comparePlayers(this.player, this.game.currentPlayer)
   }
+
   private ngAfterViewChecked() {
     this.scrollLogsToBottom()
   }

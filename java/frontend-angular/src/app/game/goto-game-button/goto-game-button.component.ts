@@ -1,10 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {GameResponseDto} from "../../openapi-generated";
 import {Router, RouterLink} from "@angular/router";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {User} from "../../user/user";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Game} from "../game";
 
 @Component({
@@ -14,7 +14,7 @@ import {Game} from "../game";
     RouterLink
   ],
   template: `
-<!--     TODO delete state, as the backend is called-->
+    <!--     TODO delete state, as the backend is called-->
     <button
       [attr.data-testid]="'goto-button-'+game.id"
       [disabled]="!canGotoGame()"
@@ -25,15 +25,20 @@ import {Game} from "../game";
   `,
   styleUrl: './goto-game-button.component.css'
 })
-export class GotoGameButtonComponent {
+export class GotoGameButtonComponent implements OnDestroy {
   @Input() game!: Game
   private user!: User;
   private user$: Observable<User>;
+  private subscription: Subscription;
 
   constructor(protected router: Router,
               private userService: UserServiceAbstract) {
     this.user$ = userService.getUser();
-    this.user$.subscribe(updatedUser => this.user = updatedUser)
+    this.subscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   canGotoGame() {

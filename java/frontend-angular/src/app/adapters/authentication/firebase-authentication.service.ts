@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {from, map, Observable} from "rxjs";
+import {from, map, Observable, Subscription} from "rxjs";
 import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import firebase from "firebase/compat";
@@ -8,30 +8,35 @@ import firebase from "firebase/compat";
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseAuthenticationService extends AuthenticationServiceAbstract {
+export class FirebaseAuthenticationService extends AuthenticationServiceAbstract implements OnDestroy {
   override loggedIn: boolean = false;
   override emailVerified: boolean = false;
+  private activationEmailSendSubscription?: Subscription
 
   constructor(private afAuth: AngularFireAuth,
               private userService: UserServiceAbstract) {
     super();
     this.afAuth.onAuthStateChanged(user => {
       this.loggedIn = user !== null;
-      this.emailVerified =  this.isEmailVerifiedInner(user) ;
+      this.emailVerified = this.isEmailVerifiedInner(user);
     })
   }
 
+  ngOnDestroy(): void {
+    this.activationEmailSendSubscription?.unsubscribe();
+  }
+
   override sendActivationEmail(): void {
-    this.afAuth.user
+    this.activationEmailSendSubscription = this.afAuth.user
       .subscribe(user => user?.sendEmailVerification()
-      )
+      );
   }
 
   override isEmailVerified(): Observable<boolean> {
     return this.afAuth.user.pipe(map(user => this.isEmailVerifiedInner(user)))
   }
 
-  private isEmailVerifiedInner(user: firebase.User | null): boolean{
+  private isEmailVerifiedInner(user: firebase.User | null): boolean {
     return (user?.isAnonymous || user?.emailVerified) ?? false;
   }
 
