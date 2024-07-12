@@ -25,7 +25,7 @@ public class QuestionsDeck {
         POP("Pop"),
         SCIENCE("Science"),
         SPORTS("Sports"),
-        ROCK("Rock"),
+//        ROCK("Rock"),
         GEOGRAPHY("Geography"),
         ;
         private final String value;

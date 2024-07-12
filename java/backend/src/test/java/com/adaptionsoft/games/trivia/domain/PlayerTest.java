@@ -176,10 +176,10 @@ class PlayerTest {
     @Test
     void name() {
         List<String> answers = new ArrayList<>(List.of(
-                "Mount Logan",
-                "Mount Rushmore",
-                "Mount Columbia",
-                "Mount Temple"
+                "154",
+                "206",
+                "302",
+                "258"
         ));
         Collections.shuffle(answers);
         System.out.println("""
