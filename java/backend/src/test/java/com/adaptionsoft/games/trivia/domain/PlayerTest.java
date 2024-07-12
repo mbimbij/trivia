@@ -175,13 +175,13 @@ class PlayerTest {
     @SneakyThrows
     @Test
     void name() {
-        List<String> answers = new ArrayList<>(List.of(
-
-                 "Tennis",
-                 "Golf",
-                 "Baseball",
-                 "Sumo"
-
+        List<String> answers = new ArrayList<>(Arrays.asList(
+                new String[]{
+"Billy Warp",
+"Veruca Salt",
+"Mike Teavee",
+"Charlie Bucket",
+                }
         ));
         Collections.shuffle(answers);
         System.out.println("""
