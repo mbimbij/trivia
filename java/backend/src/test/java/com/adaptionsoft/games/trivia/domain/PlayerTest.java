@@ -176,10 +176,12 @@ class PlayerTest {
     @Test
     void name() {
         List<String> answers = new ArrayList<>(List.of(
-                "154",
-                "206",
-                "302",
-                "258"
+
+                 "Tennis",
+                 "Golf",
+                 "Baseball",
+                 "Sumo"
+
         ));
         Collections.shuffle(answers);
         System.out.println("""
