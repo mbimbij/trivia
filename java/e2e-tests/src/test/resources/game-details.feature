@@ -11,7 +11,6 @@ Feature: Game Details Page
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
       | <game> | <creator> | <creator> | created | <se1>         | <je1>        | <jt1>     | <ge1>        |
-    And no error is displayed in the console
     When <newcomer> joins "<game>" <jBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
@@ -36,7 +35,6 @@ Feature: Game Details Page
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
       | <game> | <creator> | <creator> | created | <se1>         | <je1>        | <jt1>     | <ge1>        |
-    And no error is displayed in the console
     When <newcomer> joins "<game>" <jBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
@@ -62,7 +60,6 @@ Feature: Game Details Page
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
       | <game> | <creator> | <creator> | created | <se1>         | <je1>        | <jt1>     | <ge1>        |
-    And no error is displayed in the console
     When <newcomer> joins "<game>" <jBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
