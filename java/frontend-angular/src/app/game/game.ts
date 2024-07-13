@@ -66,6 +66,10 @@ export class Game {
     }
   }
 
+  public isEnded(): boolean {
+    return this.state === "ended";
+  }
+
   public isCurrentPlayer(player: Player): boolean {
     return comparePlayers(player, this.currentPlayer)
   }

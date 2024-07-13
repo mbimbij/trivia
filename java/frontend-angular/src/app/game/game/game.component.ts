@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
@@ -28,13 +28,14 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameComponent implements OnDestroy {
+export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   private readonly id: string;
   protected player!: Player;
   private gameId!: number;
   private game!: Game;
   protected game$!: Observable<Game>
   protected gameLogs$!: Observable<GameLog[]>;
+  protected isGameEnded: boolean = false;
 
   private userGameSubscription: Subscription | undefined;
   private routeParamsSubscription: Subscription;
@@ -56,14 +57,9 @@ export class GameComponent implements OnDestroy {
           this.game = game;
           let playerFromUser = userToPlayer(user);
           this.player = game.getCurrentStateOf(playerFromUser);
-          // this.player = playerFromUser
+          this.isGameEnded = game.isEnded();
         });
     });
-  }
-
-  ngOnDestroy(): void {
-    this.userGameSubscription?.unsubscribe();
-    this.routeParamsSubscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -71,25 +67,13 @@ export class GameComponent implements OnDestroy {
     this.gameLogs$ = this.gameService.getGameLogs(this.gameId);
   }
 
-  private setCoinCount() {
-    // TODO améliorer update player.coinCount -> introduire une update via websocket par exemple
-    const index = this.game.players.findIndex(
-      player => player.id === this.player.id);
-    if (index !== -1) {
-      this.player.coinCount = this.game.players[index].coinCount;
-    }
-  }
-
-  get isGameEnded(): boolean {
-    return this.game.state === "ended";
-  }
-
-  protected isCurrentPlayer() {
-    return comparePlayers(this.player, this.game.currentPlayer)
-  }
-
-  private ngAfterViewChecked() {
+  ngAfterViewChecked() {
     this.scrollLogsToBottom()
+  }
+
+  ngOnDestroy(): void {
+    this.userGameSubscription?.unsubscribe();
+    this.routeParamsSubscription.unsubscribe();
   }
 
   private scrollLogsToBottom() {
