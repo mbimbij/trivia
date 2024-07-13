@@ -8,6 +8,10 @@ import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RequiredArgsConstructor
 public class Hooks {
 
@@ -21,7 +25,17 @@ public class Hooks {
 
     @After
     public void tearDown() {
+        verifyNoErrorIsDisplayedInTheConsole();
         janitor.deleteTestGames();
+    }
+
+    public void verifyNoErrorIsDisplayedInTheConsole() {
+        List<String> errorLogs = console.getErrorLogs();
+        String errorLogsString = String.join("\n", errorLogs);
+        String failMessage = "The following error logs were present%n%s".formatted(errorLogsString);
+        assertThat(errorLogs)
+                .withFailMessage(() -> failMessage)
+                .isEmpty();
     }
 
     @AfterAll

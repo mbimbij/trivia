@@ -76,16 +76,6 @@ public class CommonStepDefs {
         backend.joinGame(gameId, actor.toUserDto());
     }
 
-    @And("no error is displayed in the console")
-    public void noErrorIsDisplayedInTheConsole() {
-        List<String> errorLogs = console.getErrorLogs();
-        String errorLogsString = String.join("\n", errorLogs);
-        String failMessage = "The following error logs were present%n%s".formatted(errorLogsString);
-        assertThat(errorLogs)
-                .withFailMessage(() -> failMessage)
-                .isEmpty();
-    }
-
     @When("{actor} starts {string} from the backend")
     public void testUserStartsTestGame(Actor actor, String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
