@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
+import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.*;
@@ -16,6 +17,7 @@ public class Game extends Entity<GameId> {
     @Getter
     private final String name;
     private final Players players;
+    private final StateManager stateManager;
     private Dice dice;
     @Getter
     private boolean isGameInProgress = true;
@@ -35,11 +37,13 @@ public class Game extends Entity<GameId> {
 
     public Game(GameId gameId,
                 String name,
-                State state, EventPublisher eventPublisher,
+                State state,
+                EventPublisher eventPublisher,
                 Board board,
                 Dice dice,
                 QuestionsDeck questionsDeck,
                 Player creator,
+                StateManager stateManager,
                 Player... otherPlayers) {
         super(gameId, eventPublisher);
         this.name = name;
@@ -49,6 +53,7 @@ public class Game extends Entity<GameId> {
         this.board = board;
         this.state = state;
         this.questionsDeck = questionsDeck;
+        this.stateManager = stateManager;
     }
 
     public Optional<Player> findPlayerById(UserId playerId) {
@@ -229,4 +234,5 @@ public class Game extends Entity<GameId> {
         currentPlayer = players.getCurrent();
         displayCurrentPlayerIfGameNotEnded();
     }
+
 }

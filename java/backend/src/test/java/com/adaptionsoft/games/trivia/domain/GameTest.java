@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
+import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.SneakyThrows;
@@ -26,6 +27,7 @@ import java.util.Random;
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
 import static com.adaptionsoft.games.trivia.domain.State.*;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -224,6 +226,7 @@ class GameTest {
                     null,
                     null,
                     player1,
+                    null,
                     player2);
 
             // THEN no domain events are produced
