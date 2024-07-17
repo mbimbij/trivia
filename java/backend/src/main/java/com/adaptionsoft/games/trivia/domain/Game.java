@@ -58,6 +58,7 @@ public class Game extends Entity<GameId> {
                 Dice dice,
                 QuestionsDeck questionsDeck,
                 Player creator,
+                StateManager stateManager,
                 Player... otherPlayers) {
         super(gameId, eventPublisher);
         this.name = name;

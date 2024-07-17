@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
+import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.NonNull;
@@ -33,6 +34,8 @@ public class GameFactory {
 
         QuestionsDeck questions = questionsRepository.getQuestions();
 
+        StateManager stateManager = new StateManager("0", it emptyList());
+
         Game game = new Game(
                 gameId,
                 gameName,
@@ -42,6 +45,7 @@ public class GameFactory {
                 new Dice(rand),
                 questions,
                 creator,
+                stateManager,
                 otherPlayers
         );
 
