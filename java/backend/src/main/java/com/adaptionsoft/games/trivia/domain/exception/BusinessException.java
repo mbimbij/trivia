@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
 public abstract class BusinessException extends RuntimeException {
-    BusinessException(String message) {
+    protected BusinessException(String message) {
         super(message);
     }
 }

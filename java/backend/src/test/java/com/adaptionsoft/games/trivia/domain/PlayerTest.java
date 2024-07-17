@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
+import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.SneakyThrows;
 import org.assertj.core.api.SoftAssertions;
@@ -24,6 +25,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         player = player1();
+        player.setStateManager(mock(StateManager.class));
     }
 
     @Test
@@ -93,6 +95,10 @@ class PlayerTest {
         // THEN not in penalty box
         assertThat(player.isInPenaltyBox()).isFalse();
 
+        // WHEN
+        player.applyAction(PlayerAction.DRAW_QUESTION);
+        player.applyAction(PlayerAction.SUBMIT_ANSWER);
+
         // WHEN 2nd incorrect answer
         player.answerIncorrectly();
 
@@ -130,10 +136,8 @@ class PlayerTest {
     @Test
     void getting_out_of_penalty_box_set_inner_state_correctly() {
         // GIVEN
-        player.answerCorrectly();
         player.answerIncorrectly();
         player.answerIncorrectly();
-        player.answerCorrectly();
 
         // WHEN
         player.getOutOfPenaltyBox();
@@ -158,8 +162,10 @@ class PlayerTest {
     @Test
     void correct_answer__should_reset_incorrect_answer_counter() {
         // GIVEN
-        player.answerCorrectly();
         player.answerIncorrectly();
+
+        // THEN
+        assertThat(player.getConsecutiveIncorrectAnswersCount()).isPositive();
 
         // WHEN
         player.answerCorrectly();

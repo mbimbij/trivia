@@ -2,14 +2,23 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
+import com.adaptionsoft.games.trivia.domain.statemachine.CannotExecuteAction;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
+import com.adaptionsoft.games.trivia.domain.statemachine.Transition;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
 
-import static com.adaptionsoft.games.trivia.domain.State.*;
+import static com.adaptionsoft.games.trivia.domain.GameAction.END_GAME;
+import static com.adaptionsoft.games.trivia.domain.GameAction.*;
+import static com.adaptionsoft.games.trivia.domain.GameState.*;
+import static com.adaptionsoft.games.trivia.domain.PlayerAction.*;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Setter // for testing purposes only
@@ -23,27 +32,32 @@ public class Game extends Entity<GameId> {
     private boolean isGameInProgress = true;
     @Getter
     private int turn = 0;
+    @Getter
     private Player currentPlayer;
     @Getter
     private Player winner;
     private final Board board;
     @Getter
-    private State state;
+    private GameState state;
     private QuestionsDeck questionsDeck;
     @Getter
     private Question currentQuestion;
     @Getter
     private Dice.Roll currentRoll;
 
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        this.players.setCurrent(currentPlayer);
+    }
+
     public Game(GameId gameId,
                 String name,
-                State state,
+                GameState state,
                 EventPublisher eventPublisher,
                 Board board,
                 Dice dice,
                 QuestionsDeck questionsDeck,
                 Player creator,
-                StateManager stateManager,
                 Player... otherPlayers) {
         super(gameId, eventPublisher);
         this.name = name;
@@ -53,7 +67,13 @@ public class Game extends Entity<GameId> {
         this.board = board;
         this.state = state;
         this.questionsDeck = questionsDeck;
-        this.stateManager = stateManager;
+        this.stateManager = new StateManager("game - name:%s - id:%s".formatted(name, gameId),
+                CREATED,
+                new Transition(CREATED, JOIN, CREATED),
+                new Transition(CREATED, START, STARTED),
+                new Transition(STARTED, GameAction.END_TURN, STARTED),
+                new Transition(STARTED, END_GAME, ENDED)
+        );
     }
 
     public Optional<Player> findPlayerById(UserId playerId) {
@@ -68,14 +88,14 @@ public class Game extends Entity<GameId> {
     }
 
     public void addPlayer(Player player) {
-        if (!state.equals(CREATED)) {
-            throw new InvalidGameStateException(this.getId(), this.getState(), "add player");
-        }
+        stateManager.validateAction(JOIN);
         player.setGameId(id);
         players.add(player);
+        stateManager.applyAction(JOIN);
     }
 
     public void start(Player player) {
+        stateManager.validateAction(START);
         validateGameStateIsNot(ENDED, "start");
         if (!isCreator(player)) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
@@ -89,6 +109,8 @@ public class Game extends Entity<GameId> {
         raise(new GameStartedEvent(id),
                 new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
 
+        stateManager.applyAction(START);
+
         eventPublisher.flushEvents();
     }
 
@@ -101,51 +123,58 @@ public class Game extends Entity<GameId> {
     }
 
     public void rollDice(Player player) {
-        validateGameStateIs(STARTED, "answer question");
+        validateGameStartedForPlayerAction(ROLL_DICE);
         validateCurrentPlayer(player);
-        if (!player.canRollDice()) {
-            throw new RollDiceException(id, player.getId());
-        }
+        currentPlayer.validateAction(ROLL_DICE);
 
         currentRoll = dice.roll();
+        currentPlayer.applyAction(ROLL_DICE);
         raise(new PlayerRolledDiceEvent(player, currentRoll, currentPlayer.getTurn()));
         if (player.isInPenaltyBox()) {
             rollDiceFromPenaltyBox(player);
         } else {
             board.movePlayer(player, currentRoll);
+            currentPlayer.applyAction(UPDATE_LOCATION);
         }
 
         eventPublisher.flushEvents();
     }
 
+    private void validateGameStartedForPlayerAction(PlayerAction playerAction) {
+        try {
+            stateManager.validateState(STARTED);
+        } catch (AssertionError e) {
+            throw new CannotExecuteAction(stateManager.getEntityIdentifier(), playerAction, stateManager.getCurrentState());
+        }
+    }
+
     private void rollDiceFromPenaltyBox(Player player) {
         if (currentRoll.isPair()) {
             player.getOutOfPenaltyBox();
-            raise(new PlayerGotOutOfPenaltyBoxEvent(player, player.getTurn()));
             board.movePlayer(player, currentRoll);
+            currentPlayer.applyAction(UPDATE_LOCATION);
         } else {
+            currentPlayer.applyAction(STAY_IN_PENALTY_BOX);
             raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
             endTurn();
         }
     }
 
     public void drawQuestion(Player currentPlayer) {
-        validateGameStateIs(STARTED, "draw question");
+        validateGameStartedForPlayerAction(DRAW_QUESTION);
         validateCurrentPlayer(currentPlayer);
-        validatePlayerNotInPenaltyBox(currentPlayer, "draw question");
-        if (currentRoll == null) {
-            throw new CannotDrawQuestionBeforeRollingDiceException(getId(), currentPlayer.getId());
-        }
+        currentPlayer.validateAction(DRAW_QUESTION);
 
         this.currentQuestion = questionsDeck.drawQuestion(currentPlayer.getLocation());
+        this.currentPlayer.applyAction(DRAW_QUESTION);
         raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
         eventPublisher.flushEvents();
     }
 
     public boolean answerCurrentQuestion(Player player, AnswerCode answerCode) {
-        validateGameStateIs(STARTED, "answer question");
+        validateGameStartedForPlayerAction(SUBMIT_ANSWER);
         validateCurrentPlayer(player);
-        validatePlayerNotInPenaltyBox(player, "answer current question");
+        currentPlayer.applyAction(SUBMIT_ANSWER);
 
         boolean isAnswerCorrect = false;
 
@@ -172,9 +201,6 @@ public class Game extends Entity<GameId> {
         return isAnswerCorrect;
     }
 
-    public Player getCurrentPlayer() {
-        return players.getCurrent();
-    }
 
     public Collection<Player> getPlayersList() {
         return players.getIndividualPlayers();
@@ -196,15 +222,15 @@ public class Game extends Entity<GameId> {
         }
     }
 
-    private void validateGameStateIs(State expectedState, String action) {
+    private void validateGameStateIs(GameState expectedState, String action) {
         validateGameState(true, expectedState, action);
     }
 
-    private void validateGameStateIsNot(State expectedState, String action) {
+    private void validateGameStateIsNot(GameState expectedState, String action) {
         validateGameState(false, expectedState, action);
     }
 
-    private void validateGameState(boolean orNot, State expectedState, String action) {
+    private void validateGameState(boolean orNot, GameState expectedState, String action) {
         if ((!orNot && state.equals(expectedState)) || (orNot && !state.equals(expectedState))) {
             throw new InvalidGameStateException(this.getId(), this.getState(), action);
         }
@@ -223,10 +249,14 @@ public class Game extends Entity<GameId> {
             winner = currentPlayer;
             raise(new PlayerWonEvent(id, currentPlayer, currentPlayer.getTurn()));
             raise(new GameEndedEvent(id, currentPlayer.getName()));
+            stateManager.applyAction(END_GAME);
+            currentPlayer.applyAction(PlayerAction.END_GAME);
         }
     }
 
     private void endTurn() {
+        currentPlayer.applyAction(PlayerAction.END_TURN);
+        stateManager.applyAction(GameAction.END_TURN);
         currentQuestion = null;
         currentRoll = null;
         turn++;
@@ -235,4 +265,8 @@ public class Game extends Entity<GameId> {
         displayCurrentPlayerIfGameNotEnded();
     }
 
+    public void setState(GameState gameState) {
+        this.state=gameState;
+        stateManager.setCurrentState(gameState);
+    }
 }

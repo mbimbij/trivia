@@ -94,4 +94,11 @@ public class Players extends EventRaiser {
         return individualPlayers.size();
     }
 
+    public void setCurrent(Player player) {
+        Player newCurrentPlayer = this.individualPlayers.stream()
+                .filter(p -> Objects.equals(p.getId(), player.getId()))
+                .findAny()
+                .orElseThrow();
+        currentPlayerIndex = individualPlayers.indexOf(newCurrentPlayer);
+    }
 }
