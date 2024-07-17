@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 import static com.adaptionsoft.games.trivia.domain.GameState.CREATED;
@@ -34,8 +35,6 @@ public class GameFactory {
 
         QuestionsDeck questions = questionsRepository.getQuestions();
 
-        StateManager stateManager = new StateManager("0", it emptyList());
-
         Game game = new Game(
                 gameId,
                 gameName,
@@ -45,7 +44,6 @@ public class GameFactory {
                 new Dice(rand),
                 questions,
                 creator,
-                stateManager,
                 otherPlayers
         );
 

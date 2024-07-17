@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.domain;
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
 import com.adaptionsoft.games.trivia.domain.statemachine.CannotExecuteAction;
+import com.adaptionsoft.games.trivia.domain.statemachine.State;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.domain.statemachine.Transition;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
@@ -58,7 +59,6 @@ public class Game extends Entity<GameId> {
                 Dice dice,
                 QuestionsDeck questionsDeck,
                 Player creator,
-                StateManager stateManager,
                 Player... otherPlayers) {
         super(gameId, eventPublisher);
         this.name = name;
@@ -213,6 +213,26 @@ public class Game extends Entity<GameId> {
     private void validateCurrentPlayer(Player player) {
         if (!Objects.equals(player, currentPlayer)) {
             throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
+        }
+    }
+
+    private void validatePlayerNotInPenaltyBox(Player player, String actionName) {
+        if (player.isInPenaltyBox()) {
+            throw new ExecuteActionInPenaltyBoxException(getId(), player, actionName);
+        }
+    }
+
+    private void validateGameStateIs(State expectedState, String action) {
+        validateGameState(true, expectedState, action);
+    }
+
+    private void validateGameStateIsNot(State expectedState, String action) {
+        validateGameState(false, expectedState, action);
+    }
+
+    private void validateGameState(boolean orNot, State expectedState, String action) {
+        if ((!orNot && state.equals(expectedState)) || (orNot && !state.equals(expectedState))) {
+            throw new InvalidGameStateException(this.getId(), this.getState(), action);
         }
     }
 
