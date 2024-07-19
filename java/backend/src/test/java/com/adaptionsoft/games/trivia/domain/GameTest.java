@@ -78,7 +78,7 @@ class GameTest {
             doReturn(1).when(idGenerator).nextId();
             MockEventPublisher eventPublisher = new MockEventPublisher();
             eventPublisher.register(new EventConsoleLogger());
-            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/main/resources/questions-json"));
+            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/test/resources/questions-test-json"));
             playerFactory = new PlayerFactory(eventPublisher);
         }
 
@@ -397,8 +397,8 @@ class GameTest {
                     player1 is the current player
                     They have rolled a 5
                     player1's new location is 5
-                    The category is Pop
-                    pop question 1
+                    The category is Science
+                    question Science 0
                     Answer was correct!!!!
                     player1 now has 1 Gold Coins.
                     player2 is the current player
@@ -443,10 +443,10 @@ class GameTest {
                     player1 is the current player
                     They have rolled a 5
                     player1's new location is 5
-                    The category is Pop
-                    pop question 1
+                    The category is Science
+                    question Science 0
                     Question was incorrectly answered
-                    pop question 2
+                    question Science 1
                     Question was incorrectly answered
                     player1 was sent to the penalty box
                     player2 is the current player

@@ -1,1102 +1,222 @@
 [
   {
-    "id": "Science-0",
-    "questionText": "question Science 0",
+    "id": "Science-1",
+    "questionText": "The concept of gravity was discovered by which famous physicist?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Isaac Newton",
+      "B": "René Descartes",
+      "C": "Aristotle",
+      "D": "Albert Einstein"
     },
     "correctAnswer": "A"
-  },
-  {
-    "id": "Science-1",
-    "questionText": "question Science 1",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
   },
   {
     "id": "Science-2",
-    "questionText": "question Science 2",
+    "questionText": "What is the name of the tallest grass on earth?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Giant oat grass",
+      "B": "Silvergrass",
+      "C": "Pampass Grass",
+      "D": "Bamboo"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "D"
   },
   {
     "id": "Science-3",
-    "questionText": "question Science 3",
+    "questionText": "Which is the most abundant element in the universe?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Hydrogen",
+      "B": "Nitrogen",
+      "C": "Carbon",
+      "D": "Uranium"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "A"
   },
   {
     "id": "Science-4",
-    "questionText": "question Science 4",
+    "questionText": "What is the hardest natural substance on Earth?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Plutonium",
+      "B": "Kevlar",
+      "C": "Diamond",
+      "D": "Titanium"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "C"
   },
   {
     "id": "Science-5",
-    "questionText": "question Science 5",
+    "questionText": "What is the study of mushrooms called?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Mycology",
+      "B": "Mycophagus",
+      "C": "Mycopology",
+      "D": "Mushroomology"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "A"
   },
   {
     "id": "Science-6",
-    "questionText": "question Science 6",
+    "questionText": "Which oath of ethics taken by doctors is named after an Ancient Greek physician?",
     "availableAnswers": {
       "A": "answer A",
       "B": "answer B",
       "C": "answer C",
       "D": "answer D"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-7",
-    "questionText": "question Science 7",
+    "questionText": "Which oath of ethics taken by doctors is named after an Ancient Greek physician?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "The Blood Omen",
+      "B": "The Hypocrite Oath",
+      "C": "The Hippocratic Oath",
+      "D": "The Pact with the Devil"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "C"
   },
   {
     "id": "Science-8",
-    "questionText": "question Science 8",
+    "questionText": "What is the largest desert in the world?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Sahara Desert",
+      "B": "Antarctica",
+      "C": "Gobi Desert",
+      "D": "Patagonia Desert"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-9",
-    "questionText": "question Science 9",
+    "questionText": "What does DNA stand for?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Deoxyribonucleic alcohol",
+      "B": "Disclosure Non Agreement",
+      "C": "Deoxy acid",
+      "D": "Deoxyribonucleic acid"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "D"
   },
   {
     "id": "Science-10",
-    "questionText": "question Science 10",
+    "questionText": "At what temperature are Celsius and Fahrenheit equal?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "-60",
+      "B": "-40",
+      "C": "32",
+      "D": "0"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-11",
-    "questionText": "question Science 11",
+    "questionText": "Roughly how long does it take for the sun’s light to reach Earth?",
     "availableAnswers": {
       "A": "answer A",
       "B": "answer B",
       "C": "answer C",
       "D": "answer D"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "C"
   },
   {
     "id": "Science-12",
-    "questionText": "question Science 12",
+    "questionText": "Roughly how long does it take for the sun’s light to reach Earth: 8 minutes, 8 hours or 8 days?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "8 seconds",
+      "B": "8 hours",
+      "C": "8 days",
+      "D": "8 minutes"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "D"
   },
   {
     "id": "Science-13",
-    "questionText": "question Science 13",
+    "questionText": "On what continent will you not find bees?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Antarctica",
+      "B": "Africa",
+      "C": "Oceania",
+      "D": "Asia"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "A"
   },
   {
     "id": "Science-14",
-    "questionText": "question Science 14",
+    "questionText": "How long is the memory of a goldfish?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "a few hours",
+      "B": "a few days",
+      "C": "none",
+      "D": "a few seconds"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-15",
-    "questionText": "question Science 15",
+    "questionText": "What mountain peak is farthest from the center of the Earth?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Mount Kilimandjaro",
+      "B": "Peak of Chimborazo in Ecuador",
+      "C": "K2",
+      "D": "Mount Everest"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-16",
-    "questionText": "question Science 16",
+    "questionText": "How many bones do sharks have in their bodies?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "200",
+      "B": "None",
+      "C": "10",
+      "D": "50"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-17",
-    "questionText": "question Science 17",
+    "questionText": "What is the heaviest organ in the human body?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "liver",
+      "B": "heart",
+      "C": "intestines",
+      "D": "brain"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "A"
   },
   {
     "id": "Science-18",
-    "questionText": "question Science 18",
+    "questionText": "Which blood type is the rarest in humans?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "AB positive",
+      "B": "AB negative",
+      "C": "O positive",
+      "D": "B negative"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "B"
   },
   {
     "id": "Science-19",
-    "questionText": "question Science 19",
+    "questionText": "How many teeth does an adult human have?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "40",
+      "B": "30",
+      "C": "32",
+      "D": "28"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "C"
   },
   {
     "id": "Science-20",
-    "questionText": "question Science 20",
+    "questionText": "How many bones are in the human body?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-21",
-    "questionText": "question Science 21",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "154",
+      "B": "206",
+      "C": "302",
+      "D": "258"
     },
     "correctAnswer": "B"
-  },
-  {
-    "id": "Science-22",
-    "questionText": "question Science 22",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-23",
-    "questionText": "question Science 23",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-24",
-    "questionText": "question Science 24",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-25",
-    "questionText": "question Science 25",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-26",
-    "questionText": "question Science 26",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-27",
-    "questionText": "question Science 27",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-28",
-    "questionText": "question Science 28",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-29",
-    "questionText": "question Science 29",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-30",
-    "questionText": "question Science 30",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-31",
-    "questionText": "question Science 31",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-32",
-    "questionText": "question Science 32",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-33",
-    "questionText": "question Science 33",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-34",
-    "questionText": "question Science 34",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-35",
-    "questionText": "question Science 35",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-36",
-    "questionText": "question Science 36",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-37",
-    "questionText": "question Science 37",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-38",
-    "questionText": "question Science 38",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-39",
-    "questionText": "question Science 39",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-40",
-    "questionText": "question Science 40",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-41",
-    "questionText": "question Science 41",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-42",
-    "questionText": "question Science 42",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-43",
-    "questionText": "question Science 43",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-44",
-    "questionText": "question Science 44",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-45",
-    "questionText": "question Science 45",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-46",
-    "questionText": "question Science 46",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-47",
-    "questionText": "question Science 47",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-48",
-    "questionText": "question Science 48",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-49",
-    "questionText": "question Science 49",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-50",
-    "questionText": "question Science 50",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-51",
-    "questionText": "question Science 51",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-52",
-    "questionText": "question Science 52",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-53",
-    "questionText": "question Science 53",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-54",
-    "questionText": "question Science 54",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-55",
-    "questionText": "question Science 55",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-56",
-    "questionText": "question Science 56",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-57",
-    "questionText": "question Science 57",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-58",
-    "questionText": "question Science 58",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-59",
-    "questionText": "question Science 59",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-60",
-    "questionText": "question Science 60",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-61",
-    "questionText": "question Science 61",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-62",
-    "questionText": "question Science 62",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-63",
-    "questionText": "question Science 63",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-64",
-    "questionText": "question Science 64",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-65",
-    "questionText": "question Science 65",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-66",
-    "questionText": "question Science 66",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-67",
-    "questionText": "question Science 67",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-68",
-    "questionText": "question Science 68",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-69",
-    "questionText": "question Science 69",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-70",
-    "questionText": "question Science 70",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-71",
-    "questionText": "question Science 71",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-72",
-    "questionText": "question Science 72",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-73",
-    "questionText": "question Science 73",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-74",
-    "questionText": "question Science 74",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-75",
-    "questionText": "question Science 75",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-76",
-    "questionText": "question Science 76",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-77",
-    "questionText": "question Science 77",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-78",
-    "questionText": "question Science 78",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-79",
-    "questionText": "question Science 79",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-80",
-    "questionText": "question Science 80",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-81",
-    "questionText": "question Science 81",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-82",
-    "questionText": "question Science 82",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-83",
-    "questionText": "question Science 83",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-84",
-    "questionText": "question Science 84",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-85",
-    "questionText": "question Science 85",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-86",
-    "questionText": "question Science 86",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-87",
-    "questionText": "question Science 87",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-88",
-    "questionText": "question Science 88",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-89",
-    "questionText": "question Science 89",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-90",
-    "questionText": "question Science 90",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-91",
-    "questionText": "question Science 91",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-92",
-    "questionText": "question Science 92",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-93",
-    "questionText": "question Science 93",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-94",
-    "questionText": "question Science 94",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-95",
-    "questionText": "question Science 95",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
-  },
-  {
-    "id": "Science-96",
-    "questionText": "question Science 96",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "A"
-  },
-  {
-    "id": "Science-97",
-    "questionText": "question Science 97",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "B"
-  },
-  {
-    "id": "Science-98",
-    "questionText": "question Science 98",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "C"
-  },
-  {
-    "id": "Science-99",
-    "questionText": "question Science 99",
-    "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
-    },
-    "correctAnswer": "D"
   }
 ]

@@ -6,5 +6,6 @@ target/
 e2e-tests/videos
 **/*.env
 **/creds
+**/test.html
 backend/src/main/resources/static
 
