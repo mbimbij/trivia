@@ -8,7 +8,8 @@
       "C": "Mount Everest",
       "D": "Mount Kilimandjaro"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Mount Everest"
   },
   {
     "id": "Geography-2",
@@ -19,7 +20,8 @@
       "C": "China",
       "D": "India"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "China"
   },
   {
     "id": "Geography-3",
@@ -30,7 +32,8 @@
       "C": "Australia",
       "D": "Arctic"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Oceania"
   },
   {
     "id": "Geography-4",
@@ -41,7 +44,8 @@
       "C": "North European",
       "D": "Russian"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Antarctic"
   },
   {
     "id": "Geography-5",
@@ -52,7 +56,8 @@
       "C": "Amazon River",
       "D": "Nile River"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Nile River"
   },
   {
     "id": "Geography-6",
@@ -63,7 +68,8 @@
       "C": "New York",
       "D": "Los Angeles"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "San Francisco"
   },
   {
     "id": "What is the capital of Mexico?",
@@ -74,7 +80,8 @@
       "C": "Mexico City",
       "D": "Lima"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Mexico City"
   },
   {
     "id": "Geography-8",
@@ -85,7 +92,8 @@
       "C": "Paris, Texas",
       "D": "Lima, Peru"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Paris, France"
   },
   {
     "id": "Geography-9",
@@ -96,7 +104,8 @@
       "C": "Florence",
       "D": "Naples"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Naples"
   },
   {
     "id": "Geography-10",
@@ -107,7 +116,8 @@
       "C": "Egypt",
       "D": "France"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Egypt"
   },
   {
     "id": "Geography-11",
@@ -118,7 +128,8 @@
       "C": "The Vatican City",
       "D": "Tuvalu"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "The Vatican City"
   },
   {
     "id": "Geography-12",
@@ -129,7 +140,8 @@
       "C": "Los Angeles",
       "D": "Sacramento"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Sacramento"
   },
   {
     "id": "Geography-13",
@@ -139,9 +151,9 @@
       "B": "50",
       "C": "51",
       "D": "56"
-
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "50"
   },
   {
     "id": "Geography-14",
@@ -152,7 +164,8 @@
       "C": "Venus",
       "D": "Mars"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Venus"
   },
   {
     "id": "Geography-15",
@@ -163,7 +176,8 @@
       "C": "Belgium",
       "D": "Holland"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Holland"
   },
   {
     "id": "Geography-16",
@@ -174,7 +188,8 @@
       "C": "Peru",
       "D": "Canada"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "The USA"
   },
   {
     "id": "Geography-17",
@@ -185,7 +200,8 @@
       "C": "Madrid, Spain",
       "D": "Tijuana, Mexico"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Rome, Italy"
   },
   {
     "id": "Geography-18",
@@ -196,7 +212,8 @@
       "C": "18",
       "D": "2"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "4"
   },
   {
     "id": "Geography-19",
@@ -207,7 +224,8 @@
       "C": "8",
       "D": "20"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "11"
   },
   {
     "id": "Geography-20",
@@ -218,6 +236,7 @@
       "C": "Mount Temple",
       "D": "Mount Columbia"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Mount Logan"
   }
 ]

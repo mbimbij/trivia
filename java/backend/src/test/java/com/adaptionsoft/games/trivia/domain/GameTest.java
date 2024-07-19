@@ -121,6 +121,7 @@ class GameTest {
                 }
                 if (canSubmitAnswer(game)) {
                     game.answerCurrentQuestion(game.getCurrentPlayer(), getRandomAnswer(rand));
+                    game.validate(game.getCurrentPlayer());
                 }
             } while (game.isGameInProgress());
         }
@@ -414,6 +415,8 @@ class GameTest {
 
             // WHEN correct answer
             game.answerCurrentQuestion(player1, A);
+            // AND validate
+            game.validate(player1);
 
             // THEN event is raised
             assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerAnsweredCorrectlyEvent(player1, turn));
@@ -467,6 +470,8 @@ class GameTest {
 
             // WHEN first incorrect answer (correct answers order: A,B,C,D,A,B,C,D)
             game.answerCurrentQuestion(player1, B);
+            // AND validate
+            game.validate(player1);
             // THEN event is raised
             assertThat(eventPublisher.getPublishedEvents()).containsOnlyOnce(expectedEvent);
             // AND turn not incremented
@@ -480,6 +485,8 @@ class GameTest {
 
             // WHEN second consecutive answer (correct answers order: A,B,C,D,A,B,C,D)
             game.answerCurrentQuestion(player1, C);
+            // AND validate
+            game.validate(player1);
             // THEN output as expected
             assertThat(baos.toString()).isEqualTo(expectedOutput);
             // AND the current question has been set to null
@@ -567,7 +574,7 @@ class GameTest {
     @Nested
     class EndGame {
         @Test
-        void game_should_end__after_answering__if_current_player_is_winning() {
+        void game_should_end__after_answering_and_validating__if_current_player_is_winning() {
             // GIVEN a started game with current player about to win
             Player currentPlayer = Mockito.spy(player1);
             Mockito.doReturn(true).when(currentPlayer).isWinning();
@@ -591,6 +598,7 @@ class GameTest {
 
             // WHEN
             game.answerCurrentQuestion(currentPlayer, A);
+            game.validate(currentPlayer);
 
             // THEN
             assertSoftly(softAssertions -> {

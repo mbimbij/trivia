@@ -12,7 +12,9 @@ public record Question(
         @NotNull
         AvailableAswers availableAnswers,
         @NotNull
-        AnswerCode correctAnswer
+        AnswerCode correctAnswer,
+//        @NotNull
+        String explanations
 ) {
     boolean isCorrect(AnswerCode answerCode) {
         return correctAnswer() == answerCode;

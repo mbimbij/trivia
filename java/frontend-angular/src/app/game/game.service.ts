@@ -1,7 +1,14 @@
 import {Injectable} from '@angular/core';
 import {GameServiceAbstract} from "../services/game-service-abstract";
 import {BehaviorSubject, map, Observable, of, ReplaySubject} from "rxjs";
-import {AnswerCode, GameLog, GameResponseDto, QuestionDto, TriviaControllerService} from "../openapi-generated";
+import {
+  AnswerCode,
+  AnswerDto,
+  GameLog,
+  GameResponseDto,
+  QuestionDto,
+  TriviaControllerService
+} from "../openapi-generated";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
@@ -34,8 +41,12 @@ export class GameService extends GameServiceAbstract {
       .pipe(map(value => value.currentQuestion!));
   }
 
-  override answerQuestion(gameId: number, userId: string, answerCode: AnswerCode): Observable<boolean> {
+  override answerQuestion(gameId: number, userId: string, answerCode: AnswerCode): Observable<AnswerDto> {
     return this.openApiService.answer(gameId, userId, answerCode);
+  }
+
+  override validate(gameId: number, userId: string): Observable<void> {
+    return this.openApiService.validate(gameId, userId);
   }
 
   override getGames() {

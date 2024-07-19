@@ -1,14 +1,12 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.GameCreatedEvent;
-import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 import static com.adaptionsoft.games.trivia.domain.GameState.CREATED;

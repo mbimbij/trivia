@@ -1,5 +1,5 @@
 import {Player} from "../user/player";
-import {GameResponseDto, QuestionDto} from "../openapi-generated";
+import {AnswerDto, GameResponseDto, QuestionDto} from "../openapi-generated";
 import {comparePlayers, playerDtoToPlayer, playerToPlayerDto} from "../common/helpers";
 
 export class Game {
@@ -13,6 +13,7 @@ export class Game {
   winner: Player | undefined
   currentQuestion: QuestionDto | undefined
   currentRoll: number | undefined
+  currentAnswer: AnswerDto | undefined
 
   constructor(id: number,
               name: string,
@@ -23,7 +24,9 @@ export class Game {
               players: Player[],
               winner?: Player,
               currentQuestion?: QuestionDto,
-              currentRoll?: number) {
+              currentRoll?: number,
+              currentAnswer?: AnswerDto
+              ) {
     this.id = id;
     this.name = name;
     this.state = state;
@@ -34,6 +37,7 @@ export class Game {
     this.winner = winner;
     this.currentQuestion = currentQuestion;
     this.currentRoll = currentRoll;
+    this.currentAnswer = currentAnswer
   }
 
   static fromDto(dto: GameResponseDto): Game {
@@ -48,7 +52,8 @@ export class Game {
       ),
       dto.winner ? playerDtoToPlayer(dto.winner) : undefined,
       dto.currentQuestion,
-      dto.currentRoll
+      dto.currentRoll,
+      dto.currentAnswer
     )
   }
 
@@ -63,6 +68,7 @@ export class Game {
       players: this.players.map(player => playerToPlayerDto(player)),
       currentQuestion: this.currentQuestion,
       currentRoll: this.currentRoll,
+      currentAnswer: this.currentAnswer
     }
   }
 

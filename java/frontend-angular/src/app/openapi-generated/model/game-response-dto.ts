@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { PlayerDto } from './player-dto';
+import { AnswerDto } from './answer-dto';
 import { QuestionDto } from './question-dto';
 
 
@@ -24,5 +25,6 @@ export interface GameResponseDto {
     winner?: PlayerDto;
     currentQuestion?: QuestionDto;
     currentRoll?: number;
+    currentAnswer?: AnswerDto;
 }
 

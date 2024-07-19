@@ -24,6 +24,7 @@ Feature: On-Going Game Page
       When qa-user rolls the dice
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
+      And qa-user cannot see the backhand section
       And qa-user sees game logs ending as following
         | qa-user is the current player  |
         | They have rolled a \\d         |
@@ -32,9 +33,17 @@ Feature: On-Going Game Page
         | question .*                    |
       When qa-user answers A
       Then qa-user cannot see the roll dice button
-      And qa-user cannot see the answer question section
+      And qa-user can see the answer question section
+      And qa-user can see the backhand section
       And qa-user sees game logs ending as following
         | question .*                       |
+        | Answer was correct!!!!            |
+        | qa-user now has 1 Gold Coins.     |
+      When qa-user clicks on validation button
+      Then qa-user cannot see the roll dice button
+      And qa-user cannot see the answer question section
+      And qa-user cannot see the backhand section
+      And qa-user sees game logs ending as following
         | Answer was correct!!!!            |
         | qa-user now has 1 Gold Coins.     |
         | test-user-1 is the current player |
@@ -44,11 +53,17 @@ Feature: On-Going Game Page
       When qa-user answers B
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
+      And qa-user can see the backhand section
+      And qa-user sees game logs ending as following
+        | question .*                       |
+        | Question was incorrectly answered |
+      When qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | question .*                       |
         | Question was incorrectly answered |
         | question .*                       |
       When qa-user answers B
+      When qa-user clicks on validation button
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
       And qa-user sees game logs ending as following
@@ -60,7 +75,9 @@ Feature: On-Going Game Page
     Scenario: Play a turn outside penalty box - First incorrect answer, Second incorrect answer
       When qa-user rolls the dice
       And qa-user answers B
+      And qa-user clicks on validation button
       And qa-user answers C
+      And qa-user clicks on validation button
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
       And qa-user sees game logs ending as following
@@ -105,6 +122,7 @@ Feature: On-Going Game Page
       And a loaded dice returning a 4
       When qa-user rolls the dice
       And qa-user answers A
+      And qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
@@ -119,7 +137,9 @@ Feature: On-Going Game Page
       And a loaded dice returning a 4
       When qa-user rolls the dice
       And qa-user answers B
+      And qa-user clicks on validation button
       And qa-user answers B
+      And qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |
@@ -136,7 +156,9 @@ Feature: On-Going Game Page
       And a loaded dice returning a 4
       When qa-user rolls the dice
       And qa-user answers B
+      And qa-user clicks on validation button
       And qa-user answers C
+      And qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4               |

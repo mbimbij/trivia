@@ -188,38 +188,6 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/GameResponseDto"
-  /api/games/{gameId}/players/{playerId}/answer/{answerCode}:
-    post:
-      tags:
-        - trivia-controller
-      operationId: answer
-      parameters:
-        - name: gameId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-        - name: playerId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: answerCode
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/AnswerCode'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
-            application/problem+json:
-              schema:
-                type: boolean
   /api/games/{gameId}/logs:
     get:
       tags:
@@ -241,6 +209,63 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GameLog'
+  /api/games/{gameId}/players/{playerId}/validate:
+    post:
+      tags:
+        - trivia-controller
+      operationId: validate
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+  /api/games/{gameId}/players/{playerId}/answer/{answerCode}:
+    post:
+      tags:
+        - trivia-controller
+      operationId: answer
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: answerCode
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - A
+              - B
+              - C
+              - D
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnswerDto"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/AnswerDto"
 components:
   schemas:
     CreateGameRequestDto:
@@ -299,6 +324,8 @@ components:
         currentRoll:
           type: integer
           format: int32
+        currentAnswer:
+          $ref: "#/components/schemas/AnswerDto"
     GameLog:
       type: object
       properties:
@@ -353,3 +380,10 @@ components:
         - B
         - C
         - D
+    AnswerDto:
+      type: object
+      properties:
+        isCorrect:
+          type: boolean
+        explanations:
+          type: string

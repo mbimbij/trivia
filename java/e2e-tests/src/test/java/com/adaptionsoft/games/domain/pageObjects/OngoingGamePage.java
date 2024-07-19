@@ -11,6 +11,8 @@ import java.util.List;
 public class OngoingGamePage extends UiElementObject {
     public static final String ROLL_DICE_BUTTON_TESTID = "roll-dice";
     public static final String ANSWER_QUESTION_SECTION_TESTID = "answer-question";
+    public static final String BACKHAND_SECTION_TESTID = "backhand";
+    public static final String VALIDATION_BUTTON_TESTID = "validate";
 
     public OngoingGamePage(Page page) {
         super(page);
@@ -59,5 +61,12 @@ public class OngoingGamePage extends UiElementObject {
         PlaywrightAssertions.assertThat(locator).isVisible();
         PlaywrightAssertions.assertThat(locator).isEnabled();
         locator.click();
+    }
+
+    public void clickOnValidate() {
+        Locator button = page.getByTestId(VALIDATION_BUTTON_TESTID);
+        PlaywrightAssertions.assertThat(button).isVisible();
+        PlaywrightAssertions.assertThat(button).isEnabled();
+        button.click();
     }
 }

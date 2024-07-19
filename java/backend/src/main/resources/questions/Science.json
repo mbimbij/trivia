@@ -8,7 +8,8 @@
       "C": "Aristotle",
       "D": "Albert Einstein"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Isaac Newton"
   },
   {
     "id": "Science-2",
@@ -19,7 +20,8 @@
       "C": "Pampass Grass",
       "D": "Bamboo"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Bamboo"
   },
   {
     "id": "Science-3",
@@ -30,7 +32,8 @@
       "C": "Carbon",
       "D": "Uranium"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Hydrogen"
   },
   {
     "id": "Science-4",
@@ -41,7 +44,8 @@
       "C": "Diamond",
       "D": "Titanium"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Diamond"
   },
   {
     "id": "Science-5",
@@ -52,18 +56,20 @@
       "C": "Mycopology",
       "D": "Mushroomology"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Mycology"
   },
   {
     "id": "Science-6",
-    "questionText": "Which oath of ethics taken by doctors is named after an Ancient Greek physician?",
+    "questionText": "What color is the blood inside your body?",
     "availableAnswers": {
-      "A": "answer A",
-      "B": "answer B",
-      "C": "answer C",
-      "D": "answer D"
+      "A": "Red",
+      "B": "Blue",
+      "C": "Yellow",
+      "D": "Green"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "answer B"
   },
   {
     "id": "Science-7",
@@ -74,7 +80,8 @@
       "C": "The Hippocratic Oath",
       "D": "The Pact with the Devil"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "The Hippocratic Oath"
   },
   {
     "id": "Science-8",
@@ -85,7 +92,8 @@
       "C": "Gobi Desert",
       "D": "Patagonia Desert"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Antarctica"
   },
   {
     "id": "Science-9",
@@ -96,7 +104,8 @@
       "C": "Deoxy acid",
       "D": "Deoxyribonucleic acid"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Deoxyribonucleic acid"
   },
   {
     "id": "Science-10",
@@ -107,7 +116,8 @@
       "C": "32",
       "D": "0"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "-40"
   },
   {
     "id": "Science-11",
@@ -118,7 +128,8 @@
       "C": "answer C",
       "D": "answer D"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "answer C"
   },
   {
     "id": "Science-12",
@@ -129,7 +140,8 @@
       "C": "8 days",
       "D": "8 minutes"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "8 minutes"
   },
   {
     "id": "Science-13",
@@ -140,7 +152,8 @@
       "C": "Oceania",
       "D": "Asia"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Antarctica"
   },
   {
     "id": "Science-14",
@@ -151,7 +164,8 @@
       "C": "none",
       "D": "a few seconds"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "a few days"
   },
   {
     "id": "Science-15",
@@ -162,7 +176,8 @@
       "C": "K2",
       "D": "Mount Everest"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Peak of Chimborazo in Ecuador"
   },
   {
     "id": "Science-16",
@@ -173,7 +188,8 @@
       "C": "10",
       "D": "50"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "None"
   },
   {
     "id": "Science-17",
@@ -184,7 +200,8 @@
       "C": "intestines",
       "D": "brain"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "liver"
   },
   {
     "id": "Science-18",
@@ -195,7 +212,8 @@
       "C": "O positive",
       "D": "B negative"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "AB negative"
   },
   {
     "id": "Science-19",
@@ -206,7 +224,8 @@
       "C": "32",
       "D": "28"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "32"
   },
   {
     "id": "Science-20",
@@ -217,6 +236,7 @@
       "C": "302",
       "D": "258"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "206"
   }
 ]

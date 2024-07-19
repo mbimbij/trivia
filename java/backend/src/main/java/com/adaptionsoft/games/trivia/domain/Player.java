@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
+import com.adaptionsoft.games.trivia.domain.statemachine.State;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.domain.statemachine.Transition;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
@@ -9,9 +10,7 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.*;
 
 import static com.adaptionsoft.games.trivia.domain.PlayerAction.*;
-import static com.adaptionsoft.games.trivia.domain.PlayerAction.DRAW_QUESTION;
 import static com.adaptionsoft.games.trivia.domain.PlayerState.*;
-import static com.adaptionsoft.games.trivia.domain.PlayerState.WAITING_TO_DRAW_1ST_QUESTION;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
@@ -44,19 +43,34 @@ public class Player extends Entity<UserId> {
                 new Transition(WAITING_TO_UPDATE_LOCATION, UPDATE_LOCATION, WAITING_TO_DRAW_1ST_QUESTION),
                 new Transition(WAITING_TO_DRAW_1ST_QUESTION, DRAW_QUESTION, WAITING_FOR_1ST_ANSWER),
                 new Transition(WAITING_FOR_1ST_ANSWER, SUBMIT_ANSWER, WAITING_FOR_1ST_ANSWER_EVALUATION),
-                new Transition(WAITING_FOR_1ST_ANSWER_EVALUATION, ANSWER_CORRECTLY, WAITING_TO_END_TURN_OR_GAME),
-                new Transition(WAITING_FOR_1ST_ANSWER_EVALUATION, ANSWER_INCORRECTLY, WAITING_TO_DRAW_2ND_QUESTION),
+
+                new Transition(WAITING_FOR_1ST_ANSWER_EVALUATION, ANSWER_CORRECTLY, WAITING_TO_VALIDATE_FIRST_CORRECT_ANSWER),
+                new Transition(WAITING_FOR_1ST_ANSWER_EVALUATION, ANSWER_INCORRECTLY, WAITING_TO_VALIDATE_FIRST_INCORRECT_ANSWER),
+
+                new Transition(WAITING_TO_VALIDATE_FIRST_CORRECT_ANSWER, VALIDATE, WAITING_TO_END_TURN_OR_GAME),
+                new Transition(WAITING_TO_VALIDATE_FIRST_INCORRECT_ANSWER, VALIDATE, WAITING_TO_DRAW_2ND_QUESTION),
+
                 new Transition(WAITING_TO_DRAW_2ND_QUESTION, DRAW_QUESTION, WAITING_FOR_2ND_ANSWER),
                 new Transition(WAITING_FOR_2ND_ANSWER, SUBMIT_ANSWER, WAITING_FOR_2ND_ANSWER_EVALUATION),
-                new Transition(WAITING_FOR_2ND_ANSWER_EVALUATION, ANSWER_CORRECTLY, WAITING_TO_END_TURN_OR_GAME),
-                new Transition(WAITING_FOR_2ND_ANSWER_EVALUATION, ANSWER_INCORRECTLY, IN_PENALTY_BOX),
+
+                new Transition(WAITING_FOR_2ND_ANSWER_EVALUATION, ANSWER_CORRECTLY, WAITING_TO_VALIDATE_SECOND_CORRECT_ANSWER),
+                new Transition(WAITING_FOR_2ND_ANSWER_EVALUATION, ANSWER_INCORRECTLY, WAITING_TO_VALIDATE_SECOND_INCORRECT_ANSWER),
+
+                new Transition(WAITING_TO_VALIDATE_SECOND_CORRECT_ANSWER, VALIDATE, WAITING_TO_END_TURN_OR_GAME),
+                new Transition(WAITING_TO_VALIDATE_SECOND_INCORRECT_ANSWER, VALIDATE, IN_PENALTY_BOX),
+
                 new Transition(WAITING_TO_END_TURN_OR_GAME, END_TURN, WAITING_FOR_DICE_ROLL),
                 new Transition(WAITING_TO_END_TURN_OR_GAME, END_GAME, GAME_END),
                 new Transition(IN_PENALTY_BOX, ROLL_DICE, WAITING_FOR_ROLL_DICE_EVALUATION),
                 new Transition(IN_PENALTY_BOX, END_TURN, IN_PENALTY_BOX),
+
                 new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, GET_OUT_OF_PENALTY_BOX, WAITING_TO_UPDATE_LOCATION),
                 new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, STAY_IN_PENALTY_BOX, IN_PENALTY_BOX)
         );
+    }
+
+    public State getCurrentState() {
+        return stateManager.getCurrentState();
     }
 
     void incrementTurn() {
@@ -166,5 +180,9 @@ public class Player extends Entity<UserId> {
 
     public void setState(PlayerState playerState) {
         stateManager.setCurrentState(playerState);
+    }
+
+    State getState() {
+        return getStateManager().getCurrentState();
     }
 }
