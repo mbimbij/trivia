@@ -26,21 +26,28 @@ public class StateManager {
         this.entityIdentifier = entityIdentifier;
         this.currentState = initialState;
 
-        actionsByState = Arrays.stream(transitions)
+        actionsByState = buildActionsByStateFromTransitions(transitions);
+        nextStateByStateAndAction = buildNextStateFromTransitions(transitions);
+    }
+
+    private static Map<State, Set<Action>> buildActionsByStateFromTransitions(Transition[] transitions) {
+        return Arrays.stream(transitions)
                 .collect(Collectors.groupingBy(
                         Transition::startState,
                         Collectors.mapping(Transition::action, Collectors.toSet())));
+    }
 
-
-        Map<StateActionPair, List<State>> map = Arrays.stream(transitions)
+    private static Map<StateActionPair, State> buildNextStateFromTransitions(Transition[] transitions) {
+        Map<StateActionPair, List<State>> intermediaryResult = Arrays.stream(transitions)
                 .collect(Collectors.groupingBy(
                         t -> new StateActionPair(t.startState(), t.action()),
                         Collectors.mapping(Transition::endState, Collectors.toList())));
-        map.forEach((pair, nextStates) -> {
+
+        intermediaryResult.forEach((pair, nextStates) -> {
             assert nextStates.size() == 1;
         });
 
-        nextStateByStateAndAction = MapStream.of(map)
+        return MapStream.of(intermediaryResult)
                 .mapValue(List::getFirst)
                 .toMap();
     }

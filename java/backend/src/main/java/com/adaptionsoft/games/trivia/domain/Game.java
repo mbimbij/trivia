@@ -96,7 +96,6 @@ public class Game extends Entity<GameId> {
 
     public void start(Player player) {
         stateManager.validateAction(START);
-        validateGameStateIsNot(ENDED, "start");
         if (!isCreator(player)) {
             throw StartException.onlyCreatorCanStartGame(id, player.getId());
         }
@@ -213,26 +212,6 @@ public class Game extends Entity<GameId> {
     private void validateCurrentPlayer(Player player) {
         if (!Objects.equals(player, currentPlayer)) {
             throw PlayTurnException.notCurrentPlayerException(id, player.getId(), currentPlayer.getId());
-        }
-    }
-
-    private void validatePlayerNotInPenaltyBox(Player player, String actionName) {
-        if (player.isInPenaltyBox()) {
-            throw new ExecuteActionInPenaltyBoxException(getId(), player, actionName);
-        }
-    }
-
-    private void validateGameStateIs(GameState expectedState, String action) {
-        validateGameState(true, expectedState, action);
-    }
-
-    private void validateGameStateIsNot(GameState expectedState, String action) {
-        validateGameState(false, expectedState, action);
-    }
-
-    private void validateGameState(boolean orNot, GameState expectedState, String action) {
-        if ((!orNot && state.equals(expectedState)) || (orNot && !state.equals(expectedState))) {
-            throw new InvalidGameStateException(this.getId(), this.getState(), action);
         }
     }
 
