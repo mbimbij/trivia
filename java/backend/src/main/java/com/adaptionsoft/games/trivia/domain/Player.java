@@ -54,7 +54,7 @@ public class Player extends Entity<UserId> {
                 new Transition(WAITING_TO_END_TURN_OR_GAME, END_GAME, GAME_END),
                 new Transition(IN_PENALTY_BOX, ROLL_DICE, WAITING_FOR_ROLL_DICE_EVALUATION),
                 new Transition(IN_PENALTY_BOX, END_TURN, IN_PENALTY_BOX),
-                new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, GET_OUT_OF_PENATLY_BOX, WAITING_TO_UPDATE_LOCATION),
+                new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, GET_OUT_OF_PENALTY_BOX, WAITING_TO_UPDATE_LOCATION),
                 new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, STAY_IN_PENALTY_BOX, IN_PENALTY_BOX)
         );
     }
@@ -150,7 +150,7 @@ public class Player extends Entity<UserId> {
         isInPenaltyBox = false;
         consecutiveCorrectAnswersCount = 0;
         consecutiveIncorrectAnswersCount = 0;
-        stateManager.applyAction(GET_OUT_OF_PENATLY_BOX);
+        stateManager.applyAction(GET_OUT_OF_PENALTY_BOX);
         raise(new PlayerGotOutOfPenaltyBoxEvent(this, getTurn()));
     }
 

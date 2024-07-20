@@ -79,7 +79,7 @@ class GameTest {
             doReturn(1).when(idGenerator).nextId();
             MockEventPublisher eventPublisher = new MockEventPublisher();
             eventPublisher.register(new EventConsoleLogger());
-            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/test/resources/questions-test-json"));
+            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/test/resources/questions"));
             playerFactory = new PlayerFactory(eventPublisher);
         }
 

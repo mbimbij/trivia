@@ -4,6 +4,7 @@ Feature: On-Going Game Page
     Given previous test data cleared
     And 2 existing games
     And current game is "test-game-2"
+    And current game question deck has been replaced with a test one
     And qa-user on the game-list page
     And game started
     And qa-user goes to the game
