@@ -1,6 +1,8 @@
 package com.adaptionsoft.games.trivia.domain;
 
-public enum State {
+import com.adaptionsoft.games.trivia.domain.statemachine.State;
+
+public enum GameState implements State {
     CREATED("created"),
     STARTED("started"),
     ENDED("ended"),
@@ -8,7 +10,7 @@ public enum State {
 
     private final String value;
 
-    State(String value) {
+    GameState(String value) {
         this.value = value;
     }
 

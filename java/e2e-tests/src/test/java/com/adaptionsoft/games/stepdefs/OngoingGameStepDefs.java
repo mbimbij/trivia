@@ -130,4 +130,9 @@ public class OngoingGameStepDefs {
         janitor.putQaUserInPenaltyBox(gameId, testProperties.getQaUserId());
     }
 
+    @And("current game question deck has been replaced with a test one")
+    public void currentGameQuestionDeckHasBeenReplacedWithATestOne() {
+        assertThat(gameId).isNotNull();
+        janitor.setLoadedQuestionDeckForGame(gameId);
+    }
 }

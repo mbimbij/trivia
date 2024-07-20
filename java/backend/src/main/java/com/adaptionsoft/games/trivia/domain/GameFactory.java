@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 import java.util.Random;
 
-import static com.adaptionsoft.games.trivia.domain.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.GameState.CREATED;
 
 @RequiredArgsConstructor
 public class GameFactory {
@@ -36,7 +36,8 @@ public class GameFactory {
         Game game = new Game(
                 gameId,
                 gameName,
-                CREATED, eventPublisher,
+                CREATED,
+                eventPublisher,
                 board,
                 new Dice(rand),
                 questions,

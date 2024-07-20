@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
 import com.adaptionsoft.games.trivia.domain.exception.*;
+import com.adaptionsoft.games.trivia.domain.statemachine.CannotExecuteAction;
 import com.adaptionsoft.games.trivia.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
 import lombok.SneakyThrows;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
-import static com.adaptionsoft.games.trivia.domain.State.*;
+import static com.adaptionsoft.games.trivia.domain.GameState.*;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -78,7 +79,7 @@ class GameTest {
             doReturn(1).when(idGenerator).nextId();
             MockEventPublisher eventPublisher = new MockEventPublisher();
             eventPublisher.register(new EventConsoleLogger());
-            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/test/resources/questions-test-json"));
+            gameFactory = new GameFactory(idGenerator, eventPublisher, new QuestionsRepositoryJson("src/test/resources/questions"));
             playerFactory = new PlayerFactory(eventPublisher);
         }
 
@@ -253,15 +254,15 @@ class GameTest {
     @Nested
     class JoinGame {
         @ParameterizedTest
-        @EnumSource(value = State.class, names = {"STARTED", "ENDED"})
-        void cannot_join_game__when_state_is_not_CREATED(State state) {
+        @EnumSource(value = GameState.class, names = {"STARTED", "ENDED"})
+        void cannot_join_game__when_state_is_not_CREATED(GameState state) {
             // GIVEN
             Game game = TestFixtures.a1playerGame();
             game.setState(state);
 
             // WHEN
             assertThatThrownBy(() -> game.addPlayer(player2()))
-                    .isInstanceOf(InvalidGameStateException.class);
+                    .isInstanceOf(CannotExecuteAction.class);
         }
 
         @Test
@@ -320,7 +321,7 @@ class GameTest {
 
             // THEN
             assertSoftly(softAssertions -> {
-                softAssertions.assertThat(game.getState()).isEqualTo(State.STARTED);
+                softAssertions.assertThat(game.getState()).isEqualTo(GameState.STARTED);
                 softAssertions.assertThat(eventPublisher.getPublishedEvents())
                         .containsOnlyOnce(new GameStartedEvent(game.getId()));
             });
@@ -330,7 +331,7 @@ class GameTest {
         void joined_player_cannot_start_game() {
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatThrownBy(() -> game.start(player2)).isInstanceOf(StartException.class);
-                softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
+                softAssertions.assertThat(game.getState()).isEqualTo(GameState.CREATED);
             });
         }
 
@@ -345,7 +346,7 @@ class GameTest {
             // THEN
             assertSoftly(softAssertions -> {
                 softAssertions.assertThatThrownBy(callable).isInstanceOf(StartException.class);
-                softAssertions.assertThat(game.getState()).isEqualTo(State.CREATED);
+                softAssertions.assertThat(game.getState()).isEqualTo(GameState.CREATED);
             });
         }
     }
@@ -359,7 +360,8 @@ class GameTest {
 
             // WHEN
             assertThatThrownBy(() -> game.drawQuestion(player1))
-                    .isInstanceOf(CannotDrawQuestionBeforeRollingDiceException.class);
+                    .isInstanceOf(CannotExecuteAction.class)
+                    .hasMessageEndingWith("cannot execute action DRAW_QUESTION in state WAITING_FOR_DICE_ROLL");
         }
     }
 
@@ -383,7 +385,7 @@ class GameTest {
         void cannot_submit_an_answer_if_game_not_started() {
             assumeThat(game.getState()).isNotEqualTo(STARTED);
             assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A))
-                    .isInstanceOf(InvalidGameStateException.class);
+                    .isInstanceOf(CannotExecuteAction.class);
         }
 
         @Test
@@ -540,17 +542,19 @@ class GameTest {
             player1.setInPenaltyBox(true);
 
             assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A))
-                    .isInstanceOf(ExecuteActionInPenaltyBoxException.class);
+                    .isInstanceOf(CannotExecuteAction.class)
+                    .hasMessageEndingWith("cannot execute action SUBMIT_ANSWER in state IN_PENALTY_BOX");
         }
 
         @Test
         void cannot_answer_question_before_drawing_one() {
             game.start(player1);
             game.rollDice(player1);
-            player1.setInPenaltyBox(true);
+            player1.setInPenaltyBox(false);
 
             assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A))
-                    .isInstanceOf(ExecuteActionInPenaltyBoxException.class);
+                    .isInstanceOf(CannotExecuteAction.class)
+                    .hasMessageEndingWith("cannot execute action SUBMIT_ANSWER in state WAITING_TO_DRAW_1ST_QUESTION");
         }
     }
 
@@ -574,6 +578,7 @@ class GameTest {
             game.setState(STARTED);
             game.setCurrentPlayer(currentPlayer);
             game.setCurrentQuestion(currentQuestion);
+            currentPlayer.setState(PlayerState.WAITING_FOR_1ST_ANSWER);
 
             // AND stdout redirected to a string
             ByteArrayOutputStream baos = redirectStdoutToString();
@@ -604,10 +609,10 @@ class GameTest {
 
             // WHEN
             assertSoftly(softAssertions -> {
-                softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.start(player1)).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.rollDice(player1)).isInstanceOf(InvalidGameStateException.class);
-                softAssertions.assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A)).isInstanceOf(InvalidGameStateException.class);
+                softAssertions.assertThatThrownBy(() -> game.addPlayer(player1())).isInstanceOf(CannotExecuteAction.class);
+                softAssertions.assertThatThrownBy(() -> game.start(player1)).isInstanceOf(CannotExecuteAction.class);
+                softAssertions.assertThatThrownBy(() -> game.rollDice(player1)).isInstanceOf(CannotExecuteAction.class);
+                softAssertions.assertThatThrownBy(() -> game.answerCurrentQuestion(player1, A)).isInstanceOf(CannotExecuteAction.class);
             });
         }
     }

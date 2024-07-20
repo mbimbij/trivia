@@ -39,7 +39,7 @@ public class TestFixtures {
     }
 
     private static QuestionsRepository questionsRepository() {
-        String pathString = "src/test/resources/questions-test-json";
+        String pathString = "src/test/resources/questions";
         return new QuestionsRepositoryJson(pathString);
     }
 

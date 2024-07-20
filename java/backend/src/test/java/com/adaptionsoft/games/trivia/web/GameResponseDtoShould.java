@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.adaptionsoft.games.trivia.domain.State.CREATED;
+import static com.adaptionsoft.games.trivia.domain.GameState.CREATED;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.GAME_TEST_ID_INTEGER;
 import static org.assertj.core.api.Assertions.assertThat;
 

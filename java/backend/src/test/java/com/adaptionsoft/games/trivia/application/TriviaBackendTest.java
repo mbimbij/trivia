@@ -30,8 +30,8 @@ import java.util.List;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.A;
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.B;
-import static com.adaptionsoft.games.trivia.domain.State.CREATED;
-import static com.adaptionsoft.games.trivia.domain.State.STARTED;
+import static com.adaptionsoft.games.trivia.domain.GameState.CREATED;
+import static com.adaptionsoft.games.trivia.domain.GameState.STARTED;
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -316,6 +316,7 @@ class TriviaBackendTest {
         Game game = gameFactory.create("game", player1, player2);
         game.setCurrentRoll(new Dice.Roll(3));
         game.setQuestionsDeck(loadedQuestionsDeck());
+        player1.setState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION);
         game.start(player1);
         gameRepository.save(game);
 
@@ -365,6 +366,7 @@ class TriviaBackendTest {
         game.setCurrentRoll(new Dice.Roll(3));
         game.setCurrentQuestion(questionTest());
         game.start(player1);
+        player1.setState(PlayerState.WAITING_FOR_1ST_ANSWER);
         gameRepository.save(game);
 
         // WHEN player1 rolls the dice
@@ -392,6 +394,7 @@ class TriviaBackendTest {
         game.setCurrentRoll(new Dice.Roll(3));
         game.setCurrentQuestion(questionTest());
         game.start(player1);
+        player1.setState(PlayerState.WAITING_FOR_1ST_ANSWER);
         gameRepository.save(game);
 
         // WHEN player1 rolls the dice

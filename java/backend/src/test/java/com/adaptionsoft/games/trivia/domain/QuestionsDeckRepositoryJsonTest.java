@@ -8,7 +8,7 @@ class QuestionsDeckRepositoryJsonTest {
     @Test
     void can_load_questions_from_file() {
         // GIVEN
-        QuestionsRepositoryJson questionsRepository = new QuestionsRepositoryJson("src/test/resources/questions-test-json");
+        QuestionsRepositoryJson questionsRepository = new QuestionsRepositoryJson("src/test/resources/questions");
 
         // WHEN
         QuestionsDeck questions = questionsRepository.getQuestions();
