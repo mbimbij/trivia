@@ -135,4 +135,19 @@ public class OngoingGameStepDefs {
         assertThat(gameId).isNotNull();
         janitor.setLoadedQuestionDeckForGame(gameId);
     }
+
+    @And("qa-user can see the backhand section")
+    public void qaUserCanSeeTheAnswerBackendSection() {
+        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.BACKHAND_SECTION_TESTID);
+    }
+
+    @And("qa-user cannot see the backhand section")
+    public void qaUserCannotSeeTheBackhandSection() {
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.BACKHAND_SECTION_TESTID);
+    }
+
+    @When("qa-user clicks on validation button")
+    public void qaUserClicksOnValidationButton() {
+        ongoingGamePage.clickOnValidate();
+    }
 }

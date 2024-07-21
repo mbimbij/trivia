@@ -159,6 +159,8 @@ class TriviaBackendTest {
                 List.of(player1Dto),
                 player1Dto,
                 null,
+                null,
+                null,
                 null
         );
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
@@ -209,6 +211,8 @@ class TriviaBackendTest {
                 creatorDto,
                 List.of(creatorDto, newPlayerDto),
                 creatorDto,
+                null,
+                null,
                 null,
                 null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
@@ -270,7 +274,11 @@ class TriviaBackendTest {
                 1,
                 player1Dto,
                 List.of(player1Dto, player2Dto),
-                player1Dto, null, null);
+                player1Dto,
+                null,
+                null,
+                null,
+                null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
 
@@ -298,13 +306,18 @@ class TriviaBackendTest {
         // AND the response body is as expected
         GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
 
+        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION.toString());
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),
                 1,
-                player1Dto,
-                List.of(player1Dto, player2Dto),
-                player1Dto, null, 3);
+                expectedPlayer1Dto,
+                List.of(expectedPlayer1Dto, player2Dto),
+                expectedPlayer1Dto,
+                null,
+                null,
+                3,
+                null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
     }
@@ -336,15 +349,18 @@ class TriviaBackendTest {
         GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
         QuestionDto expectedCurrentQuestionDto = QuestionDto.from(questionTest());
 
+        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_FOR_1ST_ANSWER.toString());
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),
                 1,
-                player1Dto,
-                List.of(player1Dto, player2Dto),
-                player1Dto,
+                expectedPlayer1Dto,
+                List.of(expectedPlayer1Dto, player2Dto),
+                expectedPlayer1Dto,
+                null,
                 expectedCurrentQuestionDto,
-                3);
+                3,
+                null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
         // AND the event is published

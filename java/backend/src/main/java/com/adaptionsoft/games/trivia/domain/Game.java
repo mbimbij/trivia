@@ -1,7 +1,9 @@
 package com.adaptionsoft.games.trivia.domain;
 
 import com.adaptionsoft.games.trivia.domain.event.*;
-import com.adaptionsoft.games.trivia.domain.exception.*;
+import com.adaptionsoft.games.trivia.domain.exception.CannotAnswerQuestionBeforeDrawingOneException;
+import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
+import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.domain.statemachine.CannotExecuteAction;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.domain.statemachine.Transition;
@@ -44,6 +46,8 @@ public class Game extends Entity<GameId> {
     private Question currentQuestion;
     @Getter
     private Dice.Roll currentRoll;
+    @Getter
+    private Answer currentAnswer;
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -170,7 +174,7 @@ public class Game extends Entity<GameId> {
         eventPublisher.flushEvents();
     }
 
-    public boolean answerCurrentQuestion(Player player, AnswerCode answerCode) {
+    public Answer answerCurrentQuestion(Player player, AnswerCode answerCode) {
         validateGameStartedForPlayerAction(SUBMIT_ANSWER);
         validateCurrentPlayer(player);
         currentPlayer.applyAction(SUBMIT_ANSWER);
@@ -184,20 +188,12 @@ public class Game extends Entity<GameId> {
         if (currentQuestion.isCorrect(answerCode)) {
             isAnswerCorrect = true;
             currentPlayer.answerCorrectly();
-            endGameIfCurrentPlayerWon();
-            if (isGameInProgress) {
-                endTurn();
-            }
         } else {
             currentPlayer.answerIncorrectly();
-            if (currentPlayer.canContinueAfterIncorrectAnswer()) {
-                drawQuestion(currentPlayer);
-            } else {
-                endTurn();
-            }
         }
         eventPublisher.flushEvents();
-        return isAnswerCorrect;
+        currentAnswer = new Answer(isAnswerCorrect, currentQuestion.explanations());
+        return currentAnswer;
     }
 
 
@@ -238,6 +234,7 @@ public class Game extends Entity<GameId> {
         stateManager.applyAction(GameAction.END_TURN);
         currentQuestion = null;
         currentRoll = null;
+        currentAnswer = null;
         turn++;
         players.goToNextPlayerTurn();
         currentPlayer = players.getCurrent();
@@ -245,7 +242,32 @@ public class Game extends Entity<GameId> {
     }
 
     public void setState(GameState gameState) {
-        this.state=gameState;
+        this.state = gameState;
         stateManager.setCurrentState(gameState);
     }
+
+    public void validate(Player player) {
+        validateGameStartedForPlayerAction(VALIDATE);
+        validateCurrentPlayer(player);
+        currentPlayer.validateAction(VALIDATE);
+        currentPlayer.applyAction(VALIDATE);
+        currentAnswer = null;
+
+        switch (currentPlayer.getState()) {
+            case PlayerState.WAITING_TO_END_TURN_OR_GAME -> endTurnOrGame();
+            case PlayerState.WAITING_TO_DRAW_2ND_QUESTION -> drawQuestion(player);
+            case PlayerState.IN_PENALTY_BOX -> endTurn();
+            default -> throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
+        }
+
+        eventPublisher.flushEvents();
+    }
+
+    private void endTurnOrGame() {
+        endGameIfCurrentPlayerWon();
+        if (isGameInProgress) {
+            endTurn();
+        }
+    }
+
 }

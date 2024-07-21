@@ -27,32 +27,9 @@ public record GameResponseDto(
         PlayerDto currentPlayer,
         PlayerDto winner,
         QuestionDto currentQuestion,
-        Integer currentRoll
+        Integer currentRoll,
+        AnswerDto currentAnswer
         ) {
-
-    public GameResponseDto(@NotBlank Integer id,
-                           @NotBlank String name,
-                           @NotBlank String state,
-                           @NotBlank
-                           int turn,
-                           @NotBlank
-                           PlayerDto creator,
-                           Collection<PlayerDto> players,
-                           @NotBlank
-                           PlayerDto currentPlayer,
-                           QuestionDto currentQuestion,
-                           Integer currentRoll) {
-        this(id,
-                name,
-                state,
-                turn,
-                creator,
-                players,
-                currentPlayer,
-                null,
-                currentQuestion,
-                currentRoll);
-    }
 
     public static GameResponseDto from(Game game) {
         List<PlayerDto> playersDto = game.getPlayersList().stream().map(PlayerDto::from).toList();
@@ -63,6 +40,7 @@ public record GameResponseDto(
         PlayerDto winnerDto = Optional.ofNullable(game.getWinner()).map(PlayerDto::from).orElse(null);
         QuestionDto questionDto = QuestionDto.from(game.getCurrentQuestion());
         Integer currentRoll = Optional.ofNullable(game.getCurrentRoll()).map(Dice.Roll::value).orElse(null);
+        AnswerDto answerDto = Optional.ofNullable(game.getCurrentAnswer()).map(AnswerDto::from).orElse(null);
         return new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 game.getState().toString(),
@@ -72,7 +50,8 @@ public record GameResponseDto(
                 currentPlayerDto,
                 winnerDto,
                 questionDto,
-                currentRoll);
+                currentRoll,
+                answerDto);
     }
 
 }

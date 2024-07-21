@@ -5,7 +5,7 @@
   <h2>{{ question.questionText }}</h2>
   <button
     [attr.data-testid]="'answer-A'"
-    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.A).subscribe()"
+    (click)="answerQuestion(game.id, player.id, AnswerCode.A)"
   >
     A
   </button>
@@ -13,7 +13,7 @@
   <br>
   <button
     [attr.data-testid]="'answer-B'"
-    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.B).subscribe()"
+    (click)="answerQuestion(game.id, player.id, AnswerCode.B)"
   >
     B
   </button>
@@ -21,7 +21,7 @@
   <br>
   <button
     [attr.data-testid]="'answer-C'"
-    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.C).subscribe()"
+    (click)="answerQuestion(game.id, player.id, AnswerCode.C)"
   >
     C
   </button>
@@ -29,9 +29,30 @@
   <br>
   <button
     [attr.data-testid]="'answer-D'"
-    (click)="gameService.answerQuestion(game.id, player.id, AnswerCode.D).subscribe()"
+    (click)="answerQuestion(game.id, player.id, AnswerCode.D)"
   >
     D
   </button>
   <span>{{ question.availableAnswers['D'] }}</span>
+</div>
+
+<div
+  [attr.data-testid]="'backhand'"
+  *ngIf="game.currentAnswer != undefined"
+>
+  <hr/>
+  <div
+    [attr.data-testid]="'is-answer-correct'"
+  >
+    @if (game.currentAnswer.isCorrect) {
+      <h2>Correct Answer</h2>
+    } @else {
+      <h2>Incorrect Answer</h2>
+    }
+  </div>
+  <p>{{ game.currentAnswer.explanations }}</p>
+  <button
+    [attr.data-testid]="'validate'"
+    (click)="validate(game.id, player.id)">ok
+  </button>
 </div>

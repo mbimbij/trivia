@@ -186,15 +186,26 @@ public class TriviaController {
     }
 
     @PostMapping("/{gameId}/players/{playerId}/answer/{answerCode}")
-    public boolean answer(@PathVariable("gameId") Integer gameIdInt,
+    public AnswerDto answer(@PathVariable("gameId") Integer gameIdInt,
                                   @PathVariable("playerId") String playerIdString,
                                   @PathVariable("answerCode") AnswerCode answerCode) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
-        boolean isAnswerCorrect = game.answerCurrentQuestion(player, answerCode);
+        Answer answer = game.answerCurrentQuestion(player, answerCode);
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
-        return isAnswerCorrect;
+        return AnswerDto.from(answer);
+    }
+
+    @PostMapping("/{gameId}/players/{playerId}/validate")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void validate(@PathVariable("gameId") Integer gameIdInt,
+                                  @PathVariable("playerId") String playerIdString) {
+        Game game = findGameOrThrow(new GameId(gameIdInt));
+        Player player = findPlayerOrThrow(game, new UserId(playerIdString));
+        game.validate(player);
+        gameRepository.save(game);
+        notifyGameUpdatedViaWebsocket(game);
     }
 
     private void notifyGameUpdatedViaWebsocket(Game game) {

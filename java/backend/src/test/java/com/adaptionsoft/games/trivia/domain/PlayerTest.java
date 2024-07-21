@@ -3,15 +3,15 @@ package com.adaptionsoft.games.trivia.domain;
 import com.adaptionsoft.games.trivia.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.nio.file.Paths;
+import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.TestFixtures.player1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -181,25 +181,13 @@ class PlayerTest {
     @SneakyThrows
     @Test
     void name() {
-        List<String> answers = new ArrayList<>(Arrays.asList(
-                new String[]{
-"Billy Warp",
-"Veruca Salt",
-"Mike Teavee",
-"Charlie Bucket",
-                }
-        ));
-        Collections.shuffle(answers);
-        System.out.println("""
-                "A": "%s",
-                "B": "%s",
-                "C": "%s",
-                "D": "%s"
-                """.formatted(
-                        answers.get(0),
-                        answers.get(1),
-                        answers.get(2),
-                        answers.get(3)
-        ));
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String, Object>> questions = mapper.readValue(Paths.get("src/test/resources/questions-test/Geography.json").toFile(), new TypeReference<>() {
+        });
+        questions.forEach(question -> {
+            Object correctAnswer = ((Map<String, Object>) question.get("availableAnswers")).get(question.get("correctAnswer"));
+            question.put("explanations", correctAnswer);
+        });
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(questions));
     }
 }

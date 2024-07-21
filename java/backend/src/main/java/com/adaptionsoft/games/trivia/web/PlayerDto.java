@@ -1,8 +1,11 @@
 package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Player;
+import com.adaptionsoft.games.trivia.domain.statemachine.State;
 import jakarta.validation.constraints.NotBlank;
+import lombok.With;
 
+@With
 public record PlayerDto(
         @NotBlank
         String id,
@@ -13,7 +16,9 @@ public record PlayerDto(
         @NotBlank
         boolean isInPenaltyBox,
         @NotBlank
-        int consecutiveIncorrectAnswersCount
+        int consecutiveIncorrectAnswersCount,
+        @NotBlank
+        String state
 ) {
     public static PlayerDto from(Player player) {
         if (player == null) return null;
@@ -21,6 +26,8 @@ public record PlayerDto(
                 player.getName(),
                 player.getCoinCount(),
                 player.isInPenaltyBox(),
-                player.getConsecutiveIncorrectAnswersCount());
+                player.getConsecutiveIncorrectAnswersCount(),
+                player.getCurrentState().toString());
     }
+
 }

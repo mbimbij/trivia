@@ -13,7 +13,7 @@ import { HttpHeaders }                                       from '@angular/comm
 
 import { Observable }                                        from 'rxjs';
 
-import { AnswerCode } from '../model/models';
+import { AnswerDto } from '../model/models';
 import { CreateGameRequestDto } from '../model/models';
 import { GameLog } from '../model/models';
 import { GameResponseDto } from '../model/models';
@@ -44,7 +44,7 @@ export interface TriviaControllerServiceInterface {
      * @param playerId 
      * @param answerCode 
      */
-    answer(gameId: number, playerId: string, answerCode: AnswerCode, extraHttpRequestParams?: any): Observable<boolean>;
+    answer(gameId: number, playerId: string, answerCode: 'A' | 'B' | 'C' | 'D', extraHttpRequestParams?: any): Observable<AnswerDto>;
 
     /**
      * 
@@ -103,5 +103,13 @@ export interface TriviaControllerServiceInterface {
      * @param playerId 
      */
     startGame(gameId: number, playerId: string, extraHttpRequestParams?: any): Observable<GameResponseDto>;
+
+    /**
+     * 
+     * 
+     * @param gameId 
+     * @param playerId 
+     */
+    validate(gameId: number, playerId: string, extraHttpRequestParams?: any): Observable<{}>;
 
 }

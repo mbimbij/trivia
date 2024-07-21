@@ -19,7 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { AnswerCode } from '../model/answer-code';
+import { AnswerDto } from '../model/answer-dto';
 // @ts-ignore
 import { CreateGameRequestDto } from '../model/create-game-request-dto';
 // @ts-ignore
@@ -190,10 +190,10 @@ export class TriviaControllerService implements TriviaControllerServiceInterface
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public answer(gameId: number, playerId: string, answerCode: AnswerCode, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<boolean>;
-    public answer(gameId: number, playerId: string, answerCode: AnswerCode, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<boolean>>;
-    public answer(gameId: number, playerId: string, answerCode: AnswerCode, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<boolean>>;
-    public answer(gameId: number, playerId: string, answerCode: AnswerCode, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public answer(gameId: number, playerId: string, answerCode: 'A' | 'B' | 'C' | 'D', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<AnswerDto>;
+    public answer(gameId: number, playerId: string, answerCode: 'A' | 'B' | 'C' | 'D', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AnswerDto>>;
+    public answer(gameId: number, playerId: string, answerCode: 'A' | 'B' | 'C' | 'D', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AnswerDto>>;
+    public answer(gameId: number, playerId: string, answerCode: 'A' | 'B' | 'C' | 'D', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (gameId === null || gameId === undefined) {
             throw new Error('Required parameter gameId was null or undefined when calling answer.');
         }
@@ -241,8 +241,8 @@ export class TriviaControllerService implements TriviaControllerServiceInterface
             }
         }
 
-        let localVarPath = `/api/games/${this.configuration.encodeParam({name: "gameId", value: gameId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/players/${this.configuration.encodeParam({name: "playerId", value: playerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/answer/${this.configuration.encodeParam({name: "answerCode", value: answerCode, in: "path", style: "simple", explode: false, dataType: "AnswerCode", dataFormat: undefined})}`;
-        return this.httpClient.request<boolean>('post', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/games/${this.configuration.encodeParam({name: "gameId", value: gameId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/players/${this.configuration.encodeParam({name: "playerId", value: playerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/answer/${this.configuration.encodeParam({name: "answerCode", value: answerCode, in: "path", style: "simple", explode: false, dataType: "'A' | 'B' | 'C' | 'D'", dataFormat: undefined})}`;
+        return this.httpClient.request<AnswerDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -768,6 +768,72 @@ export class TriviaControllerService implements TriviaControllerServiceInterface
 
         let localVarPath = `/api/games/${this.configuration.encodeParam({name: "gameId", value: gameId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/players/${this.configuration.encodeParam({name: "playerId", value: playerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/start`;
         return this.httpClient.request<GameResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param gameId 
+     * @param playerId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public validate(gameId: number, playerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public validate(gameId: number, playerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public validate(gameId: number, playerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public validate(gameId: number, playerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (gameId === null || gameId === undefined) {
+            throw new Error('Required parameter gameId was null or undefined when calling validate.');
+        }
+        if (playerId === null || playerId === undefined) {
+            throw new Error('Required parameter playerId was null or undefined when calling validate.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/games/${this.configuration.encodeParam({name: "gameId", value: gameId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/players/${this.configuration.encodeParam({name: "playerId", value: playerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/validate`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -8,7 +8,8 @@
       "C": "Cricket",
       "D": "Tennis"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Football"
   },
   {
     "id": "Sports-2",
@@ -19,7 +20,8 @@
       "C": "1896",
       "D": "1886"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "1896"
   },
   {
     "id": "Sports-3",
@@ -30,7 +32,8 @@
       "C": "Glass",
       "D": "Concrete"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Lead"
   },
   {
     "id": "Sports-4",
@@ -40,9 +43,9 @@
       "B": "42,195 kilometres",
       "C": "100 kilometres",
       "D": "10 kilometres"
-
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "42,195 kilometres"
   },
   {
     "id": "Sports-5",
@@ -53,7 +56,8 @@
       "C": "Canada",
       "D": "Jamaica"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "United States"
   },
   {
     "id": "Sports-6",
@@ -64,7 +68,8 @@
       "C": "Figure skating",
       "D": "Wrestling"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Boxing"
   },
   {
     "id": "Sports-7",
@@ -75,7 +80,8 @@
       "C": "Football",
       "D": "Ping-pong"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Ping-pong"
   },
   {
     "id": "Sports-8",
@@ -86,7 +92,8 @@
       "C": "Road cycling",
       "D": "Drift-tracking"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Mountain skiing"
   },
   {
     "id": "Sports-9",
@@ -97,7 +104,8 @@
       "C": "Michael Phelps",
       "D": "Usain Bolt"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Michael Phelps"
   },
   {
     "id": "Sports-10",
@@ -108,7 +116,8 @@
       "C": "1956",
       "D": "1948"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "1924"
   },
   {
     "id": "Sports-11",
@@ -119,7 +128,8 @@
       "C": "Go",
       "D": "Bridge"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Chess"
   },
   {
     "id": "Sports-12",
@@ -130,7 +140,8 @@
       "C": "1960",
       "D": "1904"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "1904"
   },
   {
     "id": "Sports-13",
@@ -141,7 +152,8 @@
       "C": "USSR",
       "D": "United Kingdom"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "United States"
   },
   {
     "id": "Sports-14",
@@ -152,7 +164,8 @@
       "C": "Australia",
       "D": "United Kingdom"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "United Kingdom"
   },
   {
     "id": "Sports-15",
@@ -163,7 +176,8 @@
       "C": "12",
       "D": "10"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "11"
   },
   {
     "id": "Sports-16",
@@ -174,7 +188,8 @@
       "C": "Football",
       "D": "Basketball"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Football"
   },
   {
     "id": "Sports-17",
@@ -185,7 +200,8 @@
       "C": "Jiu-jitsu",
       "D": "Kickboxing"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Greco-Roman wrestling"
   },
   {
     "id": "Sports-18",
@@ -196,7 +212,8 @@
       "C": "Baseball",
       "D": "Basketball"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Hockey"
   },
   {
     "id": "Sports-19",
@@ -207,7 +224,8 @@
       "C": "5",
       "D": "4"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "6"
   },
   {
     "id": "Sports-20",
@@ -218,6 +236,7 @@
       "C": "Tennis",
       "D": "Golf"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Sumo"
   }
 ]

@@ -8,7 +8,8 @@
       "C": "M&Ms",
       "D": "Reese's Peanut Butter Cups"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "M&Ms"
   },
   {
     "id": "Pop-2",
@@ -19,7 +20,8 @@
       "C": "Lenny Kravitz",
       "D": "Bono"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Sinead O'Connor"
   },
   {
     "id": "Pop-3",
@@ -30,7 +32,8 @@
       "C": "Stone Temple Pilots",
       "D": "Sisco"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Baha Men"
   },
   {
     "id": "Pop-4",
@@ -41,7 +44,8 @@
       "C": "Never let them eat after midnight.",
       "D": "Never get them wet."
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Never let them out during the day."
   },
   {
     "id": "Pop-5",
@@ -52,7 +56,8 @@
       "C": "Sean Penn and Judge Reinhold",
       "D": "Sylvester Stallone and Dolph Lundgren"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Keanu Reeves and Patrick Swayze"
   },
   {
     "id": "Pop-6",
@@ -63,7 +68,8 @@
       "C": "AFL",
       "D": "MLS"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "XFL"
   },
   {
     "id": "Pop-7",
@@ -74,7 +80,8 @@
       "C": "45",
       "D": "75"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "45"
   },
   {
     "id": "Pop-8",
@@ -85,7 +92,8 @@
       "C": "Lisa Turtle",
       "D": "Zack Morris"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "A.C. Slater"
   },
   {
     "id": "Pop-9",
@@ -96,7 +104,8 @@
       "C": "Silence of the Lambs",
       "D": "300"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "300"
   },
   {
     "id": "Pop-10",
@@ -107,7 +116,8 @@
       "C": "John Cusack",
       "D": "Harrison Ford"
     },
-    "correctAnswer": "A"
+    "correctAnswer": "A",
+    "explanations": "Tom Selleck"
   },
   {
     "id": "Pop-11",
@@ -118,7 +128,8 @@
       "C": "Love",
       "D": "Waterfalls"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Waterfalls"
   },
   {
     "id": "Pop-12",
@@ -129,7 +140,8 @@
       "C": "1986",
       "D": "1918"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "1918"
   },
   {
     "id": "Pop-13",
@@ -140,7 +152,8 @@
       "C": "Diff'rent Strokes",
       "D": "A Different World"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "A Different World"
   },
   {
     "id": "Pop-14",
@@ -151,7 +164,8 @@
       "C": "Tim McGraw",
       "D": "Vince Gill"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Dwight Yoakam"
   },
   {
     "id": "Pop-15",
@@ -162,7 +176,8 @@
       "C": "Metallica",
       "D": "Pearl Jam"
     },
-    "correctAnswer": "C"
+    "correctAnswer": "C",
+    "explanations": "Metallica"
   },
   {
     "id": "Pop-16",
@@ -173,7 +188,8 @@
       "C": "Ireland",
       "D": "New Zealand"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "New Zealand"
   },
   {
     "id": "Pop-17",
@@ -184,7 +200,8 @@
       "C": "France",
       "D": "Vietnam"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "China"
   },
   {
     "id": "Pop-18",
@@ -195,7 +212,8 @@
       "C": "The “royale with cheese” scene",
       "D": "Mia’s overdose scene"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Mia’s overdose scene"
   },
   {
     "id": "Pop-19",
@@ -206,7 +224,8 @@
       "C": "Sidney Poitier",
       "D": "Hattie McDaniel"
     },
-    "correctAnswer": "D"
+    "correctAnswer": "D",
+    "explanations": "Hattie McDaniel"
   },
   {
     "id": "Pop-20",
@@ -217,6 +236,7 @@
       "C": "Mike Teavee",
       "D": "Veruca Salt"
     },
-    "correctAnswer": "B"
+    "correctAnswer": "B",
+    "explanations": "Billy Warp"
   }
 ]

@@ -9,6 +9,7 @@ public enum PlayerAction implements Action {
     SUBMIT_ANSWER,
     ANSWER_CORRECTLY,
     ANSWER_INCORRECTLY,
+    VALIDATE,
     GET_OUT_OF_PENALTY_BOX,
     STAY_IN_PENALTY_BOX,
     END_TURN,

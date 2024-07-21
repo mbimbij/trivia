@@ -40,7 +40,9 @@ class GameResponseDtoShould {
                 player1,
                 players,
                 player1,
+                null,
                 questionDto,
-                value);
+                value,
+                null);
     }
 }

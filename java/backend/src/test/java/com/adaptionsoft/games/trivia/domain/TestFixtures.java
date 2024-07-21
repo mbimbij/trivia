@@ -89,7 +89,8 @@ public class TestFixtures {
                         "Question C",
                         "Question D"
                 ),
-                A);
+                A,
+                "explanations");
     }
 
     public static LoadedQuestionsDeck loadedQuestionsDeck() {
