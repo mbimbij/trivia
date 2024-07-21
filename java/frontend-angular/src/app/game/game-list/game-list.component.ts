@@ -46,7 +46,7 @@ export class GameListComponent {
   constructor(
     protected gameService: GameServiceAbstract,
     protected userService: UserServiceAbstract) {
-    console.log(`constructor ${this.constructor.name} called`)
+    // console.log(`constructor ${this.constructor.name} called`)
   }
 
   updateName(name: string) {
@@ -54,7 +54,7 @@ export class GameListComponent {
   }
 
   ngOnInit(): void {
-    console.log(`ngOnInit ${this.constructor.name} called`)
+    // console.log(`ngOnInit ${this.constructor.name} called`)
     this.user$ = this.userService.getUser();
     this.games$ = this.gameService.getGames();
   }

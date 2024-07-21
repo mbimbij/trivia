@@ -13,25 +13,10 @@ public class OngoingGamePage extends UiElementObject {
     public static final String ANSWER_QUESTION_SECTION_TESTID = "answer-question";
     public static final String BACKHAND_SECTION_TESTID = "backhand";
     public static final String VALIDATION_BUTTON_TESTID = "validate";
+    public static final String GO_BACK_BUTTON_TESTID = "go-back";
 
     public OngoingGamePage(Page page) {
         super(page);
-    }
-
-    public void rollDice() {
-        Locator locator = page.getByTestId(ROLL_DICE_BUTTON_TESTID);
-        PlaywrightAssertions.assertThat(locator).isVisible();
-        PlaywrightAssertions.assertThat(locator).isEnabled();
-        locator.click();
-    }
-
-
-    public void verifyCanSeeRollDiceButton() {
-        verifyCanSeeElementWithTestid(ROLL_DICE_BUTTON_TESTID);
-    }
-
-    public void verifyCanSeeAnswerQuestionSection() {
-        verifyCanSeeElementWithTestid(ANSWER_QUESTION_SECTION_TESTID);
     }
 
     public void verifyCanSeeElementWithTestid(String testId) {
@@ -42,14 +27,6 @@ public class OngoingGamePage extends UiElementObject {
         PlaywrightAssertions.assertThat(page.getByTestId(testId)).not().isVisible();
     }
 
-    public void verifyCannotSeeRollDiceButton() {
-        verifyCannotSeeElementWithTestid(ROLL_DICE_BUTTON_TESTID);
-    }
-
-    public void verifyCannotSeeAnswerQuestionSection() {
-        verifyCannotSeeElementWithTestid(ANSWER_QUESTION_SECTION_TESTID);
-    }
-
     public List<String> getGameLogs() {
         return page.querySelectorAll(".log-line")
                 .stream()
@@ -57,14 +34,11 @@ public class OngoingGamePage extends UiElementObject {
     }
 
     public void answerQuestionWith(AnswerCode answerCode) {
-        Locator locator = page.getByTestId("answer-%s".formatted(answerCode));
-        PlaywrightAssertions.assertThat(locator).isVisible();
-        PlaywrightAssertions.assertThat(locator).isEnabled();
-        locator.click();
+        clickButtonByTestId("answer-%s".formatted(answerCode));
     }
 
-    public void clickOnValidate() {
-        Locator button = page.getByTestId(VALIDATION_BUTTON_TESTID);
+    public void clickButtonByTestId(String buttonTestid) {
+        Locator button = page.getByTestId(buttonTestid);
         PlaywrightAssertions.assertThat(button).isVisible();
         PlaywrightAssertions.assertThat(button).isEnabled();
         button.click();

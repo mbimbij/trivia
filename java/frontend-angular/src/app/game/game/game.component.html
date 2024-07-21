@@ -8,7 +8,9 @@
   <ng-template #you_won>You won, Congratulations !</ng-template>
   <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
-  <button (click)="router.navigate(['games'])">go back</button>
+  <button
+    [attr.data-testid]="'go-back'"
+    (click)="router.navigate(['games'])">go back</button>
   <br>
   <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
   <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>

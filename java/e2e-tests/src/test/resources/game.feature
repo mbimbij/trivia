@@ -14,6 +14,20 @@ Feature: On-Going Game Page
     Then qa-user can see the element with testid "game-header-section"
     And qa-user can see the element with testid "game-logs-section"
 
+  Scenario: No game logs duplication (cf backlog item 71676380)
+    When qa-user clicks on "go-back" button
+    And qa-user goes to the game
+    When qa-user clicks on "go-back" button
+    And qa-user goes to the game
+    And qa-user sees game logs ending as following
+      | qa-user was added                 |
+      | They are player number 1          |
+      | Game created                      |
+      | test-user-1 was added             |
+      | They are player number 2          |
+      | Game Id\\(value=[0-9]*\\) started |
+      | qa-user is the current player     |
+
   Rule: Play a turn outside penalty box
     Scenario: Play a turn outside penalty box - Correct answer
       Then qa-user can see the roll dice button
@@ -36,9 +50,9 @@ Feature: On-Going Game Page
       And qa-user can see the answer question section
       And qa-user can see the backhand section
       And qa-user sees game logs ending as following
-        | question .*                       |
-        | Answer was correct!!!!            |
-        | qa-user now has 1 Gold Coins.     |
+        | question .*                   |
+        | Answer was correct!!!!        |
+        | qa-user now has 1 Gold Coins. |
       When qa-user clicks on validation button
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section

@@ -73,17 +73,17 @@ public class OngoingGameStepDefs {
 
     @And("qa-user can see the roll dice button")
     public void qaUserCanSeeTheRollDiceButton() {
-        ongoingGamePage.verifyCanSeeRollDiceButton();
+        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.ROLL_DICE_BUTTON_TESTID);
     }
 
     @And("qa-user can see the answer question section")
     public void qaUserCanSeeTheAnswerQuestionSection() {
-        ongoingGamePage.verifyCanSeeAnswerQuestionSection();
+        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.ANSWER_QUESTION_SECTION_TESTID);
     }
 
     @And("qa-user cannot see the roll dice button")
     public void qaUserCannotSeeTheRollDiceButton() {
-        ongoingGamePage.verifyCannotSeeRollDiceButton();
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.ROLL_DICE_BUTTON_TESTID);
     }
 
     @Then("qa-user answers {answerCode}")
@@ -102,12 +102,12 @@ public class OngoingGameStepDefs {
 
     @When("qa-user rolls the dice")
     public void qaUserRollsTheDice() {
-        ongoingGamePage.rollDice();
+        ongoingGamePage.clickButtonByTestId(OngoingGamePage.ROLL_DICE_BUTTON_TESTID);
     }
 
     @And("qa-user cannot see the answer question section")
     public void qaUserCannotSeeTheAnswerQuestionSection() {
-        ongoingGamePage.verifyCannotSeeAnswerQuestionSection();
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.ANSWER_QUESTION_SECTION_TESTID);
     }
 
     @And("a loaded dice returning a {int}")
@@ -148,6 +148,11 @@ public class OngoingGameStepDefs {
 
     @When("qa-user clicks on validation button")
     public void qaUserClicksOnValidationButton() {
-        ongoingGamePage.clickOnValidate();
+        ongoingGamePage.clickButtonByTestId(OngoingGamePage.VALIDATION_BUTTON_TESTID);
+    }
+
+    @When("qa-user clicks on \"go-back\" button")
+    public void qaUserClicksOnButton() {
+        ongoingGamePage.clickButtonByTestId(OngoingGamePage.GO_BACK_BUTTON_TESTID);
     }
 }

@@ -1,5 +1,4 @@
 import {getMockGame2, getMockQuestion1} from "../common/test-helpers";
-import {Game} from "./game";
 
 describe('Game', () => {
 

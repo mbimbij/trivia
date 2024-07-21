@@ -38,7 +38,7 @@ export class GameDetailsComponent implements OnDestroy{
               protected router: Router,
               private gameService: GameServiceAbstract) {
     this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
-    console.log(`constructor ${this.id} called`)
+    // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
       this.game$ = gameService.getGame(this.gameId);
@@ -46,11 +46,11 @@ export class GameDetailsComponent implements OnDestroy{
   }
 
   ngOnInit(): void {
-    console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
+    // console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
   }
 
   ngOnDestroy(): void {
-    console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
+    // console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
     this.routeParamsSubscription?.unsubscribe();
   }
 
