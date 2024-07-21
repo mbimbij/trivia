@@ -51,7 +51,7 @@ export class RollDiceComponent implements OnChanges, OnDestroy {
       .pipe(
         mergeMap(game => {
             if (game.canDrawQuestion(this.player)) {
-              console.log("coucou canDrawQuestion")
+              // console.log("coucou canDrawQuestion")
               return this.gameService.drawQuestion(game.id, this.player.id)
             }
             return of(game);

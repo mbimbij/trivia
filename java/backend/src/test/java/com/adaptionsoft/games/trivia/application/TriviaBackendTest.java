@@ -397,9 +397,10 @@ class TriviaBackendTest {
                 .andReturn();
 
         // AND the response body is as expected
-        boolean actualResponse = mapper.readValue(result.getResponse().getContentAsString(), Boolean.class);
+        AnswerDto actualResponse = mapper.readValue(result.getResponse().getContentAsString(), AnswerDto.class);
+        AnswerDto expectedAnswerDto = new AnswerDto(true, questionTest().explanations());
 
-        assertThat(actualResponse).isEqualTo(true);
+        assertThat(actualResponse).isEqualTo(expectedAnswerDto);
     }
 
     @SneakyThrows
@@ -425,9 +426,10 @@ class TriviaBackendTest {
                 .andReturn();
 
         // AND the response body is as expected
-        boolean actualResponse = mapper.readValue(result.getResponse().getContentAsString(), Boolean.class);
+        AnswerDto actualResponse = mapper.readValue(result.getResponse().getContentAsString(), AnswerDto.class);
+        AnswerDto expectedAnswerDto = new AnswerDto(false, questionTest().explanations());
 
-        assertThat(actualResponse).isEqualTo(false);
+        assertThat(actualResponse).isEqualTo(expectedAnswerDto);
     }
 
 }

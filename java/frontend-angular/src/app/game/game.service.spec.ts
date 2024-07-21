@@ -116,6 +116,33 @@ describe('GameService', () => {
     })
   });
 
+  it('should split initial game logs if text contains line break', () => {
+    // GIVEN
+    let service = createService();
+    let gameLogs = [
+      {gameId: 1, value: "message0"},
+      {gameId: 1, value: "message1\nmessage2"},
+      {gameId: 1, value: "\n\nmessage3\n\n\nmessage4\n"},
+      {gameId: 1, value: "\n\n\n\n\n\n"},
+      {gameId: 1, value: ""},
+    ];
+
+    // AND
+    let expectedSplitLogs = [
+      {gameId: 1, value: "message0"},
+      {gameId: 1, value: "message1"},
+      {gameId: 1, value: "message2"},
+      {gameId: 1, value: "message3"},
+      {gameId: 1, value: "message4"},
+    ];
+
+    // WHEN
+    let splitLogs = service.splitLogs(gameLogs);
+
+    // THEN new game log is split into multiple lines
+    expect(splitLogs).toEqual(expectedSplitLogs);
+  });
+
   function createService(gameListReturnValues: GameResponseDto[] = defaultGameListReturnValues,
                          singleGameReturnValue: GameResponseDto = defaultSingleGameReturnValue
   ) {

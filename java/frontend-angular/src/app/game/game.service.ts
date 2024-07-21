@@ -25,6 +25,7 @@ export class GameService extends GameServiceAbstract {
   private isUpdateHandlerRegistered = new Set<number>()
   private gameLogsSubjects = new BehaviorSubject<GameLog[]>([])
   private gameLogs$ = this.gameLogsSubjects.asObservable()
+  private isGameLogsHandlerRegistered = new Set<number>()
 
   constructor(private openApiService: TriviaControllerService,
               private rxStompService: RxStompService) {
@@ -98,16 +99,35 @@ export class GameService extends GameServiceAbstract {
 
   initGameLogs(gameId: number) {
     this.openApiService.getGameLogs(gameId)
-      .subscribe(gameLogs => this.gameLogsSubjects.next(gameLogs))
+      .subscribe(gameLogs => {
+        this.gameLogsSubjects.next(this.splitLogs(gameLogs));
+      })
     this.registerNewGameLogHandler(gameId);
   }
 
+  splitLogs(gameLogs: GameLog[]): GameLog[] {
+    return gameLogs.flatMap(
+      (g) => g.value.split('\n')
+        .filter(text => text.trim() != "")
+        .map(text => buildGameLog(text, g)))
+      ;
+    function buildGameLog(text: string, g: GameLog) {
+      return {
+        value: text,
+        gameId: g.gameId
+      } as GameLog;
+    }
+  }
+
   private registerNewGameLogHandler(gameId: number) {
-    this.rxStompService.watch(`/topic/games/${gameId}/logs`)
-      .subscribe((message: IMessage) => {
-        let newGameLog = JSON.parse(message.body) as GameLog;
-        this.handleNewGameLog(newGameLog);
-      });
+    if (!this.isGameLogsHandlerRegistered.has(gameId)) {
+      this.isGameLogsHandlerRegistered.add(gameId)
+      this.rxStompService.watch(`/topic/games/${gameId}/logs`)
+        .subscribe((message: IMessage) => {
+          let newGameLog = JSON.parse(message.body) as GameLog;
+          this.handleNewGameLog(newGameLog);
+        });
+    }
   }
 
   public handleNewGameLog(newGameLog: GameLog) {

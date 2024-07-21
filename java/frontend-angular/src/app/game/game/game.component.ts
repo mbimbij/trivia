@@ -45,7 +45,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract) {
     this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
-    console.log(`constructor ${this.id} called`)
+    // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
 
