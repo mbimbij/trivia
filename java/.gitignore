@@ -9,4 +9,4 @@ e2e-tests/videos
 **/test.html
 **/test.http
 backend/src/main/resources/static
-
+toto.json

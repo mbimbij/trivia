@@ -92,11 +92,6 @@ public class Player extends Entity<UserId> {
         return (coinCount >= 6);
     }
 
-    boolean canContinueAfterIncorrectAnswer() {
-        int maxAllowed = 2;
-        return consecutiveIncorrectAnswersCount < maxAllowed;
-    }
-
     /**
      * Used externally by tests ONLY
      */

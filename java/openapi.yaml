@@ -339,11 +339,12 @@ components:
         - value
     PlayerDto:
       required:
-        - id
-        - name
         - coinCount
-        - isInPenaltyBox
         - consecutiveIncorrectAnswersCount
+        - id
+        - isInPenaltyBox
+        - name
+        - state
       type: object
       properties:
         id:
@@ -358,6 +359,8 @@ components:
         consecutiveIncorrectAnswersCount:
           type: integer
           format: int32
+        state:
+          type: string
     QuestionDto:
       required:
         - availableAnswers

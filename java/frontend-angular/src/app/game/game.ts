@@ -26,7 +26,7 @@ export class Game {
               currentQuestion?: QuestionDto,
               currentRoll?: number,
               currentAnswer?: AnswerDto
-              ) {
+  ) {
     this.id = id;
     this.name = name;
     this.state = state;
@@ -81,7 +81,9 @@ export class Game {
   }
 
   public canRollDice(player: Player): boolean {
-    return this.isCurrentPlayer(player) && this.currentRoll == undefined
+    return this.isCurrentPlayer(player)
+      && this.currentRoll == undefined
+      && (this.currentPlayer.state === "WAITING_FOR_DICE_ROLL" || this.currentPlayer.state === "IN_PENALTY_BOX")
   }
 
   public canDrawQuestion(player: Player): boolean {
