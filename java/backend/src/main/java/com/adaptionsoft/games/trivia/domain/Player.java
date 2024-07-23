@@ -20,6 +20,7 @@ public class Player extends Entity<UserId> {
     private String name;
 
     @With // for testing purposes only
+    @Setter // for testing purposes only
     private int coinCount;
 
     @Setter
@@ -90,11 +91,6 @@ public class Player extends Entity<UserId> {
 
     boolean isWinning() {
         return (coinCount >= 6);
-    }
-
-    boolean canContinueAfterIncorrectAnswer() {
-        int maxAllowed = 2;
-        return consecutiveIncorrectAnswersCount < maxAllowed;
     }
 
     /**

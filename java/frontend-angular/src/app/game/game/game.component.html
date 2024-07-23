@@ -4,7 +4,9 @@
 >
   <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
 
-  <h2 *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
+  <h2
+    [attr.data-testid]="'winner-prompt-section'"
+    *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
   <ng-template #you_won>You won, Congratulations !</ng-template>
   <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
@@ -16,7 +18,7 @@
   <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
   <p>Current Player - "{{ game.currentPlayer.name }}"</p>
   <div
-    *ngIf="game.isCurrentPlayer(player)"
+    *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
     [attr.data-testid]="'player-action-section'"
   >
     <hr>
@@ -25,12 +27,12 @@
       [player]="player"
       [game]="game"
       [question]="game.currentQuestion!"></app-answer-question>
-    <hr>
   </div>
 </div>
 
 <ng-template #waiting_for_data>Waiting for game data</ng-template>
 
+<hr>
 
 <div
   [attr.data-testid]="'game-logs-section'"

@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.util.List;
 
+import static com.adaptionsoft.games.domain.pageObjects.OngoingGamePage.WINNER_PROMPT_SECTION_TESTID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.awaitility.Awaitility.await;
@@ -154,5 +155,46 @@ public class OngoingGameStepDefs {
     @When("qa-user clicks on \"go-back\" button")
     public void qaUserClicksOnButton() {
         ongoingGamePage.clickButtonByTestId(OngoingGamePage.GO_BACK_BUTTON_TESTID);
+    }
+
+    @Given("{actor} has {int} coins")
+    public void qaUserHasCoins(Actor qaUser, int coinCount) {
+        janitor.setCoinCount(gameId, qaUser.getId(), coinCount);
+    }
+
+    @Then("winner prompt is visible")
+    public void winnerPromptIsVisible() {
+        ongoingGamePage.verifyCanSeeElementWithTestid(WINNER_PROMPT_SECTION_TESTID);
+    }
+
+    @And("winner prompt text is {string}")
+    public void winnerPromptTextIs(String expectedTextContent) {
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(WINNER_PROMPT_SECTION_TESTID);
+        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+    }
+
+    @And("{actor} is the current player")
+    public void testUserIsTheCurrentPlayer(Actor actor) {
+        janitor.setCurrentPlayer(gameId, actor.getId());
+    }
+
+    @When("{actor} rolls the dice from the backend")
+    public void testUserRollsTheDiceFromTheBackend(Actor actor) {
+        backend.rollDice(gameId, actor.getId());
+    }
+
+    @And("{actor} answers {answerCode} from the backend")
+    public void testUserAnswersAFromTheBackend(Actor actor, AnswerCode answerCode) {
+        backend.answerQuestion(gameId, actor.getId(), answerCode);
+    }
+
+    @And("{actor} clicks on validation button from the backend")
+    public void testUserClicksOnValidationButtonFromTheBackend(Actor actor) {
+        backend.validate(gameId, actor.getId());
+    }
+
+    @When("{actor} draws a question from the backend")
+    public void testUserDrawsAQuestionFromTheBackend(Actor  actor) {
+        backend.drawQuestion(gameId, actor.getId());
     }
 }

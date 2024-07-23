@@ -222,10 +222,12 @@ public class Game extends Entity<GameId> {
             isGameInProgress = false;
             state = ENDED;
             winner = currentPlayer;
-            raise(new PlayerWonEvent(id, currentPlayer, currentPlayer.getTurn()));
-            raise(new GameEndedEvent(id, currentPlayer.getName()));
+            currentAnswer = null;
+            currentRoll = null;
+            raise(new PlayerWonEvent(id, winner, winner.getTurn()));
+            raise(new GameEndedEvent(id, winner.getName()));
             stateManager.applyAction(END_GAME);
-            currentPlayer.applyAction(PlayerAction.END_GAME);
+            winner.applyAction(PlayerAction.END_GAME);
         }
     }
 

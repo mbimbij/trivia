@@ -16,11 +16,11 @@ export function comparePlayers(player1?: Player, player2?: Player): boolean {
 }
 
 export function userToPlayerDto(user: User): PlayerDto {
-  return {id: user.id, name: user.name, coinCount: 0, isInPenaltyBox: false, consecutiveIncorrectAnswersCount:0}
+  return {id: user.id, name: user.name, coinCount: 0, isInPenaltyBox: false, consecutiveIncorrectAnswersCount:0, state: ""}
 }
 
 export function userToPlayer(user: User): Player {
-  return new Player(user.id, user.name, 0, false, 0)
+  return new Player(user.id, user.name, 0, false, 0, "")
 }
 
 export function userToUserDto(user: User): UserDto {
@@ -32,7 +32,9 @@ export function playerDtoToPlayer(dto: PlayerDto): Player {
     dto.name,
     dto.coinCount,
     dto.isInPenaltyBox,
-    dto.consecutiveIncorrectAnswersCount)
+    dto.consecutiveIncorrectAnswersCount,
+    dto.state
+  )
 }
 
 export function playerToPlayerDto(player: Player): PlayerDto {
@@ -41,7 +43,8 @@ export function playerToPlayerDto(player: Player): PlayerDto {
     name: player.name,
     coinCount: player.coinCount,
     isInPenaltyBox: player.isInPenaltyBox,
-    consecutiveIncorrectAnswersCount: player.consecutiveIncorrectAnswersCount
+    consecutiveIncorrectAnswersCount: player.consecutiveIncorrectAnswersCount,
+    state: player.state
   }
 }
 
