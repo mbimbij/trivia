@@ -20,6 +20,7 @@ public class Player extends Entity<UserId> {
     private String name;
 
     @With // for testing purposes only
+    @Setter // for testing purposes only
     private int coinCount;
 
     @Setter

@@ -28,6 +28,25 @@ Feature: On-Going Game Page
       | Game Id\\(value=[0-9]*\\) started |
       | qa-user is the current player     |
 
+  Rule: End of game display
+    Scenario: Verify display when qa-user is the winner
+      Given qa-user has 5 coins
+      When qa-user rolls the dice
+      And qa-user answers A
+      And qa-user clicks on validation button
+      Then winner prompt is visible
+      And winner prompt text is "You won, Congratulations !"
+
+    Scenario: Verify display when qa-user is not the winner
+      Given test-user-1 has 5 coins
+      And test-user-1 is the current player
+      When test-user-1 rolls the dice from the backend
+      When test-user-1 draws a question from the backend
+      And test-user-1 answers A from the backend
+      And test-user-1 clicks on validation button from the backend
+      Then winner prompt is visible
+      And winner prompt text is "test-user-1 won. Maybe next time."
+
   Rule: Play a turn outside penalty box
     Scenario: Play a turn outside penalty box - Correct answer
       Then qa-user can see the roll dice button
@@ -64,7 +83,7 @@ Feature: On-Going Game Page
 
     Scenario: Play a turn outside penalty box - First incorrect answer, Second correct answer
       When qa-user rolls the dice
-      When qa-user answers B
+      And qa-user answers B
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
       And qa-user can see the backhand section

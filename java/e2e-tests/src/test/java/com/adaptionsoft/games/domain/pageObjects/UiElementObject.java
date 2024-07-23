@@ -10,4 +10,8 @@ public class UiElementObject {
     public UiElementObject(Page page) {
         this.page = page;
     }
+
+    public String getTextContentByTestid(String testid) {
+        return page.getByTestId(testid).textContent();
+    }
 }

@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
+import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
@@ -47,5 +48,46 @@ public class Backend {
                 gameId,
                 userId);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    public void rollDice(int gameId, @NotBlank String userId) {
+        String url = backendUrlBase + "/games/{gameId}/players/{userId}/rollDice";
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
+                null,
+                GameResponseDto.class,
+                gameId,
+                userId);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    public void drawQuestion(int gameId, @NotBlank String userId) {
+        String url = backendUrlBase + "/games/{gameId}/players/{userId}/drawQuestion";
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
+                null,
+                GameResponseDto.class,
+                gameId,
+                userId);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    public void answerQuestion(int gameId, @NotBlank String userId, AnswerCode answerCode) {
+        String url = backendUrlBase + "/games/{gameId}/players/{userId}/answer/{answerCode}";
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
+                null,
+                GameResponseDto.class,
+                gameId,
+                userId,
+                answerCode);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    public void validate(int gameId, @NotBlank String userId) {
+        String url = backendUrlBase + "/games/{gameId}/players/{userId}/validate";
+        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
+                null,
+                GameResponseDto.class,
+                gameId,
+                userId);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }

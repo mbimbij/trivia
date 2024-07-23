@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.domain;
 
 import com.adaptionsoft.games.trivia.domain.Question;
-import com.adaptionsoft.games.trivia.domain.QuestionsDeck;
 import com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,13 +28,11 @@ public class Janitor {
     private final TestContext testContext;
 
     public void setLoadedDiceForGame(int gameId, int number) {
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(
-                backendUrlBase + "/testkit/games/{gameId}/setLoadedDice/{number}",
+        restTemplate.put(
+                backendUrlBase + "/testkit/games/{gameId}/dice/{number}",
                 null,
-                GameResponseDto.class,
                 gameId,
                 number);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     public void putQaUserInPenaltyBox(int gameId, String qaUserId) {
@@ -62,7 +59,7 @@ public class Janitor {
     }
 
     @SneakyThrows
-    public void setLoadedQuestionDeckForGame(Integer gameId) {
+    public void setLoadedQuestionDeckForGame(int gameId) {
         Map<Category, Queue<Question>> loadedQuestionsDeck = new HashMap<>();
         loadedQuestionsDeck.put(GEOGRAPHY, mapper.readValue(Paths.get("src/test/resources/questions-test/Geography.json").toFile(), new TypeReference<>() {
         }));
@@ -72,6 +69,21 @@ public class Janitor {
         }));
         loadedQuestionsDeck.put(SCIENCE, mapper.readValue(Paths.get("src/test/resources/questions-test/Science.json").toFile(), new TypeReference<>() {
         }));
-        restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/setLoadedQuestionDeck", loadedQuestionsDeck,gameId);
+        restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/questionDeck", loadedQuestionsDeck, gameId);
+    }
+
+    public void setCoinCount(int gameId, String playerId, int coinCount) {
+        restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/players/{playerId}/coinCount/{coinCount}",
+                null,
+                gameId,
+                playerId,
+                coinCount);
+    }
+
+    public void setCurrentPlayer(int gameId, String playerId) {
+        restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/currentPlayer/{playerId}",
+                null,
+                gameId,
+                playerId);
     }
 }
