@@ -103,7 +103,7 @@ public class OngoingGameStepDefs {
 
     @When("qa-user rolls the dice")
     public void qaUserRollsTheDice() {
-        ongoingGamePage.clickButtonByTestId(OngoingGamePage.ROLL_DICE_BUTTON_TESTID);
+        ongoingGamePage.clickButtonByTestid(OngoingGamePage.ROLL_DICE_BUTTON_TESTID);
     }
 
     @And("qa-user cannot see the answer question section")
@@ -149,12 +149,12 @@ public class OngoingGameStepDefs {
 
     @When("qa-user clicks on validation button")
     public void qaUserClicksOnValidationButton() {
-        ongoingGamePage.clickButtonByTestId(OngoingGamePage.VALIDATION_BUTTON_TESTID);
+        ongoingGamePage.clickButtonByTestid(OngoingGamePage.VALIDATION_BUTTON_TESTID);
     }
 
     @When("qa-user clicks on \"go-back\" button")
     public void qaUserClicksOnButton() {
-        ongoingGamePage.clickButtonByTestId(OngoingGamePage.GO_BACK_BUTTON_TESTID);
+        ongoingGamePage.clickButtonByTestid(OngoingGamePage.GO_BACK_BUTTON_TESTID);
     }
 
     @Given("{actor} has {int} coins")

@@ -30,7 +30,6 @@ public class CommonStepDefs {
     private final AuthenticationPage authenticationPage;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameDetailsPage;
-    private final Console console;
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;

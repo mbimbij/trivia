@@ -2,7 +2,6 @@ package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.microsoft.playwright.ElementHandle;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 
@@ -35,13 +34,7 @@ public class OngoingGamePage extends UiElementObject {
     }
 
     public void answerQuestionWith(AnswerCode answerCode) {
-        clickButtonByTestId("answer-%s".formatted(answerCode));
+        clickButtonByTestid("answer-%s".formatted(answerCode));
     }
 
-    public void clickButtonByTestId(String buttonTestid) {
-        Locator button = page.getByTestId(buttonTestid);
-        PlaywrightAssertions.assertThat(button).isVisible();
-        PlaywrightAssertions.assertThat(button).isEnabled();
-        button.click();
-    }
 }
