@@ -6,7 +6,6 @@ import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Page;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import static java.util.Collections.emptyList;
@@ -39,12 +37,12 @@ public class CommonStepDefs {
 
     @Given("2 existing games")
     public void games() {
-        Actor backendActor1 = actorService.getActorByLookupName(TestContext.TEST_USER_NAME_1);
-        Actor qaBackendActor = actorService.getActorByLookupName(TestContext.QA_BACKEND_LOOKUP_NAME);
-        GameResponseDto gameResponseDto = backend.createGame(TestContext.TEST_GAME_NAME_1, backendActor1.toUserDto());
-        testContext.putGameId(TestContext.TEST_GAME_NAME_1, Objects.requireNonNull(gameResponseDto).id());
-        GameResponseDto gameResponseDto2 = backend.createGame(TestContext.TEST_GAME_NAME_2, qaBackendActor.toUserDto());
-        testContext.putGameId(TestContext.TEST_GAME_NAME_2, Objects.requireNonNull(gameResponseDto2).id());
+        Actor backendActor1 = actorService.getActorByLookupName(TestProperties.TEST_USER_NAME_1);
+        Actor qaBackendActor = actorService.getActorByLookupName(TestProperties.QA_BACKEND_LOOKUP_NAME);
+        GameResponseDto gameResponseDto = backend.createGame(TestProperties.TEST_GAME_NAME_1, backendActor1.toUserDto());
+        testContext.putGameId(TestProperties.TEST_GAME_NAME_1, Objects.requireNonNull(gameResponseDto).id());
+        GameResponseDto gameResponseDto2 = backend.createGame(TestProperties.TEST_GAME_NAME_2, qaBackendActor.toUserDto());
+        testContext.putGameId(TestProperties.TEST_GAME_NAME_2, Objects.requireNonNull(gameResponseDto2).id());
     }
 
     @SneakyThrows

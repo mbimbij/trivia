@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-import static com.adaptionsoft.games.domain.TestContext.*;
 import static com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,9 +45,9 @@ public class Janitor {
 
     public void deleteTestGames() {
         restTemplate.delete(backendUrlBase + "/games/tests");
-        deleteGame(TEST_GAME_NAME_1, testContext.getGameIdForName(TEST_GAME_NAME_1));
-        deleteGame(TEST_GAME_NAME_2, testContext.getGameIdForName(TEST_GAME_NAME_2));
-        deleteGame(CREATED_GAME_NAME, testContext.getGameIdForName(CREATED_GAME_NAME));
+        deleteGame(TestProperties.TEST_GAME_NAME_1, testContext.getGameIdForName(TestProperties.TEST_GAME_NAME_1));
+        deleteGame(TestProperties.TEST_GAME_NAME_2, testContext.getGameIdForName(TestProperties.TEST_GAME_NAME_2));
+        deleteGame(TestProperties.CREATED_GAME_NAME, testContext.getGameIdForName(TestProperties.CREATED_GAME_NAME));
     }
 
     private void deleteGame(String gameName, Integer gameId) {
