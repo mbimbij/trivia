@@ -10,13 +10,13 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class GamesListPage extends UiElementObjectWithUrl {
+public class GamesListPage extends PageWithStaticUrl {
     public GamesListPage(String basePath, Page page) {
         super(basePath + "/games", page);
     }
 
     /**
-     * @param userNames     Pass null or an empty collection to get games for all users
+     * @param userNames Pass null or an empty collection to get games for all users
      * @return
      */
     public List<DisplayedGame> getDisplayedGamesForUsers(Collection<String> userNames) {

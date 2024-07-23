@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
 public class GameRowActions extends UiElementObject {
@@ -27,4 +28,10 @@ public class GameRowActions extends UiElementObject {
         String testid = "delete-button-%d".formatted(gameId);
         clickButtonByTestid(testid);
     }
+
+    public String getGameDetailsLink(int gameId) {
+        Locator locator = page.getByTestId("game-details-%d".formatted(gameId));
+        return locator.getAttribute("href");
+    }
+
 }

@@ -11,13 +11,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateGameUiElement extends UiElementObject {
-    private final Console console;
-    private final TestContext testContext;
 
-    public CreateGameUiElement(Page page, Console console, TestContext testContext) {
+    public CreateGameUiElement(Page page, TestContext testContext) {
         super(page);
-        this.console = console;
-        this.testContext = testContext;
     }
 
     // TODO ajouter un test de création de partie depuis le frontend

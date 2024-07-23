@@ -6,12 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public abstract class UiElementObjectWithUrl extends UiElementObject {
-    protected final String url;
+public abstract class PageWithStaticUrl extends PageWithUrl {
 
-    public UiElementObjectWithUrl(String url, Page page) {
-        super(page);
-        this.url = url;
+    public PageWithStaticUrl(String url, Page page) {
+        super(url, page);
     }
 
     public void navigateTo() {

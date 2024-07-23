@@ -7,7 +7,7 @@ import com.microsoft.playwright.assertions.PlaywrightAssertions;
 
 import java.util.List;
 
-public class OngoingGamePage extends UiElementObject {
+public class OngoingGamePage extends PageWithDynamicUrl {
     public static final String ROLL_DICE_BUTTON_TESTID = "roll-dice";
     public static final String ANSWER_QUESTION_SECTION_TESTID = "answer-question";
     public static final String WINNER_PROMPT_SECTION_TESTID = "winner-prompt-section";
@@ -15,8 +15,8 @@ public class OngoingGamePage extends UiElementObject {
     public static final String VALIDATION_BUTTON_TESTID = "validate";
     public static final String GO_BACK_BUTTON_TESTID = "go-back";
 
-    public OngoingGamePage(Page page) {
-        super(page);
+    public OngoingGamePage(Page page, String urlTemplate) {
+        super(urlTemplate,page);
     }
 
     public void verifyCanSeeElementWithTestid(String testId) {
