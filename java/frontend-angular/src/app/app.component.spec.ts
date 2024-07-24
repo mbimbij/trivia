@@ -6,14 +6,20 @@ import {GameServiceAbstract} from "./services/game-service-abstract";
 import {CreateGameComponent} from "./game/create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
+import {NavbarComponent} from "./game/navbar/navbar.component";
+import {UserServiceAbstract} from "./services/user-service.abstract";
+import {UserServiceMock} from "./adapters/user/user-service.mock";
+import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "./services/authentication-service.abstract";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
-      {provide: GameServiceAbstract, useClass: GameServiceMock}
+      {provide: GameServiceAbstract, useClass: GameServiceMock},
+      {provide: UserServiceAbstract, useClass: UserServiceMock},
+      {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
     ],
     declarations: [AppComponent],
-    imports: [ HttpClientTestingModule, CreateGameComponent, FormsModule, RouterModule ]
+    imports: [ HttpClientTestingModule, CreateGameComponent, FormsModule, RouterModule, NavbarComponent ]
   }));
 
   it('should create the app', () => {
