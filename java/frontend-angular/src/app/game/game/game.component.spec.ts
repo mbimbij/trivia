@@ -79,6 +79,7 @@ describe('GameComponent', () => {
     let mockGame = getMockGame2();
     mockGame.currentRoll = undefined
     mockGame.currentQuestion = undefined
+    mockGame.currentPlayer.state = "WAITING_FOR_DICE_ROLL"
     component.setGame(mockGame)
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
     expect(htmlElement.querySelector(`[data-testid="roll-dice"]`)).toBeTruthy();

@@ -34,25 +34,27 @@
     D
   </button>
   <span>{{ question.availableAnswers['D'] }}</span>
+
+  <div
+    [attr.data-testid]="'backhand'"
+    *ngIf="game.currentAnswer != undefined"
+  >
+    <hr/>
+    <div
+      [attr.data-testid]="'is-answer-correct'"
+    >
+      @if (game.currentAnswer.isCorrect) {
+        <h2>Correct Answer</h2>
+      } @else {
+        <h2>Incorrect Answer</h2>
+      }
+    </div>
+    <p>{{ game.currentAnswer.explanations }}</p>
+    <button
+      [attr.data-testid]="'validate'"
+      (click)="validate(game.id, player.id)">ok
+    </button>
+  </div>
+
 </div>
 
-<div
-  [attr.data-testid]="'backhand'"
-  *ngIf="game.currentAnswer != undefined"
->
-  <hr/>
-  <div
-    [attr.data-testid]="'is-answer-correct'"
-  >
-    @if (game.currentAnswer.isCorrect) {
-      <h2>Correct Answer</h2>
-    } @else {
-      <h2>Incorrect Answer</h2>
-    }
-  </div>
-  <p>{{ game.currentAnswer.explanations }}</p>
-  <button
-    [attr.data-testid]="'validate'"
-    (click)="validate(game.id, player.id)">ok
-  </button>
-</div>

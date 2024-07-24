@@ -16,7 +16,7 @@ export function comparePlayers(player1?: Player, player2?: Player): boolean {
 }
 
 export function userToPlayerDto(user: User): PlayerDto {
-  return {id: user.id, name: user.name, coinCount: 0, isInPenaltyBox: false, consecutiveIncorrectAnswersCount:0, state: ""}
+  return {id: user.id, name: user.name, coinCount: 0, isInPenaltyBox: false, consecutiveIncorrectAnswersCount:0, state: "WAITING_FOR_DICE_ROLL"}
 }
 
 export function userToPlayer(user: User): Player {

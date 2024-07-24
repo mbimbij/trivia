@@ -21,11 +21,11 @@ export const mockPlayer1 = userToPlayer(mockUser1)
 export const mockPlayer2 = userToPlayer(mockUser2);
 
 export const mockPlayer3 = playerDtoToPlayer(
-  {id: "3", name: "player3", coinCount: 1, isInPenaltyBox: false, consecutiveIncorrectAnswersCount: 0}
+  {id: "3", name: "player3", coinCount: 1, isInPenaltyBox: false, consecutiveIncorrectAnswersCount: 0, state: "WAITING_FOR_DICE_ROLL"}
 );
 
 export const mockPlayer4 = playerDtoToPlayer(
-  {id: "4", name: "player4", coinCount: 1, isInPenaltyBox: false, consecutiveIncorrectAnswersCount: 0}
+  {id: "4", name: "player4", coinCount: 1, isInPenaltyBox: false, consecutiveIncorrectAnswersCount: 0, state: "WAITING_FOR_DICE_ROLL"}
 );
 
 export const mockGame1: Game = getMockGame1();
