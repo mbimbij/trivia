@@ -6,8 +6,6 @@ import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
 import com.adaptionsoft.games.domain.pageObjects.OngoingGamePage;
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
 import com.adaptionsoft.games.utils.TestUtils;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -29,7 +27,6 @@ public class OngoingGameStepDefs {
 
     private final TestContext testContext;
     private final TestProperties testProperties;
-    private final Page page;
     private final Janitor janitor;
     private final ActorService actorService;
     private final GameRowActions gameRowActions;
@@ -63,8 +60,7 @@ public class OngoingGameStepDefs {
     @When("i am on the on game page for {string}")
     public void iAmOnTheOnGamePageFor(String gameName) {
         Integer gameId = testContext.getGameIdForName(gameName);
-        String url = (testProperties.getFrontendUrlBase() + "/games/%d").formatted(gameId);
-        PlaywrightAssertions.assertThat(page).hasURL(url);
+        ongoingGamePage.waitForUrl(gameId);
     }
 
     @And("qa-user can see the element with testid {string}")

@@ -4,7 +4,7 @@ import com.microsoft.playwright.Page;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AuthenticationPage extends UiElementObjectWithUrl {
+public class AuthenticationPage extends PageWithStaticUrl {
 
     private final GamesListPage gamesListPage;
     private static final String EMAIL_PASSWORD_IDP_BUTTON = ".firebaseui-idp-password";

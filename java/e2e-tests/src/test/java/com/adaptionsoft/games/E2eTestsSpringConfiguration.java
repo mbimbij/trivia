@@ -2,13 +2,12 @@ package com.adaptionsoft.games;
 
 import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.pageObjects.*;
+import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.microsoft.playwright.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.nio.file.Path;
 
 @ComponentScan
 @EnableConfigurationProperties(TestProperties.class)
@@ -70,13 +69,20 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public OngoingGamePage ongoingGamePage(Page page) {
-        return new OngoingGamePage(page);
+    public OngoingGamePage ongoingGamePage(Page page, TestProperties testProperties) {
+        String urlTemplate = testProperties.getFrontendUrlBase() + "/games/%d";
+        return new OngoingGamePage(page, urlTemplate);
     }
 
     @Bean
-    public CreateGameUiElement createGameUiElement(Page page, Console console, TestContext testContext) {
-        return new CreateGameUiElement(page, console, testContext);
+    public GameDetailsPage gameDetailsPage(Page page, TestProperties testProperties) {
+        String urlTemplate = testProperties.getFrontendUrlBase() + "/games/%d/details";
+        return new GameDetailsPage(page, urlTemplate);
+    }
+
+    @Bean
+    public CreateGameUiElement createGameUiElement(Page page, TestContext testContext) {
+        return new CreateGameUiElement(page, testContext);
     }
 
     @Bean

@@ -23,4 +23,9 @@ public class UiElementObject {
         PlaywrightAssertions.assertThat(button).isEnabled();
         button.click();
     }
+
+    public void clickElementByTestid(int gameId, Page page) {
+        Locator locator = page.getByTestId("game-details-%d".formatted(gameId));
+        locator.click();
+    }
 }
