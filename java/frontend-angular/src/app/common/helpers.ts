@@ -20,7 +20,7 @@ export function userToPlayerDto(user: User): PlayerDto {
 }
 
 export function userToPlayer(user: User): Player {
-  return new Player(user.id, user.name, 0, false, 0, "")
+  return new Player(user.id, user.name, 0, false, 0, "WAITING_FOR_DICE_ROLL")
 }
 
 export function userToUserDto(user: User): UserDto {
