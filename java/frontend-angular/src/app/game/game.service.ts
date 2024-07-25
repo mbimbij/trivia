@@ -66,7 +66,7 @@ export class GameService extends GameServiceAbstract {
       .subscribe(games => {
         this.gamesSubject.next(games);
         for (let game of games) {
-          this.registerGameUpdatedHandler(game);
+          this.registerGameUpdatedHandler(game.id);
         }
       })
     // TODO get Games => enregistrement automatique des handlers, à revoir
@@ -84,11 +84,16 @@ export class GameService extends GameServiceAbstract {
     let gameObservable = this.openApiService.getGameById(gameId)
       .pipe(map(Game.fromDto));
     gameObservable
-      .subscribe(game => {
+      .subscribe({
+        next: game => {
           this.addSingleGameSubject(game)
-          this.registerGameUpdatedHandler(game);
+          this.registerGameUpdatedHandler(game.id);
+        },
+        error: err => {
+          this.gamesSubjectsMap.get(gameId)?.error(err);
+          this.registerGameUpdatedHandler(gameId);
         }
-      );
+      });
   }
 
   private createSubjectForSingleGame(gameId: number) {
@@ -111,6 +116,7 @@ export class GameService extends GameServiceAbstract {
         .filter(text => text.trim() != "")
         .map(text => buildGameLog(text, g)))
       ;
+
     function buildGameLog(text: string, g: GameLog) {
       return {
         value: text,
@@ -184,13 +190,13 @@ export class GameService extends GameServiceAbstract {
   private handleGameCreated(newGame: Game) {
     this.addToGameListSubject(newGame);
     this.addSingleGameSubject(newGame, newGame.id)
-    this.registerGameUpdatedHandler(newGame)
+    this.registerGameUpdatedHandler(newGame.id)
   }
 
-  registerGameUpdatedHandler(game: Game) {
-    if (!this.isUpdateHandlerRegistered.has(game.id)) {
-      this.isUpdateHandlerRegistered.add(game.id)
-      this.rxStompService.watch(`/topic/games/${game.id}`).subscribe((message: IMessage) => {
+  registerGameUpdatedHandler(gameId: number) {
+    if (!this.isUpdateHandlerRegistered.has(gameId)) {
+      this.isUpdateHandlerRegistered.add(gameId)
+      this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
         let updatedGameDto = JSON.parse(message.body) as GameResponseDto;
         let updatedGame = Game.fromDto(updatedGameDto);
         this.handleGameUpdated(updatedGame);
