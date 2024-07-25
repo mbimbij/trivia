@@ -5,12 +5,14 @@ import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {combineLatest, Observable, of, Subscription} from "rxjs";
+import {catchError, combineLatest, Observable, of, Subject, Subscription} from "rxjs";
 import {Game} from "../game";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RollDiceComponent} from "./roll-dice/roll-dice.component";
 import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
+import {Nobody} from "../../user/user";
+import {mockGame1, mockUser1} from "../../common/test-helpers";
 
 @Component({
   selector: 'app-game',
@@ -31,11 +33,12 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
 export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   private readonly id: string;
   protected player!: Player;
-  private gameId!: number;
+  protected gameId!: number;
   private game!: Game;
   protected game$!: Observable<Game>
   protected gameLogs$!: Observable<GameLog[]>;
   protected isGameEnded: boolean = false;
+  protected gameLoadingError$= new Subject<boolean>();
 
   private userGameSubscription: Subscription | undefined;
   private routeParamsSubscription: Subscription;
@@ -53,11 +56,16 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
       let user$ = this.userService.getUser();
 
       this.userGameSubscription = combineLatest([user$, this.game$])
-        .subscribe(([user, game]) => {
-          this.game = game;
-          let playerFromUser = userToPlayer(user);
-          this.player = game.getCurrentStateOf(playerFromUser);
-          this.isGameEnded = game.isEnded();
+        .subscribe({
+          next: ([user, game]) => {
+            this.game = game;
+            let playerFromUser = userToPlayer(user);
+            this.player = game.getCurrentStateOf(playerFromUser);
+            this.isGameEnded = game.isEnded();
+          },
+          error: err => {
+            this.gameLoadingError$.next(true);
+          }
         });
     });
   }

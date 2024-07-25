@@ -6,7 +6,7 @@ import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {Observable, Subscription} from "rxjs";
+import {catchError, Observable, Subject, Subscription} from "rxjs";
 import {Game} from "../game";
 import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
@@ -33,6 +33,7 @@ export class GameDetailsComponent implements OnDestroy{
   game$!: Observable<Game>;
   private readonly id: string;
   private routeParamsSubscription?: Subscription;
+  protected gameLoadingError$= new Subject<boolean>();
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
@@ -41,7 +42,13 @@ export class GameDetailsComponent implements OnDestroy{
     // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
-      this.game$ = gameService.getGame(this.gameId);
+      this.game$ = gameService.getGame(this.gameId)
+        .pipe(
+          catchError(err => {
+            this.gameLoadingError$.next(true);
+            throw err;
+          })
+        );
     });
   }
 

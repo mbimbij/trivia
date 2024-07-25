@@ -1,5 +1,9 @@
-<button (click)="router.navigate(['/games'])">go back</button>
-<ng-container *ngIf="(game$ | async) as game; else waiting_for_data">
+<button style="display: block"
+        [attr.data-testid]="'go-back'"
+        (click)="router.navigate(['/games'])">
+  back to games
+</button>
+<ng-container *ngIf="(game$ | async) as game; else loadingOrError">
   <table>
     <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
     <tr>
@@ -35,4 +39,11 @@
     </tr>
   </table>
 </ng-container>
-<ng-template #waiting_for_data>Waiting for game data</ng-template>
+<ng-template #loadingOrError>
+  <div *ngIf="gameLoadingError$ | async; else loading">
+    <p>Error loading game with id {{ gameId }}</p>
+  </div>
+  <ng-template #loading>
+    <p>Waiting for game data</p>
+  </ng-template>
+</ng-template>
