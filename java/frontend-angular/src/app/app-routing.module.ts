@@ -9,9 +9,11 @@ import {
 } from "./authentication/waiting-for-email-verification/waiting-for-email-verification.component";
 import {loginActivateGuard} from "./authentication/authentication-guard/login-activate.guard";
 import {emailVerifiedGuard} from "./authentication/authentication-guard/email-verified.guard";
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
-  {path: "games", component: GameListComponent
+  {
+    path: "games", component: GameListComponent
     , canActivate: [loginActivateGuard, emailVerifiedGuard]
   },
   {path: "", redirectTo: "/games", pathMatch: "full"},
@@ -22,7 +24,9 @@ const routes: Routes = [
     path: "waiting-for-email-verification",
     component: WaitingForEmailVerificationComponent,
     canActivate: [loginActivateGuard]
-  }
+  },
+  {path: 'not-found', component: NotFoundComponent},
+  {path: '**', redirectTo: '/not-found'}
 ]
 
 @NgModule({
