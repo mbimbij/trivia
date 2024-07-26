@@ -6,6 +6,7 @@ import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -17,15 +18,19 @@ public class Hooks {
 
     private final Janitor janitor;
     private final Console console;
+    private boolean noErrorLogsExpectedInConsole;
 
     @Before
     public void setUp() {
         console.clearLogs();
+        noErrorLogsExpectedInConsole = true;
     }
 
     @After
     public void tearDown() {
-        verifyNoErrorIsDisplayedInTheConsole();
+        if(noErrorLogsExpectedInConsole){
+            verifyNoErrorIsDisplayedInTheConsole();
+        }
         janitor.deleteTestGames();
     }
 
@@ -41,5 +46,11 @@ public class Hooks {
     @AfterAll
     public static void afterAll() {
         PlaywrightSingleton.getInstance().close();
+    }
+
+
+    @And("error logs are expected in the console")
+    public void logsAreExpectedInTheConsole() {
+        noErrorLogsExpectedInConsole = false;
     }
 }

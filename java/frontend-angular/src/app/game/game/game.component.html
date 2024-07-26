@@ -4,6 +4,7 @@
   back to games
 </button>
 <div
+  [attr.data-testid]="'ok-section'"
   *ngIf="(game$ | async) as game; else loadingOrError"
 >
   <div
@@ -48,12 +49,21 @@
     </div>
   </div>
 </div>
+
 <ng-template #loadingOrError>
-  <div *ngIf="gameLoadingError$ | async; else loading">
+  <div
+    [attr.data-testid]="'error-section'"
+    *ngIf="gameLoadingError$ | async; else loading"
+  >
     <p>Error loading game with id {{ gameId }}</p>
   </div>
-  <ng-template #loading>
+</ng-template>
+
+<ng-template #loading>
+  <div
+    [attr.data-testid]="'loading-section'"
+  >
     <p>Waiting for game data</p>
-  </ng-template>
+  </div>
 </ng-template>
 

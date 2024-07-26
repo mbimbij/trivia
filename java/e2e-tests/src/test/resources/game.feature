@@ -28,6 +28,15 @@ Feature: On-Going Game Page
       | Game Id\\(value=[0-9]*\\) started |
       | qa-user is the current player     |
 
+  Scenario: Display error message when game not found
+    When qa-user clicks on "go-back" button
+    And qa-user goes to the game with id = -1
+    Then ok section is not visible
+    And loading section is not visible
+    And error section is visible
+    And error section text is "Error loading game with id -1"
+    And error logs are expected in the console
+
   Rule: End of game display
     Scenario: Verify display when qa-user is the winner
       Given qa-user has 5 coins

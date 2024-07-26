@@ -14,6 +14,9 @@ public class OngoingGamePage extends PageWithDynamicUrl {
     public static final String BACKHAND_SECTION_TESTID = "backhand";
     public static final String VALIDATION_BUTTON_TESTID = "validate";
     public static final String GO_BACK_BUTTON_TESTID = "go-back";
+    public static final String OK_SECTION = "ok-section";
+    public static final String ERROR_SECTION = "error-section";
+    public static final String LOADING_SECTION = "loading-section";
 
     public OngoingGamePage(Page page, String urlTemplate) {
         super(urlTemplate,page);

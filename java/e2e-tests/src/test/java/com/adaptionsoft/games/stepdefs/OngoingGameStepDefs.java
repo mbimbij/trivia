@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.util.List;
 
-import static com.adaptionsoft.games.domain.pageObjects.OngoingGamePage.WINNER_PROMPT_SECTION_TESTID;
+import static com.adaptionsoft.games.domain.pageObjects.OngoingGamePage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.awaitility.Awaitility.await;
@@ -193,4 +193,31 @@ public class OngoingGameStepDefs {
     public void testUserDrawsAQuestionFromTheBackend(Actor  actor) {
         backend.drawQuestion(gameId, actor.getId());
     }
+
+    @And("qa-user goes to the game with id = {int}")
+    public void qaUserGoesToTheGameWithId(int gameId) {
+        ongoingGamePage.navigateTo(gameId);
+    }
+
+    @Then("error section is visible")
+    public void errorSectionIsVisible() {
+        ongoingGamePage.verifyCanSeeElementWithTestid(ERROR_SECTION);
+    }
+
+    @Then("ok section is not visible")
+    public void okSectionIsNotVisible() {
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OK_SECTION);
+    }
+
+    @Then("loading section is not visible")
+    public void loadingSectionIsNotVisible() {
+        ongoingGamePage.verifyCannotSeeElementWithTestid(LOADING_SECTION);
+    }
+
+    @And("error section text is {string}")
+    public void errorSectionTextIs(String expectedTextContent) {
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION);
+        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+    }
+
 }
