@@ -4,21 +4,26 @@
   back to games
 </button>
 <div
-  [attr.data-testid]="'game-header-section'"
   *ngIf="(game$ | async) as game; else loadingOrError"
 >
-  <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
+  <div
+    [attr.data-testid]="'game-header-section'"
+  >
+    <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
 
-  <h2
-    [attr.data-testid]="'winner-prompt-section'"
-    *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
-  <ng-template #you_won>You won, Congratulations !</ng-template>
-  <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
+    <h2
+      [attr.data-testid]="'winner-prompt-section'"
+      *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
+    <ng-template #you_won>You won, Congratulations !</ng-template>
+    <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
-  <br>
-  <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
-  <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
-  <p>Current Player - "{{ game.currentPlayer.name }}"</p>
+    <br>
+    <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
+    <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
+    <p>Current Player - "{{ game.currentPlayer.name }}"</p>
+
+  </div>
+
   <div
     *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
     [attr.data-testid]="'player-action-section'"
@@ -43,7 +48,6 @@
     </div>
   </div>
 </div>
-
 <ng-template #loadingOrError>
   <div *ngIf="gameLoadingError$ | async; else loading">
     <p>Error loading game with id {{ gameId }}</p>
