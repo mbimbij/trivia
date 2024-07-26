@@ -148,11 +148,6 @@ public class OngoingGameStepDefs {
         ongoingGamePage.clickButtonByTestid(OngoingGamePage.VALIDATION_BUTTON_TESTID);
     }
 
-    @When("qa-user clicks on \"go-back\" button")
-    public void qaUserClicksOnButton() {
-        ongoingGamePage.clickButtonByTestid(OngoingGamePage.GO_BACK_BUTTON_TESTID);
-    }
-
     @Given("{actor} has {int} coins")
     public void qaUserHasCoins(Actor qaUser, int coinCount) {
         janitor.setCoinCount(gameId, qaUser.getId(), coinCount);

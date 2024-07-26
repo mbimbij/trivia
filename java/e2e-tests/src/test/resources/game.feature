@@ -34,7 +34,7 @@ Feature: On-Going Game Page
     Then ok section is not visible
     And loading section is not visible
     And error section is visible
-    And error section text is "Error loading game with id -1"
+    And error section text is "Game with id -1 not found"
     And error logs are expected in the console
 
   Rule: End of game display
