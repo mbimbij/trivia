@@ -56,12 +56,20 @@
     *ngIf="(gameLoadingError$ | async) as error; else loading"
   >
     @if (error.status == 404) {
-      <p>game with id {{ gameId }} not found</p>
+      <div
+        [attr.data-testid]="'game-not-found-section'"
+      >
+        <p>game with id {{ gameId }} not found</p>
+      </div>
     } @else {
-      <p>Error loading game with id {{ gameId }}</p>
-      <hr>
-      <p>response status: <span style="font-weight: bold">{{ error.status }}</span></p>
-      <p>message: <span style="font-weight: bold">{{ error.error['message'] }}</span></p>
+      <div
+        [attr.data-testid]="'other-error-section'"
+      >
+        <p>Error loading game with id {{ gameId }}</p>
+        <hr>
+        <p>response status: <span style="font-weight: bold">{{ error.status }}</span></p>
+        <p>message: <span style="font-weight: bold">{{ error.error['message'] }}</span></p>
+      </div>
     }
   </div>
 </ng-template>
@@ -71,6 +79,9 @@
     [attr.data-testid]="'loading-section'"
   >
     <p>Waiting for game data</p>
+    <p
+      [attr.data-testid]="'plop'"
+    >{{ loadingDisplay }}</p>
   </div>
 </ng-template>
 

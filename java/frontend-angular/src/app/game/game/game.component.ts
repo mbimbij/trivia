@@ -34,13 +34,14 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   protected player!: Player;
   protected gameId!: number;
   private game!: Game;
-  protected game$!: Observable<Game>
+  game$!: Observable<Game>
   protected gameLogs$!: Observable<GameLog[]>;
   protected isGameEnded: boolean = false;
-  protected gameLoadingError$= new Subject<HttpErrorResponse>();
+  gameLoadingError$= new Subject<HttpErrorResponse>();
 
   private userGameSubscription: Subscription | undefined;
   private routeParamsSubscription: Subscription;
+  loadingDisplay: string = "default";
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
