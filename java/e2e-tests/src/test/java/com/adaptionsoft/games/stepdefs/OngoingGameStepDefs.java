@@ -215,4 +215,10 @@ public class OngoingGameStepDefs {
         assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 
+    @And("error section text contains {string}")
+    public void errorSectionTextContains(String expectedTextContent) {
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION);
+        assertThat(actualTextContent).contains(expectedTextContent);
+    }
+
 }

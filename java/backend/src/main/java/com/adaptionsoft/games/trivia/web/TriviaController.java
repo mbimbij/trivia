@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -22,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -76,11 +78,18 @@ public class TriviaController {
     )
     @GetMapping("/{gameId}")
     public GameResponseDto getGameById(@PathVariable("gameId") int gameIdInt) {
+        return getByIdImplementation.apply(gameIdInt);
+    }
+
+    public GameResponseDto getByIdDefaultImplementation(int gameIdInt) {
         GameId gameId = new GameId(gameIdInt);
         return gameRepository.findById(gameId)
                 .map(GameResponseDto::from)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     }
+
+    @Setter
+    private Function<Integer, GameResponseDto> getByIdImplementation = this::getByIdDefaultImplementation;
 
     @GetMapping
     @RequestMapping("/{gameId}/logs")

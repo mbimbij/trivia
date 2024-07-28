@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia.web.testkit;
+package com.adaptionsoft.games.trivia.testkit;
 
 import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category;
@@ -6,6 +6,7 @@ import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
 import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.web.TriviaController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,7 @@ public class TestKitController {
 
     private final GameRepository gameRepository;
     private final SimpMessagingTemplate template;
+    private final TriviaController triviaController;
 
     @PostMapping("/{gameId}/players/{playerId}/goToPenaltyBox")
     public GameResponseDto goToPenaltyBox(@PathVariable("gameId") Integer gameIdInt,
@@ -56,7 +58,7 @@ public class TestKitController {
     public GameResponseDto setCoinCount(@PathVariable("gameId") Integer gameIdInt,
                                         @PathVariable("playerId") String playerIdString,
                                         @PathVariable("coinCount") Integer coinCount) {
-        assert coinCount != null && coinCount >=0;
+        assert coinCount != null && coinCount >= 0;
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         player.setCoinCount(coinCount);
@@ -89,14 +91,27 @@ public class TestKitController {
 
     @PutMapping("/{gameId}/currentPlayer/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public GameResponseDto setLoadedQuestionDeck(@PathVariable("gameId") int gameIdInt,
-                                                 @PathVariable("userId") String playerIdString) {
+    public void setLoadedQuestionDeck(@PathVariable("gameId") int gameIdInt,
+                                      @PathVariable("userId") String playerIdString) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = game.findPlayerById(new UserId(playerIdString)).orElseThrow();
         game.setCurrentPlayer(player);
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
-        return GameResponseDto.from(game);
+    }
+
+    @PutMapping("/getByIdImplementation/exception")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void throwExceptionWhenCallGetGameById() {
+        triviaController.setGetByIdImplementation(integer -> {
+            throw new RuntimeException("some backend exception");
+        });
+    }
+
+    @PutMapping("/getByIdImplementation/reset")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resetGetGameByIdMethod() {
+        triviaController.setGetByIdImplementation(triviaController::getByIdDefaultImplementation);
     }
 
     private void notifyGameUpdatedViaWebsocket(Game game) {

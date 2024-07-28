@@ -41,7 +41,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
 
   private userGameSubscription: Subscription | undefined;
   private routeParamsSubscription: Subscription;
-  loadingDisplay: string = "default";
 
   constructor(private route: ActivatedRoute,
               protected router: Router,

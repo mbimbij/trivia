@@ -28,14 +28,25 @@ Feature: On-Going Game Page
       | Game Id\\(value=[0-9]*\\) started |
       | qa-user is the current player     |
 
-  Scenario: Display error message when game not found
-    When qa-user clicks on "go-back" button
-    And qa-user goes to the game with id = -1
-    Then ok section is not visible
-    And loading section is not visible
-    And error section is visible
-    And error section text is "Game with id -1 not found"
-    And error logs are expected in the console
+  Rule: Verify Error display
+    Scenario: Display error message when game not found
+      When qa-user clicks on "go-back" button
+      And qa-user goes to the game with id = -1
+      Then ok section is not visible
+      And loading section is not visible
+      And error section is visible
+      And error section text is "Game with id -1 not found"
+      And error logs are expected in the console
+
+    Scenario: Display error message when backend exception
+      Given an exception is thrown when calling getGameById
+      And qa-user reloads the page
+      Then ok section is not visible
+      And loading section is not visible
+      And error section is visible
+      And error section text contains "Error loading game with id"
+      And error section text contains "message: some backend exception"
+      And error logs are expected in the console
 
   Rule: End of game display
     Scenario: Verify display when qa-user is the winner

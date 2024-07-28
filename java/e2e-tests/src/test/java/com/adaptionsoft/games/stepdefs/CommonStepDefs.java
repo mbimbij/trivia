@@ -106,4 +106,9 @@ public class CommonStepDefs {
         PlaywrightAssertions.assertThat(button).isEnabled();
         button.click();
     }
+
+    @Given("an exception is thrown when calling getGameById")
+    public void anExceptionIsThrownWhenCallingGetGameById() {
+        janitor.throwExceptionWhenCallGetGameById();
+    }
 }

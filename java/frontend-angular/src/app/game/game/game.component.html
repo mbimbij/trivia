@@ -59,7 +59,7 @@
       <div
         [attr.data-testid]="'game-not-found-section'"
       >
-        <p>game with id {{ gameId }} not found</p>
+        <p>Game with id {{ gameId }} not found</p>
       </div>
     } @else {
       <div
@@ -79,9 +79,6 @@
     [attr.data-testid]="'loading-section'"
   >
     <p>Waiting for game data</p>
-    <p
-      [attr.data-testid]="'plop'"
-    >{{ loadingDisplay }}</p>
   </div>
 </ng-template>
 

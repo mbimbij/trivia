@@ -24,6 +24,7 @@ public class Hooks {
     public void setUp() {
         console.clearLogs();
         noErrorLogsExpectedInConsole = true;
+        janitor.resetGetGameByIdMethodBehaviour();
     }
 
     @After
