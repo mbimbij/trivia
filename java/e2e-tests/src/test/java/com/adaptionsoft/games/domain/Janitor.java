@@ -85,4 +85,12 @@ public class Janitor {
                 gameId,
                 playerId);
     }
+
+    public void throwExceptionWhenCallGetGameById() {
+        restTemplate.put(backendUrlBase + "/testkit/games/getByIdImplementation/exception",null);
+    }
+
+    public void resetGetGameByIdMethodBehaviour() {
+        restTemplate.put(backendUrlBase + "/testkit/games/getByIdImplementation/reset",null);
+    }
 }

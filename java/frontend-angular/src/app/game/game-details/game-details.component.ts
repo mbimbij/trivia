@@ -10,6 +10,7 @@ import {catchError, Observable, Subject, Subscription} from "rxjs";
 import {Game} from "../game";
 import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-game',
@@ -33,7 +34,7 @@ export class GameDetailsComponent implements OnDestroy{
   game$!: Observable<Game>;
   private readonly id: string;
   private routeParamsSubscription?: Subscription;
-  protected gameLoadingError$= new Subject<boolean>();
+  protected gameLoadingError$= new Subject<HttpErrorResponse>();
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
@@ -45,7 +46,7 @@ export class GameDetailsComponent implements OnDestroy{
       this.game$ = gameService.getGame(this.gameId)
         .pipe(
           catchError(err => {
-            this.gameLoadingError$.next(true);
+            this.gameLoadingError$.next(err);
             throw err;
           })
         );

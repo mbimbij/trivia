@@ -5,7 +5,9 @@ import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -33,6 +35,7 @@ public class CommonStepDefs {
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;
+    public static final String GO_BACK_BUTTON_TESTID = "go-back";
 
     @Given("2 existing games")
     public void games() {
@@ -93,5 +96,19 @@ public class CommonStepDefs {
     @When("qa-user reloads the page")
     public void qaUserReloadsThePage() {
         page.reload();
+    }
+
+
+    @When("qa-user clicks on \"go-back\" button")
+    public void qaUserClicksOnButton() {
+        Locator button = page.getByTestId(GO_BACK_BUTTON_TESTID);
+        PlaywrightAssertions.assertThat(button).isVisible();
+        PlaywrightAssertions.assertThat(button).isEnabled();
+        button.click();
+    }
+
+    @Given("an exception is thrown when calling getGameById")
+    public void anExceptionIsThrownWhenCallingGetGameById() {
+        janitor.throwExceptionWhenCallGetGameById();
     }
 }

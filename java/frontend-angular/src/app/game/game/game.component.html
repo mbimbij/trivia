@@ -4,21 +4,27 @@
   back to games
 </button>
 <div
-  [attr.data-testid]="'game-header-section'"
+  [attr.data-testid]="'ok-section'"
   *ngIf="(game$ | async) as game; else loadingOrError"
 >
-  <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
+  <div
+    [attr.data-testid]="'game-header-section'"
+  >
+    <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
 
-  <h2
-    [attr.data-testid]="'winner-prompt-section'"
-    *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
-  <ng-template #you_won>You won, Congratulations !</ng-template>
-  <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
+    <h2
+      [attr.data-testid]="'winner-prompt-section'"
+      *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
+    <ng-template #you_won>You won, Congratulations !</ng-template>
+    <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
-  <br>
-  <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
-  <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
-  <p>Current Player - "{{ game.currentPlayer.name }}"</p>
+    <br>
+    <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
+    <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
+    <p>Current Player - "{{ game.currentPlayer.name }}"</p>
+
+  </div>
+
   <div
     *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
     [attr.data-testid]="'player-action-section'"
@@ -45,11 +51,34 @@
 </div>
 
 <ng-template #loadingOrError>
-  <div *ngIf="gameLoadingError$ | async; else loading">
-    <p>Error loading game with id {{ gameId }}</p>
+  <div
+    [attr.data-testid]="'error-section'"
+    *ngIf="(gameLoadingError$ | async) as error; else loading"
+  >
+    @if (error.status == 404) {
+      <div
+        [attr.data-testid]="'game-not-found-section'"
+      >
+        <p>Game with id {{ gameId }} not found</p>
+      </div>
+    } @else {
+      <div
+        [attr.data-testid]="'other-error-section'"
+      >
+        <p>Error loading game with id {{ gameId }}</p>
+        <hr>
+        <p>response status: <span style="font-weight: bold">{{ error.status }}</span></p>
+        <p>message: <span style="font-weight: bold">{{ error.error['message'] }}</span></p>
+      </div>
+    }
   </div>
-  <ng-template #loading>
+</ng-template>
+
+<ng-template #loading>
+  <div
+    [attr.data-testid]="'loading-section'"
+  >
     <p>Waiting for game data</p>
-  </ng-template>
+  </div>
 </ng-template>
 

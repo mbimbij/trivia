@@ -5,6 +5,14 @@ Feature: Game Details Page
     And 2 existing games
     And qa-user on the game-list page
 
+  Scenario: Display error message when game not found
+    When qa-user directly access the game-details page for game id -1
+    Then ok section is not visible
+    And loading section is not visible
+    And error section is visible
+    And error section text is "Game with id -1 not found"
+    And error logs are expected in the console
+
   Scenario Outline: Verify Game Details Displayed - On an existing game
     When i click on game details link for "<game>"
     Then i am on the on game details page for "<game>"
@@ -54,7 +62,7 @@ Feature: Game Details Page
 
 
   Scenario Outline: Verify Game Details Displayed - Direct url access and refresh
-    When i directly access the game-details page for "<game>"
+    When qa-user directly access the game-details page for "<game>"
     And qa-user refresh
     Then i am on the on game details page for "<game>"
     And the following games are displayed

@@ -1,18 +1,17 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {GameLog} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {catchError, combineLatest, Observable, of, Subject, Subscription} from "rxjs";
+import {combineLatest, Observable, of, Subject, Subscription} from "rxjs";
 import {Game} from "../game";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RollDiceComponent} from "./roll-dice/roll-dice.component";
 import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
-import {Nobody} from "../../user/user";
-import {mockGame1, mockUser1} from "../../common/test-helpers";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-game',
@@ -35,10 +34,10 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   protected player!: Player;
   protected gameId!: number;
   private game!: Game;
-  protected game$!: Observable<Game>
+  game$!: Observable<Game>
   protected gameLogs$!: Observable<GameLog[]>;
   protected isGameEnded: boolean = false;
-  protected gameLoadingError$= new Subject<boolean>();
+  gameLoadingError$= new Subject<HttpErrorResponse>();
 
   private userGameSubscription: Subscription | undefined;
   private routeParamsSubscription: Subscription;
@@ -64,7 +63,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
             this.isGameEnded = game.isEnded();
           },
           error: err => {
-            this.gameLoadingError$.next(true);
+            this.gameLoadingError$.next(err);
           }
         });
     });

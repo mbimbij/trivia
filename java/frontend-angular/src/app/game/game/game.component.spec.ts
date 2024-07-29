@@ -16,7 +16,9 @@ import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {ChangeDetectorRef, DebugElement} from "@angular/core";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {of} from "rxjs";
+import {BehaviorSubject, of} from "rxjs";
+import {GameService} from "../game.service";
+import {HttpErrorResponse} from "@angular/common/http";
 import any = jasmine.any;
 
 describe('GameComponent', () => {
@@ -108,4 +110,91 @@ describe('GameComponent', () => {
     expect(htmlElement.querySelector(`[data-testid="answer-question"]`)).toBeTruthy();
     expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
   });
+});
+
+describe('Error display', () => {
+  let fixture: ComponentFixture<GameComponent>;
+  let component: GameComponent;
+  let htmlElement: HTMLElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [GameComponent, HttpClientTestingModule],
+      providers: [
+        {provide: ActivatedRoute, useClass: MockActivatedRoute},
+        {provide: UserServiceAbstract, useClass: UserServiceMock},
+        {provide: GameServiceAbstract, useClass: GameService},
+      ]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(GameComponent);
+    component = fixture.componentInstance;
+    htmlElement = fixture.nativeElement;
+  });
+
+  it('Should display game not found section, when http 404 returned', () => {
+    component.gameLoadingError$ = new BehaviorSubject<HttpErrorResponse>(new HttpErrorResponse({
+      status: 404,
+      error: {message: `some message`}
+    }));
+
+    fixture.detectChanges()
+
+    expect(component).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=ok-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=error-section]')).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=loading-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=game-not-found-section]')).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=other-error-section]')).toBeFalsy()
+  });
+
+  it('Should display other error section, when http 400 returned', () => {
+    component.gameLoadingError$ = new BehaviorSubject<HttpErrorResponse>(new HttpErrorResponse({
+      status: 400,
+      error: {message: `some message`}
+    }));
+
+    fixture.detectChanges()
+
+    expect(component).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=ok-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=error-section]')).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=loading-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=game-not-found-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=other-error-section]')).toBeTruthy()
+  });
+
+  it('Should display other error section, when http 500 returned', () => {
+    component.gameLoadingError$ = new BehaviorSubject<HttpErrorResponse>(new HttpErrorResponse({
+      status: 500,
+      error: {message: `some message`}
+    }));
+
+    fixture.detectChanges()
+
+    expect(component).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=ok-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=error-section]')).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=loading-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=game-not-found-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=other-error-section]')).toBeTruthy()
+  });
+
+  it('Should display loading section, when http 500 returned', () => {
+    component.gameLoadingError$ = new BehaviorSubject<HttpErrorResponse>(new HttpErrorResponse({
+      status: 500,
+      error: {message: `some message`}
+    }));
+
+    fixture.detectChanges()
+
+    expect(component).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=ok-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=error-section]')).toBeTruthy()
+    expect(htmlElement.querySelector('[data-testid=loading-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=game-not-found-section]')).toBeFalsy()
+    expect(htmlElement.querySelector('[data-testid=other-error-section]')).toBeTruthy()
+  });
+
 });

@@ -44,9 +44,14 @@ public class GameDetailsStepDefs {
         gameRowActions.join(gameId);
     }
 
-    @When("i directly access the game-details page for {string}")
+    @When("qa-user directly access the game-details page for {string}")
     public void iDirectlyAccessTheGameDetailsPageFor(String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
+        gameDetailsPage.navigateTo(gameId);
+    }
+
+    @When("qa-user directly access the game-details page for game id {int}")
+    public void iDirectlyAccessTheGameDetailsPageForGameId(int gameId) {
         gameDetailsPage.navigateTo(gameId);
     }
 }
