@@ -53,36 +53,3 @@
 <ng-template #loadingOrError>
   <app-error-display [gameId]="gameId" [gameLoadingError$]="gameLoadingError$"></app-error-display>
 </ng-template>
-
-<!--<ng-template #loadingOrError>-->
-<!--  <div-->
-<!--    [attr.data-testid]="'error-section'"-->
-<!--    *ngIf="(gameLoadingError$ | async) as error; else loading"-->
-<!--  >-->
-<!--    @if (error.status == 404) {-->
-<!--      <div-->
-<!--        [attr.data-testid]="'game-not-found-section'"-->
-<!--      >-->
-<!--        <p>Game with id {{ gameId }} not found</p>-->
-<!--      </div>-->
-<!--    } @else {-->
-<!--      <div-->
-<!--        [attr.data-testid]="'other-error-section'"-->
-<!--      >-->
-<!--        <p>Error loading game with id {{ gameId }}</p>-->
-<!--        <hr>-->
-<!--        <p>response status: <span style="font-weight: bold">{{ error.status }}</span></p>-->
-<!--        <p>message: <span style="font-weight: bold">{{ error.error['message'] }}</span></p>-->
-<!--      </div>-->
-<!--    }-->
-<!--  </div>-->
-<!--</ng-template>-->
-
-<!--<ng-template #loading>-->
-<!--  <div-->
-<!--    [attr.data-testid]="'loading-section'"-->
-<!--  >-->
-<!--    <p>Waiting for game data</p>-->
-<!--  </div>-->
-<!--</ng-template>-->
-
