@@ -12,6 +12,7 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RollDiceComponent} from "./roll-dice/roll-dice.component";
 import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorDisplayComponent} from "../error-display/error-display.component";
 
 @Component({
   selector: 'app-game',
@@ -23,7 +24,8 @@ import {HttpErrorResponse} from "@angular/common/http";
     ConsoleLogPipe,
     RollDiceComponent,
     AnswerQuestionComponent,
-    NgClass
+    NgClass,
+    ErrorDisplayComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
