@@ -17,7 +17,7 @@ public class GameDetailsStepDefs {
     private final GameDetailsPage gameDetailsPage;
     private final Page page;
 
-    @And("i click on game details link for {string}")
+    @And("qa-user clicks on game details link for {string}")
     public void iClickOnGameDetailsLinkFor(String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
 
