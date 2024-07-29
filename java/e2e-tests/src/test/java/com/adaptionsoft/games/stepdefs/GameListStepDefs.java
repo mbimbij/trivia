@@ -27,6 +27,7 @@ public class GameListStepDefs {
     private final GameRowActions gameRowActions;
     private final CreateGameUiElement createGameUiElement;
     private final Backend backend;
+    private final Janitor janitor;
 
     @Then("qa-user sees the following games, filtered for creators \"{strings}\"")
     public void theFollowingGamesAreDisplayedForUsers(Collection<String> userNames, Collection<DisplayedGame> expected) {
@@ -43,12 +44,14 @@ public class GameListStepDefs {
     @When("{actor} creates a game named {string} from the backend")
     public void testUserCreatesAGameNamed(Actor actor, String gameName) {
         GameResponseDto gameResponseDto = backend.createGame(gameName, actor.toUserDto());
+        janitor.disablePlayersShuffling(gameResponseDto.id());
         testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
     }
 
     @When("{actor} creates a game named {string} from the frontend")
     public void qaUserCreatesAGameNamed(Actor actor, String gameName) {
         int createdGameId = createGameUiElement.createGame(gameName);
+        janitor.disablePlayersShuffling(createdGameId);
         testContext.putGameId(gameName, createdGameId);
     }
 

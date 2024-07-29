@@ -110,12 +110,18 @@ public class Game extends Entity<GameId> {
         state = STARTED;
         turn = 1;
         questionsDeck.shuffle();
+        shufflePlayers();
         raise(new GameStartedEvent(id),
                 new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
 
         stateManager.applyAction(START);
 
         eventPublisher.flushEvents();
+    }
+
+    private void shufflePlayers() {
+        players.shuffle();
+        this.currentPlayer = players.getCurrent();
     }
 
     private boolean isCreator(Player player) {
@@ -273,7 +279,11 @@ public class Game extends Entity<GameId> {
         }
     }
 
-    public void setShuffler(QuestionsShuffler shuffler) {
+    public void setQuestionsShuffler(QuestionsShuffler shuffler) {
         questionsDeck.setShuffler(shuffler);
+    }
+
+    public void setPlayersShuffler(PlayersShuffler shuffler) {
+        players.setShuffler(shuffler);
     }
 }

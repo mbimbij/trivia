@@ -250,6 +250,7 @@ class TriviaBackendTest {
     void creator_can_start_game() {
         // GIVEN an existing game
         Game game = gameFactory.create("game name", player1, player2);
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
         gameRepository.save(game);
 
         // WHEN the creator starts the game
@@ -289,6 +290,7 @@ class TriviaBackendTest {
         Game game = gameFactory.create("game", player1, player2);
         game.setDice(new LoadedDice(3));
         game.start(player1);
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
         gameRepository.save(game);
 
         // WHEN player1 rolls the dice
@@ -329,8 +331,10 @@ class TriviaBackendTest {
         Game game = gameFactory.create("game", player1, player2);
         game.setCurrentRoll(new Dice.Roll(3));
         game.setQuestionsDeck(loadedQuestionsDeck());
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
         player1.setState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION);
         game.start(player1);
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
         gameRepository.save(game);
 
         // WHEN player1 rolls the dice
@@ -379,6 +383,7 @@ class TriviaBackendTest {
     void answer_correctly() {
         // GIVEN a started game
         Game game = gameFactory.create("game", player1, player2);
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
         game.setCurrentRoll(new Dice.Roll(3));
         game.setCurrentQuestion(questionTest());
         game.start(player1);
@@ -408,6 +413,7 @@ class TriviaBackendTest {
     void answer_incorrectly() {
         // GIVEN a started game
         Game game = gameFactory.create("game", player1, player2);
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
         game.setCurrentRoll(new Dice.Roll(3));
         game.setCurrentQuestion(questionTest());
         game.start(player1);

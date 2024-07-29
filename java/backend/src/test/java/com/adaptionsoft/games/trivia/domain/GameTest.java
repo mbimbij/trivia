@@ -50,7 +50,8 @@ class GameTest {
         player1 = player1();
         player2 = player2();
         game = gameFactory.create(new Random(2), "game", player1, player2);
-        game.setShuffler(new DoNothingQuestionsShuffler());
+        game.setQuestionsShuffler(new DoNothingQuestionsShuffler());
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
     }
 
     @Test
@@ -102,7 +103,8 @@ class GameTest {
             Player vlad = playerFactory.create(new UserId("id-Vlad"), "Vlad");
             Random rand = new Random(seed);
             Game game = gameFactory.create(rand, "game", chet, pat, sue, joe, vlad);
-            game.setShuffler(new DoNothingQuestionsShuffler());
+            game.setQuestionsShuffler(new DoNothingQuestionsShuffler());
+            game.setPlayersShuffler(new DoNothingPlayersShuffler());
 
             // WHEN
             playEntireGame(game, rand);

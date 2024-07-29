@@ -115,6 +115,15 @@ public class TestKitController {
         triviaController.setGetByIdImplementation(triviaController::getByIdDefaultImplementation);
     }
 
+    @PutMapping("/{gameId}/playersShuffle/disable")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void disablePlayersShuffle(@PathVariable("gameId") int gameIdInt) {
+        Game game = findGameOrThrow(new GameId(gameIdInt));
+        game.setPlayersShuffler(new DoNothingPlayersShuffler());
+        gameRepository.save(game);
+        notifyGameUpdatedViaWebsocket(game);
+    }
+
     private void notifyGameUpdatedViaWebsocket(Game game) {
         Integer gameIdInt = game.getId().getValue();
         template.convertAndSend("/topic/games/%d".formatted(gameIdInt),
