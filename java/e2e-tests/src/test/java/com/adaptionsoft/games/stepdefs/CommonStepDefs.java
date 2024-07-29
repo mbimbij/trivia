@@ -8,6 +8,7 @@ import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -42,8 +43,10 @@ public class CommonStepDefs {
         Actor backendActor1 = actorService.getActorByLookupName(TestProperties.TEST_USER_NAME_1);
         Actor qaBackendActor = actorService.getActorByLookupName(TestProperties.QA_BACKEND_LOOKUP_NAME);
         GameResponseDto gameResponseDto = backend.createGame(TestProperties.TEST_GAME_NAME_1, backendActor1.toUserDto());
+        janitor.disablePlayersShuffling(gameResponseDto.id());
         testContext.putGameId(TestProperties.TEST_GAME_NAME_1, Objects.requireNonNull(gameResponseDto).id());
         GameResponseDto gameResponseDto2 = backend.createGame(TestProperties.TEST_GAME_NAME_2, qaBackendActor.toUserDto());
+        janitor.disablePlayersShuffling(gameResponseDto2.id());
         testContext.putGameId(TestProperties.TEST_GAME_NAME_2, Objects.requireNonNull(gameResponseDto2).id());
     }
 

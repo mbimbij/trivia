@@ -18,8 +18,10 @@ public class Players extends EventRaiser {
     @Setter
     private Player creator;
     @Getter
-    private final List<Player> individualPlayers = new ArrayList<>();
+    private List<Player> individualPlayers = new ArrayList<>();
     private int currentPlayerIndex = 0;
+    @Setter // for testing purposes only
+    private PlayersShuffler shuffler = new RandomPlayersShuffler();
 
     public Players(EventPublisher eventPublisher, Player creator, Player... otherPlayers) {
         super(eventPublisher);
@@ -100,5 +102,9 @@ public class Players extends EventRaiser {
                 .findAny()
                 .orElseThrow();
         currentPlayerIndex = individualPlayers.indexOf(newCurrentPlayer);
+    }
+
+    public void shuffle() {
+        this.individualPlayers = this.shuffler.shuffle(this.individualPlayers);
     }
 }

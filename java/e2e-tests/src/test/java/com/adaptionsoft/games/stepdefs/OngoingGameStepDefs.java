@@ -220,5 +220,4 @@ public class OngoingGameStepDefs {
         String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION);
         assertThat(actualTextContent).contains(expectedTextContent);
     }
-
 }

@@ -93,4 +93,10 @@ public class Janitor {
     public void resetGetGameByIdMethodBehaviour() {
         restTemplate.put(backendUrlBase + "/testkit/games/getByIdImplementation/reset",null);
     }
+
+    public void disablePlayersShuffling(int gameId) {
+        restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/playersShuffle/disable",
+                null,
+                gameId);
+    }
 }
