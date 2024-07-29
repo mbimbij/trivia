@@ -33,11 +33,6 @@ public class GameDetailsStepDefs {
         gameDetailsPage.waitForUrl(gameId);
     }
 
-    @And("qa-user refresh")
-    public void iRefresh() {
-        gameDetailsPage.reload();
-    }
-
     @When("qa-user joins {string} from the frontend")
     public void userJoinsGameFromTheFrontend(String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
@@ -50,7 +45,7 @@ public class GameDetailsStepDefs {
         gameDetailsPage.navigateTo(gameId);
     }
 
-    @When("qa-user directly access the game-details page for game id {int}")
+    @When("qa-user directly access the game-details page for game id = {int}")
     public void iDirectlyAccessTheGameDetailsPageForGameId(int gameId) {
         gameDetailsPage.navigateTo(gameId);
     }

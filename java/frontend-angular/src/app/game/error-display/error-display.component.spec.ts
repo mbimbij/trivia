@@ -1,51 +1,24 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {GameDetailsComponent} from './game-details.component';
-import {ActivatedRoute} from "@angular/router";
-import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {GameServiceMock} from "../game-service-mock";
-import {MockActivatedRoute, mockGame1} from "../../common/test-helpers";
-import {UserServiceMock} from "../../adapters/user/user-service.mock";
-import {UserServiceAbstract} from "../../services/user-service.abstract";
+import { ErrorDisplayComponent } from './error-display.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ActivatedRoute} from "@angular/router";
+import {MockActivatedRoute} from "../../common/test-helpers";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {UserServiceMock} from "../../adapters/user/user-service.mock";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameService} from "../game.service";
 import {BehaviorSubject} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
 
-describe('GameDetailsComponent', () => {
-  let component: GameDetailsComponent;
-  let fixture: ComponentFixture<GameDetailsComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [
-        {provide: GameServiceAbstract, useClass: GameServiceMock},
-        {provide: ActivatedRoute, useClass: MockActivatedRoute},
-        {provide: UserServiceAbstract, useClass: UserServiceMock},
-        {provide: GameServiceAbstract, useClass: GameServiceMock}
-      ],
-      imports: [GameDetailsComponent]
-    })
-      .compileComponents();
-
-    fixture = TestBed.createComponent(GameDetailsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
-
-describe('Error display', () => {
-  let fixture: ComponentFixture<GameDetailsComponent>;
-  let component: GameDetailsComponent;
+describe('ErrorDisplayComponent', () => {
+  let fixture: ComponentFixture<ErrorDisplayComponent>;
+  let component: ErrorDisplayComponent;
   let htmlElement: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameDetailsComponent, HttpClientTestingModule],
+      imports: [ErrorDisplayComponent, HttpClientTestingModule],
       providers: [
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
         {provide: UserServiceAbstract, useClass: UserServiceMock},
@@ -54,7 +27,7 @@ describe('Error display', () => {
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(GameDetailsComponent);
+    fixture = TestBed.createComponent(ErrorDisplayComponent);
     component = fixture.componentInstance;
     htmlElement = fixture.nativeElement;
   });

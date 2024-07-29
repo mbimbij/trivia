@@ -5,13 +5,24 @@ Feature: Game Details Page
     And 2 existing games
     And qa-user on the game-list page
 
-  Scenario: Display error message when game not found
-    When qa-user directly access the game-details page for game id -1
-    Then ok section is not visible
-    And loading section is not visible
-    And error section is visible
-    And error section text is "Game with id -1 not found"
-    And error logs are expected in the console
+  Rule: Verify Error display
+    Scenario: Display error message when game not found
+      And qa-user directly access the game-details page for game id = -1
+      Then ok section is not visible
+      And loading section is not visible
+      And error section is visible
+      And error section text is "Game with id -1 not found"
+      And error logs are expected in the console
+
+    Scenario: Display error message when backend exception
+      Given an exception is thrown when calling getGameById
+      And qa-user directly access the game-details page for game id = -1
+      Then ok section is not visible
+      And loading section is not visible
+      And error section is visible
+      And error section text contains "Error loading game with id"
+      And error section text contains "message: some backend exception"
+      And error logs are expected in the console
 
   Scenario Outline: Verify Game Details Displayed - On an existing game
     When qa-user clicks on game details link for "<game>"
@@ -63,7 +74,7 @@ Feature: Game Details Page
 
   Scenario Outline: Verify Game Details Displayed - Direct url access and refresh
     When qa-user directly access the game-details page for "<game>"
-    And qa-user refresh
+    And qa-user reloads the page
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |

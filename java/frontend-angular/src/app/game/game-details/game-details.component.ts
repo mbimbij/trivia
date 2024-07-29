@@ -11,6 +11,7 @@ import {Game} from "../game";
 import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorDisplayComponent} from "../error-display/error-display.component";
 
 @Component({
   selector: 'app-game',
@@ -24,7 +25,8 @@ import {HttpErrorResponse} from "@angular/common/http";
     StartGameButtonComponent,
     AsyncPipe,
     NgClass,
-    ConsoleLogPipe
+    ConsoleLogPipe,
+    ErrorDisplayComponent
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
@@ -34,7 +36,7 @@ export class GameDetailsComponent implements OnDestroy{
   game$!: Observable<Game>;
   private readonly id: string;
   private routeParamsSubscription?: Subscription;
-  protected gameLoadingError$= new Subject<HttpErrorResponse>();
+  gameLoadingError$= new Subject<HttpErrorResponse>();
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
