@@ -4,7 +4,6 @@ import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category;
 import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
-import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.TriviaController;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +82,9 @@ public class TestKitController {
     public GameResponseDto setLoadedQuestionDeck(@PathVariable("gameId") int gameIdInt,
                                                  @RequestBody Map<Category, Queue<Question>> loadedQuestionDeck) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
-        game.setQuestionsDeck(new QuestionsDeck(loadedQuestionDeck));
+        QuestionsDeck questionsDeck = new QuestionsDeck(loadedQuestionDeck);
+        questionsDeck.setShuffler(new DoNothingQuestionsShuffler());
+        game.setQuestionsDeck(questionsDeck);
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);

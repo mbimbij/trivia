@@ -93,6 +93,19 @@ public class TestFixtures {
                 "explanations");
     }
 
+    public static Question questionTest(int i) {
+        return new Question("id-question-test-"+i,
+                "question test "+i,
+                new AvailableAswers(
+                        "Question A",
+                        "Question B",
+                        "Question C",
+                        "Question D"
+                ),
+                A,
+                "explanations "+i);
+    }
+
     public static LoadedQuestionsDeck loadedQuestionsDeck() {
         return new LoadedQuestionsDeck(questionTest());
     }

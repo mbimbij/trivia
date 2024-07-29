@@ -109,6 +109,7 @@ public class Game extends Entity<GameId> {
 
         state = STARTED;
         turn = 1;
+        questionsDeck.shuffle();
         raise(new GameStartedEvent(id),
                 new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
 
@@ -272,4 +273,7 @@ public class Game extends Entity<GameId> {
         }
     }
 
+    public void setShuffler(QuestionsShuffler shuffler) {
+        questionsDeck.setShuffler(shuffler);
+    }
 }

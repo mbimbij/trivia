@@ -14,7 +14,7 @@ Feature: Game Details Page
     And error logs are expected in the console
 
   Scenario Outline: Verify Game Details Displayed - On an existing game
-    When i click on game details link for "<game>"
+    When qa-user clicks on game details link for "<game>"
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
@@ -38,7 +38,7 @@ Feature: Game Details Page
 
   Scenario Outline: Verify Game Details Displayed - On a newly created game
     When <creator> creates a game named "<game>" <cBeFe>
-    When i click on game details link for "<game>"
+    When qa-user clicks on game details link for "<game>"
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |

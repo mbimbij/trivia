@@ -1,15 +1,22 @@
 package com.adaptionsoft.games.trivia.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
 public class QuestionsDeck {
 
+    @Getter // for testing only
     private final Map<Category, Queue<Question>> questionsByCategory;
+    @Setter
+    private QuestionsShuffler shuffler = new RandomQuestionsShuffler();
 
     public QuestionsDeck(Map<Category, Queue<Question>> questionsByCategory) {
-        this.questionsByCategory = questionsByCategory;
+        this.questionsByCategory = new HashMap<>(questionsByCategory);
     }
 
     Question drawQuestion(int playerLocation) {
@@ -19,6 +26,13 @@ public class QuestionsDeck {
 
     public boolean isValid() {
         return questionsByCategory.keySet().containsAll(Set.of(Category.values()));
+    }
+
+    public void shuffle() {
+        for (Category c : questionsByCategory.keySet()){
+            Queue<Question> shuffledQuestions = this.shuffler.shuffle(questionsByCategory.get(c));
+            questionsByCategory.put(c, shuffledQuestions);
+        }
     }
 
     public enum Category {

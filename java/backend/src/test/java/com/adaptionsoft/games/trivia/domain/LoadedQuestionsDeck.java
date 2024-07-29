@@ -1,10 +1,12 @@
 package com.adaptionsoft.games.trivia.domain;
 
+import java.util.Collections;
+
 public class LoadedQuestionsDeck extends QuestionsDeck {
     private final Question question;
 
     public LoadedQuestionsDeck(Question question) {
-        super(null);
+        super(Collections.emptyMap());
         this.question = question;
     }
 
