@@ -135,16 +135,15 @@ public class Game extends Entity<GameId> {
     public void rollDice(Player player) {
         validateGameStartedForPlayerAction(ROLL_DICE);
         validateCurrentPlayer(player);
-        currentPlayer.validateAction(ROLL_DICE);
+        player.validateAction(ROLL_DICE);
 
         currentRoll = dice.roll();
-        currentPlayer.applyAction(ROLL_DICE);
-        raise(new PlayerRolledDiceEvent(player, currentRoll, currentPlayer.getTurn()));
-        if (player.isInPenaltyBox()) {
-            rollDiceFromPenaltyBox(player);
-        } else {
-            board.movePlayer(player, currentRoll);
-            currentPlayer.applyAction(UPDATE_LOCATION);
+        int newLocationIfOutOfPenaltyBox = board.computeNewLocation(player, currentRoll);
+
+        currentPlayer.applyDiceRoll(currentRoll, newLocationIfOutOfPenaltyBox);
+
+        if(player.isInPenaltyBox()){
+            endTurn();
         }
 
         eventPublisher.flushEvents();
@@ -155,18 +154,6 @@ public class Game extends Entity<GameId> {
             stateManager.validateState(STARTED);
         } catch (AssertionError e) {
             throw new CannotExecuteAction(stateManager.getEntityIdentifier(), playerAction, stateManager.getCurrentState());
-        }
-    }
-
-    private void rollDiceFromPenaltyBox(Player player) {
-        if (currentRoll.isPair()) {
-            player.getOutOfPenaltyBox();
-            board.movePlayer(player, currentRoll);
-            currentPlayer.applyAction(UPDATE_LOCATION);
-        } else {
-            currentPlayer.applyAction(STAY_IN_PENALTY_BOX);
-            raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
-            endTurn();
         }
     }
 

@@ -289,8 +289,8 @@ class TriviaBackendTest {
         // GIVEN a started game
         Game game = gameFactory.create("game", player1, player2);
         game.setDice(new LoadedDice(3));
-        game.start(player1);
         game.setPlayersShuffler(new DoNothingPlayersShuffler());
+        game.start(player1);
         gameRepository.save(game);
 
         // WHEN player1 rolls the dice

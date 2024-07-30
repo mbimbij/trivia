@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GameTest and PlayerTest" type="JUnit" factoryName="JUnit">
+    <module name="backend" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="pattern" />
+    <patterns>
+      <pattern testClass="com.adaptionsoft.games.trivia.domain.GameTest" />
+      <pattern testClass="com.adaptionsoft.games.trivia.domain.PlayerTest" />
+    </patterns>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

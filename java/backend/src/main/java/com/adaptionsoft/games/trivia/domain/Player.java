@@ -181,4 +181,27 @@ public class Player extends Entity<UserId> {
     State getState() {
         return getStateManager().getCurrentState();
     }
+
+     private void rollDiceFromPenaltyBox(Dice.Roll currentRoll, int newLocation) {
+        if (currentRoll.isPair()) {
+            this.getOutOfPenaltyBox();
+            this.updateLocation(newLocation);
+            this.applyAction(UPDATE_LOCATION);
+        } else {
+            this.applyAction(STAY_IN_PENALTY_BOX);
+            raise(new PlayerStayedInPenaltyBoxEvent(this, this.getTurn()));
+        }
+    }
+
+    void applyDiceRoll(Dice.Roll currentRoll, int newLocation) {
+        this.validateAction(ROLL_DICE);
+        this.applyAction(ROLL_DICE);
+        raise(new PlayerRolledDiceEvent(this, currentRoll, this.getTurn()));
+        if (this.isInPenaltyBox()) {
+            rollDiceFromPenaltyBox(currentRoll, newLocation);
+        } else {
+            this.updateLocation(newLocation);
+            this.applyAction(UPDATE_LOCATION);
+        }
+    }
 }
