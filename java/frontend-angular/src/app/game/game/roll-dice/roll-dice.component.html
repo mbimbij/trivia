@@ -1,0 +1,19 @@
+<div>
+  <button
+    [attr.data-testid]="'roll-dice'"
+    *ngIf="canRollDice || false"
+    (click)="rollDice()"
+  >
+    roll dice
+  </button>
+  <div
+    *ngIf="canShowBackhand"
+    [attr.data-testid]="'roll-dice-backhand-section'"
+  >
+    <div
+      [attr.data-testid]="'roll-dice-backhand-message'"
+    >
+      {{ backhandDisplayMessage }}
+    </div>
+    <app-validation-button [attr.data-testid]="'roll-dice-backhand-validation'" [gameId]="game.id" [playerId]="player.id"/>
+  </div>

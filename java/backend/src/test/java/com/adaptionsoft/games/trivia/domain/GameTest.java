@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.adaptionsoft.games.trivia.domain.AnswerCode.*;
 import static com.adaptionsoft.games.trivia.domain.GameState.*;
@@ -119,6 +116,12 @@ class GameTest {
             do {
                 if (game.getCurrentPlayer().canRollDice()) {
                     game.rollDice(game.getCurrentPlayer());
+                }
+                if(Set.of(
+                        PlayerState.WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX,
+                        PlayerState.WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX
+                        ).contains(game.getCurrentPlayer().getState())){
+                    game.validate(game.getCurrentPlayer());
                 }
                 if (canDrawQuestion(game, game.getCurrentPlayer())) {
                     game.drawQuestion(game.getCurrentPlayer());
@@ -364,7 +367,7 @@ class GameTest {
             game.start(player1);
 
             // WHEN
-            assertThatThrownBy(() -> game.drawQuestion(player1))
+            assertThatThrownBy(() -> game.drawQuestion(game.getCurrentPlayer()))
                     .isInstanceOf(CannotExecuteAction.class)
                     .hasMessageEndingWith("cannot execute action DRAW_QUESTION in state WAITING_FOR_DICE_ROLL");
         }
@@ -377,7 +380,7 @@ class GameTest {
             // GIVEN a started game
             game.start(player1);
             game.rollDice(player1);
-            game.drawQuestion(player1);
+            game.drawQuestion(game.getCurrentPlayer());
 
             // WHEN
             ThrowableAssert.ThrowingCallable action = () -> game.answerCurrentQuestion(player1, A);
@@ -415,7 +418,7 @@ class GameTest {
             game.start(player1);
             game.rollDice(game.getCurrentPlayer());
             int turn = game.getTurn();
-            game.drawQuestion(player1);
+            game.drawQuestion(game.getCurrentPlayer());
 
             // WHEN correct answer
             game.answerCurrentQuestion(player1, A);
@@ -464,7 +467,7 @@ class GameTest {
             // AND a started game
             game.start(player1);
             game.rollDice(player1);
-            game.drawQuestion(player1);
+            game.drawQuestion(game.getCurrentPlayer());
 
             // AND some expected values
             int turnBefore = game.getTurn();
@@ -517,6 +520,7 @@ class GameTest {
 
             // WHEN
             game.rollDice(currentPlayer);
+            game.validate(currentPlayer);
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);
@@ -541,6 +545,7 @@ class GameTest {
 
             // WHEN
             game.rollDice(currentPlayer);
+            game.validate(currentPlayer);
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);

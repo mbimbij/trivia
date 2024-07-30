@@ -192,7 +192,7 @@ class PlayerTest {
         }
 
         @Test
-        void given_player_in_penalty_box__when_odd_dice_roll__then_waiting_for_validation() {
+        void validate_after_rolling_odd_number_in_penalty_box() {
             // GIVEN
             player.setInPenaltyBox(true);
 
@@ -204,5 +204,17 @@ class PlayerTest {
                     .isEqualTo(PlayerState.WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX);
         }
 
+        @Test
+        void validate_after_rolling_even_number_in_penalty_box() {
+            // GIVEN
+            player.setInPenaltyBox(true);
+
+            // WHEN
+            player.applyDiceRoll(new Dice.Roll(4), 4);
+
+            // THEN
+            assertThat(player.getState())
+                    .isEqualTo(PlayerState.WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX);
+        }
     }
 }

@@ -87,7 +87,8 @@ export class Game {
   }
 
   public canDrawQuestion(player: Player): boolean {
-    return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion == undefined
+    // return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion == undefined
+    return this.isCurrentPlayer(player) && this.currentPlayer.state == "WAITING_TO_DRAW_1ST_QUESTION"
   }
 
   public canAnswerQuestion(player: Player): boolean {
