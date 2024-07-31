@@ -8,7 +8,7 @@ Feature: On-Going Game Page
     And qa-user on the game-list page
     And game started
     And qa-user goes to the game
-    And i am on the on game page for "test-game-2"
+    And qa-user is on the on game page for "test-game-2"
 
   Scenario: Go to game from game-list page
     Then qa-user can see the element with testid "game-header-section"
@@ -156,6 +156,9 @@ Feature: On-Going Game Page
         | qa-user was sent to the penalty box           |
         | They have rolled a 3                          |
         | qa-user is not getting out of the penalty box |
+      When qa-user clicks on validation button
+      Then qa-user sees game logs ending as following
+        | qa-user is not getting out of the penalty box |
         | test-user-1 is the current player             |
 
     Scenario: An even roll dice gets you out of in penalty box
@@ -163,17 +166,22 @@ Feature: On-Going Game Page
       And a loaded dice returning a 4
       When qa-user rolls the dice
       Then qa-user cannot see the roll dice button
-      And qa-user can see the answer question section
+      And qa-user cannot see the answer question section
+      And qa-user can see the roll dice backhand section
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
-        | qa-user's new location is 4               |
-        | The category is .*                        |
-        | question .* 0                             |
+      When qa-user clicks on validation button
+      And qa-user can see the answer question section
+      And qa-user sees game logs ending as following
+        | qa-user's new location is 4 |
+        | The category is .*          |
+        | question .* 0               |
 
     Scenario: Answer correctly after getting out of the penalty box
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
       When qa-user rolls the dice
+      When qa-user clicks on validation button
       And qa-user answers A
       And qa-user clicks on validation button
       And qa-user sees game logs ending as following
@@ -189,6 +197,7 @@ Feature: On-Going Game Page
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
       When qa-user rolls the dice
+      When qa-user clicks on validation button
       And qa-user answers B
       And qa-user clicks on validation button
       And qa-user answers B
@@ -208,6 +217,7 @@ Feature: On-Going Game Page
       Given qa-user is put in the penalty box
       And a loaded dice returning a 4
       When qa-user rolls the dice
+      And qa-user clicks on validation button
       And qa-user answers B
       And qa-user clicks on validation button
       And qa-user answers C

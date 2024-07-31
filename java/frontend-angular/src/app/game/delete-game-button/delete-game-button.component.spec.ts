@@ -5,7 +5,7 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
-import {mockGame1} from "../../common/test-helpers";
+import {getMockGame1} from "../../common/test-helpers";
 
 describe('DeleteGameButtonComponent', () => {
   let component: DeleteGameButtonComponent;
@@ -23,7 +23,7 @@ describe('DeleteGameButtonComponent', () => {
 
     fixture = TestBed.createComponent(DeleteGameButtonComponent);
     component = fixture.componentInstance;
-    component.game = mockGame1
+    component.game = getMockGame1()
     fixture.detectChanges();
   });
 

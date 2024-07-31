@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { JoinGameButtonComponent } from './join-game-button.component';
+import {JoinGameButtonComponent} from './join-game-button.component';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
-import {mockGame1} from "../../common/test-helpers";
+import {getMockGame1} from "../../common/test-helpers";
 
 describe('JoinGameButtonComponent', () => {
   let component: JoinGameButtonComponent;
@@ -23,7 +23,7 @@ describe('JoinGameButtonComponent', () => {
 
     fixture = TestBed.createComponent(JoinGameButtonComponent);
     component = fixture.componentInstance;
-    component.game = mockGame1
+    component.game = getMockGame1()
     fixture.detectChanges();
   });
 

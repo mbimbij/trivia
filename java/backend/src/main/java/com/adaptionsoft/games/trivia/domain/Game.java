@@ -5,6 +5,7 @@ import com.adaptionsoft.games.trivia.domain.exception.CannotAnswerQuestionBefore
 import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.domain.statemachine.CannotExecuteAction;
+import com.adaptionsoft.games.trivia.domain.statemachine.State;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.domain.statemachine.Transition;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
@@ -52,6 +53,10 @@ public class Game extends Entity<GameId> {
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         this.players.setCurrent(currentPlayer);
+    }
+
+    public State getCurrentPlayerState() {
+        return currentPlayer.getState();
     }
 
     public Game(GameId gameId,
@@ -135,17 +140,12 @@ public class Game extends Entity<GameId> {
     public void rollDice(Player player) {
         validateGameStartedForPlayerAction(ROLL_DICE);
         validateCurrentPlayer(player);
-        currentPlayer.validateAction(ROLL_DICE);
+        player.validateAction(ROLL_DICE);
 
         currentRoll = dice.roll();
-        currentPlayer.applyAction(ROLL_DICE);
-        raise(new PlayerRolledDiceEvent(player, currentRoll, currentPlayer.getTurn()));
-        if (player.isInPenaltyBox()) {
-            rollDiceFromPenaltyBox(player);
-        } else {
-            board.movePlayer(player, currentRoll);
-            currentPlayer.applyAction(UPDATE_LOCATION);
-        }
+        int newLocationIfOutOfPenaltyBox = board.computeNewLocation(player, currentRoll);
+
+        currentPlayer.applyDiceRoll(currentRoll, newLocationIfOutOfPenaltyBox);
 
         eventPublisher.flushEvents();
     }
@@ -158,26 +158,14 @@ public class Game extends Entity<GameId> {
         }
     }
 
-    private void rollDiceFromPenaltyBox(Player player) {
-        if (currentRoll.isPair()) {
-            player.getOutOfPenaltyBox();
-            board.movePlayer(player, currentRoll);
-            currentPlayer.applyAction(UPDATE_LOCATION);
-        } else {
-            currentPlayer.applyAction(STAY_IN_PENALTY_BOX);
-            raise(new PlayerStayedInPenaltyBoxEvent(player, player.getTurn()));
-            endTurn();
-        }
-    }
-
-    public void drawQuestion(Player currentPlayer) {
+    public void drawQuestion(Player player) {
         validateGameStartedForPlayerAction(DRAW_QUESTION);
-        validateCurrentPlayer(currentPlayer);
-        currentPlayer.validateAction(DRAW_QUESTION);
+        validateCurrentPlayer(player);
+        player.validateAction(DRAW_QUESTION);
 
-        this.currentQuestion = questionsDeck.drawQuestion(currentPlayer.getLocation());
-        this.currentPlayer.applyAction(DRAW_QUESTION);
-        raise(new QuestionAskedToPlayerEvent(currentPlayer, currentQuestion.questionText()));
+        this.currentQuestion = questionsDeck.drawQuestion(player.getLocation());
+        player.applyAction(DRAW_QUESTION);
+        raise(new QuestionAskedToPlayerEvent(player, currentQuestion.questionText()));
         eventPublisher.flushEvents();
     }
 
@@ -264,12 +252,19 @@ public class Game extends Entity<GameId> {
 
         switch (currentPlayer.getState()) {
             case PlayerState.WAITING_TO_END_TURN_OR_GAME -> endTurnOrGame();
-            case PlayerState.WAITING_TO_DRAW_2ND_QUESTION -> drawQuestion(player);
+            case PlayerState.WAITING_TO_DRAW_2ND_QUESTION -> drawQuestion(currentPlayer);
             case PlayerState.IN_PENALTY_BOX -> endTurn();
-            default -> throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
+            case PlayerState.WAITING_TO_UPDATE_LOCATION -> updateCurrentPlayerLocation();
+            default ->
+                    throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
         }
 
         eventPublisher.flushEvents();
+    }
+
+    private void updateCurrentPlayerLocation() {
+        currentPlayer.updateLocation(board.computeNewLocation(currentPlayer, currentRoll));
+        currentPlayer.applyAction(UPDATE_LOCATION);
     }
 
     private void endTurnOrGame() {

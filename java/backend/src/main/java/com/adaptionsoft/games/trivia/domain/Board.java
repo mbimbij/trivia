@@ -11,8 +11,7 @@ public class Board {
         return squaresCount;
     }
 
-    void movePlayer(Player player, Dice.Roll roll) {
-        int newLocation = (player.getLocation() + roll.value()) % getSquaresCount();
-        player.updateLocation(newLocation);
+    int computeNewLocation(Player player, Dice.Roll roll) {
+        return (player.getLocation() + roll.value()) % getSquaresCount();
     }
 }

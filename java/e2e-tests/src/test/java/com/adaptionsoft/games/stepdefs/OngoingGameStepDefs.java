@@ -57,7 +57,7 @@ public class OngoingGameStepDefs {
         backend.startGame(gameId, actorService.getQaBackendActor().getId());
     }
 
-    @When("i am on the on game page for {string}")
+    @When("qa-user is on the on game page for {string}")
     public void iAmOnTheOnGamePageFor(String gameName) {
         Integer gameId = testContext.getGameIdForName(gameName);
         ongoingGamePage.waitForUrl(gameId);
@@ -219,5 +219,10 @@ public class OngoingGameStepDefs {
     public void errorSectionTextContains(String expectedTextContent) {
         String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION);
         assertThat(actualTextContent).contains(expectedTextContent);
+    }
+
+    @And("qa-user can see the roll dice backhand section")
+    public void qaUserCanSeeTheRollDiceBackhandSection() {
+        ongoingGamePage.verifyCanSeeElementWithTestid(ROLL_DICE_BACKHAND_SECTION);
     }
 }

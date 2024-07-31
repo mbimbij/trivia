@@ -65,8 +65,11 @@ public class Player extends Entity<UserId> {
                 new Transition(IN_PENALTY_BOX, ROLL_DICE, WAITING_FOR_ROLL_DICE_EVALUATION),
                 new Transition(IN_PENALTY_BOX, END_TURN, IN_PENALTY_BOX),
 
-                new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, GET_OUT_OF_PENALTY_BOX, WAITING_TO_UPDATE_LOCATION),
-                new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, STAY_IN_PENALTY_BOX, IN_PENALTY_BOX)
+                new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, ROLL_EVEN_NUMBER_IN_PENALTY_BOX, WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX),
+                new Transition(WAITING_FOR_ROLL_DICE_EVALUATION, ROLL_ODD_NUMBER_IN_PENALTY_BOX, WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX),
+
+                new Transition(WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX, VALIDATE, WAITING_TO_UPDATE_LOCATION),
+                new Transition(WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX, VALIDATE, IN_PENALTY_BOX)
         );
     }
 
@@ -160,7 +163,6 @@ public class Player extends Entity<UserId> {
         isInPenaltyBox = false;
         consecutiveCorrectAnswersCount = 0;
         consecutiveIncorrectAnswersCount = 0;
-        stateManager.applyAction(GET_OUT_OF_PENALTY_BOX);
         raise(new PlayerGotOutOfPenaltyBoxEvent(this, getTurn()));
     }
 
@@ -180,5 +182,27 @@ public class Player extends Entity<UserId> {
 
     State getState() {
         return getStateManager().getCurrentState();
+    }
+
+     private void rollDiceFromPenaltyBox(Dice.Roll currentRoll) {
+        if (currentRoll.isPair()) {
+            stateManager.applyAction(ROLL_EVEN_NUMBER_IN_PENALTY_BOX);
+            getOutOfPenaltyBox();
+        } else {
+            this.applyAction(ROLL_ODD_NUMBER_IN_PENALTY_BOX);
+            raise(new PlayerStayedInPenaltyBoxEvent(this, this.getTurn()));
+        }
+    }
+
+    void applyDiceRoll(Dice.Roll currentRoll, int newLocation) {
+        this.validateAction(ROLL_DICE);
+        this.applyAction(ROLL_DICE);
+        raise(new PlayerRolledDiceEvent(this, currentRoll, this.getTurn()));
+        if (this.isInPenaltyBox()) {
+            rollDiceFromPenaltyBox(currentRoll);
+        } else {
+            this.updateLocation(newLocation);
+            this.applyAction(UPDATE_LOCATION);
+        }
     }
 }

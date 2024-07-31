@@ -3,30 +3,26 @@ import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {flatMap, mergeMap, of, pipe, Subscription} from "rxjs";
+import {mergeMap, of, Subscription} from "rxjs";
+import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 
 @Component({
   selector: 'app-roll-dice',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    ValidationButtonComponent
   ],
-  template: `
-    <button
-      *ngIf="canRollDice || false"
-      [attr.data-testid]="'roll-dice'"
-      (click)="rollDice()"
-    >
-      roll dice
-    </button>
-  `,
+  templateUrl: `roll-dice.component.html`,
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RollDiceComponent implements OnChanges, OnDestroy {
-  protected canRollDice: boolean | undefined;
   @Input() game!: Game;
   @Input() player!: Player;
+  canRollDice: boolean | undefined;
+  canShowBackhand: boolean | undefined;
+  backhandDisplayMessage: string | undefined;
   private subscription?: Subscription;
 
   constructor(protected gameService: GameServiceAbstract) {
@@ -43,7 +39,30 @@ export class RollDiceComponent implements OnChanges, OnDestroy {
     if (changes['game']) {
       this.game = changes['game'].currentValue;
     }
+    this.updateAttributes();
+  }
+
+  updateAttributes() {
     this.canRollDice = this.game.canRollDice(this.player)
+    this.canShowBackhand = this.getCanShowBackhand()
+    this.backhandDisplayMessage = this.getBackhandDisplayMessage()
+  }
+
+  private getCanShowBackhand() {
+    return new Set<string>([
+      "WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX",
+      "WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX"])
+      .has(this.player.state);
+  }
+
+  private getBackhandDisplayMessage() {
+    if(this.player.state === "WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX"){
+      return `You rolled an even number: ${this.game.currentRoll}. You are getting out of the penalty box`
+    } else if(this.player.state === "WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX"){
+      return `You rolled an odd number: ${this.game.currentRoll}. You stay in the penalty box`
+    } else {
+      return `You should absolutely not see this message`
+    }
   }
 
   rollDice() {

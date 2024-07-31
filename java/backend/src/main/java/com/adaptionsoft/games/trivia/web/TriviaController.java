@@ -188,7 +188,7 @@ public class TriviaController {
                                         @PathVariable("playerId") String playerIdString) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
-        game.drawQuestion(player);
+        game.drawQuestion(game.getCurrentPlayer());
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
@@ -213,6 +213,9 @@ public class TriviaController {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.validate(player);
+        if(game.getCurrentPlayerState().equals(PlayerState.WAITING_TO_DRAW_1ST_QUESTION)){
+            game.drawQuestion(game.getCurrentPlayer());
+        }
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
     }

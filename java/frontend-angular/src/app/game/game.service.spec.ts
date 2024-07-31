@@ -2,14 +2,14 @@ import {TestBed} from '@angular/core/testing';
 
 import {GameService} from './game.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {mockGame1, mockGame2} from "../common/test-helpers";
+import {getMockGame1, getMockGame2} from "../common/test-helpers";
 import {Observable, of} from "rxjs";
 import {Game} from "./game";
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";
 
 describe('GameService', () => {
-  let defaultGameListReturnValues = [mockGame1, mockGame2].map(value => value.toDto())
-  let defaultSingleGameReturnValue = mockGame1.toDto()
+  let defaultGameListReturnValues = [getMockGame1(), getMockGame2()].map(value => value.toDto())
+  let defaultSingleGameReturnValue = getMockGame1().toDto()
 
   it('should be created', () => {
     let service = createService()
@@ -25,7 +25,7 @@ describe('GameService', () => {
 
     // THEN
     gamesObservable.subscribe(games => {
-      expect(games).toEqual([mockGame1, mockGame2])
+      expect(games).toEqual([getMockGame1(), getMockGame2()])
     })
 
     expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(1)
@@ -61,7 +61,7 @@ describe('GameService', () => {
     })
 
     // THEN game is returned
-    expect(emittedValues).toEqual([mockGame1])
+    expect(emittedValues).toEqual([getMockGame1()])
 
     // AND handler registration is performed as expected
     expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(0)

@@ -50,10 +50,7 @@
       }
     </div>
     <p>{{ game.currentAnswer.explanations }}</p>
-    <button
-      [attr.data-testid]="'validate'"
-      (click)="validate(game.id, player.id)">ok
-    </button>
+    <app-validation-button [gameId]="game.id" [playerId]="player.id"/>
   </div>
 
 </div>

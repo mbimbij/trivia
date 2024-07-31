@@ -1,10 +1,10 @@
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable, of} from "rxjs";
 import {User} from "src/app/user/user";
-import {mockUser1} from "../../common/test-helpers";
+import {getMockUser1} from "../../common/test-helpers";
 
 export class UserServiceMock extends UserServiceAbstract {
-  user: User = mockUser1;
+  user: User = getMockUser1();
 
   override renameUser(newUserName: string): void {
     this.user.name = newUserName;

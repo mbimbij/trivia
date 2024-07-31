@@ -4,12 +4,14 @@ import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
+import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 
 @Component({
   selector: 'app-answer-question',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    ValidationButtonComponent
   ],
   templateUrl: './answer-question.component.html',
   styleUrl: './answer-question.component.css',
