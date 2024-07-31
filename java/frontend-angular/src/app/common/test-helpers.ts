@@ -1,28 +1,7 @@
-import {User} from "../user/user";
 import {Observable, of} from "rxjs";
 import {Game} from "../game/game";
 import {playerDtoToPlayer, userToPlayer} from "./helpers";
 import {QuestionDto} from "../openapi-generated";
-
-export const mockUser1: User = getMockUser1()
-
-export const mockUser2: User = getMockUser2()
-
-export const mockPlayer1 = getMockPlayer1()
-
-export const mockPlayer2 = getMockPlayer2();
-
-export const mockPlayer3 = playerDtoToPlayer(
-  {id: "3", name: "player3", coinCount: 1, isInPenaltyBox: false, consecutiveIncorrectAnswersCount: 0, state: "WAITING_FOR_DICE_ROLL"}
-);
-
-export const mockPlayer4 = playerDtoToPlayer(
-  {id: "4", name: "player4", coinCount: 1, isInPenaltyBox: false, consecutiveIncorrectAnswersCount: 0, state: "WAITING_FOR_DICE_ROLL"}
-);
-
-export const mockGame1: Game = getMockGame1();
-
-export const mockGame2: Game = getMockGame2();
 
 export function getMockQuestion1() {
   return {
@@ -54,11 +33,37 @@ export function getMockUser2() {
 }
 
 export function getMockPlayer1() {
-  return userToPlayer(mockUser1);
+  return userToPlayer(getMockUser1());
 }
 
 export function getMockPlayer2() {
-  return userToPlayer(mockUser2);
+  return userToPlayer(getMockUser2());
+}
+
+export function getMockPlayer3() {
+  return playerDtoToPlayer(
+    {
+      id: "3",
+      name: "player3",
+      coinCount: 1,
+      isInPenaltyBox: false,
+      consecutiveIncorrectAnswersCount: 0,
+      state: "WAITING_FOR_DICE_ROLL"
+    }
+  );
+}
+
+export function getMockPlayer4() {
+  return playerDtoToPlayer(
+    {
+      id: "4",
+      name: "player4",
+      coinCount: 1,
+      isInPenaltyBox: false,
+      consecutiveIncorrectAnswersCount: 0,
+      state: "WAITING_FOR_DICE_ROLL"
+    }
+  );
 }
 
 export function getMockGame1() {
@@ -66,9 +71,9 @@ export function getMockGame1() {
     "game1",
     "created",
     0,
-    mockPlayer1,
-    mockPlayer1,
-    [mockPlayer1, mockPlayer2]
+    getMockPlayer1(),
+    getMockPlayer1(),
+    [getMockPlayer1(), getMockPlayer2()]
   );
 
 }
@@ -78,9 +83,9 @@ export function getMockGame2() {
     "game2",
     "started",
     0,
-    mockPlayer2,
-    mockPlayer2,
-    [mockPlayer2, mockPlayer3, mockPlayer4],
+    getMockPlayer2(),
+    getMockPlayer2(),
+    [getMockPlayer2(), getMockPlayer3(), getMockPlayer4()],
     undefined,
     getMockQuestion1(),
     3
@@ -92,9 +97,9 @@ export function getMockGame3() {
     "game2",
     "started",
     0,
-    mockPlayer2,
-    mockPlayer1,
-    [mockPlayer2, mockPlayer3, mockPlayer4],
+    getMockPlayer2(),
+    getMockPlayer1(),
+    [getMockPlayer2(), getMockPlayer3(), getMockPlayer4()],
     undefined,
     getMockQuestion1(),
     3

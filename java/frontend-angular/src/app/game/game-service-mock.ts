@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {GameServiceAbstract} from "../services/game-service-abstract";
-import {BehaviorSubject, Observable, of, throwError} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {AnswerCode, AnswerDto, GameLog, QuestionDto} from "../openapi-generated";
-import {mockGame1, mockGame2} from "../common/test-helpers";
+import {getMockGame1, getMockGame2} from "../common/test-helpers";
 import {User} from "../user/user";
 import {Game} from "./game";
 
@@ -13,7 +13,7 @@ export class GameServiceMock extends GameServiceAbstract {
   override validate(gameId: number, userId: string): Observable<void> {
       throw new Error("Method not implemented.");
   }
-  private gameSubject = new BehaviorSubject(mockGame1);
+  private gameSubject = new BehaviorSubject(getMockGame1());
 
   override rollDice(gameId: number, userId: string): Observable<Game> {
       throw new Error("Method not implemented.");
@@ -53,8 +53,8 @@ export class GameServiceMock extends GameServiceAbstract {
 
   getGames(): Observable<Array<Game>> {
     return of([
-      mockGame1,
-      mockGame2,
+      getMockGame1(),
+      getMockGame2(),
     ]);
   }
 
@@ -63,6 +63,6 @@ export class GameServiceMock extends GameServiceAbstract {
   }
 
   override start(gameId: number, userId: string): Observable<Game> {
-    return of(mockGame1);
+    return of(getMockGame1());
   }
 }

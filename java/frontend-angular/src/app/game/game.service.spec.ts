@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 
 import {GameService} from './game.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {getMockGame1, getMockGame2, mockGame1, mockGame2} from "../common/test-helpers";
+import {getMockGame1, getMockGame2} from "../common/test-helpers";
 import {Observable, of} from "rxjs";
 import {Game} from "./game";
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";

@@ -1,11 +1,10 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {RollDiceComponent} from './roll-dice.component';
-import {getMockGame2, mockGame2, mockPlayer2} from "../../../common/test-helpers";
+import {getMockGame2, getMockPlayer2} from "../../../common/test-helpers";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {GameServiceMock} from "../../game-service-mock";
 import {By} from "@angular/platform-browser";
-import {ChangeDetectorRef} from "@angular/core";
 
 describe('RollDiceComponent',
   () => {
@@ -24,7 +23,7 @@ describe('RollDiceComponent',
       fixture = TestBed.createComponent(RollDiceComponent);
       component = fixture.componentInstance;
       component.game = getMockGame2()
-      component.player = mockPlayer2
+      component.player = getMockPlayer2()
     });
 
     it('should create', () => {

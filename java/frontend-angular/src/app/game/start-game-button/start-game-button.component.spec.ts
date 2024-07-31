@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {StartGameButtonComponent} from './start-game-button.component';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {mockGame1} from "../../common/test-helpers";
+import {getMockGame1} from "../../common/test-helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
 
@@ -23,7 +23,7 @@ describe('StartGameButtonComponent', () => {
 
     fixture = TestBed.createComponent(StartGameButtonComponent);
     component = fixture.componentInstance;
-    component.game = mockGame1
+    component.game = getMockGame1()
     fixture.detectChanges();
   });
 

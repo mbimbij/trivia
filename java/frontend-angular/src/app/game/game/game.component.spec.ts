@@ -5,11 +5,10 @@ import {ActivatedRoute} from "@angular/router";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {
   getMockGame2,
-  MockActivatedRoute,
-  mockGame2,
-  mockPlayer1,
-  mockQuestion1,
-  mockUser2
+  getMockPlayer1,
+  getMockQuestion1,
+  getMockUser2,
+  MockActivatedRoute
 } from "../../common/test-helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
@@ -39,10 +38,10 @@ describe('GameComponent', () => {
       .compileComponents();
 
     gameService = new GameServiceMock();
-    spyOn(gameService, `getGame`).and.returnValue(of(mockGame2));
+    spyOn(gameService, `getGame`).and.returnValue(of(getMockGame2()));
 
     userService = new UserServiceMock();
-    spyOn(userService, `getUser`).and.returnValue(of(mockUser2));
+    spyOn(userService, `getUser`).and.returnValue(of(getMockUser2()));
 
     TestBed.overrideProvider(GameServiceAbstract, {useValue: gameService});
     TestBed.overrideProvider(UserServiceAbstract, {useValue: userService});
@@ -71,7 +70,7 @@ describe('GameComponent', () => {
   });
 
   it('should NOT display player action section if is NOT current player', () => {
-    component.setPlayer(mockPlayer1)
+    component.setPlayer(getMockPlayer1())
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
     expect(htmlElement.querySelector(`[data-testid="player-action-section"]`)).toBeFalsy();
     expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
@@ -103,7 +102,7 @@ describe('GameComponent', () => {
   it('GIVEN current player AND dice roll THEN does not displays roll dice button', () => {
     let mockGame = getMockGame2();
     mockGame.currentRoll = 3
-    mockGame.currentQuestion = mockQuestion1
+    mockGame.currentQuestion = getMockQuestion1()
     component.setGame(mockGame)
     fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
     expect(htmlElement.querySelector(`[data-testid="roll-dice"]`)).toBeFalsy();
