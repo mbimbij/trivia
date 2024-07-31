@@ -1,7 +1,6 @@
 import {Observable, of} from "rxjs";
 import {Game} from "../game/game";
 import {playerDtoToPlayer, userToPlayer} from "./helpers";
-import {QuestionDto} from "../openapi-generated";
 
 export function getMockQuestion1() {
   return {
@@ -13,8 +12,6 @@ export function getMockQuestion1() {
     }
   };
 }
-
-export const mockQuestion1: QuestionDto = getMockQuestion1()
 
 export function getMockUser1() {
   return {
