@@ -18,5 +18,7 @@ export interface PlayerDto {
     isInPenaltyBox: boolean;
     consecutiveIncorrectAnswersCount: number;
     state: string;
+    location: number;
+    gotOutOfPenaltyBox: boolean;
 }
 

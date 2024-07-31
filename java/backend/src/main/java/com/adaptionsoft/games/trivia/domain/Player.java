@@ -27,6 +27,9 @@ public class Player extends Entity<UserId> {
     private int location;
     private int turn = 1;
     private boolean isInPenaltyBox;
+    @Getter
+    @Setter
+    private boolean gotOutOfPenaltyBox;
     @Setter // for testing purposes only
     private int consecutiveCorrectAnswersCount;
     @Setter // for testing purposes only
@@ -161,6 +164,7 @@ public class Player extends Entity<UserId> {
 
     public void getOutOfPenaltyBox() {
         isInPenaltyBox = false;
+        gotOutOfPenaltyBox = true;
         consecutiveCorrectAnswersCount = 0;
         consecutiveIncorrectAnswersCount = 0;
         raise(new PlayerGotOutOfPenaltyBoxEvent(this, getTurn()));

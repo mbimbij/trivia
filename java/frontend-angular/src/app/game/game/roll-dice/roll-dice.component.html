@@ -6,14 +6,6 @@
   >
     roll dice
   </button>
-  <div
-    *ngIf="canShowBackhand"
-    [attr.data-testid]="'roll-dice-backhand-section'"
-  >
-    <div
-      [attr.data-testid]="'roll-dice-backhand-message'"
-    >
-      {{ backhandDisplayMessage }}
-    </div>
-    <app-validation-button [attr.data-testid]="'roll-dice-backhand-validation'" [gameId]="game.id" [playerId]="player.id"/>
-  </div>
+  <app-roll-dice-backhand-inside-penalty-box [game]="game" [player]="player"/>
+  <app-roll-dice-backhand-outside-penalty-box [game]="game" [player]="player"/>
+</div>

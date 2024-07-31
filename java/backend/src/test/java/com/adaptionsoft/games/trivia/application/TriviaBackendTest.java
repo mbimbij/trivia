@@ -308,7 +308,8 @@ class TriviaBackendTest {
         // AND the response body is as expected
         GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
 
-        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION.toString());
+        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION.toString())
+                .withLocation(3);
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),

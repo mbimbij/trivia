@@ -7,13 +7,17 @@ export class Player {
   isInPenaltyBox: boolean;
   consecutiveIncorrectAnswersCount: number;
   state: string;
+  location: number;
+  gotOutOfPenaltyBox: boolean;
 
   constructor(id: string,
               name: string,
               coinCount: number,
               isInPenaltyBox: boolean,
               consecutiveIncorrectAnswersCount: number,
-              state: string
+              state: string,
+              location: number,
+              gotOutOfPenaltyBox: boolean
   ) {
     this.id = id;
     this.name = name;
@@ -21,6 +25,8 @@ export class Player {
     this.isInPenaltyBox = isInPenaltyBox;
     this.consecutiveIncorrectAnswersCount = consecutiveIncorrectAnswersCount;
     this.state = state;
+    this.location = location;
+    this.gotOutOfPenaltyBox = gotOutOfPenaltyBox;
   }
 
   static fromDto(dto: PlayerDto): Player {
@@ -29,7 +35,9 @@ export class Player {
       dto.coinCount,
       dto.isInPenaltyBox,
       dto.consecutiveIncorrectAnswersCount,
-      dto.state
+      dto.state,
+      dto.location,
+      dto.gotOutOfPenaltyBox
     )
   }
 
@@ -40,7 +48,9 @@ export class Player {
       coinCount: this.coinCount,
       isInPenaltyBox: this.isInPenaltyBox,
       consecutiveIncorrectAnswersCount: this.consecutiveIncorrectAnswersCount,
-      state: this.state
+      state: this.state,
+      location: this.location,
+      gotOutOfPenaltyBox: this.gotOutOfPenaltyBox
     };
   }
 }

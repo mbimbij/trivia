@@ -345,6 +345,8 @@ components:
         - isInPenaltyBox
         - name
         - state
+        - location
+        - gotOutOfPenaltyBox
       type: object
       properties:
         id:
@@ -361,6 +363,11 @@ components:
           format: int32
         state:
           type: string
+        location:
+          type: integer
+          format: int32
+        gotOutOfPenaltyBox:
+          type: boolean
     QuestionDto:
       required:
         - availableAnswers
