@@ -1,0 +1,5 @@
+<button
+  [attr.data-testid]="'draw-question'"
+  (click)="this.gameService.drawQuestion(gameId, playerId).subscribe()">
+  draw question
+</button>

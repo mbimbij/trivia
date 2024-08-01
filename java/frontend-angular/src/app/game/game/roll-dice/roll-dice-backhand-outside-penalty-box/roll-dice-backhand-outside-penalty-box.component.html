@@ -1,0 +1,13 @@
+<div
+  [attr.data-testid]="'roll-dice-backhand-section'"
+  *ngIf="canShowComponent"
+>
+  <div
+    [attr.data-testid]="'roll-dice-backhand-message'"
+  >
+    <h2>{{ displayMessage }}</h2>
+  </div>
+  <app-draw-question
+    [gameId]="game.id"
+    [playerId]="player.id"/>
+</div>

@@ -213,9 +213,6 @@ public class TriviaController {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.validate(player);
-        if(game.getCurrentPlayerState().equals(PlayerState.WAITING_TO_DRAW_1ST_QUESTION)){
-            game.drawQuestion(game.getCurrentPlayer());
-        }
         gameRepository.save(game);
         notifyGameUpdatedViaWebsocket(game);
     }

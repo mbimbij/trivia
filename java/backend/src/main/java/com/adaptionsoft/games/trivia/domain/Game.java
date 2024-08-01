@@ -227,6 +227,7 @@ public class Game extends Entity<GameId> {
     }
 
     private void endTurn() {
+        currentPlayer.setGotOutOfPenaltyBox(false);
         currentPlayer.applyAction(PlayerAction.END_TURN);
         stateManager.applyAction(GameAction.END_TURN);
         currentQuestion = null;

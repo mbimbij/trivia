@@ -45,7 +45,9 @@ export function getMockPlayer3() {
       coinCount: 1,
       isInPenaltyBox: false,
       consecutiveIncorrectAnswersCount: 0,
-      state: "WAITING_FOR_DICE_ROLL"
+      state: "WAITING_FOR_DICE_ROLL",
+      location: 0,
+      gotOutOfPenaltyBox: false
     }
   );
 }
@@ -58,7 +60,9 @@ export function getMockPlayer4() {
       coinCount: 1,
       isInPenaltyBox: false,
       consecutiveIncorrectAnswersCount: 0,
-      state: "WAITING_FOR_DICE_ROLL"
+      state: "WAITING_FOR_DICE_ROLL",
+      location: 0,
+      gotOutOfPenaltyBox: false
     }
   );
 }

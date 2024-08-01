@@ -225,4 +225,15 @@ public class OngoingGameStepDefs {
     public void qaUserCanSeeTheRollDiceBackhandSection() {
         ongoingGamePage.verifyCanSeeElementWithTestid(ROLL_DICE_BACKHAND_SECTION);
     }
+
+    @When("qa-user draws a question")
+    public void qaUserDrawsAQuestion() {
+        ongoingGamePage.clickButtonByTestid(DRAW_QUESTION_BUTTON_TESTID);
+    }
+
+    @And("the roll dice backhand section content is {string}")
+    public void theRollDiceBackhandSectionContentIs(String expectedTextContent) {
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ROLL_DICE_BACKHAND_MESSAGE_TESTID);
+        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+    }
 }

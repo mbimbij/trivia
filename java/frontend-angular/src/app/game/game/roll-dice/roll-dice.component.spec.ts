@@ -87,18 +87,4 @@ describe('RollDiceComponent',
         );
       }
     )
-
-    // it('should display backhand section after even roll from penalty box', () => {
-    //   // GIVEN
-    //   component.player.state = "WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX"
-    //   component.canShowBackhand = component.getCanShowBackhand()
-    //
-    //   // WHEN
-    //   fixture.detectChanges()
-    //
-    //   // THEN
-    //   let backhandElement = fixture.debugElement.query(By.css('[data-testid="roll-dice-backhand"]'));
-    //   expect(backhandElement).toBeTruthy()
-    //
-    // });
   });

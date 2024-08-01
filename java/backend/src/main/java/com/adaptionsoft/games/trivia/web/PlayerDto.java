@@ -18,7 +18,11 @@ public record PlayerDto(
         @NotBlank
         int consecutiveIncorrectAnswersCount,
         @NotBlank
-        String state
+        String state,
+        @NotBlank
+        int location,
+        @NotBlank
+        boolean gotOutOfPenaltyBox
 ) {
     public static PlayerDto from(Player player) {
         if (player == null) return null;
@@ -27,7 +31,9 @@ public record PlayerDto(
                 player.getCoinCount(),
                 player.isInPenaltyBox(),
                 player.getConsecutiveIncorrectAnswersCount(),
-                player.getCurrentState().toString());
+                player.getCurrentState().toString(),
+                player.getLocation(),
+                player.isGotOutOfPenaltyBox());
     }
 
 }
