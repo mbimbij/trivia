@@ -14,7 +14,7 @@ public class UiElementObject {
     }
 
     public String getTextContentByTestid(String testid) {
-        return page.getByTestId(testid).textContent();
+        return page.getByTestId(testid).textContent().trim();
     }
 
     public void clickButtonByTestid(String testid) {

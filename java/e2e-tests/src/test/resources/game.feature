@@ -102,6 +102,8 @@ Feature: On-Going Game Page
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
       And qa-user can see the backhand section
+      And the text content of the is correct prompt is "Correct Answer"
+      And the text content of the validation button is "ok"
       And qa-user sees game logs ending as following
         | question .*                   |
         | Answer was correct!!!!        |
@@ -117,12 +119,15 @@ Feature: On-Going Game Page
         | test-user-1 is the current player |
 
     Scenario: Play a turn outside penalty box - First incorrect answer, Second correct answer
+      # 1st question - incorrect answer
       When qa-user rolls the dice
       When qa-user draws a question
       And qa-user answers B
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
       And qa-user can see the backhand section
+      And the text content of the is correct prompt is "First Incorrect Answer. You are given a second chance"
+      And the text content of the validation button is "draw 2nd question"
       And qa-user sees game logs ending as following
         | question .*                       |
         | Question was incorrectly answered |
@@ -131,7 +136,10 @@ Feature: On-Going Game Page
         | question .*                       |
         | Question was incorrectly answered |
         | question .*                       |
+      # 2nd question - correct answer
       When qa-user answers B
+      And the text content of the is correct prompt is "Correct Answer"
+      And the text content of the validation button is "ok"
       When qa-user clicks on validation button
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
@@ -144,9 +152,13 @@ Feature: On-Going Game Page
     Scenario: Play a turn outside penalty box - First incorrect answer, Second incorrect answer
       When qa-user rolls the dice
       When qa-user draws a question
+      # 1st question - incorrect answer
       And qa-user answers B
       And qa-user clicks on validation button
+      # 2nd question - incorrect answer
       And qa-user answers C
+      And the text content of the is correct prompt is "Second Incorrect Answer. You are sent to the penalty box."
+      And the text content of the validation button is "ok"
       And qa-user clicks on validation button
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
@@ -208,6 +220,8 @@ Feature: On-Going Game Page
       When qa-user clicks on validation button
       When qa-user draws a question
       And qa-user answers A
+      And the text content of the is correct prompt is "Correct Answer"
+      And the text content of the validation button is "ok"
       And qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
@@ -225,8 +239,12 @@ Feature: On-Going Game Page
       When qa-user clicks on validation button
       When qa-user draws a question
       And qa-user answers B
+      And the text content of the is correct prompt is "First Incorrect Answer. You are given a second chance"
+      And the text content of the validation button is "draw 2nd question"
       And qa-user clicks on validation button
       And qa-user answers B
+      And the text content of the is correct prompt is "Correct Answer"
+      And the text content of the validation button is "ok"
       And qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
@@ -246,8 +264,12 @@ Feature: On-Going Game Page
       And qa-user clicks on validation button
       When qa-user draws a question
       And qa-user answers B
+      And the text content of the is correct prompt is "First Incorrect Answer. You are given a second chance"
+      And the text content of the validation button is "draw 2nd question"
       And qa-user clicks on validation button
       And qa-user answers C
+      And the text content of the is correct prompt is "Second Incorrect Answer. You are sent to the penalty box."
+      And the text content of the validation button is "ok"
       And qa-user clicks on validation button
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
