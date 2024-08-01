@@ -360,6 +360,24 @@ class GameTest {
     }
 
     @Nested
+    class RollDice {
+        @Test
+        void should_set_current_category__when_roll_dice() {
+            // GIVEN a started game
+            game.start(player1);
+
+            // THEN
+            assertThat(game.getCurrentCategory()).isNull();
+
+            // WHEN
+            game.rollDice(player1);
+
+            // THEN
+            assertThat(game.getCurrentCategory()).isNotNull();
+        }
+    }
+
+    @Nested
     class DrawQuestion {
         @Test
         void cannot_draw_question__before_rolling_dice() {

@@ -89,7 +89,9 @@ export function getMockGame2() {
     [getMockPlayer2(), getMockPlayer3(), getMockPlayer4()],
     undefined,
     getMockQuestion1(),
-    3
+    3,
+    "Pop",
+    undefined
   );
 }
 

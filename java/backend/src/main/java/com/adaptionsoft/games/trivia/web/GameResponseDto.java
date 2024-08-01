@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Dice;
 import com.adaptionsoft.games.trivia.domain.Game;
+import com.adaptionsoft.games.trivia.domain.QuestionsDeck;
 import jakarta.validation.constraints.NotBlank;
 import lombok.With;
 
@@ -28,6 +29,7 @@ public record GameResponseDto(
         PlayerDto winner,
         QuestionDto currentQuestion,
         Integer currentRoll,
+        String currentCategory,
         AnswerDto currentAnswer
         ) {
 
@@ -41,6 +43,7 @@ public record GameResponseDto(
         QuestionDto questionDto = QuestionDto.from(game.getCurrentQuestion());
         Integer currentRoll = Optional.ofNullable(game.getCurrentRoll()).map(Dice.Roll::value).orElse(null);
         AnswerDto answerDto = Optional.ofNullable(game.getCurrentAnswer()).map(AnswerDto::from).orElse(null);
+        String currentCategory = Optional.ofNullable(game.getCurrentCategory()).map(QuestionsDeck.Category::toString).orElse(null);
         return new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 game.getState().toString(),
@@ -51,6 +54,7 @@ public record GameResponseDto(
                 winnerDto,
                 questionDto,
                 currentRoll,
+                currentCategory,
                 answerDto);
     }
 

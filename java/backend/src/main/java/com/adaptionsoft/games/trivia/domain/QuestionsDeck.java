@@ -58,7 +58,7 @@ public class QuestionsDeck {
             return null;
         }
 
-        static Category getQuestionCategory(int playerLocation) {
+         public static Category getQuestionCategory(int playerLocation) {
             int categoriesCount = values().length;
             return values()[playerLocation % categoriesCount];
         }

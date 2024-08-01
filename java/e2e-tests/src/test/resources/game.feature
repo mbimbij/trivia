@@ -83,7 +83,7 @@ Feature: On-Going Game Page
       And qa-user cannot see the answer question section
       And qa-user cannot see the backhand section
       And qa-user can see the roll dice backhand section
-      And the roll dice backhand section content is "You rolled a 3. Your new location is 3."
+      And the roll dice backhand section content is "You rolled a 3. Your new location is 3. The category is Geography"
       And qa-user sees game logs ending as following
         | qa-user is the current player  |
         | They have rolled a \\d         |
@@ -190,7 +190,7 @@ Feature: On-Going Game Page
         | qa-user is getting out of the penalty box |
       When qa-user clicks on validation button
       Then qa-user can see the roll dice backhand section
-      And the roll dice backhand section content is "Your new location is 4."
+      And the roll dice backhand section content is "Your new location is 4. The category is Pop"
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4 |

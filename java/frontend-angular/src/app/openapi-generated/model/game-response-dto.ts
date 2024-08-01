@@ -25,6 +25,7 @@ export interface GameResponseDto {
     winner?: PlayerDto;
     currentQuestion?: QuestionDto;
     currentRoll?: number;
+    currentCategory?: string;
     currentAnswer?: AnswerDto;
 }
 
