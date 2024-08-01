@@ -49,6 +49,8 @@ public class Game extends Entity<GameId> {
     private Dice.Roll currentRoll;
     @Getter
     private Answer currentAnswer;
+    @Getter
+    private QuestionsDeck.Category currentCategory;
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -147,6 +149,8 @@ public class Game extends Entity<GameId> {
 
         currentPlayer.applyDiceRoll(currentRoll, newLocationIfOutOfPenaltyBox);
 
+        currentCategory = QuestionsDeck.Category.getQuestionCategory(currentPlayer.getLocation());
+
         eventPublisher.flushEvents();
     }
 
@@ -219,6 +223,7 @@ public class Game extends Entity<GameId> {
             winner = currentPlayer;
             currentAnswer = null;
             currentRoll = null;
+            currentCategory = null;
             raise(new PlayerWonEvent(id, winner, winner.getTurn()));
             raise(new GameEndedEvent(id, winner.getName()));
             stateManager.applyAction(END_GAME);
@@ -232,6 +237,7 @@ public class Game extends Entity<GameId> {
         stateManager.applyAction(GameAction.END_TURN);
         currentQuestion = null;
         currentRoll = null;
+        currentCategory = null;
         currentAnswer = null;
         turn++;
         players.goToNextPlayerTurn();
@@ -282,4 +288,5 @@ public class Game extends Entity<GameId> {
     public void setPlayersShuffler(PlayersShuffler shuffler) {
         players.setShuffler(shuffler);
     }
+
 }

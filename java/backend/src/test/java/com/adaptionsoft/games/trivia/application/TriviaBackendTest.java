@@ -161,6 +161,7 @@ class TriviaBackendTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
@@ -211,6 +212,7 @@ class TriviaBackendTest {
                 creatorDto,
                 List.of(creatorDto, newPlayerDto),
                 creatorDto,
+                null,
                 null,
                 null,
                 null,
@@ -279,6 +281,7 @@ class TriviaBackendTest {
                 null,
                 null,
                 null,
+                null,
                 null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
     }
@@ -310,6 +313,7 @@ class TriviaBackendTest {
 
         PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION.toString())
                 .withLocation(3);
+        String expectedCategory = QuestionsDeck.Category.getQuestionCategory(3).toString();
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
                 STARTED.toString(),
@@ -320,6 +324,7 @@ class TriviaBackendTest {
                 null,
                 null,
                 3,
+                expectedCategory,
                 null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 
@@ -365,6 +370,7 @@ class TriviaBackendTest {
                 null,
                 expectedCurrentQuestionDto,
                 3,
+                null,
                 null);
         assertThat(actualResponseDto).usingRecursiveComparison().isEqualTo(expectedResponseDto);
 

@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.web;
 
 import com.adaptionsoft.games.trivia.domain.Dice;
 import com.adaptionsoft.games.trivia.domain.Game;
+import com.adaptionsoft.games.trivia.domain.QuestionsDeck;
 import com.adaptionsoft.games.trivia.domain.TestFixtures;
 import jakarta.validation.constraints.NotBlank;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,10 @@ class GameResponseDtoShould {
         List<PlayerDto> players = game.getPlayersList().stream().map(PlayerDto::from).toList();
         QuestionDto questionDto = QuestionDto.from(game.getCurrentQuestion());
         Integer value = Optional.ofNullable(game.getCurrentRoll()).map(Dice.Roll::value).orElse(null);
+        String category = Optional.ofNullable(value)
+                .map(QuestionsDeck.Category::getQuestionCategory)
+                .map(QuestionsDeck.Category::toString)
+                .orElse(null);
         return new GameResponseDto(GAME_TEST_ID_INTEGER,
                 game.getName(),
                 CREATED.toString(),
@@ -43,6 +48,7 @@ class GameResponseDtoShould {
                 null,
                 questionDto,
                 value,
+                category,
                 null);
     }
 }

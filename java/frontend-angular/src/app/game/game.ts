@@ -13,6 +13,7 @@ export class Game {
   winner: Player | undefined
   currentQuestion: QuestionDto | undefined
   currentRoll: number | undefined
+  currentCategory: string | undefined
   currentAnswer: AnswerDto | undefined
 
   constructor(id: number,
@@ -25,8 +26,12 @@ export class Game {
               winner?: Player,
               currentQuestion?: QuestionDto,
               currentRoll?: number,
+              currentCategory?: string,
               currentAnswer?: AnswerDto
   ) {
+    if ((currentRoll != null && currentCategory == null) || (currentRoll == null && currentCategory != null)){
+      throw new Error(`currentRoll: ${currentRoll}, currentCategory: ${currentCategory}`)
+    }
     this.id = id;
     this.name = name;
     this.state = state;
@@ -38,6 +43,7 @@ export class Game {
     this.currentQuestion = currentQuestion;
     this.currentRoll = currentRoll;
     this.currentAnswer = currentAnswer
+    this.currentCategory = currentCategory
   }
 
   static fromDto(dto: GameResponseDto): Game {
@@ -53,6 +59,7 @@ export class Game {
       dto.winner ? playerDtoToPlayer(dto.winner) : undefined,
       dto.currentQuestion,
       dto.currentRoll,
+      dto.currentCategory,
       dto.currentAnswer
     )
   }
@@ -68,6 +75,7 @@ export class Game {
       players: this.players.map(player => playerToPlayerDto(player)),
       currentQuestion: this.currentQuestion,
       currentRoll: this.currentRoll,
+      currentCategory: this.currentCategory,
       currentAnswer: this.currentAnswer
     }
   }
@@ -84,11 +92,6 @@ export class Game {
     return this.isCurrentPlayer(player)
       && this.currentRoll == undefined
       && (this.currentPlayer.state === "WAITING_FOR_DICE_ROLL" || this.currentPlayer.state === "IN_PENALTY_BOX")
-  }
-
-  public canDrawQuestion(player: Player): boolean {
-    // return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion == undefined
-    return this.isCurrentPlayer(player) && this.currentPlayer.state == "WAITING_TO_DRAW_1ST_QUESTION"
   }
 
   public canAnswerQuestion(player: Player): boolean {

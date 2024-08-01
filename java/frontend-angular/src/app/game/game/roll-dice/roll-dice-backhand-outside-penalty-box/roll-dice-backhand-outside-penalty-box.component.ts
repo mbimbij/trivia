@@ -43,6 +43,6 @@ export class RollDiceBackhandOutsidePenaltyBoxComponent {
 
   private getBackhandDisplayMessage() {
     let prefix = !this.player.gotOutOfPenaltyBox ? `You rolled a ${this.game.currentRoll}. ` : ``;
-    return prefix + `Your new location is ${this.player.location}.`
+    return prefix + `Your new location is ${this.player.location}. The category is ${this.game.currentCategory!}`
   }
 }

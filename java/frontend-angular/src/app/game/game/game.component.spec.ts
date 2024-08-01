@@ -21,13 +21,8 @@ import {HttpErrorResponse} from "@angular/common/http";
 import any = jasmine.any;
 
 describe('GameComponent', () => {
-  let component: GameComponent;
-  let fixture: ComponentFixture<GameComponent>;
-  let htmlElement: HTMLElement;
-  let debugElement: DebugElement;
-  let gameService: GameServiceMock;
-  let userService: UserServiceMock;
-
+  let component: GameComponent, fixture: ComponentFixture<GameComponent>, htmlElement: HTMLElement,
+    gameService: GameServiceMock, userService: UserServiceMock;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GameComponent, HttpClientTestingModule],
@@ -49,7 +44,6 @@ describe('GameComponent', () => {
     fixture = TestBed.createComponent(GameComponent);
     component = fixture.componentInstance;
     htmlElement = fixture.nativeElement;
-    debugElement = fixture.debugElement;
 
     fixture.autoDetectChanges(true);
   });
