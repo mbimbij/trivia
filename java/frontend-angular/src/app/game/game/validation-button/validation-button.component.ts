@@ -8,7 +8,7 @@ import {GameServiceAbstract} from "../../../services/game-service-abstract";
   template: `
     <button
       [attr.data-testid]="'validate'"
-      (click)="validate(gameId, playerId)">ok
+      (click)="validate(gameId, playerId)">{{ buttonText }}
     </button>
   `,
   styleUrl: './validation-button.component.css',
@@ -17,6 +17,7 @@ import {GameServiceAbstract} from "../../../services/game-service-abstract";
 export class ValidationButtonComponent {
   @Input() gameId!: number;
   @Input() playerId!: string;
+  @Input() buttonText: string = "ok";
 
   constructor(private gameService: GameServiceAbstract) {
   }

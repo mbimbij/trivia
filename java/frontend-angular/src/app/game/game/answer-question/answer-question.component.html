@@ -40,17 +40,33 @@
     *ngIf="game.currentAnswer != undefined"
   >
     <hr/>
-    <div
-      [attr.data-testid]="'is-answer-correct'"
-    >
-      @if (game.currentAnswer.isCorrect) {
+
+    @if (player.state == "WAITING_TO_VALIDATE_FIRST_INCORRECT_ANSWER") {
+      <div
+        [attr.data-testid]="'is-answer-correct'"
+      >
+        <h2>First Incorrect Answer. You are given a second chance</h2>
+      </div>
+      <p>{{ game.currentAnswer.explanations }}</p>
+      <app-validation-button [gameId]="game.id" [playerId]="player.id" [buttonText]="'draw 2nd question'"/>
+    } @else if (player.state == "WAITING_TO_VALIDATE_SECOND_INCORRECT_ANSWER") {
+      <div
+        [attr.data-testid]="'is-answer-correct'"
+      >
+        <h2>Second Incorrect Answer. You are sent to the penalty box.</h2>
+      </div>
+      <p>{{ game.currentAnswer.explanations }}</p>
+      <app-validation-button [gameId]="game.id" [playerId]="player.id"/>
+
+    } @else {
+      <div
+        [attr.data-testid]="'is-answer-correct'"
+      >
         <h2>Correct Answer</h2>
-      } @else {
-        <h2>Incorrect Answer</h2>
-      }
-    </div>
-    <p>{{ game.currentAnswer.explanations }}</p>
-    <app-validation-button [gameId]="game.id" [playerId]="player.id"/>
+      </div>
+      <p>{{ game.currentAnswer.explanations }}</p>
+      <app-validation-button [gameId]="game.id" [playerId]="player.id"/>
+    }
   </div>
 
 </div>

@@ -135,12 +135,12 @@ public class OngoingGameStepDefs {
 
     @And("qa-user can see the backhand section")
     public void qaUserCanSeeTheAnswerBackendSection() {
-        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.BACKHAND_SECTION_TESTID);
+        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.ANSWER_BACKHAND_SECTION_TESTID);
     }
 
     @And("qa-user cannot see the backhand section")
     public void qaUserCannotSeeTheBackhandSection() {
-        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.BACKHAND_SECTION_TESTID);
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.ANSWER_BACKHAND_SECTION_TESTID);
     }
 
     @When("qa-user clicks on validation button")
@@ -234,6 +234,18 @@ public class OngoingGameStepDefs {
     @And("the roll dice backhand section content is {string}")
     public void theRollDiceBackhandSectionContentIs(String expectedTextContent) {
         String actualTextContent = ongoingGamePage.getTextContentByTestid(ROLL_DICE_BACKHAND_MESSAGE_TESTID);
+        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+    }
+
+    @And("the text content of the is correct prompt is {string}")
+    public void theTextContentOfTheIsCorrectPromptIs(String expectedTextContent) {
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ANSWER_BACKHAND_IS_CORRECT_PROMPT);
+        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+    }
+
+    @And("the text content of the validation button is {string}")
+    public void theTextContentOfTheValidationButtonIs(String expectedTextContent) {
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(VALIDATION_BUTTON_TESTID);
         assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 }
