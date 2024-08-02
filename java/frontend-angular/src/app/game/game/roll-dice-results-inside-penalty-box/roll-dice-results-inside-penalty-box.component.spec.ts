@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {RollDiceBackhandInsidePenaltyBoxComponent} from './roll-dice-backhand-inside-penalty-box.component';
+import {RollDiceResultsInsidePenaltyBoxComponent} from './roll-dice-results-inside-penalty-box.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {getMockGame2, getMockPlayer2} from "../../../common/test-helpers";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
@@ -8,19 +8,19 @@ import {GameService} from "../../game.service";
 import {By} from "@angular/platform-browser";
 
 describe('RollDiceBackhandInsidePenaltyBoxComponent', () => {
-  let component: RollDiceBackhandInsidePenaltyBoxComponent;
-  let fixture: ComponentFixture<RollDiceBackhandInsidePenaltyBoxComponent>;
+  let component: RollDiceResultsInsidePenaltyBoxComponent;
+  let fixture: ComponentFixture<RollDiceResultsInsidePenaltyBoxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RollDiceBackhandInsidePenaltyBoxComponent, HttpClientTestingModule],
+      imports: [RollDiceResultsInsidePenaltyBoxComponent, HttpClientTestingModule],
       providers: [
         {provide: GameServiceAbstract, useClass: GameService},
       ]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(RollDiceBackhandInsidePenaltyBoxComponent);
+    fixture = TestBed.createComponent(RollDiceResultsInsidePenaltyBoxComponent);
     component = fixture.componentInstance;
     component.game = getMockGame2()
     component.player = getMockPlayer2()
@@ -74,9 +74,9 @@ describe('RollDiceBackhandInsidePenaltyBoxComponent', () => {
           fixture.detectChanges()
 
           // THEN
-          let backhandElement = fixture.debugElement.query(By.css('[data-testid="roll-dice-backhand-section"]'));
-          let backhandMessage = fixture.debugElement.query(By.css('[data-testid="roll-dice-backhand-message"]'));
-          let backhandValidationButton = fixture.debugElement.query(By.css('[data-testid="roll-dice-backhand-validation"]'));
+          let backhandElement = fixture.debugElement.query(By.css('[data-testid="roll-dice-results-section"]'));
+          let backhandMessage = fixture.debugElement.query(By.css('[data-testid="roll-dice-results-message"]'));
+          let backhandValidationButton = fixture.debugElement.query(By.css('[data-testid="roll-dice-results-validation"]'));
           if (expectedBackhandSectionShown) {
             expect(backhandElement).toBeTruthy()
             expect(backhandMessage.nativeElement.textContent.trim()).toEqual(expectedBackHandMessage)

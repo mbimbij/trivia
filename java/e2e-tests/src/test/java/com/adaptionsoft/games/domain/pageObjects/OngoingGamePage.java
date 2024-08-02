@@ -9,8 +9,8 @@ import java.util.List;
 
 public class OngoingGamePage extends PageWithDynamicUrl {
     public static final String ROLL_DICE_BUTTON_TESTID = "roll-dice";
-    public static final String ROLL_DICE_BACKHAND_SECTION = "roll-dice-backhand-section";
-    public static final String ROLL_DICE_BACKHAND_MESSAGE_TESTID = "roll-dice-backhand-message";
+    public static final String ROLL_DICE_BACKHAND_SECTION = "roll-dice-results-section";
+    public static final String ROLL_DICE_BACKHAND_MESSAGE_TESTID = "roll-dice-results-message";
     public static final String DRAW_QUESTION_BUTTON_TESTID = "draw-question";
     public static final String ANSWER_QUESTION_SECTION_TESTID = "answer-question";
     public static final String ANSWER_BACKHAND_SECTION_TESTID = "backhand";

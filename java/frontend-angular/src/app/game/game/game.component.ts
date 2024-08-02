@@ -14,11 +14,11 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {
-    RollDiceBackhandInsidePenaltyBoxComponent
-} from "./roll-dice-backhand-inside-penalty-box/roll-dice-backhand-inside-penalty-box.component";
+    RollDiceResultsInsidePenaltyBoxComponent
+} from "./roll-dice-results-inside-penalty-box/roll-dice-results-inside-penalty-box.component";
 import {
-    RollDiceBackhandOutsidePenaltyBoxComponent
-} from "./roll-dice-backhand-outside-penalty-box/roll-dice-backhand-outside-penalty-box.component";
+  RollDiceResultsOutsidePenaltyBoxComponent
+} from "./roll-dice-results-outside-penalty-box/roll-dice-results-outside-penalty-box.component";
 
 @Component({
   selector: 'app-game',
@@ -32,8 +32,8 @@ import {
         AnswerQuestionComponent,
         NgClass,
         ErrorDisplayComponent,
-        RollDiceBackhandInsidePenaltyBoxComponent,
-        RollDiceBackhandOutsidePenaltyBoxComponent
+        RollDiceResultsInsidePenaltyBoxComponent,
+        RollDiceResultsOutsidePenaltyBoxComponent
     ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',

@@ -3,23 +3,13 @@ import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {mergeMap, of, Subscription} from "rxjs";
-import {ValidationButtonComponent} from "../validation-button/validation-button.component";
-import {
-  RollDiceBackhandInsidePenaltyBoxComponent
-} from "../roll-dice-backhand-inside-penalty-box/roll-dice-backhand-inside-penalty-box.component";
-import {
-  RollDiceBackhandOutsidePenaltyBoxComponent
-} from "../roll-dice-backhand-outside-penalty-box/roll-dice-backhand-outside-penalty-box.component";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-roll-dice',
   standalone: true,
   imports: [
     NgIf,
-    ValidationButtonComponent,
-    RollDiceBackhandInsidePenaltyBoxComponent,
-    RollDiceBackhandOutsidePenaltyBoxComponent
   ],
   templateUrl: `roll-dice.component.html`,
   styleUrl: './roll-dice.component.css',

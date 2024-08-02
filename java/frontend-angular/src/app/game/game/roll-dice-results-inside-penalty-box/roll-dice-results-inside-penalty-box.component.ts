@@ -5,17 +5,17 @@ import {ValidationButtonComponent} from "../validation-button/validation-button.
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-roll-dice-backhand-inside-penalty-box',
+  selector: 'app-roll-dice-results-inside-penalty-box',
   standalone: true,
   imports: [
     ValidationButtonComponent,
     NgIf
   ],
-  templateUrl: './roll-dice-backhand-inside-penalty-box.component.html',
-  styleUrl: './roll-dice-backhand-inside-penalty-box.component.css',
+  templateUrl: './roll-dice-results-inside-penalty-box.component.html',
+  styleUrl: './roll-dice-results-inside-penalty-box.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceBackhandInsidePenaltyBoxComponent implements OnChanges{
+export class RollDiceResultsInsidePenaltyBoxComponent implements OnChanges{
   @Input() game!: Game;
   @Input() player!: Player;
   canShowComponent: boolean | undefined;
