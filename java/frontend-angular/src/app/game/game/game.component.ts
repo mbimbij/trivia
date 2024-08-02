@@ -13,20 +13,28 @@ import {RollDiceComponent} from "./roll-dice/roll-dice.component";
 import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
+import {
+    RollDiceBackhandInsidePenaltyBoxComponent
+} from "./roll-dice-backhand-inside-penalty-box/roll-dice-backhand-inside-penalty-box.component";
+import {
+    RollDiceBackhandOutsidePenaltyBoxComponent
+} from "./roll-dice-backhand-outside-penalty-box/roll-dice-backhand-outside-penalty-box.component";
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    AsyncPipe,
-    ConsoleLogPipe,
-    RollDiceComponent,
-    AnswerQuestionComponent,
-    NgClass,
-    ErrorDisplayComponent
-  ],
+    imports: [
+        NgForOf,
+        NgIf,
+        AsyncPipe,
+        ConsoleLogPipe,
+        RollDiceComponent,
+        AnswerQuestionComponent,
+        NgClass,
+        ErrorDisplayComponent,
+        RollDiceBackhandInsidePenaltyBoxComponent,
+        RollDiceBackhandOutsidePenaltyBoxComponent
+    ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

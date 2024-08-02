@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RollDiceBackhandOutsidePenaltyBoxComponent } from './roll-dice-backhand-outside-penalty-box.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {GameServiceAbstract} from "../../../../services/game-service-abstract";
-import {GameService} from "../../../game.service";
-import {getMockGame2} from "../../../../common/test-helpers";
+import {GameServiceAbstract} from "../../../services/game-service-abstract";
+import {GameService} from "../../game.service";
+import {getMockGame2} from "../../../common/test-helpers";
 
 describe('RollDiceBackhandOutsidePenaltyBoxComponent', () => {
   let component: RollDiceBackhandOutsidePenaltyBoxComponent;

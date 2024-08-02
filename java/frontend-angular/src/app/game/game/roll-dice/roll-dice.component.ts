@@ -7,10 +7,10 @@ import {mergeMap, of, Subscription} from "rxjs";
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 import {
   RollDiceBackhandInsidePenaltyBoxComponent
-} from "./roll-dice-backhand-inside-penalty-box/roll-dice-backhand-inside-penalty-box.component";
+} from "../roll-dice-backhand-inside-penalty-box/roll-dice-backhand-inside-penalty-box.component";
 import {
   RollDiceBackhandOutsidePenaltyBoxComponent
-} from "./roll-dice-backhand-outside-penalty-box/roll-dice-backhand-outside-penalty-box.component";
+} from "../roll-dice-backhand-outside-penalty-box/roll-dice-backhand-outside-penalty-box.component";
 
 @Component({
   selector: 'app-roll-dice',
