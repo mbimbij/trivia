@@ -394,6 +394,9 @@ components:
         - D
     AnswerDto:
       type: object
+      required:
+        - isCorrect
+        - explanations
       properties:
         isCorrect:
           type: boolean

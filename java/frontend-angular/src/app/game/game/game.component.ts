@@ -13,6 +13,13 @@ import {RollDiceComponent} from "./roll-dice/roll-dice.component";
 import {AnswerQuestionComponent} from "./answer-question/answer-question.component";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
+import {
+    RollDiceResultsInsidePenaltyBoxComponent
+} from "./roll-dice-results-inside-penalty-box/roll-dice-results-inside-penalty-box.component";
+import {
+  RollDiceResultsOutsidePenaltyBoxComponent
+} from "./roll-dice-results-outside-penalty-box/roll-dice-results-outside-penalty-box.component";
+import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
 
 @Component({
   selector: 'app-game',
@@ -25,7 +32,10 @@ import {ErrorDisplayComponent} from "../error-display/error-display.component";
     RollDiceComponent,
     AnswerQuestionComponent,
     NgClass,
-    ErrorDisplayComponent
+    ErrorDisplayComponent,
+    RollDiceResultsInsidePenaltyBoxComponent,
+    RollDiceResultsOutsidePenaltyBoxComponent,
+    AnswerQuestionResultsComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',

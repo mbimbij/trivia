@@ -16,7 +16,7 @@ describe('ValidationButtonComponent', () => {
         {provide: GameServiceAbstract, useClass: GameService},
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ValidationButtonComponent);
     component = fixture.componentInstance;

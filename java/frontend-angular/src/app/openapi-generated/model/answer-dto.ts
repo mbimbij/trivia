@@ -12,7 +12,7 @@
 
 
 export interface AnswerDto { 
-    isCorrect?: boolean;
-    explanations?: string;
+    isCorrect: boolean;
+    explanations: string;
 }
 

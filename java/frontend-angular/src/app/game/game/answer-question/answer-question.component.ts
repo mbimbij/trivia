@@ -5,13 +5,15 @@ import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
+import {AnswerQuestionResultsComponent} from "../answer-question-results/answer-question-results.component";
 
 @Component({
   selector: 'app-answer-question',
   standalone: true,
   imports: [
     NgIf,
-    ValidationButtonComponent
+    ValidationButtonComponent,
+    AnswerQuestionResultsComponent
   ],
   templateUrl: './answer-question.component.html',
   styleUrl: './answer-question.component.css',

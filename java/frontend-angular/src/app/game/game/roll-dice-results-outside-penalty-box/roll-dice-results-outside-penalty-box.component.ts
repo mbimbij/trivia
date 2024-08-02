@@ -1,20 +1,20 @@
-import {Component, Input, SimpleChanges} from '@angular/core';
-import {Game} from "../../../game";
-import {Player} from "../../../../user/player";
-import {DrawQuestionComponent} from "../../draw-question/draw-question.component";
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Game} from "../../game";
+import {Player} from "../../../user/player";
+import {DrawQuestionComponent} from "../draw-question/draw-question.component";
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-roll-dice-backhand-outside-penalty-box',
+  selector: 'app-roll-dice-results-outside-penalty-box',
   standalone: true,
   imports: [
     DrawQuestionComponent,
     NgIf
   ],
-  templateUrl: './roll-dice-backhand-outside-penalty-box.component.html',
-  styleUrl: './roll-dice-backhand-outside-penalty-box.component.css'
+  templateUrl: './roll-dice-results-outside-penalty-box.component.html',
+  styleUrl: './roll-dice-results-outside-penalty-box.component.css'
 })
-export class RollDiceBackhandOutsidePenaltyBoxComponent {
+export class RollDiceResultsOutsidePenaltyBoxComponent implements OnChanges{
   @Input() game!: Game;
   @Input() player!: Player;
   canShowComponent: boolean | undefined;
