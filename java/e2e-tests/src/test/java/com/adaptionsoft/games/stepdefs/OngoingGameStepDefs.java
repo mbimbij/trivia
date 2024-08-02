@@ -133,14 +133,14 @@ public class OngoingGameStepDefs {
         janitor.setLoadedQuestionDeckForGame(gameId);
     }
 
-    @And("qa-user can see the backhand section")
+    @And("qa-user can see the answer question results section")
     public void qaUserCanSeeTheAnswerBackendSection() {
-        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.ANSWER_BACKHAND_SECTION_TESTID);
+        ongoingGamePage.verifyCanSeeElementWithTestid(OngoingGamePage.ANSWER_QUESTION_RESULTS_SECTION_TESTID);
     }
 
-    @And("qa-user cannot see the backhand section")
+    @And("qa-user cannot see the answer question results section")
     public void qaUserCannotSeeTheBackhandSection() {
-        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.ANSWER_BACKHAND_SECTION_TESTID);
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OngoingGamePage.ANSWER_QUESTION_RESULTS_SECTION_TESTID);
     }
 
     @When("qa-user clicks on validation button")
@@ -196,34 +196,34 @@ public class OngoingGameStepDefs {
 
     @Then("error section is visible")
     public void errorSectionIsVisible() {
-        ongoingGamePage.verifyCanSeeElementWithTestid(ERROR_SECTION);
+        ongoingGamePage.verifyCanSeeElementWithTestid(ERROR_SECTION_TESTID);
     }
 
     @Then("ok section is not visible")
     public void okSectionIsNotVisible() {
-        ongoingGamePage.verifyCannotSeeElementWithTestid(OK_SECTION);
+        ongoingGamePage.verifyCannotSeeElementWithTestid(OK_SECTION_TESTID);
     }
 
     @Then("loading section is not visible")
     public void loadingSectionIsNotVisible() {
-        ongoingGamePage.verifyCannotSeeElementWithTestid(LOADING_SECTION);
+        ongoingGamePage.verifyCannotSeeElementWithTestid(LOADING_SECTION_TESTID);
     }
 
     @And("error section text is {string}")
     public void errorSectionTextIs(String expectedTextContent) {
-        String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION);
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION_TESTID);
         assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 
     @And("error section text contains {string}")
     public void errorSectionTextContains(String expectedTextContent) {
-        String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION);
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ERROR_SECTION_TESTID);
         assertThat(actualTextContent).contains(expectedTextContent);
     }
 
-    @And("qa-user can see the roll dice backhand section")
+    @And("qa-user can see the roll dice results section")
     public void qaUserCanSeeTheRollDiceBackhandSection() {
-        ongoingGamePage.verifyCanSeeElementWithTestid(ROLL_DICE_BACKHAND_SECTION);
+        ongoingGamePage.verifyCanSeeElementWithTestid(ROLL_DICE_RESULTS_SECTION_TESTID);
     }
 
     @When("qa-user draws a question")
@@ -231,15 +231,15 @@ public class OngoingGameStepDefs {
         ongoingGamePage.clickButtonByTestid(DRAW_QUESTION_BUTTON_TESTID);
     }
 
-    @And("the roll dice backhand section content is {string}")
+    @And("the roll dice results prompt is {string}")
     public void theRollDiceBackhandSectionContentIs(String expectedTextContent) {
-        String actualTextContent = ongoingGamePage.getTextContentByTestid(ROLL_DICE_BACKHAND_MESSAGE_TESTID);
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ROLL_DICE_RESULTS_MESSAGE_TESTID);
         assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 
     @And("the text content of the is correct prompt is {string}")
     public void theTextContentOfTheIsCorrectPromptIs(String expectedTextContent) {
-        String actualTextContent = ongoingGamePage.getTextContentByTestid(ANSWER_BACKHAND_IS_CORRECT_PROMPT);
+        String actualTextContent = ongoingGamePage.getTextContentByTestid(ANSWER_QUESTION_RESULTS_IS_CORRECT_PROMPT_TESTID);
         assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 

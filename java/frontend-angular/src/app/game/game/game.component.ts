@@ -19,22 +19,24 @@ import {
 import {
   RollDiceResultsOutsidePenaltyBoxComponent
 } from "./roll-dice-results-outside-penalty-box/roll-dice-results-outside-penalty-box.component";
+import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
 
 @Component({
   selector: 'app-game',
   standalone: true,
-    imports: [
-        NgForOf,
-        NgIf,
-        AsyncPipe,
-        ConsoleLogPipe,
-        RollDiceComponent,
-        AnswerQuestionComponent,
-        NgClass,
-        ErrorDisplayComponent,
-        RollDiceResultsInsidePenaltyBoxComponent,
-        RollDiceResultsOutsidePenaltyBoxComponent
-    ],
+  imports: [
+    NgForOf,
+    NgIf,
+    AsyncPipe,
+    ConsoleLogPipe,
+    RollDiceComponent,
+    AnswerQuestionComponent,
+    NgClass,
+    ErrorDisplayComponent,
+    RollDiceResultsInsidePenaltyBoxComponent,
+    RollDiceResultsOutsidePenaltyBoxComponent,
+    AnswerQuestionResultsComponent
+  ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

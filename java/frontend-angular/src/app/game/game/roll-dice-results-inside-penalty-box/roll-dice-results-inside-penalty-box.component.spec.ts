@@ -63,7 +63,7 @@ describe('RollDiceBackhandInsidePenaltyBoxComponent', () => {
         expectedBackHandMessage},
       tcNum
     ) => {
-      it(`GIVEN case number ${tcNum}, then should display or not backhand section after even roll from penalty box`,
+      it(`GIVEN case number ${tcNum}, then should display or not roll result section after even roll from penalty box`,
         () => {
           // GIVEN
           component.player.state = playerState

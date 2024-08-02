@@ -81,9 +81,9 @@ Feature: On-Going Game Page
       When qa-user rolls the dice
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
-      And qa-user cannot see the backhand section
-      And qa-user can see the roll dice backhand section
-      And the roll dice backhand section content is "You rolled a 3. Your new location is 3. The category is Geography"
+      And qa-user cannot see the answer question results section
+      And qa-user can see the roll dice results section
+      And the roll dice results prompt is "You rolled a 3. Your new location is 3. The category is Geography"
       And qa-user sees game logs ending as following
         | qa-user is the current player  |
         | They have rolled a \\d         |
@@ -93,7 +93,7 @@ Feature: On-Going Game Page
       When qa-user draws a question
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
-      And qa-user cannot see the backhand section
+      And qa-user cannot see the answer question results section
       And qa-user sees game logs ending as following
         | The category is .*             |
         | question .*                    |
@@ -101,7 +101,7 @@ Feature: On-Going Game Page
       When qa-user answers A
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
-      And qa-user can see the backhand section
+      And qa-user can see the answer question results section
       And the text content of the is correct prompt is "Correct Answer"
       And the text content of the validation button is "ok"
       And qa-user sees game logs ending as following
@@ -112,7 +112,7 @@ Feature: On-Going Game Page
       When qa-user clicks on validation button
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
-      And qa-user cannot see the backhand section
+      And qa-user cannot see the answer question results section
       And qa-user sees game logs ending as following
         | Answer was correct!!!!            |
         | qa-user now has 1 Gold Coins.     |
@@ -125,7 +125,7 @@ Feature: On-Going Game Page
       And qa-user answers B
       Then qa-user cannot see the roll dice button
       And qa-user can see the answer question section
-      And qa-user can see the backhand section
+      And qa-user can see the answer question results section
       And the text content of the is correct prompt is "First Incorrect Answer. You are given a second chance"
       And the text content of the validation button is "draw 2nd question"
       And qa-user sees game logs ending as following
@@ -196,13 +196,13 @@ Feature: On-Going Game Page
       When qa-user rolls the dice
       Then qa-user cannot see the roll dice button
       And qa-user cannot see the answer question section
-      And qa-user can see the roll dice backhand section
-      And the roll dice backhand section content is "You rolled an even number: 4. You are getting out of the penalty box"
+      And qa-user can see the roll dice results section
+      And the roll dice results prompt is "You rolled an even number: 4. You are getting out of the penalty box"
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
       When qa-user clicks on validation button
-      Then qa-user can see the roll dice backhand section
-      And the roll dice backhand section content is "Your new location is 4. The category is Pop"
+      Then qa-user can see the roll dice results section
+      And the roll dice results prompt is "Your new location is 4. The category is Pop"
       And qa-user sees game logs ending as following
         | qa-user is getting out of the penalty box |
         | qa-user's new location is 4 |
