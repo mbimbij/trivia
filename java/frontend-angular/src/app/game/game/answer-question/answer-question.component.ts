@@ -23,7 +23,7 @@ export class AnswerQuestionComponent {
   @Input() question!: QuestionDto
   @Input() game!: Game;
   @Input() player!: Player;
-  protected canAnswerQuestion!: boolean;
+  protected canShowComponent!: boolean;
 
   constructor(private gameService: GameServiceAbstract,
               private cdr: ChangeDetectorRef) {
@@ -36,17 +36,16 @@ export class AnswerQuestionComponent {
     if(changes['game']){
       this.game = changes['game'].currentValue;
     }
-    this.canAnswerQuestion = this.game.canAnswerQuestion(this.player)
+    this.updateAttributes();
     this.cdr.markForCheck()
+  }
+
+  private updateAttributes() {
+    this.canShowComponent = this.game.canAnswerQuestion(this.player)
   }
 
   protected answerQuestion(gameId: number, playerId: string, answerCode: AnswerCode): void {
     this.gameService.answerQuestion(gameId, playerId, answerCode).subscribe()
   }
-
-  protected validate(gameId: number, playerId: string): void {
-    this.gameService.validate(gameId, playerId).subscribe()
-  }
-
   protected readonly AnswerCode = AnswerCode;
 }

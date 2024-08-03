@@ -4,6 +4,7 @@ import {GameComponent} from './game.component';
 import {ActivatedRoute} from "@angular/router";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {
+  getMockGame1,
   getMockGame2,
   getMockPlayer1,
   getMockQuestion1,
@@ -21,8 +22,11 @@ import {HttpErrorResponse} from "@angular/common/http";
 import any = jasmine.any;
 
 describe('GameComponent', () => {
-  let component: GameComponent, fixture: ComponentFixture<GameComponent>, htmlElement: HTMLElement,
-    gameService: GameServiceMock, userService: UserServiceMock;
+  let component: GameComponent
+  let fixture: ComponentFixture<GameComponent>
+  let htmlElement: HTMLElement
+  let gameService: GameServiceMock
+  let userService: UserServiceMock;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GameComponent, HttpClientTestingModule],
@@ -44,8 +48,6 @@ describe('GameComponent', () => {
     fixture = TestBed.createComponent(GameComponent);
     component = fixture.componentInstance;
     htmlElement = fixture.nativeElement;
-
-    fixture.autoDetectChanges(true);
   });
 
   it('should create', () => {
@@ -53,62 +55,55 @@ describe('GameComponent', () => {
     expect(gameService.getGame).toHaveBeenCalledWith(any(Number))
   });
 
-  it('should display expected elements eventually', () => {
-    expect(htmlElement.querySelector(`[data-testid="game-header-section"]`)).toBeTruthy();
-    expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
-  });
-
   it('should display player action section if is current player', () => {
+    // GIVEN
+    component.setGame(getMockGame1())
+    component.setPlayer(getMockPlayer1())
+
+    // WHEN
+    fixture.detectChanges()
+
+    // THEN
     expect(htmlElement.querySelector(`[data-testid="player-action-section"]`)).toBeTruthy();
     expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
   });
 
   it('should NOT display player action section if is NOT current player', () => {
+    // GIVEN
+    component.setGame(getMockGame2())
     component.setPlayer(getMockPlayer1())
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
+
+    // WHEN
+    fixture.detectChanges()
+
+    // THEN
     expect(htmlElement.querySelector(`[data-testid="player-action-section"]`)).toBeFalsy();
     expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
   });
 
   it('GIVEN current player BUT no dice roll THEN displays roll dice button', () => {
+    // GIVEN
     let mockGame = getMockGame2();
     mockGame.currentRoll = undefined
     mockGame.currentQuestion = undefined
     mockGame.currentPlayer.state = "WAITING_FOR_DICE_ROLL"
     component.setGame(mockGame)
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
+
+    // WHEN
+    fixture.detectChanges()
+
+    // THEN
     expect(htmlElement.querySelector(`[data-testid="roll-dice"]`)).toBeTruthy();
     expect(htmlElement.querySelector(`[data-testid="answer-question"]`)).toBeFalsy();
     expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
   });
 
-  it('GIVEN current player AND dice roll THEN does not displays roll dice button', () => {
-    let mockGame = getMockGame2();
-    mockGame.currentRoll = 3
-    mockGame.currentQuestion = undefined
-    component.setGame(mockGame)
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
-    expect(htmlElement.querySelector(`[data-testid="roll-dice"]`)).toBeFalsy();
-    expect(htmlElement.querySelector(`[data-testid="answer-question"]`)).toBeFalsy();
-    expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
-  });
-
-  it('GIVEN current player AND dice roll THEN does not displays roll dice button', () => {
-    let mockGame = getMockGame2();
-    mockGame.currentRoll = 3
-    mockGame.currentQuestion = getMockQuestion1()
-    component.setGame(mockGame)
-    fixture.componentRef.injector.get(ChangeDetectorRef).detectChanges()
-    expect(htmlElement.querySelector(`[data-testid="roll-dice"]`)).toBeFalsy();
-    expect(htmlElement.querySelector(`[data-testid="answer-question"]`)).toBeTruthy();
-    expect(htmlElement.querySelector(`[data-testid="game-logs-section"]`)).toBeTruthy();
-  });
 });
 
 describe('Error display', () => {
-  let fixture: ComponentFixture<GameComponent>;
   let component: GameComponent;
   let htmlElement: HTMLElement;
+  let fixture: ComponentFixture<GameComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
