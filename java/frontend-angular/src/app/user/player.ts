@@ -1,4 +1,4 @@
-import {PlayerDto} from "../openapi-generated";
+import {PlayerDto, State} from "../openapi-generated";
 
 export class Player {
   id: string;
@@ -6,7 +6,7 @@ export class Player {
   coinCount: number;
   isInPenaltyBox: boolean;
   consecutiveIncorrectAnswersCount: number;
-  state: string;
+  state: State;
   location: number;
   gotOutOfPenaltyBox: boolean;
 
@@ -15,7 +15,7 @@ export class Player {
               coinCount: number,
               isInPenaltyBox: boolean,
               consecutiveIncorrectAnswersCount: number,
-              state: string,
+              state: State,
               location: number,
               gotOutOfPenaltyBox: boolean
   ) {

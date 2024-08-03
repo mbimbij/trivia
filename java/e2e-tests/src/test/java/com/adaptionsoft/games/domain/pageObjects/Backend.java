@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.trivia.domain.AnswerCode;
+import com.adaptionsoft.games.trivia.web.AnswerDto;
 import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
 import com.adaptionsoft.games.trivia.web.UserDto;
@@ -12,10 +13,11 @@ import org.springframework.web.client.RestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Backend {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final String backendUrlBase;
 
-    public Backend(String backendUrlBase) {
+    public Backend(RestTemplate restTemplate, String backendUrlBase) {
+        this.restTemplate = restTemplate;
         this.backendUrlBase = backendUrlBase;
     }
 
@@ -72,9 +74,9 @@ public class Backend {
 
     public void answerQuestion(int gameId, @NotBlank String userId, AnswerCode answerCode) {
         String url = backendUrlBase + "/games/{gameId}/players/{userId}/answer/{answerCode}";
-        ResponseEntity<GameResponseDto> responseEntity = restTemplate.postForEntity(url,
+        ResponseEntity<AnswerDto> responseEntity = restTemplate.postForEntity(url,
                 null,
-                GameResponseDto.class,
+                AnswerDto.class,
                 gameId,
                 userId,
                 answerCode);

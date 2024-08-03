@@ -11,13 +11,14 @@
  */
 import { PlayerDto } from './player-dto';
 import { AnswerDto } from './answer-dto';
+import { State } from './state';
 import { QuestionDto } from './question-dto';
 
 
 export interface GameResponseDto { 
     id: number;
     name: string;
-    state: string;
+    state: State;
     turn: number;
     creator: PlayerDto;
     players: Array<PlayerDto>;
@@ -28,4 +29,7 @@ export interface GameResponseDto {
     currentCategory?: string;
     currentAnswer?: AnswerDto;
 }
+export namespace GameResponseDto {
+}
+
 

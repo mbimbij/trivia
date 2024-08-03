@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy} from '@angular/core';
-import {GameResponseDto} from "../../openapi-generated";
+import {GameResponseDto, State} from "../../openapi-generated";
 import {Router, RouterLink} from "@angular/router";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -50,6 +50,6 @@ export class GotoGameButtonComponent implements OnDestroy {
   }
 
   private isGameStarted() {
-    return this.game.state === 'started';
+    return this.game.state === State.Started;
   }
 }

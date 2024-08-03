@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.web;
 import com.adaptionsoft.games.trivia.domain.Dice;
 import com.adaptionsoft.games.trivia.domain.Game;
 import com.adaptionsoft.games.trivia.domain.QuestionsDeck;
+import com.adaptionsoft.games.trivia.domain.statemachine.State;
 import jakarta.validation.constraints.NotBlank;
 import lombok.With;
 
@@ -17,7 +18,7 @@ public record GameResponseDto(
         @NotBlank
         String name,
         @NotBlank
-        String state,
+        State state,
         @NotBlank
         int turn,
         @NotBlank
@@ -46,7 +47,7 @@ public record GameResponseDto(
         String currentCategory = Optional.ofNullable(game.getCurrentCategory()).map(QuestionsDeck.Category::toString).orElse(null);
         return new GameResponseDto(game.getId().getValue(),
                 game.getName(),
-                game.getState().toString(),
+                game.getState(),
                 game.getTurn(),
                 creatorDto,
                 playersDto,

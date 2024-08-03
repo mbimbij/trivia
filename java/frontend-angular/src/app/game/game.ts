@@ -1,11 +1,11 @@
 import {Player} from "../user/player";
-import {AnswerDto, GameResponseDto, QuestionDto} from "../openapi-generated";
+import {AnswerDto, GameResponseDto, QuestionDto, State} from "../openapi-generated";
 import {comparePlayers, playerDtoToPlayer, playerToPlayerDto} from "../common/helpers";
 
 export class Game {
   id: number
   name: string
-  state: string;
+  state: State;
   turn: number;
   creator: Player;
   currentPlayer: Player;
@@ -18,7 +18,7 @@ export class Game {
 
   constructor(id: number,
               name: string,
-              state: string,
+              state: State,
               turn: number,
               creator: Player,
               currentPlayer: Player,
@@ -81,7 +81,7 @@ export class Game {
   }
 
   public isEnded(): boolean {
-    return this.state === "ended";
+    return this.state === State.Ended;
   }
 
   public isCurrentPlayer(player: Player): boolean {
@@ -90,7 +90,7 @@ export class Game {
 
   public canRollDice(player: Player): boolean {
     return this.isCurrentPlayer(player)
-      && (this.currentPlayer.state === "WAITING_FOR_DICE_ROLL" || this.currentPlayer.state === "IN_PENALTY_BOX")
+      && (this.currentPlayer.state === State.WaitingForDiceRoll || this.currentPlayer.state === State.InPenaltyBox)
   }
 
   public canAnswerQuestion(player: Player): boolean {

@@ -3,14 +3,22 @@ package com.adaptionsoft.games;
 import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
+import com.adaptionsoft.games.trivia.web.WebConfig;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 @ComponentScan
 @EnableConfigurationProperties(TestProperties.class)
+@Import(WebConfig.class)
 public class E2eTestsSpringConfiguration {
     @Bean
     public TestContext testContext() {
@@ -43,8 +51,8 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public Janitor testRunnerActor(TestContext testContext, TestProperties testProperties) {
-        return new Janitor(testProperties.getBackendUrlBase(), testContext);
+    public Janitor testRunnerActor(RestTemplate restTemplate, TestProperties testProperties, TestContext testContext) {
+        return new Janitor(restTemplate,testProperties.getBackendUrlBase(), testContext);
     }
 
     @Bean
@@ -84,9 +92,29 @@ public class E2eTestsSpringConfiguration {
     public CreateGameUiElement createGameUiElement(Page page, TestContext testContext) {
         return new CreateGameUiElement(page, testContext);
     }
-
+    
     @Bean
-    public Backend backend(TestProperties testProperties) {
-        return new Backend(testProperties.getBackendUrlBase());
+    public RestTemplate restTemplate(@Qualifier("stateDeserializer") Module stateDeserializer) {
+        RestTemplate restTemplate = new RestTemplate();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper mapper = new ObjectMapper();
+        converter.setObjectMapper(mapper.registerModule(stateDeserializer));
+        restTemplate.getMessageConverters().add(0, converter);
+        return restTemplate;
+
+//        RestTemplate restTemplate = new RestTemplate();
+//        MappingJackson2HttpMessageConverter httpMessageConverter = (MappingJackson2HttpMessageConverter) restTemplate
+//                .getMessageConverters()
+//                .stream()
+//                .filter(m -> m instanceof MappingJackson2HttpMessageConverter)
+//                .findFirst()
+//                .orElseThrow();
+//        httpMessageConverter.getObjectMapper().registerModule(stateDeserializer);
+//        return restTemplate;
+    }
+    
+    @Bean
+    public Backend backend(RestTemplate restTemplate, TestProperties testProperties) {
+        return new Backend(restTemplate,testProperties.getBackendUrlBase());
     }
 }
