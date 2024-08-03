@@ -23,11 +23,16 @@ describe('AnswerQuestionResultsComponent', () => {
 
     fixture = TestBed.createComponent(AnswerQuestionResultsComponent);
     component = fixture.componentInstance;
-
   });
 
   it('should create', () => {
+    // GIVEN
+    component.player = getMockPlayer1()
+
+    // WHEN
     fixture.detectChanges()
+
+    // THEN
     expect(component).toBeTruthy();
   });
 

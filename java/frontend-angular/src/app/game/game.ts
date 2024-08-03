@@ -90,12 +90,11 @@ export class Game {
 
   public canRollDice(player: Player): boolean {
     return this.isCurrentPlayer(player)
-      && this.currentRoll == undefined
       && (this.currentPlayer.state === "WAITING_FOR_DICE_ROLL" || this.currentPlayer.state === "IN_PENALTY_BOX")
   }
 
   public canAnswerQuestion(player: Player): boolean {
-    return this.isCurrentPlayer(player) && this.currentRoll != undefined && this.currentQuestion != undefined
+    return this.isCurrentPlayer(player) && this.currentQuestion != undefined
   }
 
   public getCurrentStateOf(player: Player): Player {
