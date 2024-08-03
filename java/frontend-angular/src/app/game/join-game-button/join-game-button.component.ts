@@ -5,6 +5,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable, Subscription} from "rxjs";
 import {Game} from '../game';
 import {compareUserAndPlayer} from "../../common/helpers";
+import {State} from "../../openapi-generated";
 
 @Component({
   selector: 'app-join-game-button',
@@ -57,7 +58,7 @@ export class JoinGameButtonComponent implements OnDestroy {
   }
 
   protected isGameStarted(): boolean {
-    return this.game.state === 'started';
+    return this.game.state === State.Started;
   }
 
   joinGame() {

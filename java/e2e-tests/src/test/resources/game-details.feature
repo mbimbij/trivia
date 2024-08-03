@@ -29,15 +29,15 @@ Feature: Game Details Page
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator> | created | <se1>         | <je1>        | <jt1>     | <ge1>        |
+      | <game> | <creator> | <creator> | CREATED | <se1>         | <je1>        | <jt1>     | <ge1>        |
     When <newcomer> joins "<game>" <jBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator>,<newcomer> | created | <se2>         | <je2>        | <jt2>     | <ge2>        |
+      | <game> | <creator> | <creator>,<newcomer> | CREATED | <se2>         | <je2>        | <jt2>     | <ge2>        |
     When <creator> starts "<game>" <sBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator>,<newcomer> | started | <se3>         | <je3>        | <jt3>     | <ge3>        |
+      | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
     Examples:
       | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1  | je1  | jt1            | ge1   | se2  | je2  | jt2            | ge2   | se3  | je3  | jt3          | ge3   |
     # (I) joins an (existing) game created by (other)
@@ -53,15 +53,15 @@ Feature: Game Details Page
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator> | created | <se1>         | <je1>        | <jt1>     | <ge1>        |
+      | <game> | <creator> | <creator> | CREATED | <se1>         | <je1>        | <jt1>     | <ge1>        |
     When <newcomer> joins "<game>" <jBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator>,<newcomer> | created | <se2>         | <je2>        | <jt2>     | <ge2>        |
+      | <game> | <creator> | <creator>,<newcomer> | CREATED | <se2>         | <je2>        | <jt2>     | <ge2>        |
     When <creator> starts "<game>" <sBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator>,<newcomer> | started | <se3>         | <je3>        | <jt3>     | <ge3>        |
+      | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
     Examples:
       | game    | creator     | cBeFe             | sBeFe             | newcomer    | jBeFe             | se1  | je1  | jt1            | ge1   | se2  | je2  | jt2            | ge2   | se3  | je3  | jt3          | ge3   |
     # (I) joins an (new) game created by (other)
@@ -78,15 +78,15 @@ Feature: Game Details Page
     Then i am on the on game details page for "<game>"
     And the following games are displayed
       | name   | creator   | players   | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator> | created | <se1>         | <je1>        | <jt1>     | <ge1>        |
+      | <game> | <creator> | <creator> | CREATED | <se1>         | <je1>        | <jt1>     | <ge1>        |
     When <newcomer> joins "<game>" <jBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator>,<newcomer> | created | <se2>         | <je2>        | <jt2>     | <ge2>        |
+      | <game> | <creator> | <creator>,<newcomer> | CREATED | <se2>         | <je2>        | <jt2>     | <ge2>        |
     When <creator> starts "<game>" <sBeFe>
     Then the following games are displayed
       | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
-      | <game> | <creator> | <creator>,<newcomer> | started | <se3>         | <je3>        | <jt3>     | <ge3>        |
+      | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
     Examples:
       | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1  | je1  | jt1            | ge1   | se2  | je2  | jt2            | ge2   | se3  | je3  | jt3          | ge3   |
     # (I) joins an (existing) game created by (other)

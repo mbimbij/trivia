@@ -1,4 +1,4 @@
-import {PlayerDto, UserDto} from "../openapi-generated";
+import {PlayerDto, State, UserDto} from "../openapi-generated";
 import {User} from "../user/user";
 import {Player} from "../user/player";
 
@@ -22,7 +22,7 @@ export function userToPlayerDto(user: User): PlayerDto {
     coinCount: 0,
     isInPenaltyBox: false,
     consecutiveIncorrectAnswersCount: 0,
-    state: "WAITING_FOR_DICE_ROLL",
+    state: State.WaitingForDiceRoll,
     location: 0,
     gotOutOfPenaltyBox: false
   }
@@ -34,7 +34,7 @@ export function userToPlayer(user: User): Player {
     0,
     false,
     0,
-    "WAITING_FOR_DICE_ROLL",
+    State.WaitingForDiceRoll,
     0,
     false)
 }

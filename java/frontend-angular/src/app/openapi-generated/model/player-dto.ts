@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { State } from './state';
 
 
 export interface PlayerDto { 
@@ -17,8 +18,11 @@ export interface PlayerDto {
     coinCount: number;
     isInPenaltyBox: boolean;
     consecutiveIncorrectAnswersCount: number;
-    state: string;
+    state: State;
     location: number;
     gotOutOfPenaltyBox: boolean;
 }
+export namespace PlayerDto {
+}
+
 

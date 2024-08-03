@@ -14,6 +14,7 @@ import {compareUserAndPlayer, generateRandomString} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Game} from "../game";
 import {combineLatest, Subscription} from "rxjs";
+import {State} from "../../openapi-generated";
 
 @Component({
   standalone: true,
@@ -87,6 +88,6 @@ export class StartGameButtonComponent implements OnDestroy {
   }
 
   private isGameJustCreated(): boolean {
-    return this.game.state === "created"
+    return this.game.state === State.Created
   }
 }

@@ -40,7 +40,7 @@ class GameResponseDtoShould {
                 .orElse(null);
         return new GameResponseDto(GAME_TEST_ID_INTEGER,
                 game.getName(),
-                CREATED.toString(),
+                CREATED,
                 0,
                 player1,
                 players,

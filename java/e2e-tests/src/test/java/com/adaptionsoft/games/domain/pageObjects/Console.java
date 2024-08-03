@@ -12,7 +12,6 @@ public class Console {
 
     public Console(Page page) {
         page.onConsoleMessage(e -> {
-            System.out.println("coucou log: %s".formatted(e.text()));
             getCurrentScenarioLogs().add(e);
         });
     }

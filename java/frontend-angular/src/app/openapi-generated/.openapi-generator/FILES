@@ -16,6 +16,7 @@ model/game-response-dto.ts
 model/models.ts
 model/player-dto.ts
 model/question-dto.ts
+model/state.ts
 model/user-dto.ts
 param.ts
 variables.ts

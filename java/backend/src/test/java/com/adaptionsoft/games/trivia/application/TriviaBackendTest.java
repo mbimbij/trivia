@@ -44,7 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Import({
         WebSocketConfig.class,
-        MyTestConfiguration.class
+        MyTestConfiguration.class,
+        WebConfig.class
 })
 class TriviaBackendTest {
 
@@ -153,7 +154,7 @@ class TriviaBackendTest {
                 });
         GameResponseDto expectedResponseDto = new GameResponseDto(gameIdInt,
                 gameName,
-                CREATED.toString(),
+                CREATED,
                 0,
                 player1Dto,
                 List.of(player1Dto),
@@ -207,7 +208,7 @@ class TriviaBackendTest {
         @NotBlank PlayerDto creatorDto = PlayerDto.from(player1);
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
-                CREATED.toString(),
+                CREATED,
                 0,
                 creatorDto,
                 List.of(creatorDto, newPlayerDto),
@@ -273,7 +274,7 @@ class TriviaBackendTest {
 
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
-                STARTED.toString(),
+                STARTED,
                 1,
                 player1Dto,
                 List.of(player1Dto, player2Dto),
@@ -311,12 +312,12 @@ class TriviaBackendTest {
         // AND the response body is as expected
         GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
 
-        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION.toString())
+        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_TO_DRAW_1ST_QUESTION)
                 .withLocation(3);
         String expectedCategory = QuestionsDeck.Category.getQuestionCategory(3).toString();
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
-                STARTED.toString(),
+                STARTED,
                 1,
                 expectedPlayer1Dto,
                 List.of(expectedPlayer1Dto, player2Dto),
@@ -359,10 +360,10 @@ class TriviaBackendTest {
         GameResponseDto actualResponseDto = mapper.readValue(result.getResponse().getContentAsString(), GameResponseDto.class);
         QuestionDto expectedCurrentQuestionDto = QuestionDto.from(questionTest());
 
-        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_FOR_1ST_ANSWER.toString());
+        PlayerDto expectedPlayer1Dto = player1Dto.withState(PlayerState.WAITING_FOR_1ST_ANSWER);
         GameResponseDto expectedResponseDto = new GameResponseDto(game.getId().getValue(),
                 game.getName(),
-                STARTED.toString(),
+                STARTED,
                 1,
                 expectedPlayer1Dto,
                 List.of(expectedPlayer1Dto, player2Dto),

@@ -6,6 +6,7 @@ import {getMockGame2, getMockPlayer2} from "../../../common/test-helpers";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {GameService} from "../../game.service";
 import {By} from "@angular/platform-browser";
+import {State} from "../../../openapi-generated";
 
 describe('RollDiceBackhandInsidePenaltyBoxComponent', () => {
   let component: RollDiceResultsInsidePenaltyBoxComponent;
@@ -35,19 +36,19 @@ describe('RollDiceBackhandInsidePenaltyBoxComponent', () => {
 
   const testCases = [
     {
-      playerState: "WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX",
+      playerState: State.WaitingToValidateEvenDiceRollFromPenaltyBox,
       currentRoll: 4,
       expectedBackhandSectionShown: true,
       expectedBackHandMessage: "You rolled an even number: 4. You are getting out of the penalty box"
     },
     {
-      playerState: "WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX",
+      playerState: State.WaitingToValidateOddDiceRollFromPenaltyBox,
       currentRoll: 3,
       expectedBackhandSectionShown: true,
       expectedBackHandMessage: "You rolled an odd number: 3. You stay in the penalty box"
     },
     {
-      playerState: "ANY_OTHER_STATE",
+      playerState: State.WaitingToDraw2NdQuestion,
       currentRoll: 3,
       expectedBackhandSectionShown: false,
       expectedBackHandMessage: "You should absolutely not see this message"
