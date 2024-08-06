@@ -1,5 +1,5 @@
 import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {GameLog} from "../../openapi-generated";
+import {GameLog, State} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
@@ -121,4 +121,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   setGame(game: Game) {
     this.game$ = of(game)
   }
+
+  protected readonly State = State;
 }

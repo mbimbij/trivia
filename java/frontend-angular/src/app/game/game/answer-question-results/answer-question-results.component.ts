@@ -19,7 +19,9 @@ import {NgIf} from "@angular/common";
     NgIf
   ],
   template: `
-    <div>
+    <div
+      [attr.data-testid]="'answer-question-results'"
+    >
       <div
         [attr.data-testid]="'is-answer-correct-prompt'"
       >
