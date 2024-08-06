@@ -5,7 +5,7 @@ import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
-import {AnswerQuestionResultsComponent} from "../answer-question-results/answer-question-results.component";
+import {AnswerQuestionResultsComponent} from "../answer-question-results-wrapper/answer-question-results/answer-question-results.component";
 
 @Component({
   selector: 'app-answer-question',

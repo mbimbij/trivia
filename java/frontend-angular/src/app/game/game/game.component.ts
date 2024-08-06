@@ -19,7 +19,10 @@ import {
 import {
   RollDiceResultsOutsidePenaltyBoxComponent
 } from "./roll-dice-results-outside-penalty-box/roll-dice-results-outside-penalty-box.component";
-import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
+import {AnswerQuestionResultsComponent} from "./answer-question-results-wrapper/answer-question-results/answer-question-results.component";
+import {
+  AnswerQuestionResultsWrapperComponent
+} from "./answer-question-results-wrapper/answer-question-results-wrapper.component";
 
 @Component({
   selector: 'app-game',
@@ -35,7 +38,8 @@ import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-q
     ErrorDisplayComponent,
     RollDiceResultsInsidePenaltyBoxComponent,
     RollDiceResultsOutsidePenaltyBoxComponent,
-    AnswerQuestionResultsComponent
+    AnswerQuestionResultsComponent,
+    AnswerQuestionResultsWrapperComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',

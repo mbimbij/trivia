@@ -35,31 +35,7 @@
     <app-roll-dice-results-outside-penalty-box [game]="game" [player]="player"/>
 
     <app-answer-question [player]="player" [game]="game" [question]="game.currentQuestion!"/>
-
-    @if (player.state == State.WaitingToValidateFirstIncorrectAnswer) {
-      <hr/>
-      <app-answer-question-results
-        [gameId]="game.id" [player]="player"
-        [isAnswerCorrectPrompt]="'First Incorrect Answer. You are given a second chance'"
-        [explanations]="game.currentAnswer!.explanations"
-        [buttonText]="'draw 2nd question'"
-      />
-    } @else if (player.state == State.WaitingToValidateSecondIncorrectAnswer) {
-      <hr/>
-      <app-answer-question-results
-        [gameId]="game.id" [player]="player"
-        [isAnswerCorrectPrompt]="'Second Incorrect Answer. You are sent to the penalty box.'"
-        [explanations]="game.currentAnswer!.explanations"
-      />
-
-    } @else if (player.state == State.WaitingToValidateFirstCorrectAnswer || player.state == State.WaitingToValidateSecondCorrectAnswer) {
-      <hr/>
-      <app-answer-question-results
-        [gameId]="game.id" [player]="player"
-        [isAnswerCorrectPrompt]="'Correct Answer'"
-        [explanations]="game.currentAnswer!.explanations"
-      />
-    }
+    <app-answer-question-results-wrapper [gameId]="gameId" [player]="player" [explanations]="game.currentAnswer?.explanations"/>
   </div>
 
   <hr>

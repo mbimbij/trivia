@@ -1,0 +1,24 @@
+@if (player.state == State.WaitingToValidateFirstIncorrectAnswer) {
+  <hr/>
+  <app-answer-question-results
+    [gameId]="gameId" [playerId]="player.id"
+    [isAnswerCorrectPrompt]="'First Incorrect Answer. You are given a second chance'"
+    [explanations]="explanations!"
+    [buttonText]="'draw 2nd question'"
+  />
+} @else if (player.state == State.WaitingToValidateSecondIncorrectAnswer) {
+  <hr/>
+  <app-answer-question-results
+    [gameId]="gameId" [playerId]="player.id"
+    [isAnswerCorrectPrompt]="'Second Incorrect Answer. You are sent to the penalty box.'"
+    [explanations]="explanations!"
+  />
+
+} @else if (player.state == State.WaitingToValidateFirstCorrectAnswer || player.state == State.WaitingToValidateSecondCorrectAnswer) {
+  <hr/>
+  <app-answer-question-results
+    [gameId]="gameId" [playerId]="player.id"
+    [isAnswerCorrectPrompt]="'Correct Answer'"
+    [explanations]="explanations!"
+  />
+}

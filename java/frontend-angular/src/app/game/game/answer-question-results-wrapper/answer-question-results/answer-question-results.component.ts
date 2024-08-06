@@ -7,8 +7,8 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import {ValidationButtonComponent} from "../validation-button/validation-button.component";
-import {Player} from "../../../user/player";
+import {ValidationButtonComponent} from "../../validation-button/validation-button.component";
+import {Player} from "../../../../user/player";
 import {NgIf} from "@angular/common";
 
 @Component({
@@ -28,22 +28,16 @@ import {NgIf} from "@angular/common";
         <h2>{{ isAnswerCorrectPrompt }}</h2>
       </div>
       <p>{{ explanations }}</p>
-      <app-validation-button [gameId]="gameId" [playerId]="player.id" [buttonText]="buttonText"/>
+      <app-validation-button [gameId]="gameId" [playerId]="playerId" [buttonText]="buttonText"/>
     </div>
   `,
   styleUrl: './answer-question-results.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionResultsComponent implements OnChanges{
+export class AnswerQuestionResultsComponent{
   @Input() gameId!: number;
-  @Input() player!: Player;
+  @Input() playerId!: string;
   @Input() isAnswerCorrectPrompt!: string;
   @Input() explanations!: string;
   @Input() buttonText: string | undefined;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['player']){
-      this.player = changes['player'].currentValue;
-    }
-  }
 }
