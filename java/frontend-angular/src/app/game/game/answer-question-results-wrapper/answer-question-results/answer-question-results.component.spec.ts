@@ -27,7 +27,7 @@ describe('AnswerQuestionResultsComponent', () => {
 
   it('should create', () => {
     // GIVEN
-    component.player = getMockPlayer1()
+    component.playerId = getMockPlayer1().id
 
     // WHEN
     fixture.detectChanges()
@@ -38,7 +38,7 @@ describe('AnswerQuestionResultsComponent', () => {
 
   it('should display "ok" on validation button if no text provided', () => {
     // GIVEN
-    component.player = getMockPlayer1()
+    component.playerId = getMockPlayer1().id
     component.buttonText = undefined
 
     // WHEN

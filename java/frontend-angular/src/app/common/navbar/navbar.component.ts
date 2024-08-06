@@ -7,7 +7,7 @@ import {User} from "../../user/user";
 import {AsyncPipe, KeyValuePipe, NgIf} from "@angular/common";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
-import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
+import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {Router} from "@angular/router";
 
 @Component({

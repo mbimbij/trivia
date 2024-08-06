@@ -12,7 +12,7 @@ import {
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
-import {userToUserDto} from "../common/helpers";
+import {gameDtoToGame, gameToGameDto, userToUserDto} from "../common/helpers";
 import {Game} from "./game";
 
 @Injectable({
@@ -34,7 +34,7 @@ export class GameService extends GameServiceAbstract {
 
   override rollDice(gameId: number, userId: string): Observable<Game> {
     return this.openApiService.rollDice(gameId, userId)
-      .pipe(map(Game.fromDto));
+      .pipe(map(dto => gameDtoToGame(dto)));
   }
 
   override drawQuestion(gameId: number, userId: string): Observable<QuestionDto> {
@@ -61,7 +61,7 @@ export class GameService extends GameServiceAbstract {
   initGamesList() {
     this.openApiService.listGames()
       .pipe(
-        map(dtos => dtos.map(Game.fromDto))
+        map(dtos => dtos.map(dto => gameDtoToGame(dto)))
       )
       .subscribe(games => {
         this.gamesSubject.next(games);
@@ -82,7 +82,7 @@ export class GameService extends GameServiceAbstract {
   initSingleGame(gameId: number) {
     this.createSubjectForSingleGame(gameId);
     let gameObservable = this.openApiService.getGameById(gameId)
-      .pipe(map(Game.fromDto));
+      .pipe(map( dto => gameDtoToGame(dto)));
     gameObservable
       .subscribe({
         next: game => {
@@ -150,7 +150,7 @@ export class GameService extends GameServiceAbstract {
     let requestDto = {gameName: name, creator: userToUserDto(user)};
     return this.openApiService.createGame(requestDto)
       .pipe(
-        map(Game.fromDto),
+        map(dto => gameDtoToGame(dto)),
       );
   }
 
@@ -167,12 +167,12 @@ export class GameService extends GameServiceAbstract {
 
   override start(gameId: number, userId: string): Observable<Game> {
     return this.openApiService.startGame(gameId, userId)
-      .pipe(map(Game.fromDto));
+      .pipe(map(dto => gameDtoToGame(dto)));
   }
 
   override join(game: Game, user: User): Observable<Game> {
     return this.openApiService.addPlayerToGame(game.id, user.id, userToUserDto(user))
-      .pipe(map(Game.fromDto));
+      .pipe(map(dto => gameDtoToGame(dto)));
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
@@ -182,7 +182,7 @@ export class GameService extends GameServiceAbstract {
   registerGameCreatedHandler() {
     this.rxStompService.watch(`/topic/games/created`).subscribe((message: IMessage) => {
       let newGameDto = JSON.parse(message.body) as GameResponseDto;
-      let newGame = Game.fromDto(newGameDto);
+      let newGame = gameDtoToGame(newGameDto);
       this.handleGameCreated(newGame);
     });
   }
@@ -198,7 +198,7 @@ export class GameService extends GameServiceAbstract {
       this.isUpdateHandlerRegistered.add(gameId)
       this.rxStompService.watch(`/topic/games/${gameId}`).subscribe((message: IMessage) => {
         let updatedGameDto = JSON.parse(message.body) as GameResponseDto;
-        let updatedGame = Game.fromDto(updatedGameDto);
+        let updatedGame = gameDtoToGame(updatedGameDto);
         this.handleGameUpdated(updatedGame);
       });
     }

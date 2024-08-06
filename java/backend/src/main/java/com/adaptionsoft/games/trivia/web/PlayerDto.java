@@ -14,10 +14,6 @@ public record PlayerDto(
         @NotBlank
         int coinCount,
         @NotBlank
-        boolean isInPenaltyBox,
-        @NotBlank
-        int consecutiveIncorrectAnswersCount,
-        @NotBlank
         State state,
         @NotBlank
         int location,
@@ -29,8 +25,6 @@ public record PlayerDto(
         return new PlayerDto(player.getId().getValue(),
                 player.getName(),
                 player.getCoinCount(),
-                player.isInPenaltyBox(),
-                player.getConsecutiveIncorrectAnswersCount(),
                 player.getCurrentState(),
                 player.getLocation(),
                 player.isGotOutOfPenaltyBox());

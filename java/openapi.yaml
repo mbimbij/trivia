@@ -341,12 +341,10 @@ components:
         - value
     PlayerDto:
       required:
-        - coinCount
-        - consecutiveIncorrectAnswersCount
         - id
-        - isInPenaltyBox
         - name
         - state
+        - coinCount
         - location
         - gotOutOfPenaltyBox
       type: object
@@ -356,11 +354,6 @@ components:
         name:
           type: string
         coinCount:
-          type: integer
-          format: int32
-        isInPenaltyBox:
-          type: boolean
-        consecutiveIncorrectAnswersCount:
           type: integer
           format: int32
         state:

@@ -6,10 +6,11 @@ import {getMockGame1, getMockGame2} from "../common/test-helpers";
 import {Observable, of} from "rxjs";
 import {Game} from "./game";
 import {GameResponseDto, TriviaControllerService} from "../openapi-generated";
+import {gameToGameDto} from "../common/helpers";
 
 describe('GameService', () => {
-  let defaultGameListReturnValues = [getMockGame1(), getMockGame2()].map(value => value.toDto())
-  let defaultSingleGameReturnValue = getMockGame1().toDto()
+  let defaultGameListReturnValues = [getMockGame1(), getMockGame2()].map(value => gameToGameDto(value))
+  let defaultSingleGameReturnValue = gameToGameDto(getMockGame1())
 
   it('should be created', () => {
     let service = createService()

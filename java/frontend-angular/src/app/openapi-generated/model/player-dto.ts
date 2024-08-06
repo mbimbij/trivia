@@ -16,8 +16,6 @@ export interface PlayerDto {
     id: string;
     name: string;
     coinCount: number;
-    isInPenaltyBox: boolean;
-    consecutiveIncorrectAnswersCount: number;
     state: State;
     location: number;
     gotOutOfPenaltyBox: boolean;

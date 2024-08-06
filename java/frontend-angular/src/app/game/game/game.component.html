@@ -14,7 +14,7 @@
 
     <h2
       [attr.data-testid]="'winner-prompt-section'"
-      *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
+      *ngIf="isGameEnded"><span *ngIf="game.isWinner(player); then you_won else other_won"></span></h2>
     <ng-template #you_won>You won, Congratulations !</ng-template>
     <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
