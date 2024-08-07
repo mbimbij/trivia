@@ -12,7 +12,7 @@ import {
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
-import {gameDtoToGame, gameToGameDto, userToUserDto} from "../common/helpers";
+import {gameDtoToGame, userToUserDto} from "../common/helpers";
 import {Game} from "./game";
 
 @Injectable({
@@ -24,7 +24,6 @@ export class GameService extends GameServiceAbstract {
   private gamesSubjectsMap = new Map<number, ReplaySubject<Game>>()
   private isUpdateHandlerRegistered = new Set<number>()
   private gameLogsSubjects = new BehaviorSubject<GameLog[]>([])
-  private gameLogs$ = this.gameLogsSubjects.asObservable()
   private isGameLogsHandlerRegistered = new Set<number>()
 
   constructor(private openApiService: TriviaControllerService,
@@ -176,7 +175,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
-    return this.gameLogs$;
+    return this.gameLogsSubjects.asObservable();
   }
 
   registerGameCreatedHandler() {
