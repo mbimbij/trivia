@@ -8,6 +8,7 @@ export class User {
     this.name = name;
     this.isAnonymous = isAnonymous;
   }
+
 }
 
 export class Nobody extends User {

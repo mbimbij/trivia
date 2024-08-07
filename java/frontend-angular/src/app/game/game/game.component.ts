@@ -1,8 +1,8 @@
 import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {GameLog} from "../../openapi-generated";
+import {GameLog, State} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {comparePlayers, generateRandomString, userToPlayer} from "../../common/helpers";
+import {generateRandomString, userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {combineLatest, Observable, of, Subject, Subscription} from "rxjs";
@@ -14,12 +14,17 @@ import {AnswerQuestionComponent} from "./answer-question/answer-question.compone
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {
-    RollDiceResultsInsidePenaltyBoxComponent
+  RollDiceResultsInsidePenaltyBoxComponent
 } from "./roll-dice-results-inside-penalty-box/roll-dice-results-inside-penalty-box.component";
 import {
   RollDiceResultsOutsidePenaltyBoxComponent
 } from "./roll-dice-results-outside-penalty-box/roll-dice-results-outside-penalty-box.component";
-import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
+import {
+  AnswerQuestionResultsComponent
+} from "./answer-question-results-wrapper/answer-question-results/answer-question-results.component";
+import {
+  AnswerQuestionResultsWrapperComponent
+} from "./answer-question-results-wrapper/answer-question-results-wrapper.component";
 
 @Component({
   selector: 'app-game',
@@ -35,7 +40,8 @@ import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-q
     ErrorDisplayComponent,
     RollDiceResultsInsidePenaltyBoxComponent,
     RollDiceResultsOutsidePenaltyBoxComponent,
-    AnswerQuestionResultsComponent
+    AnswerQuestionResultsComponent,
+    AnswerQuestionResultsWrapperComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
@@ -45,11 +51,10 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   private readonly id: string;
   protected player!: Player;
   protected gameId!: number;
-  private game!: Game;
   game$!: Observable<Game>
   protected gameLogs$!: Observable<GameLog[]>;
   protected isGameEnded: boolean = false;
-  gameLoadingError$= new Subject<HttpErrorResponse>();
+  gameLoadingError$ = new Subject<HttpErrorResponse>();
 
   private userGameSubscription: Subscription | undefined;
   private routeParamsSubscription: Subscription;
@@ -69,7 +74,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
       this.userGameSubscription = combineLatest([user$, this.game$])
         .subscribe({
           next: ([user, game]) => {
-            this.game = game;
             let playerFromUser = userToPlayer(user);
             this.player = game.getCurrentStateOf(playerFromUser);
             this.isGameEnded = game.isEnded();
@@ -102,10 +106,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
   }
 
-  protected playerWon(): boolean {
-    return comparePlayers(this.player, this.game.winner)
-  }
-
   /**
    * For tests only
    * @param player
@@ -121,4 +121,6 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
   setGame(game: Game) {
     this.game$ = of(game)
   }
+
+  protected readonly State = State;
 }

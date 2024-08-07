@@ -1,6 +1,7 @@
-import {PlayerDto, State, UserDto} from "../openapi-generated";
+import {GameResponseDto, PlayerDto, State, UserDto} from "../openapi-generated";
 import {User} from "../user/user";
 import {Player} from "../user/player";
+import {Game} from "../game/game";
 
 // TODO move these functions into appropriate classes
 export function compareUserDtos(user1: UserDto, user2: UserDto): boolean {
@@ -15,24 +16,9 @@ export function comparePlayers(player1?: Player, player2?: Player): boolean {
   return player1 !== null && player2 !== null && player1?.id === player2?.id;
 }
 
-export function userToPlayerDto(user: User): PlayerDto {
-  return {
-    id: user.id,
-    name: user.name,
-    coinCount: 0,
-    isInPenaltyBox: false,
-    consecutiveIncorrectAnswersCount: 0,
-    state: State.WaitingForDiceRoll,
-    location: 0,
-    gotOutOfPenaltyBox: false
-  }
-}
-
 export function userToPlayer(user: User): Player {
   return new Player(user.id,
     user.name,
-    0,
-    false,
     0,
     State.WaitingForDiceRoll,
     0,
@@ -47,8 +33,6 @@ export function playerDtoToPlayer(dto: PlayerDto): Player {
   return new Player(dto.id,
     dto.name,
     dto.coinCount,
-    dto.isInPenaltyBox,
-    dto.consecutiveIncorrectAnswersCount,
     dto.state,
     dto.location,
     dto.gotOutOfPenaltyBox
@@ -60,12 +44,44 @@ export function playerToPlayerDto(player: Player): PlayerDto {
     id: player.id,
     name: player.name,
     coinCount: player.coinCount,
-    isInPenaltyBox: player.isInPenaltyBox,
-    consecutiveIncorrectAnswersCount: player.consecutiveIncorrectAnswersCount,
     state: player.state,
     location: player.location,
     gotOutOfPenaltyBox: player.gotOutOfPenaltyBox
   }
+}
+
+export function gameToGameDto(game: Game): GameResponseDto {
+  return {
+    id: game.id,
+    name: game.name,
+    state: game.state,
+    turn: game.turn,
+    creator: playerToPlayerDto(game.creator),
+    currentPlayer: playerToPlayerDto(game.currentPlayer),
+    players: game.players.map(player => playerToPlayerDto(player)),
+    currentQuestion: game.currentQuestion,
+    currentRoll: game.currentRoll,
+    currentCategory: game.currentCategory,
+    currentAnswer: game.currentAnswer
+  }
+}
+
+export function gameDtoToGame(dto: GameResponseDto): Game {
+  return new Game(dto.id,
+    dto.name,
+    dto.state,
+    dto.turn,
+    playerDtoToPlayer(dto.creator),
+    playerDtoToPlayer(dto.currentPlayer),
+    dto.players.map(
+      playerDto => playerDtoToPlayer(playerDto)
+    ),
+    dto.winner ? playerDtoToPlayer(dto.winner) : undefined,
+    dto.currentQuestion,
+    dto.currentRoll,
+    dto.currentCategory,
+    dto.currentAnswer
+  )
 }
 
 export function generateRandomString(length: number): string {

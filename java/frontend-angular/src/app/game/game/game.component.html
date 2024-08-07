@@ -14,7 +14,7 @@
 
     <h2
       [attr.data-testid]="'winner-prompt-section'"
-      *ngIf="isGameEnded"><span *ngIf="playerWon(); then you_won else other_won"></span></h2>
+      *ngIf="isGameEnded"><span *ngIf="game.isWinner(player); then you_won else other_won"></span></h2>
     <ng-template #you_won>You won, Congratulations !</ng-template>
     <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
@@ -26,49 +26,16 @@
   </div>
 
   <div
-    *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
     [attr.data-testid]="'player-action-section'"
+    *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
   >
     <hr>
-    <app-roll-dice [game]="game" [player]="player"></app-roll-dice>
+    <app-roll-dice [game]="game" [player]="player"/>
     <app-roll-dice-results-inside-penalty-box [game]="game" [player]="player"/>
     <app-roll-dice-results-outside-penalty-box [game]="game" [player]="player"/>
 
-    <app-answer-question
-      [player]="player"
-      [game]="game"
-      [question]="game.currentQuestion!"></app-answer-question>
-
-    <div
-      [attr.data-testid]="'answer-question-results'"
-      *ngIf="game.currentAnswer != undefined"
-    >
-      <hr/>
-
-      @if (player.state == "WAITING_TO_VALIDATE_FIRST_INCORRECT_ANSWER") {
-        <app-answer-question-results
-          [gameId]="game.id" [player]="player"
-          [isAnswerCorrectPrompt]="'First Incorrect Answer. You are given a second chance'"
-          [explanations]="game.currentAnswer.explanations"
-          [buttonText]="'draw 2nd question'"
-        />
-      } @else if (player.state == "WAITING_TO_VALIDATE_SECOND_INCORRECT_ANSWER") {
-        <app-answer-question-results
-          [gameId]="game.id" [player]="player"
-          [isAnswerCorrectPrompt]="'Second Incorrect Answer. You are sent to the penalty box.'"
-          [explanations]="game.currentAnswer.explanations"
-        />
-
-      } @else if (player.state == "WAITING_TO_VALIDATE_FIRST_CORRECT_ANSWER" || player.state == "WAITING_TO_VALIDATE_SECOND_CORRECT_ANSWER") {
-        <app-answer-question-results
-          [gameId]="game.id" [player]="player"
-          [isAnswerCorrectPrompt]="'Correct Answer'"
-          [explanations]="game.currentAnswer.explanations"
-        />
-      } @else {
-        <p>Error: Unknown Player state: {{ player.state }}</p>
-      }
-    </div>
+    <app-answer-question [player]="player" [game]="game" [question]="game.currentQuestion!"/>
+    <app-answer-question-results-wrapper [gameId]="gameId" [player]="player" [explanations]="game.currentAnswer?.explanations"/>
   </div>
 
   <hr>

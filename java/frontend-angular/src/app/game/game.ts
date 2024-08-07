@@ -1,6 +1,6 @@
 import {Player} from "../user/player";
-import {AnswerDto, GameResponseDto, QuestionDto, State} from "../openapi-generated";
-import {comparePlayers, playerDtoToPlayer, playerToPlayerDto} from "../common/helpers";
+import {AnswerDto, QuestionDto, State} from "../openapi-generated";
+import {comparePlayers} from "../common/helpers";
 
 export class Game {
   id: number
@@ -29,9 +29,7 @@ export class Game {
               currentCategory?: string,
               currentAnswer?: AnswerDto
   ) {
-    if ((currentRoll != null && currentCategory == null) || (currentRoll == null && currentCategory != null)){
-      throw new Error(`currentRoll: ${currentRoll}, currentCategory: ${currentCategory}`)
-    }
+    this.validateRollAndCategory(currentRoll, currentCategory);
     this.id = id;
     this.name = name;
     this.state = state;
@@ -46,37 +44,9 @@ export class Game {
     this.currentCategory = currentCategory
   }
 
-  static fromDto(dto: GameResponseDto): Game {
-    return new Game(dto.id,
-      dto.name,
-      dto.state,
-      dto.turn,
-      playerDtoToPlayer(dto.creator),
-      playerDtoToPlayer(dto.currentPlayer),
-      dto.players.map(
-        playerDto => playerDtoToPlayer(playerDto)
-      ),
-      dto.winner ? playerDtoToPlayer(dto.winner) : undefined,
-      dto.currentQuestion,
-      dto.currentRoll,
-      dto.currentCategory,
-      dto.currentAnswer
-    )
-  }
-
-  toDto(): GameResponseDto {
-    return {
-      id: this.id,
-      name: this.name,
-      state: this.state,
-      turn: this.turn,
-      creator: playerToPlayerDto(this.creator),
-      currentPlayer: playerToPlayerDto(this.currentPlayer),
-      players: this.players.map(player => playerToPlayerDto(player)),
-      currentQuestion: this.currentQuestion,
-      currentRoll: this.currentRoll,
-      currentCategory: this.currentCategory,
-      currentAnswer: this.currentAnswer
+  private validateRollAndCategory(currentRoll: number | undefined, currentCategory: string | undefined) {
+    if ((currentRoll != null && currentCategory == null) || (currentRoll == null && currentCategory != null)) {
+      throw new Error(`currentRoll: ${currentRoll}, currentCategory: ${currentCategory}`)
     }
   }
 
@@ -99,5 +69,9 @@ export class Game {
 
   public getCurrentStateOf(player: Player): Player {
     return this.players.find(p => p.id === player.id)!
+  }
+
+  public isWinner(player: Player): boolean {
+    return comparePlayers(player, this.winner)
   }
 }

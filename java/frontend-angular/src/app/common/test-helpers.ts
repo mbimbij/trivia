@@ -1,7 +1,8 @@
 import {Observable, of} from "rxjs";
 import {Game} from "../game/game";
-import {playerDtoToPlayer, userToPlayer} from "./helpers";
+import {userToPlayer} from "./helpers";
 import {State} from "../openapi-generated";
+import {Player} from "../user/player";
 
 export function getMockQuestion1() {
   return {
@@ -39,33 +40,26 @@ export function getMockPlayer2() {
 }
 
 export function getMockPlayer3() {
-  return playerDtoToPlayer(
-    {
-      id: "3",
-      name: "player3",
-      coinCount: 1,
-      isInPenaltyBox: false,
-      consecutiveIncorrectAnswersCount: 0,
-      state: "WAITING_FOR_DICE_ROLL",
-      location: 0,
-      gotOutOfPenaltyBox: false
-    }
+  return new Player("id-player-3",
+      "player3",
+      1,
+      State.WaitingForDiceRoll,
+      0,
+      false
+
   );
 }
 
 export function getMockPlayer4() {
-  return playerDtoToPlayer(
-    {
-      id: "4",
-      name: "player4",
-      coinCount: 1,
-      isInPenaltyBox: false,
-      consecutiveIncorrectAnswersCount: 0,
-      state: State.WaitingForDiceRoll,
-      location: 0,
-      gotOutOfPenaltyBox: false
-    }
+  return new Player("id-player-4",
+    "player4",
+    1,
+    State.WaitingForDiceRoll,
+    0,
+    false
+
   );
+
 }
 
 export function getMockGame1() {

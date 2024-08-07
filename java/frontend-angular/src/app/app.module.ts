@@ -23,7 +23,7 @@ import {AuthenticationServiceAbstract} from "./services/authentication-service.a
 import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
 import {FirebaseUserService} from "./adapters/user/firebase-user.service";
 import {UserServiceAbstract} from "./services/user-service.abstract";
-import {NavbarComponent} from "./game/navbar/navbar.component";
+import {NavbarComponent} from "./common/navbar/navbar.component";
 
 @NgModule({
   declarations: [
