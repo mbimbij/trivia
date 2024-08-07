@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
+import {Identifiable} from "../../../common/identifiable";
 
 @Component({
   selector: 'app-draw-question',
@@ -14,10 +15,11 @@ import {GameServiceAbstract} from "../../../services/game-service-abstract";
   `,
   styleUrl: './draw-question.component.css'
 })
-export class DrawQuestionComponent {
+export class DrawQuestionComponent extends Identifiable {
   @Input() gameId!: number;
   @Input() playerId!: string;
 
   constructor(protected gameService: GameServiceAbstract) {
+    super()
   }
 }

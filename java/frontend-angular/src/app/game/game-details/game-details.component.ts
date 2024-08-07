@@ -12,6 +12,7 @@ import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-game',
@@ -31,17 +32,16 @@ import {ErrorDisplayComponent} from "../error-display/error-display.component";
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css'
 })
-export class GameDetailsComponent implements OnDestroy{
+export class GameDetailsComponent extends Identifiable implements OnDestroy{
   gameId!: number;
   game$!: Observable<Game>;
-  private readonly id: string;
   private routeParamsSubscription?: Subscription;
   gameLoadingError$= new Subject<HttpErrorResponse>();
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
               private gameService: GameServiceAbstract) {
-    this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
+    super()
     // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);

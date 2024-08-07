@@ -6,6 +6,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {User} from "../../user/user";
 import {Observable, Subscription} from "rxjs";
 import {Game} from "../game";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-goto-game-button',
@@ -25,7 +26,7 @@ import {Game} from "../game";
   `,
   styleUrl: './goto-game-button.component.css'
 })
-export class GotoGameButtonComponent implements OnDestroy {
+export class GotoGameButtonComponent extends Identifiable implements OnDestroy {
   @Input() game!: Game
   private user!: User;
   private user$: Observable<User>;
@@ -33,6 +34,7 @@ export class GotoGameButtonComponent implements OnDestroy {
 
   constructor(protected router: Router,
               private userService: UserServiceAbstract) {
+    super()
     this.user$ = userService.getUser();
     this.subscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }

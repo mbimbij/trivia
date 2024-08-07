@@ -5,6 +5,7 @@ import {Nobody, User} from "../../user/user";
 
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable, Subscription} from "rxjs";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-create-game',
@@ -27,7 +28,7 @@ import {Observable, Subscription} from "rxjs";
   `,
   styleUrl: './create-game.component.css'
 })
-export class CreateGameComponent implements OnDestroy{
+export class CreateGameComponent extends Identifiable implements OnDestroy{
   private user: User = Nobody.instance;
   private user$: Observable<User>;
   private userSubscription: Subscription;
@@ -35,6 +36,7 @@ export class CreateGameComponent implements OnDestroy{
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
+    super()
     this.user$ = userService.getUser();
     this.userSubscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }

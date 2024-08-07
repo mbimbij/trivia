@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} fro
 import {Player} from "../../../user/player";
 import {State} from "../../../openapi-generated";
 import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
+import {Identifiable} from "../../../common/identifiable";
 
 @Component({
   selector: 'app-answer-question-results-wrapper',
@@ -13,7 +14,7 @@ import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-q
   styleUrl: './answer-question-results-wrapper.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionResultsWrapperComponent implements OnChanges{
+export class AnswerQuestionResultsWrapperComponent extends Identifiable implements OnChanges{
   @Input() gameId!: number;
   @Input() player!: Player;
   @Input() explanations: string | undefined;
