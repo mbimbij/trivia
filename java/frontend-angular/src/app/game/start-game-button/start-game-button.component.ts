@@ -15,6 +15,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Game} from "../game";
 import {combineLatest, Subscription} from "rxjs";
 import {State} from "../../openapi-generated";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   standalone: true,
@@ -30,18 +31,17 @@ import {State} from "../../openapi-generated";
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartGameButtonComponent implements OnDestroy {
+export class StartGameButtonComponent extends Identifiable implements OnDestroy {
 
   @Input() game!: Game
   protected user!: User;
   protected canStartGameAttr: boolean = false
-  private readonly id: string;
 
   constructor(private service: GameServiceAbstract,
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract,
               private cdr: ChangeDetectorRef)  {
-    this.id = generateRandomString(4);
+    super()
     // console.log(`constructor ${this.constructor.name} - ${this.id} called`)
   }
 

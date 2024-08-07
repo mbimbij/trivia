@@ -25,6 +25,7 @@ import {
 import {
   AnswerQuestionResultsWrapperComponent
 } from "./answer-question-results-wrapper/answer-question-results-wrapper.component";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-game',
@@ -47,8 +48,7 @@ import {
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
-  private readonly id: string;
+export class GameComponent extends Identifiable implements OnDestroy, OnInit, AfterViewChecked {
   protected player!: Player;
   protected gameId!: number;
   game$!: Observable<Game>
@@ -63,7 +63,7 @@ export class GameComponent implements OnDestroy, OnInit, AfterViewChecked {
               protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract) {
-    this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
+    super()
     // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);

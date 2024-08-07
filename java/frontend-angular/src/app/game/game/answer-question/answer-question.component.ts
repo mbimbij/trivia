@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {AnswerCode, QuestionDto} from "../../../openapi-generated";
 import {Game} from "../../game";
 import {Player} from "../../../user/player";
@@ -6,6 +6,7 @@ import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 import {AnswerQuestionResultsComponent} from "../answer-question-results-wrapper/answer-question-results/answer-question-results.component";
+import {Identifiable} from "../../../common/identifiable";
 
 @Component({
   selector: 'app-answer-question',
@@ -19,7 +20,7 @@ import {AnswerQuestionResultsComponent} from "../answer-question-results-wrapper
   styleUrl: './answer-question.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionComponent {
+export class AnswerQuestionComponent extends Identifiable implements OnChanges{
   @Input() question!: QuestionDto
   @Input() game!: Game;
   @Input() player!: Player;
@@ -27,6 +28,7 @@ export class AnswerQuestionComponent {
 
   constructor(private gameService: GameServiceAbstract,
               private cdr: ChangeDetectorRef) {
+    super()
   }
 
   ngOnChanges(changes: SimpleChanges): void {

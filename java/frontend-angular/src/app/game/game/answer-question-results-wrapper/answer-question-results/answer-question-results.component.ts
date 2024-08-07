@@ -10,6 +10,7 @@ import {
 import {ValidationButtonComponent} from "../../validation-button/validation-button.component";
 import {Player} from "../../../../user/player";
 import {NgIf} from "@angular/common";
+import {Identifiable} from "../../../../common/identifiable";
 
 @Component({
   selector: 'app-answer-question-results',
@@ -34,7 +35,7 @@ import {NgIf} from "@angular/common";
   styleUrl: './answer-question-results.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionResultsComponent{
+export class AnswerQuestionResultsComponent extends Identifiable{
   @Input() gameId!: number;
   @Input() playerId!: string;
   @Input() isAnswerCorrectPrompt!: string;

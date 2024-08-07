@@ -3,6 +3,7 @@ import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {DrawQuestionComponent} from "../draw-question/draw-question.component";
 import {NgIf} from "@angular/common";
+import {Identifiable} from "../../../common/identifiable";
 
 @Component({
   selector: 'app-roll-dice-results-outside-penalty-box',
@@ -14,7 +15,7 @@ import {NgIf} from "@angular/common";
   templateUrl: './roll-dice-results-outside-penalty-box.component.html',
   styleUrl: './roll-dice-results-outside-penalty-box.component.css'
 })
-export class RollDiceResultsOutsidePenaltyBoxComponent implements OnChanges{
+export class RollDiceResultsOutsidePenaltyBoxComponent extends Identifiable implements OnChanges{
   @Input() game!: Game;
   @Input() player!: Player;
   canShowComponent: boolean | undefined;

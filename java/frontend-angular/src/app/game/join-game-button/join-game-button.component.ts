@@ -6,6 +6,7 @@ import {Observable, Subscription} from "rxjs";
 import {Game} from '../game';
 import {compareUserAndPlayer} from "../../common/helpers";
 import {State} from "../../openapi-generated";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-join-game-button',
@@ -25,7 +26,7 @@ import {State} from "../../openapi-generated";
   `,
   styleUrl: './join-game-button.component.css'
 })
-export class JoinGameButtonComponent implements OnDestroy {
+export class JoinGameButtonComponent extends Identifiable implements OnDestroy {
 
   @Input() game!: Game
   protected user: User = Nobody.instance;
@@ -35,6 +36,7 @@ export class JoinGameButtonComponent implements OnDestroy {
 
   constructor(private gameService: GameServiceAbstract,
               private userService: UserServiceAbstract) {
+    super()
     this.user$ = userService.getUser();
     this.subscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }

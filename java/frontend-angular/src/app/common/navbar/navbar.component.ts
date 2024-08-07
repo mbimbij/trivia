@@ -9,6 +9,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {Router} from "@angular/router";
+import {Identifiable} from "../identifiable";
 
 @Component({
   selector: 'app-navbar',
@@ -20,11 +21,11 @@ import {Router} from "@angular/router";
   styleUrl: './navbar.component.css'
 })
 
-export class NavbarComponent {
+export class NavbarComponent extends Identifiable {
   user$: Observable<User>;
 
-  constructor(private userService: UserServiceAbstract,
-  protected router: Router) {
+  constructor(private userService: UserServiceAbstract, protected router: Router) {
+    super()
     this.user$ = this.userService.getUser();
   }
 }

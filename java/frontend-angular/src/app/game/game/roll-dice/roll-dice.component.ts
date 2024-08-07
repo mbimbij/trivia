@@ -4,6 +4,7 @@ import {Player} from "../../../user/player";
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Subscription} from "rxjs";
+import {Identifiable} from "../../../common/identifiable";
 
 @Component({
   selector: 'app-roll-dice',
@@ -15,13 +16,14 @@ import {Subscription} from "rxjs";
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceComponent implements OnChanges, OnDestroy {
+export class RollDiceComponent extends Identifiable implements OnChanges, OnDestroy {
   @Input() game!: Game;
   @Input() player!: Player;
   canRollDice: boolean | undefined;
   private subscription?: Subscription;
 
   constructor(protected gameService: GameServiceAbstract) {
+    super()
   }
 
   ngOnDestroy(): void {

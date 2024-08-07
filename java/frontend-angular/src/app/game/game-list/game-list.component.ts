@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
@@ -15,6 +15,7 @@ import {NavbarComponent} from "../../common/navbar/navbar.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 import {Game} from "../game";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-game-list',
@@ -39,14 +40,14 @@ import {Game} from "../game";
   styleUrl: './game-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameListComponent {
+export class GameListComponent extends Identifiable implements OnInit{
   user$!: Observable<User>;
   games$!: Observable<Array<Game>>
 
   constructor(
     protected gameService: GameServiceAbstract,
     protected userService: UserServiceAbstract) {
-    // console.log(`constructor ${this.constructor.name} called`)
+    super()
   }
 
   updateName(name: string) {
@@ -54,7 +55,6 @@ export class GameListComponent {
   }
 
   ngOnInit(): void {
-    // console.log(`ngOnInit ${this.constructor.name} called`)
     this.user$ = this.userService.getUser();
     this.games$ = this.gameService.getGames();
   }

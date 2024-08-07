@@ -3,6 +3,7 @@ import {Player} from "../../../user/player";
 import {Game} from "../../game";
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 import {NgIf} from "@angular/common";
+import {Identifiable} from "../../../common/identifiable";
 
 @Component({
   selector: 'app-roll-dice-results-inside-penalty-box',
@@ -15,7 +16,7 @@ import {NgIf} from "@angular/common";
   styleUrl: './roll-dice-results-inside-penalty-box.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceResultsInsidePenaltyBoxComponent implements OnChanges{
+export class RollDiceResultsInsidePenaltyBoxComponent extends Identifiable implements OnChanges{
   @Input() game!: Game;
   @Input() player!: Player;
   canShowComponent: boolean | undefined;

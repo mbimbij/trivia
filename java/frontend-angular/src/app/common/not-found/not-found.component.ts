@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Identifiable} from "../identifiable";
 
 @Component({
   selector: 'app-not-found',
@@ -9,6 +10,6 @@ import { Component } from '@angular/core';
   `,
   styleUrl: './not-found.component.css'
 })
-export class NotFoundComponent {
+export class NotFoundComponent extends Identifiable {
 
 }
