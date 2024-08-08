@@ -83,6 +83,7 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
+              "watch": true,
               "namedChunks": true,
               "fileReplacements": [
                 {

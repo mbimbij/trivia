@@ -44,12 +44,6 @@ public class Hooks {
                 .isEmpty();
     }
 
-    @AfterAll
-    public static void afterAll() {
-        PlaywrightSingleton.getInstance().close();
-    }
-
-
     @And("error logs are expected in the console")
     public void logsAreExpectedInTheConsole() {
         noErrorLogsExpectedInConsole = false;

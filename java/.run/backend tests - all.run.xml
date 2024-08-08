@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All in backend" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+  <configuration default="false" name="backend tests - all" type="JUnit" factoryName="JUnit">
     <module name="backend" />
     <option name="PACKAGE_NAME" value="" />
     <option name="MAIN_CLASS_NAME" value="" />

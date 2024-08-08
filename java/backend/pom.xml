@@ -13,7 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <it-phase-port>8090</it-phase-port>
+        <server.port>8080</server.port>
     </properties>
 
     <dependencies>
@@ -73,7 +73,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <server.port>${it-phase-port}</server.port>
+                        <server.port>${server.port}</server.port>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
@@ -107,7 +107,7 @@
                 <artifactId>springdoc-openapi-maven-plugin</artifactId>
                 <version>1.4</version>
                 <configuration>
-                    <apiDocsUrl>http://localhost:${it-phase-port}/v3/api-docs.yaml</apiDocsUrl>
+                    <apiDocsUrl>http://localhost:${server.port}/v3/api-docs.yaml</apiDocsUrl>
                     <outputFileName>openapi.yaml</outputFileName>
                     <skip>false</skip>
                 </configuration>

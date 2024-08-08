@@ -57,7 +57,7 @@ Most actions should also have an associated `Makefile` target
 
 Both rely on a properly configured `.env` file
 
-# Frontend dependencies
+## Frontend dependencies
 
 1. dsds
 2. 
@@ -71,7 +71,7 @@ There are several ways to run the application locally, we will refer them as "pr
 
 The most standard way used in day to day development. Although the name refers to "IDE", you can actually run the frontend, the backend or both in this profile using the CLI.
 
-The frontend runs on port 4200 and the backend on port 8080
+The frontend runs on port $PORT_LOCAL_IDE_FRONTEND and the backend on port $PORT_LOCAL_IDE_BACKEND
 
 ![](/java/docs/readme-images/4.1-profile-local-ide.jpg)
 
@@ -104,7 +104,7 @@ You should get an output as follows (here backend started in debug)
 
 ### Access the app via the browser
 
-You can now access the app via the browser. Go to `localhost:4200`:
+You can now access the app via the browser. Go to `localhost:$PORT_LOCAL_IDE_FRONTEND`:
 
 ![](/java/docs/readme-images/1.3-browser.jpg)
 
@@ -120,7 +120,7 @@ The goal of this profile is to have a setup similar to what will be deployed, bu
 
 it is useful for example to verify Angular routes and Spring MVC routes do not step on each other's toes.
 
-The application is accessed via port 8100
+The application is accessed via port $PORT_LOCAL_IDE_EMBEDDED
 
 ![](/java/docs/readme-images/4.2-profile-local-ide-embedded.jpg)
 
@@ -136,7 +136,7 @@ Using the Makefile target `run-backend-local-ide-embedded` or `debug-backend-loc
 
 ### Access the app via the browser
 
-You can now access the app via the browser. Go to `localhost:8100`:
+You can now access the app via the browser. Go to `localhost:$PORT_LOCAL_IDE_EMBEDDED`:
 
 ## Profile "local-docker"
 
@@ -159,7 +159,7 @@ Using the Makefile target `run-docker-local`
 
 ### Access the app via the browser
 
-You can now access the app via the browser. Go to `localhost:8110`:
+You can now access the app via the browser. Go to `localhost:$PORT_LOCAL_DOCKER`:
 
 
 # Run the unit tests

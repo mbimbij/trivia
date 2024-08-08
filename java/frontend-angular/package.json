@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:local-ide-embedded": "ng build -c local-ide-embedded",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

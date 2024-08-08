@@ -4,11 +4,11 @@ target/
 *.dtmp
 *.bkp
 e2e-tests/videos
-**/*.env
+**/.env
 **/creds
 **/test.html
 **/test.http
 backend/src/main/resources/static
 **/SketchTest.java
-toto.json
-toto.txt
+../../../.config/JetBrains/IntelliJIdea2024.2/scratches/toto.json
+../../../.config/JetBrains/IntelliJIdea2024.2/scratches/toto.txt
