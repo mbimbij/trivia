@@ -48,7 +48,7 @@ import {Identifiable} from "../../common/identifiable";
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameComponent extends Identifiable implements OnDestroy, OnInit, AfterViewChecked {
+export class GameComponent extends Identifiable implements OnDestroy, AfterViewChecked {
   protected player!: Player;
   protected gameId!: number;
   game$!: Observable<Game>
@@ -64,7 +64,6 @@ export class GameComponent extends Identifiable implements OnDestroy, OnInit, Af
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract) {
     super()
-    // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
 
@@ -77,17 +76,14 @@ export class GameComponent extends Identifiable implements OnDestroy, OnInit, Af
             let playerFromUser = userToPlayer(user);
             this.player = game.getCurrentStateOf(playerFromUser);
             this.isGameEnded = game.isEnded();
+            this.gameService.initGameLogs(game.id);
+            this.gameLogs$ = this.gameService.getGameLogs(game.id);
           },
           error: err => {
             this.gameLoadingError$.next(err);
           }
         });
     });
-  }
-
-  ngOnInit() {
-    this.gameService.initGameLogs(this.gameId);
-    this.gameLogs$ = this.gameService.getGameLogs(this.gameId);
   }
 
   ngAfterViewChecked() {

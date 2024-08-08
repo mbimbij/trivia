@@ -35,7 +35,7 @@
     <app-roll-dice-results-outside-penalty-box [game]="game" [player]="player"/>
 
     <app-answer-question [player]="player" [game]="game" [question]="game.currentQuestion!"/>
-    <app-answer-question-results-wrapper [gameId]="gameId" [player]="player" [explanations]="game.currentAnswer?.explanations"/>
+    <app-answer-question-results-wrapper [gameId]="game.id" [player]="player" [explanations]="game.currentAnswer?.explanations"/>
   </div>
 
   <hr>

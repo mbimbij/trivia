@@ -170,7 +170,7 @@ public class OngoingGameStepDefs {
     }
 
     @When("{actor} rolls the dice from the backend")
-    public void testUserRollsTheDiceFromTheBackend(Actor actor) {
+    public void actorRollsTheDiceFromTheBackend(Actor actor) {
         backend.rollDice(gameId, actor.getId());
     }
 

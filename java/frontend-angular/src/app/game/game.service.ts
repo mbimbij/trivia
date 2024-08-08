@@ -12,7 +12,7 @@ import {
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
-import {gameDtoToGame, gameToGameDto, userToUserDto} from "../common/helpers";
+import {gameDtoToGame, userToUserDto} from "../common/helpers";
 import {Game} from "./game";
 
 @Injectable({
@@ -23,8 +23,7 @@ export class GameService extends GameServiceAbstract {
   private isGameListInitialized: boolean = false
   private gamesSubjectsMap = new Map<number, ReplaySubject<Game>>()
   private isUpdateHandlerRegistered = new Set<number>()
-  private gameLogsSubjects = new BehaviorSubject<GameLog[]>([])
-  private gameLogs$ = this.gameLogsSubjects.asObservable()
+  private gameLogsSubject = new BehaviorSubject<GameLog[]>([])
   private isGameLogsHandlerRegistered = new Set<number>()
 
   constructor(private openApiService: TriviaControllerService,
@@ -105,7 +104,7 @@ export class GameService extends GameServiceAbstract {
   initGameLogs(gameId: number) {
     this.openApiService.getGameLogs(gameId)
       .subscribe(gameLogs => {
-        this.gameLogsSubjects.next(this.splitLogs(gameLogs));
+        this.gameLogsSubject.next(this.splitLogs(gameLogs));
       })
     this.registerNewGameLogHandler(gameId);
   }
@@ -143,7 +142,7 @@ export class GameService extends GameServiceAbstract {
       .map((m) => {
         return {gameId: 1, value: m} as GameLog;
       });
-    this.gameLogsSubjects.next(this.gameLogsSubjects.value.concat(logsToAdd))
+    this.gameLogsSubject.next(this.gameLogsSubject.value.concat(logsToAdd))
   }
 
   override create(name: string, user: User): Observable<Game> {
@@ -176,7 +175,7 @@ export class GameService extends GameServiceAbstract {
   }
 
   override getGameLogs(gameId: number): Observable<Array<GameLog>> {
-    return this.gameLogs$;
+    return this.gameLogsSubject.asObservable();
   }
 
   registerGameCreatedHandler() {

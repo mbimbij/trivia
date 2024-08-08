@@ -12,7 +12,17 @@ import {Identifiable} from "../../../common/identifiable";
   imports: [
     NgIf,
   ],
-  templateUrl: `roll-dice.component.html`,
+  template: `
+    <div>
+      <button
+        [attr.data-testid]="'roll-dice'"
+        *ngIf="canRollDice || false"
+        (click)="rollDice()"
+      >
+        roll dice
+      </button>
+    </div>
+  `,
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
