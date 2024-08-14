@@ -37,9 +37,9 @@ and a reason to get my hand on Angular and other tools or techniques.
 
 - IntelliJ
 - java (optional if using IJ provided JVM)
-- maven (optional if using IJ provided maven)
-- Node & npm
-- Angular CLI v17
+- node & npm - [Using nvm for example](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
+- Angular CLI v17 - [Installation guide](https://v17.angular.io/cli#installing-angular-cli)
+- openapi-generator-cli - [Installation guide](https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#globally)
 - make (optional if you are not interested in executing actions using Makefile targets)
 
 ## Configure .env file
@@ -59,9 +59,15 @@ Both rely on a properly configured `.env` file
 
 ## Frontend dependencies
 
-1. dsds
-2. 
-2. Generate the openapi stubs with the Makefile target `generate-frontend-stubs-from-openapi`
+- node & npm - [Using nvm for example](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
+- Angular CLI v17 - [Installation guide](https://v17.angular.io/cli#installing-angular-cli)
+- openapi-generator-cli - [Installation guide](https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#globally)
+- Generate the openapi stubs with the Makefile target `generate-frontend-stubs-from-openapi`
+
+## Backend dependencies
+
+- java
+- maven is not necessary as maven wrapper is used in Makefile targets
 
 # Run the app locally
 
