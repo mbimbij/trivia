@@ -3,7 +3,7 @@ include .env
 .PHONY: *
 
 generate-openapi-from-backend:
-	cd backend/ && mvn -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
+	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
 
 generate-frontend-stubs-from-openapi:
 	cd frontend-angular/ && ./generate-from-openapi.sh
@@ -12,13 +12,13 @@ generate-readme:
 	cd .. && envsubst < README.template.md > README.md
 
 build-frontend-local-ide-embedded:
-	cd frontend-angular/ && ng build -c local-ide-embedded
+	cd frontend-angular/ && npm install && ng build -c local-ide-embedded
 
 build-frontend-local-docker:
-	cd frontend-angular/ && ng build -c local-docker
+	cd frontend-angular/ && npm install && ng build -c local-docker
 
 build-backend:
-	cd backend/ && mvn package -Dmaven.test.skip=true
+	./mvnw -pl backend package -Dmaven.test.skip=true
 	java -Djarmode=layertools -jar backend/target/*.jar extract --destination backend/target/extracted
 
 build-docker-local: build-frontend-local-docker build-backend
@@ -28,23 +28,23 @@ unittests-frontend:
 	cd frontend-angular/ && ng test
 
 unittests-backend:
-	cd backend/ && mvn clean verify
+	./mvnw -pl backend clean verify
 
 run-frontend-local-ide:
-	cd frontend-angular/ && ng serve
+	cd frontend-angular/ && npm install && ng serve
 
 run-backend-local-ide:
-	cd backend/ && mvn spring-boot:run
+	APPLICATION_QUESTIONS_PATH=src/main/resources/questions ./mvnw -pl backend spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_BACKEND)
 
 run-backend-local-ide-embedded:
-	cd backend/ && mvn spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_EMBEDDED)
+	APPLICATION_QUESTIONS_PATH=src/main/resources/questions ./mvnw -pl backend spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_EMBEDDED)
 
 run-docker-local:
 	docker run -p $(PORT_LOCAL_DOCKER):$(PORT_LOCAL_DOCKER) -e SPRING_PROFILES_ACTIVE=local-docker cless91/trivia:local
 
 debug-backend-local-ide:
-	mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$(PORT_LOCAL_IDE_DEBUG_BACKEND)"
+	APPLICATION_QUESTIONS_PATH=src/main/resources/questions ./mvnw -pl backend spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$(PORT_LOCAL_IDE_DEBUG_BACKEND)"
 
 debug-backend-local-ide-embedded:
-	cd backend/ && mvn spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_EMBEDDED) \
+	APPLICATION_QUESTIONS_PATH=src/main/resources/questions ./mvnw -pl backend spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_EMBEDDED) \
 -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$(PORT_LOCAL_IDE_EMBEDDED_DEBUG_BACKEND)"
