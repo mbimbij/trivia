@@ -12,3 +12,7 @@ backend/src/main/resources/static
 **/SketchTest.java
 ../../../.config/JetBrains/IntelliJIdea2024.2/scratches/toto.json
 ../../../.config/JetBrains/IntelliJIdea2024.2/scratches/toto.txt
+**/environment.local-docker.ts
+**/environment.local-ide.ts
+**/environment.local-ide-embedded.ts
+**/environment.production.ts

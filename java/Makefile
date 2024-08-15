@@ -1,9 +1,15 @@
 include .env
-#SHELL := /bin/bash
+SHELL := /bin/bash
 .PHONY: *
 
 generate-openapi-from-backend:
 	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
+
+generate-frontend-environment-files:
+	envsubst < frontend-angular/src/environments/environment.local-ide.template.ts > frontend-angular/src/environments/environment.local-ide.ts
+	envsubst < frontend-angular/src/environments/environment.local-ide-embedded.template.ts > frontend-angular/src/environments/environment.local-ide-embedded.ts
+	envsubst < frontend-angular/src/environments/environment.local-docker.template.ts > frontend-angular/src/environments/environment.local-docker.ts
+	envsubst < frontend-angular/src/environments/environment.production.template.ts > frontend-angular/src/environments/environment.production.ts
 
 generate-frontend-stubs-from-openapi:
 	cd frontend-angular/ && ./generate-from-openapi.sh
@@ -11,10 +17,10 @@ generate-frontend-stubs-from-openapi:
 generate-readme:
 	cd .. && envsubst < README.template.md > README.md
 
-build-frontend-local-ide-embedded:
+build-frontend-local-ide-embedded: generate-frontend-environment-files
 	cd frontend-angular/ && npm install && ng build -c local-ide-embedded
 
-build-frontend-local-docker:
+build-frontend-local-docker: generate-frontend-environment-files
 	cd frontend-angular/ && npm install && ng build -c local-docker
 
 build-backend:
@@ -24,13 +30,13 @@ build-backend:
 build-docker-local: build-frontend-local-docker build-backend
 	docker build -f pipeline.Dockerfile -t cless91/trivia:local .
 
-unittests-frontend:
+unittests-frontend: generate-frontend-environment-files
 	cd frontend-angular/ && ng test
 
 unittests-backend:
 	./mvnw -pl backend clean verify
 
-run-frontend-local-ide:
+run-frontend-local-ide: generate-frontend-environment-files
 	cd frontend-angular/ && npm install && ng serve
 
 run-backend-local-ide:
