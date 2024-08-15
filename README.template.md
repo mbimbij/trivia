@@ -36,7 +36,7 @@ and a reason to get my hand on Angular and other tools or techniques.
 ## Tools
 
 - IntelliJ
-- java (optional if using IJ provided JVM)
+- java 21 (optional if using IJ provided JVM)
 - node & npm - [Using nvm for example](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
 - Angular CLI v17 - [Installation guide](https://v17.angular.io/cli#installing-angular-cli)
 - openapi-generator-cli - [Installation guide](https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#globally)
@@ -66,7 +66,7 @@ Both rely on a properly configured `.env` file
 
 ## Backend dependencies
 
-- java
+- java 21
 - maven is not necessary as maven wrapper is used in Makefile targets
 
 # Run the app locally
