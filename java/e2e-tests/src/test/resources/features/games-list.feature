@@ -1,7 +1,7 @@
 Feature: List games
 
   Background:
-    Given previous test data cleared
+    And previous test data cleared
     And 2 existing games
     And qa-user on the game-list page
 

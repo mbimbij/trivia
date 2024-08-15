@@ -1,7 +1,7 @@
 Feature: On-Going Game Page
 
   Background:
-    Given previous test data cleared
+    And previous test data cleared
     And 2 existing games
     And current game is "test-game-2"
     And current game question deck has been replaced with a test one

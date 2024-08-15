@@ -10,6 +10,7 @@ import {
 import {loginActivateGuard} from "./authentication/authentication-guard/login-activate.guard";
 import {emailVerifiedGuard} from "./authentication/authentication-guard/email-verified.guard";
 import { NotFoundComponent } from './common/not-found/not-found.component';
+import {HealthComponent} from "./health/health.component";
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
     canActivate: [loginActivateGuard]
   },
   {path: 'not-found', component: NotFoundComponent},
+  {path: 'health', component: HealthComponent},
   {path: '**', redirectTo: '/not-found'}
 ]
 
