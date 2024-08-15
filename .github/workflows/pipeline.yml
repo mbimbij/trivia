@@ -33,6 +33,13 @@ jobs:
       - name: install Angular CLI
         working-directory: java/frontend-angular
         run: npm i -g @angular/cli@17.3.8
+      - name: generate frontend environment file - production
+        working-directory: java
+        run: |
+          make generate-frontend-environment-file-production
+        env:
+          HOSTNAME_PROD: ${{ vars.HOSTNAME_PROD }}
+          FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
       - name: build frontend
         working-directory: java/frontend-angular
         run: |
@@ -50,7 +57,8 @@ jobs:
       - name: Build, tag, and push Docker image
         working-directory: java
         run: |
-          java -Djarmode=layertools -jar backend/target/*.jar extract --destination backend/target/extracted
+          artifactName=$(echo '${project.artifactId}-${project.version}.jar' | mvn -pl backend -q -DforceStdout help:evaluate)
+          java -Djarmode=layertools -jar backend/target/$artifactName extract --destination backend/target/extracted
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} . --file pipeline.Dockerfile
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}
       - name: Deploy new revision

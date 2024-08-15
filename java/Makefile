@@ -1,15 +1,17 @@
-include .env
+-include .env
 SHELL := /bin/bash
 .PHONY: *
 
 generate-openapi-from-backend:
 	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
 
+generate-frontend-environment-file-production:
+	envsubst < frontend-angular/src/environments/environment.production.template.ts > frontend-angular/src/environments/environment.production.ts
+
 generate-frontend-environment-files:
 	envsubst < frontend-angular/src/environments/environment.local-ide.template.ts > frontend-angular/src/environments/environment.local-ide.ts
 	envsubst < frontend-angular/src/environments/environment.local-ide-embedded.template.ts > frontend-angular/src/environments/environment.local-ide-embedded.ts
 	envsubst < frontend-angular/src/environments/environment.local-docker.template.ts > frontend-angular/src/environments/environment.local-docker.ts
-	envsubst < frontend-angular/src/environments/environment.production.template.ts > frontend-angular/src/environments/environment.production.ts
 
 generate-frontend-stubs-from-openapi:
 	cd frontend-angular/ && ./generate-from-openapi.sh
