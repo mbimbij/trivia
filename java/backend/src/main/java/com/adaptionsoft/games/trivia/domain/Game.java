@@ -123,7 +123,7 @@ public class Game extends Entity<GameId> {
 
         stateManager.applyAction(START);
 
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
     }
 
     private void shufflePlayers() {
@@ -151,7 +151,7 @@ public class Game extends Entity<GameId> {
 
         currentCategory = QuestionsDeck.Category.getQuestionCategory(currentPlayer.getLocation());
 
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
     }
 
     private void validateGameStartedForPlayerAction(PlayerAction playerAction) {
@@ -170,7 +170,7 @@ public class Game extends Entity<GameId> {
         this.currentQuestion = questionsDeck.drawQuestion(player.getLocation());
         player.applyAction(DRAW_QUESTION);
         raise(new QuestionAskedToPlayerEvent(player, currentQuestion.questionText()));
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
     }
 
     public Answer answerCurrentQuestion(Player player, AnswerCode answerCode) {
@@ -190,7 +190,7 @@ public class Game extends Entity<GameId> {
         } else {
             currentPlayer.answerIncorrectly();
         }
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
         currentAnswer = new Answer(isAnswerCorrect, currentQuestion.explanations());
         return currentAnswer;
     }
@@ -266,7 +266,7 @@ public class Game extends Entity<GameId> {
                     throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
         }
 
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
     }
 
     private void updateCurrentPlayerLocation() {

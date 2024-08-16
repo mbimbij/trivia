@@ -4,7 +4,6 @@ import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -17,9 +16,8 @@ public class MockEventPublisher extends ObserverBasedEventPublisher implements E
     }
 
     @Override
-    public void flush(Collection<Event> events) {
-        super.flush(events);
-        this.publishedEvents.addAll(events);
+    public void flush() {
+        publishedEvents.addAll(uncommittedEvents);
+        super.flush();
     }
-
 }

@@ -46,7 +46,7 @@ public class GameFactory {
         );
 
         eventPublisher.raise(new GameCreatedEvent(game.getId()));
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
         return game;
     }
 }
