@@ -91,15 +91,13 @@ public class TriviaController {
     @Setter
     private Function<Integer, GameResponseDto> getByIdImplementation = this::getByIdDefaultImplementation;
 
-    @GetMapping
-    @RequestMapping("/{gameId}/logs")
+    @GetMapping("/{gameId}/logs")
     public Collection<GameLog> getGameLogs(@PathVariable("gameId") int gameIdInt) {
         return gameLogsRepository.getLogsForGame(new GameId(gameIdInt));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{gameId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @RequestMapping("/{gameId}")
     public void deleteGameById(@PathVariable("gameId") int gameIdInt) {
         GameId gameId = new GameId(gameIdInt);
         gameRepository.deleteGameById(gameId);
@@ -110,9 +108,8 @@ public class TriviaController {
         template.convertAndSend("/topic/games/deleted", gameId.getValue());
     }
 
-    @DeleteMapping
+    @DeleteMapping("/tests")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @RequestMapping("/tests")
     public void deleteTestGames() {
         List<Game> gamesToDelete = gameRepository.list()
                 .stream()

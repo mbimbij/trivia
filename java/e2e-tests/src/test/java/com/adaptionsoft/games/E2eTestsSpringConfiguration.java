@@ -72,6 +72,11 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
+    public HealthPage healthPage(TestProperties testProperties, Page page) {
+        return new HealthPage(testProperties.getFrontendUrlBase(), page);
+    }
+
+    @Bean
     public GameRowActions gameRowActions(Page page) {
         return new GameRowActions(page);
     }
@@ -101,16 +106,6 @@ public class E2eTestsSpringConfiguration {
         converter.setObjectMapper(mapper.registerModule(stateDeserializer));
         restTemplate.getMessageConverters().add(0, converter);
         return restTemplate;
-
-//        RestTemplate restTemplate = new RestTemplate();
-//        MappingJackson2HttpMessageConverter httpMessageConverter = (MappingJackson2HttpMessageConverter) restTemplate
-//                .getMessageConverters()
-//                .stream()
-//                .filter(m -> m instanceof MappingJackson2HttpMessageConverter)
-//                .findFirst()
-//                .orElseThrow();
-//        httpMessageConverter.getObjectMapper().registerModule(stateDeserializer);
-//        return restTemplate;
     }
     
     @Bean

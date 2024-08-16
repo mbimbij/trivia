@@ -8,7 +8,6 @@ import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -33,6 +32,7 @@ public class CommonStepDefs {
     private final AuthenticationPage authenticationPage;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameDetailsPage;
+    private final HealthPage healthPage;
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;
@@ -53,12 +53,12 @@ public class CommonStepDefs {
     @SneakyThrows
     @Given("{actor} on the game-list page")
     public void logged_in_test_user_on_game_list_page(Actor qaActor) {
-        if(!qaActor.isLoggedIn()){
+        if (!qaActor.isLoggedIn()) {
             authenticationPage.loginViaEmailAndPassword(testProperties.getQaUserEmail(), testProperties.getQaUserPassword());
             qaActor.setLoggedIn(true);
             // TODO find a better way to wait for websocket connection for game state update
             Thread.sleep(1000);
-        }else {
+        } else {
             gamesListPage.navigateTo();
         }
     }
@@ -114,4 +114,5 @@ public class CommonStepDefs {
     public void anExceptionIsThrownWhenCallingGetGameById() {
         janitor.throwExceptionWhenCallGetGameById();
     }
+
 }

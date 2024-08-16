@@ -4,7 +4,7 @@
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/.env" />
     </option>
-    <option name="FILE_PATH" value="$PROJECT_DIR$/e2e-tests" />
+    <option name="FILE_PATH" value="$PROJECT_DIR$/e2e-tests/src/test/resources/features" />
     <option name="GLUE" value="com.adaptionsoft.games" />
     <option name="MAIN_CLASS_NAME" value="io.cucumber.core.cli.Main" />
     <module name="e2e-tests" />

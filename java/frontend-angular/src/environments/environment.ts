@@ -1,7 +1,7 @@
 export const environment = {
-  backendUrl: `http://localhost:8080`,
-  backendWebSocketUrl: `ws://localhost:8080/ws/gs-guide-websocket`,
+  backendUrl: "replace_me",
+  backendWebSocketUrl: "replace_me",
   firebaseConfig: {
-    apiKey: 'AIzaSyBgVgToHnITb86RRrQYX7-s2vWJoa3IDEw',
+    apiKey: "replace_me",
   }
 };

@@ -25,6 +25,7 @@ public class Janitor {
     private final ObjectMapper mapper = new ObjectMapper();
     private final String backendUrlBase;
     private final TestContext testContext;
+    private boolean backendIsUpVerified = false;
 
     public void setLoadedDiceForGame(int gameId, int number) {
         restTemplate.put(
@@ -98,5 +99,20 @@ public class Janitor {
         restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/playersShuffle/disable",
                 null,
                 gameId);
+    }
+
+    public void verifyBackendIsUp() {
+        if (!backendIsUpVerified) {
+            try {
+                ResponseEntity<Map> responseEntity = restTemplate.getForEntity(backendUrlBase + "/actuator/health", Map.class);
+                assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+            } catch (Exception e) {
+                System.err.println("************************************");
+                System.err.println("Backend is not up. Ending tests");
+                System.err.println("************************************");
+                System.exit(-1);
+            }
+            backendIsUpVerified = true;
+        }
     }
 }

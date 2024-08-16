@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="TriviaApplication - local-ide" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="backend - local-ide" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="backend" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.adaptionsoft.games.trivia.TriviaApplication" />

@@ -1,2 +1,2 @@
-test.frontend-url-base: http://localhost:8110
-test.backend-url-base: http://localhost:8110/api
+test.frontend-url-base: http://localhost:${PORT_LOCAL_DOCKER}
+test.backend-url-base: http://localhost:${PORT_LOCAL_DOCKER}/api

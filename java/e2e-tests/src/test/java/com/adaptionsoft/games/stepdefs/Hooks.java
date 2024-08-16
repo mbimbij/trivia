@@ -2,6 +2,7 @@ package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.pageObjects.Console;
+import com.adaptionsoft.games.domain.pageObjects.HealthPage;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
@@ -17,11 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Hooks {
 
     private final Janitor janitor;
+    private final HealthPage healthPage;
     private final Console console;
     private boolean noErrorLogsExpectedInConsole;
 
     @Before
     public void setUp() {
+        janitor.verifyBackendIsUp();
+        healthPage.verifyFrontendIsUp();
         console.clearLogs();
         noErrorLogsExpectedInConsole = true;
         janitor.resetGetGameByIdMethodBehaviour();
@@ -43,12 +47,6 @@ public class Hooks {
                 .withFailMessage(() -> failMessage)
                 .isEmpty();
     }
-
-    @AfterAll
-    public static void afterAll() {
-        PlaywrightSingleton.getInstance().close();
-    }
-
 
     @And("error logs are expected in the console")
     public void logsAreExpectedInTheConsole() {
