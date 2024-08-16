@@ -8,10 +8,12 @@ generate-openapi-from-backend:
 generate-frontend-environment-file-production:
 	envsubst < frontend-angular/src/environments/environment.production.template.ts > frontend-angular/src/environments/environment.production.ts
 
-generate-frontend-environment-files:
+generate-frontend-environment-files-local:
 	envsubst < frontend-angular/src/environments/environment.local-ide.template.ts > frontend-angular/src/environments/environment.local-ide.ts
 	envsubst < frontend-angular/src/environments/environment.local-ide-embedded.template.ts > frontend-angular/src/environments/environment.local-ide-embedded.ts
 	envsubst < frontend-angular/src/environments/environment.local-docker.template.ts > frontend-angular/src/environments/environment.local-docker.ts
+
+generate-frontend-environment-files: generate-frontend-environment-files-local generate-frontend-environment-file-production
 
 generate-frontend-stubs-from-openapi:
 	cd frontend-angular/ && ./generate-from-openapi.sh
