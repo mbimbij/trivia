@@ -241,13 +241,24 @@ public class Game extends Entity<GameId> {
         validateGameStartedForPlayerAction(VALIDATE);
         validateCurrentPlayer(player);
         currentPlayer.validateAction(VALIDATE);
-        currentPlayer.applyAction(VALIDATE);
         currentAnswer = null;
 
         switch (currentPlayer.getState()) {
-            case PlayerState.WAITING_TO_END_TURN_OR_GAME, PlayerState.IN_PENALTY_BOX -> endTurnOrGame();
-            case PlayerState.WAITING_TO_DRAW_2ND_QUESTION -> drawQuestion(currentPlayer);
-            case PlayerState.WAITING_TO_UPDATE_LOCATION -> updateCurrentPlayerLocation();
+            case PlayerState.WAITING_TO_VALIDATE_FIRST_CORRECT_ANSWER,
+                 PlayerState.WAITING_TO_VALIDATE_SECOND_CORRECT_ANSWER,
+                 PlayerState.WAITING_TO_VALIDATE_SECOND_INCORRECT_ANSWER,
+                 PlayerState.WAITING_TO_VALIDATE_ODD_DICE_ROLL_FROM_PENALTY_BOX-> {
+                currentPlayer.applyAction(VALIDATE);
+                endTurnOrGame();
+            }
+            case PlayerState.WAITING_TO_VALIDATE_FIRST_INCORRECT_ANSWER -> {
+                currentPlayer.applyAction(VALIDATE);
+                drawQuestion(currentPlayer);
+            }
+            case PlayerState.WAITING_TO_VALIDATE_EVEN_DICE_ROLL_FROM_PENALTY_BOX -> {
+                currentPlayer.applyAction(VALIDATE);
+                updateCurrentPlayerLocation();
+            }
             default ->
                     throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
         }
