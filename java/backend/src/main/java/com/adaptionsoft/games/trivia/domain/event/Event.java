@@ -18,11 +18,10 @@ public abstract class Event {
      */
     private static final AtomicInteger eventCounter = new AtomicInteger(0);
 
+    // TODO à retirer. La manière dont l'event est affiché n'est pas de sa responsabilité
     protected final String stringValue;
     @EqualsAndHashCode.Exclude
     protected final int orderNumber;
-    // TODO remove the setter after the refacto R-1
-    @Setter
     protected GameId gameId;
 
     protected Event(GameId gameId, String stringValue) {

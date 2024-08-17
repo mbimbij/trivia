@@ -35,15 +35,6 @@ public class Players extends EventRaiser {
         raise(new PlayerAddedEvent(creator, this.individualPlayers.size(), creator.getTurn()));
     }
 
-    public void validateOnCreation() {
-        if (individualPlayers.isEmpty() || individualPlayers.size() > MAX_PLAYER_COUNT) {
-            throw InvalidNumberOfPlayersException.onCreation(individualPlayers.size());
-        }
-        if (findDuplicatesAtCreationTime(individualPlayers)) {
-            throw DuplicatePlayerNameException.onCreation(individualPlayers);
-        }
-    }
-
     public void add(Player newPlayer) {
         if (individualPlayers.contains(newPlayer)) {
             throw new PlayerAlreadyJoinedException(newPlayer);
@@ -56,11 +47,6 @@ public class Players extends EventRaiser {
         }
         individualPlayers.add(newPlayer);
         raise(new PlayerAddedEvent(newPlayer, this.individualPlayers.size(), newPlayer.getTurn()));
-    }
-
-    private boolean findDuplicatesAtCreationTime(List<Player> players) {
-        String[] playersNames = players.stream().map(Player::getName).toArray(String[]::new);
-        return findDuplicates(playersNames);
     }
 
     private boolean isNameDuplicate(Player newPlayer) {

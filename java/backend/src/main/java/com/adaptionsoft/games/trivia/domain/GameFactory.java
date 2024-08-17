@@ -28,6 +28,7 @@ public class GameFactory {
             player.setGameId(gameId);
         });
 
+        // TODO: récupérer depuis des properties ?
         int squaresCount = 12;
         Board board = new Board(squaresCount);
 

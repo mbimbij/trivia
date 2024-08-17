@@ -5,7 +5,6 @@ import com.adaptionsoft.games.trivia.domain.exception.CannotAnswerQuestionBefore
 import com.adaptionsoft.games.trivia.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.domain.exception.StartException;
 import com.adaptionsoft.games.trivia.domain.statemachine.CannotExecuteAction;
-import com.adaptionsoft.games.trivia.domain.statemachine.State;
 import com.adaptionsoft.games.trivia.domain.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.domain.statemachine.Transition;
 import com.adaptionsoft.games.trivia.microarchitecture.Entity;
@@ -55,10 +54,6 @@ public class Game extends Entity<GameId> {
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         this.players.setCurrent(currentPlayer);
-    }
-
-    public State getCurrentPlayerState() {
-        return currentPlayer.getState();
     }
 
     public Game(GameId gameId,
@@ -118,11 +113,10 @@ public class Game extends Entity<GameId> {
         turn = 1;
         questionsDeck.shuffle();
         shufflePlayers();
-        raise(new GameStartedEvent(id),
-                new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
+        raise(new GameStartedEvent(id));
+        currentPlayer.startTurn();
 
         stateManager.applyAction(START);
-
         eventPublisher.flush();
     }
 
@@ -210,14 +204,10 @@ public class Game extends Entity<GameId> {
         }
     }
 
-    private void displayCurrentPlayerIfGameNotEnded() {
-        if (state != ENDED) {
-            raise(new PlayerTurnStartedEvent(currentPlayer, currentPlayer.getTurn()));
-        }
-    }
-
     private void endGameIfCurrentPlayerWon() {
         if (currentPlayer.isWinning()) {
+            stateManager.validateAction(END_GAME);
+            currentPlayer.validateAction(PlayerAction.END_GAME);
             isGameInProgress = false;
             state = ENDED;
             winner = currentPlayer;
@@ -231,7 +221,7 @@ public class Game extends Entity<GameId> {
         }
     }
 
-    private void endTurn() {
+    private void endCurrentPlayerTurn() {
         currentPlayer.setGotOutOfPenaltyBox(false);
         currentPlayer.applyAction(PlayerAction.END_TURN);
         stateManager.applyAction(GameAction.END_TURN);
@@ -240,9 +230,6 @@ public class Game extends Entity<GameId> {
         currentCategory = null;
         currentAnswer = null;
         turn++;
-        players.goToNextPlayerTurn();
-        currentPlayer = players.getCurrent();
-        displayCurrentPlayerIfGameNotEnded();
     }
 
     public void setState(GameState gameState) {
@@ -258,9 +245,8 @@ public class Game extends Entity<GameId> {
         currentAnswer = null;
 
         switch (currentPlayer.getState()) {
-            case PlayerState.WAITING_TO_END_TURN_OR_GAME -> endTurnOrGame();
+            case PlayerState.WAITING_TO_END_TURN_OR_GAME, PlayerState.IN_PENALTY_BOX -> endTurnOrGame();
             case PlayerState.WAITING_TO_DRAW_2ND_QUESTION -> drawQuestion(currentPlayer);
-            case PlayerState.IN_PENALTY_BOX -> endTurn();
             case PlayerState.WAITING_TO_UPDATE_LOCATION -> updateCurrentPlayerLocation();
             default ->
                     throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
@@ -277,8 +263,15 @@ public class Game extends Entity<GameId> {
     private void endTurnOrGame() {
         endGameIfCurrentPlayerWon();
         if (isGameInProgress) {
-            endTurn();
+            endCurrentPlayerTurn();
+            goToNextPlayer();
+            currentPlayer.startTurn();
         }
+    }
+
+    private void goToNextPlayer() {
+        players.goToNextPlayerTurn();
+        currentPlayer = players.getCurrent();
     }
 
     public void setQuestionsShuffler(QuestionsShuffler shuffler) {
