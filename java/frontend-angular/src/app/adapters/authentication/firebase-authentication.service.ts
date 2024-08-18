@@ -19,7 +19,7 @@ export class FirebaseAuthenticationService extends AuthenticationServiceAbstract
     this.afAuth.onAuthStateChanged(user => {
       this.loggedIn = user !== null;
       this.emailVerified = this.isEmailVerifiedInner(user);
-    })
+    }).then(() => {})
   }
 
   ngOnDestroy(): void {
