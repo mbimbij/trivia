@@ -1,19 +1,22 @@
-<h1 style="text-align: center">Welcome to Trivia Web !</h1>
 <div>
-  <firebase-ui
-    *ngIf="!authenticationService.loggedIn"
-    (signInSuccessWithAuthResult)="successCallback($event)"
-    (signInFailure)="errorCallback($event)"
-    (uiShown)="uiShownCallback()"
-  />
-  <button
-    style="display: block; margin: auto"
-    (click)="router.navigate(['/games'])"
-    *ngIf="authenticationService.loggedIn"
-  >back to games</button>
-  <button
-    style="display: block; margin: auto"
-    (click)="authenticationService.logout();"
-    *ngIf="authenticationService.loggedIn"
-  >Logout</button>
+  @if (!authenticationService.loggedIn) {
+    <h1 style="text-align: center">Select an sign-in method</h1>
+    <firebase-ui
+      (signInSuccessWithAuthResult)="successCallback($event)"
+      (signInFailure)="errorCallback($event)"
+      (uiShown)="uiShownCallback()"
+    />
+  } @else {
+    <h1 style="text-align: center">You are already signed-in</h1>
+    <button
+      style="display: block; margin: auto"
+      (click)="router.navigate(['/games'])"
+    >back to games
+    </button>
+    <button
+      style="display: block; margin: auto"
+      (click)="authenticationService.logout();"
+    >Logout
+    </button>
+  }
 </div>
