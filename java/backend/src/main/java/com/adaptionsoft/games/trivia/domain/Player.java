@@ -209,4 +209,8 @@ public class Player extends Entity<UserId> {
             this.applyAction(UPDATE_LOCATION);
         }
     }
+
+    void startTurn() {
+        raise(new PlayerTurnStartedEvent(this, this.getTurn()));
+    }
 }

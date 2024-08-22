@@ -8,5 +8,5 @@ public interface EventPublisher {
 
     void register(EventListener eventListener);
 
-    void flushEvents();
+    void flush();
 }

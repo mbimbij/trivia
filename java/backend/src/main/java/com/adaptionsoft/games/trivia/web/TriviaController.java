@@ -135,7 +135,8 @@ public class TriviaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
-        Game game = gameFactory.create(requestDto.gameName(), playerFactory.fromDto(requestDto.creator()));
+        Player creator = playerFactory.fromDto(requestDto.creator());
+        Game game = gameFactory.create(requestDto.gameName(), creator);
         gameRepository.save(game);
         template.convertAndSend("/topic/games/created", GameResponseDto.from(game));
         return GameResponseDto.from(game);

@@ -7,7 +7,7 @@ import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import java.util.*;
 
 public class GameLogsRepositoryInMemory implements GameLogsRepository {
-    private Map<GameId, Collection<GameLog>> gameLogs = new HashMap<>();
+    private final Map<GameId, Collection<GameLog>> gameLogs = new HashMap<>();
 
     @Override
     public void addLog(GameLog gameLog) {

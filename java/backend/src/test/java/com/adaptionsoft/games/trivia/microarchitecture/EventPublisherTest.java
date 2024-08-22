@@ -17,7 +17,7 @@ class EventPublisherTest {
 
         // WHEN
         eventPublisher.raise(new MockEvent());
-        eventPublisher.flushEvents();
+        eventPublisher.flush();
 
         // THEN
         Assertions.assertThat(eventListener.isHandled()).isTrue();

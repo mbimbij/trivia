@@ -8,7 +8,6 @@ import {Router} from "@angular/router";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
-import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
 

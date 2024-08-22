@@ -13,13 +13,12 @@ export class FirebaseAuthenticationService extends AuthenticationServiceAbstract
   override emailVerified: boolean = false;
   private activationEmailSendSubscription?: Subscription
 
-  constructor(private afAuth: AngularFireAuth,
-              private userService: UserServiceAbstract) {
+  constructor(private afAuth: AngularFireAuth) {
     super();
     this.afAuth.onAuthStateChanged(user => {
       this.loggedIn = user !== null;
       this.emailVerified = this.isEmailVerifiedInner(user);
-    })
+    }).then(() => {})
   }
 
   ngOnDestroy(): void {

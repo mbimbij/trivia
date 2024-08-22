@@ -17,7 +17,7 @@ public class ObserverBasedEventPublisher implements EventPublisher {
         uncommittedEvents.addAll(Arrays.asList(events));
     }
 
-    public void flush(Collection<Event> events) {
+    private void notifyListeners(Collection<Event> events) {
         events.forEach(event ->
                 listeners.stream()
                         .filter(eventListener -> eventListener.accept(event))
@@ -30,8 +30,8 @@ public class ObserverBasedEventPublisher implements EventPublisher {
     }
 
     @Override
-    public void flushEvents() {
-        flush(uncommittedEvents);
+    public void flush() {
+        notifyListeners(uncommittedEvents);
         uncommittedEvents.clear();
     }
 }
