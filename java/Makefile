@@ -2,6 +2,11 @@
 SHELL := /bin/bash
 .PHONY: *
 
+prepare-frontend: generate-frontend-environment-files npm-install-frontend generate-openapi-from-backend
+
+npm-install-frontend:
+	cd frontend-angular/ && npm install
+
 generate-openapi-from-backend:
 	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
 
@@ -21,11 +26,11 @@ generate-frontend-stubs-from-openapi:
 generate-readme:
 	cd .. && envsubst < README.template.md > README.md
 
-build-frontend-local-ide-embedded: generate-frontend-environment-files
-	cd frontend-angular/ && npm install && ng build -c local-ide-embedded
+build-frontend-local-ide-embedded: generate-frontend-environment-files npm-install-frontend
+	cd frontend-angular/ && ng build -c local-ide-embedded
 
-build-frontend-local-docker: generate-frontend-environment-files
-	cd frontend-angular/ && npm install && ng build -c local-docker
+build-frontend-local-docker: generate-frontend-environment-files npm-install-frontend
+	cd frontend-angular/ && ng build -c local-docker
 
 build-backend:
 	./mvnw -pl backend package -Dmaven.test.skip=true
@@ -34,14 +39,14 @@ build-backend:
 build-docker-local: build-frontend-local-docker build-backend
 	docker build -f pipeline.Dockerfile -t cless91/trivia:local .
 
-unittests-frontend: generate-frontend-environment-files
+unittests-frontend: generate-frontend-environment-files npm-install-frontend
 	cd frontend-angular/ && ng test
 
 unittests-backend:
 	./mvnw -pl backend clean verify
 
-run-frontend-local-ide: generate-frontend-environment-files
-	cd frontend-angular/ && npm install && ng serve
+run-frontend-local-ide: generate-frontend-environment-files npm-install-frontend
+	cd frontend-angular/ && ng serve
 
 run-backend-local-ide:
 	APPLICATION_QUESTIONS_PATH=src/main/resources/questions ./mvnw -pl backend spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_BACKEND)

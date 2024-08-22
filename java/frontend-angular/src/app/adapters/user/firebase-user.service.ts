@@ -27,6 +27,9 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
   }
 
   override renameUser(newUserName: string): void {
+    if(this.subscription1){
+      this.subscription1.unsubscribe()
+    }
     this.subscription1 = this.afAuth.user
       .subscribe(user => {
         user?.updateProfile({displayName: newUserName})
@@ -37,6 +40,9 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
   }
 
   private updateUserSubject() {
+    if(this.subscription2){
+      this.subscription2.unsubscribe()
+    }
     this.subscription2 = this.afAuth.user.pipe(map(user => this.buildDomainUser(user))).subscribe(
       value => {
         this.userSubject.next(value);
