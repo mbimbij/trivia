@@ -1,11 +1,11 @@
 package com.adaptionsoft.games.trivia.testkit;
 
-import com.adaptionsoft.games.trivia.domain.*;
-import com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category;
-import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
-import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
-import com.adaptionsoft.games.trivia.web.GameController;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.game.domain.*;
+import com.adaptionsoft.games.trivia.game.domain.QuestionsDeck.Category;
+import com.adaptionsoft.games.trivia.game.domain.exception.GameNotFoundException;
+import com.adaptionsoft.games.trivia.game.domain.exception.PlayerNotFoundInGameException;
+import com.adaptionsoft.games.trivia.game.web.GameController;
+import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

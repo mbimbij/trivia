@@ -3,7 +3,7 @@ package com.adaptionsoft.games;
 import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
-import com.adaptionsoft.games.trivia.web.WebConfig;
+import com.adaptionsoft.games.trivia.game.web.WebConfig;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;

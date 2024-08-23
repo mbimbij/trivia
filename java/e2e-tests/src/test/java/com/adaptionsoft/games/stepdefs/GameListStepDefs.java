@@ -3,7 +3,7 @@ package com.adaptionsoft.games.stepdefs;
 import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

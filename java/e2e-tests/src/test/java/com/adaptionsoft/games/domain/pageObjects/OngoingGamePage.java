@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
-import com.adaptionsoft.games.trivia.domain.AnswerCode;
+import com.adaptionsoft.games.trivia.game.domain.AnswerCode;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;

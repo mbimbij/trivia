@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.domain;
 
-import com.adaptionsoft.games.trivia.web.UserDto;
+import com.adaptionsoft.games.trivia.game.web.UserDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

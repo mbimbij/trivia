@@ -2,9 +2,9 @@ package com.adaptionsoft.games.tests;
 
 import com.adaptionsoft.games.E2eTestsSpringConfiguration;
 import com.adaptionsoft.games.domain.pageObjects.Backend;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
-import com.adaptionsoft.games.trivia.web.UserDto;
-import com.adaptionsoft.games.trivia.web.WebConfig;
+import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.game.web.UserDto;
+import com.adaptionsoft.games.trivia.game.web.WebConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
