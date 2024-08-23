@@ -1,15 +1,15 @@
 package com.adaptionsoft.games.trivia;
 
-import com.adaptionsoft.games.trivia.domain.*;
-import com.adaptionsoft.games.trivia.domain.event.ObserverBasedEventPublisher;
-import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
-import com.adaptionsoft.games.trivia.infra.GameLogsRepositoryInMemory;
-import com.adaptionsoft.games.trivia.infra.GameLogsWebSocketNotifier;
-import com.adaptionsoft.games.trivia.infra.GameRepositoryInMemory;
-import com.adaptionsoft.games.trivia.microarchitecture.EventListener;
-import com.adaptionsoft.games.trivia.microarchitecture.EventPublisher;
-import com.adaptionsoft.games.trivia.infra.GameLogsPersister;
-import com.adaptionsoft.games.trivia.microarchitecture.IdGenerator;
+import com.adaptionsoft.games.trivia.game.domain.*;
+import com.adaptionsoft.games.trivia.game.domain.event.ObserverBasedEventPublisher;
+import com.adaptionsoft.games.trivia.game.infra.GameRepositoryInMemory;
+import com.adaptionsoft.games.trivia.gamelogs.GameLogsPersister;
+import com.adaptionsoft.games.trivia.gamelogs.GameLogsRepository;
+import com.adaptionsoft.games.trivia.gamelogs.GameLogsRepositoryInMemory;
+import com.adaptionsoft.games.trivia.gamelogs.GameLogsWebSocketNotifier;
+import com.adaptionsoft.games.trivia.shared.microarchitecture.EventListener;
+import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

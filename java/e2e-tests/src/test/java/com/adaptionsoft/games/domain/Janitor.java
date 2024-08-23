@@ -1,8 +1,8 @@
 package com.adaptionsoft.games.domain;
 
-import com.adaptionsoft.games.trivia.domain.Question;
-import com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.game.domain.Question;
+import com.adaptionsoft.games.trivia.game.domain.QuestionsDeck.Category;
+import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-import static com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category.*;
+import static com.adaptionsoft.games.trivia.game.domain.QuestionsDeck.Category.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor

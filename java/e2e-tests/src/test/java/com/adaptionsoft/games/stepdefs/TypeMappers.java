@@ -3,7 +3,7 @@ package com.adaptionsoft.games.stepdefs;
 import com.adaptionsoft.games.domain.Actor;
 import com.adaptionsoft.games.domain.ActorService;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
-import com.adaptionsoft.games.trivia.domain.AnswerCode;
+import com.adaptionsoft.games.trivia.game.domain.AnswerCode;
 import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.DataTableType;

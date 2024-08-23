@@ -4,7 +4,7 @@ import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.pageObjects.Backend;
 import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
 import com.adaptionsoft.games.domain.pageObjects.OngoingGamePage;
-import com.adaptionsoft.games.trivia.domain.AnswerCode;
+import com.adaptionsoft.games.trivia.game.domain.AnswerCode;
 import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

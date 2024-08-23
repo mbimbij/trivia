@@ -1,10 +1,10 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
-import com.adaptionsoft.games.trivia.domain.AnswerCode;
-import com.adaptionsoft.games.trivia.web.AnswerDto;
-import com.adaptionsoft.games.trivia.web.CreateGameRequestDto;
-import com.adaptionsoft.games.trivia.web.GameResponseDto;
-import com.adaptionsoft.games.trivia.web.UserDto;
+import com.adaptionsoft.games.trivia.game.domain.AnswerCode;
+import com.adaptionsoft.games.trivia.game.web.AnswerDto;
+import com.adaptionsoft.games.trivia.game.web.CreateGameRequestDto;
+import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
+import com.adaptionsoft.games.trivia.game.web.UserDto;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
