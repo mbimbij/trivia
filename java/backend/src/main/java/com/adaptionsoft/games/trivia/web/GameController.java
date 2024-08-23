@@ -3,8 +3,6 @@ package com.adaptionsoft.games.trivia.web;
 import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
-import com.adaptionsoft.games.trivia.domain.gamelogs.GameLog;
-import com.adaptionsoft.games.trivia.domain.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.microarchitecture.Id;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,13 +39,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 )
 @CrossOrigin(origins = "${application.allowed-origins}", methods = {DELETE, GET, POST, OPTIONS})
 @Slf4j
-public class TriviaController {
+public class GameController {
 
     private final GameRepository gameRepository;
     private final GameFactory gameFactory;
     private final PlayerFactory playerFactory;
     private final SimpMessagingTemplate template;
-    private final GameLogsRepository gameLogsRepository;
 
     @GetMapping
     public Collection<GameResponseDto> listGames() {
@@ -90,11 +87,6 @@ public class TriviaController {
 
     @Setter
     private Function<Integer, GameResponseDto> getByIdImplementation = this::getByIdDefaultImplementation;
-
-    @GetMapping("/{gameId}/logs")
-    public Collection<GameLog> getGameLogs(@PathVariable("gameId") int gameIdInt) {
-        return gameLogsRepository.getLogsForGame(new GameId(gameIdInt));
-    }
 
     @DeleteMapping("/{gameId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -194,8 +186,8 @@ public class TriviaController {
 
     @PostMapping("/{gameId}/players/{playerId}/answer/{answerCode}")
     public AnswerDto answer(@PathVariable("gameId") Integer gameIdInt,
-                                  @PathVariable("playerId") String playerIdString,
-                                  @PathVariable("answerCode") AnswerCode answerCode) {
+                            @PathVariable("playerId") String playerIdString,
+                            @PathVariable("answerCode") AnswerCode answerCode) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         Answer answer = game.answerCurrentQuestion(player, answerCode);

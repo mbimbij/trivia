@@ -26,7 +26,7 @@ class TriviaControllerTest {
     @Mock
     private GameFactory gameFactory;
     @InjectMocks
-    private TriviaController controller;
+    private GameController controller;
 
     @BeforeEach
     void setUp() {
