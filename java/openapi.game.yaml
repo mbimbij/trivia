@@ -188,27 +188,6 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/GameResponseDto"
-  /api/games/{gameId}/logs:
-    get:
-      tags:
-        - trivia-controller
-      operationId: getGameLogs
-      parameters:
-        - name: gameId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GameLog'
   /api/games/{gameId}/players/{playerId}/validate:
     post:
       tags:
@@ -328,17 +307,6 @@ components:
           type: string
         currentAnswer:
           $ref: "#/components/schemas/AnswerDto"
-    GameLog:
-      type: object
-      properties:
-        gameId:
-          type: integer
-          format: int32
-        value:
-          type: string
-      required:
-        - gameId
-        - value
     PlayerDto:
       required:
         - id
