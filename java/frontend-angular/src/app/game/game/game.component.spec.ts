@@ -20,6 +20,8 @@ import {BehaviorSubject, of} from "rxjs";
 import {GameService} from "../game.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import any = jasmine.any;
+import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
+import {GameLogsService} from "../gamelogs.service";
 
 describe('GameComponent', () => {
   let component: GameComponent
@@ -32,6 +34,7 @@ describe('GameComponent', () => {
       imports: [GameComponent, HttpClientTestingModule],
       providers: [
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
+        {provide: GameLogsServiceAbstract, useClass: GameLogsService},
       ]
     })
       .compileComponents();
@@ -112,6 +115,7 @@ describe('Error display', () => {
         {provide: ActivatedRoute, useClass: MockActivatedRoute},
         {provide: UserServiceAbstract, useClass: UserServiceMock},
         {provide: GameServiceAbstract, useClass: GameService},
+        {provide: GameLogsServiceAbstract, useClass: GameLogsService},
       ]
     })
       .compileComponents();
@@ -121,7 +125,7 @@ describe('Error display', () => {
     htmlElement = fixture.nativeElement;
   });
 
-  it('Should display game not found section, when http 404 returned', () => {
+  it('game Should display game not found section, when http 404 returned', () => {
     component.gameLoadingError$ = new BehaviorSubject<HttpErrorResponse>(new HttpErrorResponse({
       status: 404,
       error: {message: `some message`}

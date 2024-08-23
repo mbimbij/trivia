@@ -9,7 +9,7 @@ paths:
   /api/games:
     get:
       tags:
-      - trivia-controller
+      - game-controller
       operationId: listGames
       responses:
         "200":
@@ -22,7 +22,7 @@ paths:
                   $ref: '#/components/schemas/GameResponseDto'
     post:
       tags:
-      - trivia-controller
+      - game-controller
       operationId: createGame
       requestBody:
         content:
@@ -40,7 +40,7 @@ paths:
   /api/games/{gameId}:
     get:
       tags:
-        - trivia-controller
+        - game-controller
       summary: get a game by its id
       operationId: getGameById
       parameters:
@@ -68,7 +68,7 @@ paths:
                 $ref: '#/components/schemas/GameResponseDto'
     delete:
       tags:
-        - trivia-controller
+        - game-controller
       operationId: deleteGameById
       parameters:
         - name: gameId
@@ -83,7 +83,7 @@ paths:
   /api/games/{gameId}/players/{playerId}/join:
     post:
       tags:
-      - trivia-controller
+      - game-controller
       operationId: addPlayerToGame
       parameters:
       - name: gameId
@@ -113,7 +113,7 @@ paths:
   /api/games/{gameId}/players/{playerId}/start:
     post:
       tags:
-      - trivia-controller
+      - game-controller
       operationId: startGame
       parameters:
       - name: gameId
@@ -137,7 +137,7 @@ paths:
   /api/games/{gameId}/players/{playerId}/rollDice:
     post:
       tags:
-        - trivia-controller
+        - game-controller
       operationId: rollDice
       parameters:
         - name: gameId
@@ -164,7 +164,7 @@ paths:
   /api/games/{gameId}/players/{playerId}/drawQuestion:
     post:
       tags:
-        - trivia-controller
+        - game-controller
       operationId: drawQuestion
       parameters:
         - name: gameId
@@ -191,7 +191,7 @@ paths:
   /api/games/{gameId}/players/{playerId}/validate:
     post:
       tags:
-        - trivia-controller
+        - game-controller
       operationId: validate
       parameters:
         - name: gameId
@@ -211,7 +211,7 @@ paths:
   /api/games/{gameId}/players/{playerId}/answer/{answerCode}:
     post:
       tags:
-        - trivia-controller
+        - game-controller
       operationId: answer
       parameters:
         - name: gameId

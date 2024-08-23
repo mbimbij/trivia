@@ -5,8 +5,8 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable, Subscription} from "rxjs";
 import {Game} from '../game';
 import {compareUserAndPlayer} from "../../common/helpers";
-import {State} from "../../openapi-generated";
 import {Identifiable} from "../../common/identifiable";
+import {State} from "../../openapi-generated/game";
 
 @Component({
   selector: 'app-join-game-button',

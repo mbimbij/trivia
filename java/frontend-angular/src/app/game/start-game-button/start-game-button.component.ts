@@ -3,9 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnChanges,
   OnDestroy,
-  SimpleChanges
 } from '@angular/core';
 import {NgIf} from "@angular/common";
 import {User} from "../../user/user";
@@ -14,8 +12,8 @@ import {compareUserAndPlayer, generateRandomString} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Game} from "../game";
 import {combineLatest, Subscription} from "rxjs";
-import {State} from "../../openapi-generated";
 import {Identifiable} from "../../common/identifiable";
+import {State} from "../../openapi-generated/game";
 
 @Component({
   standalone: true,

@@ -1,5 +1,4 @@
 import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {GameLog, State} from "../../openapi-generated";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {generateRandomString, userToPlayer} from "../../common/helpers";
@@ -26,6 +25,8 @@ import {
   AnswerQuestionResultsWrapperComponent
 } from "./answer-question-results-wrapper/answer-question-results-wrapper.component";
 import {Identifiable} from "../../common/identifiable";
+import {GameLog} from "../../openapi-generated/gamelogs";
+import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
 
 @Component({
   selector: 'app-game',
@@ -62,7 +63,8 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
   constructor(private route: ActivatedRoute,
               protected router: Router,
               private userService: UserServiceAbstract,
-              private gameService: GameServiceAbstract) {
+              private gameService: GameServiceAbstract,
+              private gameLogsService: GameLogsServiceAbstract) {
     super()
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
@@ -76,8 +78,8 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
             let playerFromUser = userToPlayer(user);
             this.player = game.getCurrentStateOf(playerFromUser);
             this.isGameEnded = game.isEnded();
-            this.gameService.initGameLogs(game.id);
-            this.gameLogs$ = this.gameService.getGameLogs(game.id);
+            this.gameLogsService.initGameLogs(game.id);
+            this.gameLogs$ = this.gameLogsService.getGameLogs(game.id);
           },
           error: err => {
             this.gameLoadingError$.next(err);
@@ -117,6 +119,4 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
   setGame(game: Game) {
     this.game$ = of(game)
   }
-
-  protected readonly State = State;
 }

@@ -6,7 +6,7 @@ import {getMockGame2, getMockPlayer2} from "../../../common/test-helpers";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {GameService} from "../../game.service";
 import {By} from "@angular/platform-browser";
-import {State} from "../../../openapi-generated";
+import {State} from "../../../openapi-generated/game";
 
 describe('RollDiceBackhandInsidePenaltyBoxComponent', () => {
   let component: RollDiceResultsInsidePenaltyBoxComponent;

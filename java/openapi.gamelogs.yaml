@@ -9,7 +9,7 @@ paths:
   /api/games/{gameId}/logs:
     get:
       tags:
-        - trivia-controller
+        - game-logs-controller
       operationId: getGameLogs
       parameters:
         - name: gameId
