@@ -1,6 +1,6 @@
 import {Player} from "../user/player";
-import {AnswerDto, QuestionDto, State} from "../openapi-generated";
 import {comparePlayers} from "../common/helpers";
+import {AnswerDto, QuestionDto, State} from "../openapi-generated/game";
 
 export class Game {
   id: number

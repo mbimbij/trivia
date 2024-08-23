@@ -15,7 +15,6 @@ import { Observable }                                        from 'rxjs';
 
 import { AnswerDto } from '../model/models';
 import { CreateGameRequestDto } from '../model/models';
-import { GameLog } from '../model/models';
 import { GameResponseDto } from '../model/models';
 import { UserDto } from '../model/models';
 
@@ -24,7 +23,7 @@ import { Configuration }                                     from '../configurat
 
 
 
-export interface TriviaControllerServiceInterface {
+export interface GameControllerServiceInterface {
     defaultHeaders: HttpHeaders;
     configuration: Configuration;
 
@@ -74,13 +73,6 @@ export interface TriviaControllerServiceInterface {
      * @param gameId 
      */
     getGameById(gameId: number, extraHttpRequestParams?: any): Observable<GameResponseDto>;
-
-    /**
-     * 
-     * 
-     * @param gameId 
-     */
-    getGameLogs(gameId: number, extraHttpRequestParams?: any): Observable<Array<GameLog>>;
 
     /**
      * 

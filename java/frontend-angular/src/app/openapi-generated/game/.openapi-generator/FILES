@@ -1,9 +1,10 @@
 .gitignore
+.openapi-generator-ignore
 README.md
 api.module.ts
 api/api.ts
-api/trivia-controller.service.ts
-api/trivia-controller.serviceInterface.ts
+api/game-controller.service.ts
+api/game-controller.serviceInterface.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -11,7 +12,6 @@ index.ts
 model/answer-code.ts
 model/answer-dto.ts
 model/create-game-request-dto.ts
-model/game-log.ts
 model/game-response-dto.ts
 model/models.ts
 model/player-dto.ts

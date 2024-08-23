@@ -5,7 +5,6 @@ import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import {GameServiceAbstract} from "./services/game-service-abstract";
 import {GameService} from "./game/game.service";
-import {ApiModule, BASE_PATH, Configuration} from "./openapi-generated";
 import {CreateGameComponent} from "./game/create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from './app-routing.module';
@@ -24,6 +23,10 @@ import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-
 import {FirebaseUserService} from "./adapters/user/firebase-user.service";
 import {UserServiceAbstract} from "./services/user-service.abstract";
 import {NavbarComponent} from "./common/navbar/navbar.component";
+import {ApiModule as GameApiModule, BASE_PATH as GAME_API_BASE_PATH} from "./openapi-generated/game";
+import {ApiModule as GameLogsApiModule, BASE_PATH as GAMELOGS_API_BASE_PATH} from "./openapi-generated/gamelogs";
+import {GameLogsServiceAbstract} from "./services/gamelogs-service-abstract";
+import {GameLogsService} from "./game/gamelogs.service";
 
 @NgModule({
   declarations: [
@@ -32,7 +35,8 @@ import {NavbarComponent} from "./common/navbar/navbar.component";
     imports: [
         BrowserModule,
         HttpClientModule,
-        ApiModule,
+        GameApiModule,
+        GameLogsApiModule,
         CreateGameComponent,
         FormsModule,
         AppRoutingModule,
@@ -44,10 +48,12 @@ import {NavbarComponent} from "./common/navbar/navbar.component";
     ],
   providers: [
     {provide: GameServiceAbstract, useClass: GameService},
+    {provide: GameLogsServiceAbstract, useClass: GameLogsService},
     {provide: AuthenticationServiceAbstract, useClass: FirebaseAuthenticationService},
     {provide: UserServiceAbstract, useClass: FirebaseUserService},
     {provide: RxStompService, useFactory: rxStompServiceFactory},
-    {provide: BASE_PATH, useValue: environment.backendUrl},
+    {provide: GAME_API_BASE_PATH, useValue: environment.backendUrl},
+    {provide: GAMELOGS_API_BASE_PATH, useValue: environment.backendUrl},
     provideAuth(() => getAuth()),
     {
       provide: USE_AUTH_EMULATOR,

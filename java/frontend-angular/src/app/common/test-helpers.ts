@@ -1,8 +1,8 @@
 import {Observable, of} from "rxjs";
 import {Game} from "../game/game";
 import {userToPlayer} from "./helpers";
-import {State} from "../openapi-generated";
 import {Player} from "../user/player";
+import {State} from "../openapi-generated/game";
 
 export function getMockQuestion1() {
   return {

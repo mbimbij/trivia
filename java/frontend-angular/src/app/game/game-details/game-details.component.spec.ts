@@ -59,7 +59,7 @@ describe('Error display', () => {
     htmlElement = fixture.nativeElement;
   });
 
-  it('Should display game not found section, when http 404 returned', () => {
+  it('game-details Should display game not found section, when http 404 returned', () => {
     component.gameLoadingError$ = new BehaviorSubject<HttpErrorResponse>(new HttpErrorResponse({
       status: 404,
       error: {message: `some message`}

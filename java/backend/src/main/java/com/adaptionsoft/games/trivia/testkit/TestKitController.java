@@ -4,8 +4,8 @@ import com.adaptionsoft.games.trivia.domain.*;
 import com.adaptionsoft.games.trivia.domain.QuestionsDeck.Category;
 import com.adaptionsoft.games.trivia.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.domain.exception.PlayerNotFoundInGameException;
+import com.adaptionsoft.games.trivia.web.GameController;
 import com.adaptionsoft.games.trivia.web.GameResponseDto;
-import com.adaptionsoft.games.trivia.web.TriviaController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class TestKitController {
 
     private final GameRepository gameRepository;
     private final SimpMessagingTemplate template;
-    private final TriviaController triviaController;
+    private final GameController gameController;
 
     @PostMapping("/{gameId}/players/{playerId}/goToPenaltyBox")
     public GameResponseDto goToPenaltyBox(@PathVariable("gameId") Integer gameIdInt,
@@ -92,8 +92,8 @@ public class TestKitController {
 
     @PutMapping("/{gameId}/currentPlayer/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void setLoadedQuestionDeck(@PathVariable("gameId") int gameIdInt,
-                                      @PathVariable("userId") String playerIdString) {
+    public void setCurrentPlayer(@PathVariable("gameId") int gameIdInt,
+                                 @PathVariable("userId") String playerIdString) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = game.findPlayerById(new UserId(playerIdString)).orElseThrow();
         game.setCurrentPlayer(player);
@@ -104,7 +104,7 @@ public class TestKitController {
     @PutMapping("/getByIdImplementation/exception")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void throwExceptionWhenCallGetGameById() {
-        triviaController.setGetByIdImplementation(integer -> {
+        gameController.setGetByIdImplementation(integer -> {
             throw new RuntimeException("some backend exception");
         });
     }
@@ -112,7 +112,7 @@ public class TestKitController {
     @PutMapping("/getByIdImplementation/reset")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void resetGetGameByIdMethod() {
-        triviaController.setGetByIdImplementation(triviaController::getByIdDefaultImplementation);
+        gameController.setGetByIdImplementation(gameController::getByIdDefaultImplementation);
     }
 
     @PutMapping("/{gameId}/playersShuffle/disable")

@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Player} from "../../../user/player";
-import {State} from "../../../openapi-generated";
 import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
 import {Identifiable} from "../../../common/identifiable";
+import {State} from "../../../openapi-generated/game";
 
 @Component({
   selector: 'app-answer-question-results-wrapper',

@@ -1,7 +1,7 @@
-import {GameResponseDto, PlayerDto, State, UserDto} from "../openapi-generated";
 import {User} from "../user/user";
 import {Player} from "../user/player";
 import {Game} from "../game/game";
+import {GameResponseDto, PlayerDto, State, UserDto} from "../openapi-generated/game";
 
 // TODO move these functions into appropriate classes
 export function compareUserDtos(user1: UserDto, user2: UserDto): boolean {

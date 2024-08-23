@@ -35,11 +35,11 @@ class RestAssuredBasedControllerTest {
     @Autowired
     private ObjectMapper mapper;
     @SpyBean
-    private TriviaController triviaController;
+    private GameController gameController;
 
     @BeforeEach
     void setUp() {
-        reset(triviaController);
+        reset(gameController);
         RestAssuredConfig.config().objectMapperConfig(new ObjectMapperConfig().jackson2ObjectMapperFactory(
                 (cls, charset) -> mapper
         ));
@@ -56,7 +56,7 @@ class RestAssuredBasedControllerTest {
     void business_exception_should_throw_409_conflict() {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(new InvalidGameStateException(null, null, "add player"))
-                .when(triviaController)
+                .when(gameController)
                 .joinGame(anyInt(), anyString(), any(PlayerDto.class));
 
         // WHEN a new player tries to join the game
@@ -81,7 +81,7 @@ class RestAssuredBasedControllerTest {
     void invalid_player_turn_exception_should_throw_403_unauthorized() {
         // GIVEN an error is thrown when adding a player
         Mockito.doThrow(PlayTurnException.notCurrentPlayerException(null, null, null))
-                .when(triviaController);
+                .when(gameController);
 
         // WHEN a player tries to play a turn
         //@formatter:off

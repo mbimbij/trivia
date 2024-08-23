@@ -1,4 +1,4 @@
-import {State} from "../openapi-generated";
+import {State} from "../openapi-generated/game";
 
 export class Player {
   id: string;

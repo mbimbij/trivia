@@ -1,5 +1,5 @@
-import {UserDto} from "../openapi-generated";
 import {compareUserDtos} from "./helpers";
+import {UserDto} from "../openapi-generated/game";
 
 describe('ExampleTest', () => {
 
