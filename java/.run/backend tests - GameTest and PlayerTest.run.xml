@@ -5,8 +5,8 @@
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="pattern" />
     <patterns>
-      <pattern testClass="com.adaptionsoft.games.trivia.domain.GameTest" />
-      <pattern testClass="com.adaptionsoft.games.trivia.domain.PlayerTest" />
+      <pattern testClass="com.adaptionsoft.games.trivia.game.domain.GameTest" />
+      <pattern testClass="com.adaptionsoft.games.trivia.game.domain.PlayerTest" />
     </patterns>
     <method v="2">
       <option name="Make" enabled="true" />

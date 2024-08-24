@@ -10,7 +10,11 @@ public class EventRaiser {
         this.eventPublisher = eventPublisher;
     }
 
-    protected void raise(Event... events) {
+    public void raise(Event... events) {
         eventPublisher.raise(events);
+    }
+
+    public void flush() {
+        eventPublisher.flush();
     }
 }

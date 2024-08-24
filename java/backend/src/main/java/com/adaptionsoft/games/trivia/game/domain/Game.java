@@ -1,9 +1,6 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
-import com.adaptionsoft.games.trivia.game.domain.event.GameEndedEvent;
-import com.adaptionsoft.games.trivia.game.domain.event.GameStartedEvent;
-import com.adaptionsoft.games.trivia.game.domain.event.PlayerWonEvent;
-import com.adaptionsoft.games.trivia.game.domain.event.QuestionAskedToPlayerEvent;
+import com.adaptionsoft.games.trivia.game.domain.event.*;
 import com.adaptionsoft.games.trivia.game.domain.exception.CannotAnswerQuestionBeforeDrawingOneException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.game.domain.exception.StartException;
@@ -296,4 +293,21 @@ public class Game extends Entity<GameId> {
         players.setShuffler(shuffler);
     }
 
+    public void produceGameCreatedEvent() {
+        eventPublisher.raise(new GameCreatedEvent(getId()));
+    }
+
+    public void producePlayersAddedEvents() {
+//        eventPublisher.raise(new PlayerAddedEvent(getCreator(),1));
+//        int playerCount = 2;
+//        for (Player player : players.getIndividualPlayersOtherThanCreator()) {
+//            eventPublisher.raise(new PlayerAddedEvent(player,playerCount));
+//            playerCount++;
+//        }
+
+        for (int i = 0; i < players.getIndividualPlayers().size(); i++) {
+            Player player = players.getIndividualPlayers().get(i);
+            eventPublisher.raise(new PlayerAddedEvent(player,i+1));
+        }
+    }
 }

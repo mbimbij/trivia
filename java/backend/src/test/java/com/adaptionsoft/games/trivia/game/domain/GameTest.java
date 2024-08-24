@@ -253,8 +253,8 @@ class GameTest {
             // THEN the domain events are produced in the correct order
             List<Event> events = eventPublisher.getPublishedEvents();
             Assertions.assertArrayEquals(events.toArray(), new Event[]{
-                    new PlayerAddedEvent(player1, 1, player1.getTurn()),
-                    new PlayerAddedEvent(player2, 2, player2.getTurn()),
+                    new PlayerAddedEvent(player1, 1),
+                    new PlayerAddedEvent(player2, 2),
                     new GameCreatedEvent(game.getId())
             });
         }

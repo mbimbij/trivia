@@ -13,6 +13,10 @@ public class ObserverBasedEventPublisher implements EventPublisher {
     private final List<EventListener> listeners = new ArrayList<>();
     protected final List<Event> uncommittedEvents = new ArrayList<>();
 
+    public ObserverBasedEventPublisher() {
+        System.out.println();
+    }
+
     @Override
     public void raise(Event... events) {
         uncommittedEvents.addAll(Arrays.asList(events));

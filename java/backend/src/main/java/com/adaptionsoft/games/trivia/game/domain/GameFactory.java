@@ -46,8 +46,9 @@ public class GameFactory {
                 otherPlayers
         );
 
-        eventPublisher.raise(new GameCreatedEvent(game.getId()));
-        eventPublisher.flush();
+        game.producePlayersAddedEvents();
+        game.produceGameCreatedEvent();
+        game.flush();
         return game;
     }
 }
