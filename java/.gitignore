@@ -6,7 +6,7 @@ target/
 e2e-tests/videos
 **/.env
 **/creds
-**/test.html
+../../../.config/JetBrains/IntelliJIdea2024.2/scratches/test.html
 **/test.http
 backend/src/main/resources/static
 **/SketchTest.java

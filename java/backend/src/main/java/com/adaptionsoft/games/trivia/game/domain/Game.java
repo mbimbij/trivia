@@ -117,7 +117,7 @@ public class Game extends Entity<GameId> {
         currentPlayer.startTurn();
 
         stateManager.applyAction(START);
-        eventPublisher.flush();
+        flush();
     }
 
     private void shufflePlayers() {
@@ -145,7 +145,7 @@ public class Game extends Entity<GameId> {
 
         currentCategory = QuestionsDeck.Category.getQuestionCategory(currentPlayer.getLocation());
 
-        eventPublisher.flush();
+        flush();
     }
 
     private void validateGameStartedForPlayerAction(PlayerAction playerAction) {
@@ -164,7 +164,7 @@ public class Game extends Entity<GameId> {
         this.currentQuestion = questionsDeck.drawQuestion(player.getLocation());
         player.applyAction(DRAW_QUESTION);
         raise(new QuestionAskedToPlayerEvent(player, currentQuestion.questionText()));
-        eventPublisher.flush();
+        flush();
     }
 
     public Answer answerCurrentQuestion(Player player, AnswerCode answerCode) {
@@ -184,7 +184,7 @@ public class Game extends Entity<GameId> {
         } else {
             currentPlayer.answerIncorrectly();
         }
-        eventPublisher.flush();
+        flush();
         currentAnswer = new Answer(isAnswerCorrect, currentQuestion.explanations());
         return currentAnswer;
     }
@@ -263,7 +263,7 @@ public class Game extends Entity<GameId> {
                     throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
         }
 
-        eventPublisher.flush();
+        flush();
     }
 
     private void updateCurrentPlayerLocation() {
@@ -294,20 +294,14 @@ public class Game extends Entity<GameId> {
     }
 
     public void produceGameCreatedEvent() {
-        eventPublisher.raise(new GameCreatedEvent(getId()));
+        raise(new GameCreatedEvent(getId()));
     }
 
     public void producePlayersAddedEvents() {
-//        eventPublisher.raise(new PlayerAddedEvent(getCreator(),1));
-//        int playerCount = 2;
-//        for (Player player : players.getIndividualPlayersOtherThanCreator()) {
-//            eventPublisher.raise(new PlayerAddedEvent(player,playerCount));
-//            playerCount++;
-//        }
 
         for (int i = 0; i < players.getIndividualPlayers().size(); i++) {
             Player player = players.getIndividualPlayers().get(i);
-            eventPublisher.raise(new PlayerAddedEvent(player,i+1));
+            raise(new PlayerAddedEvent(player,i+1));
         }
     }
 }

@@ -32,20 +32,20 @@ import {GameLogsService} from "./game/gamelogs.service";
   declarations: [
     AppComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        GameApiModule,
-        GameLogsApiModule,
-        CreateGameComponent,
-        FormsModule,
-        AppRoutingModule,
-        GameListComponent,
-        AngularFireModule.initializeApp(environment.firebaseConfig),
-        AngularFireAuthModule,
-        FirebaseUIModule.forRoot(firebaseUiAuthConfig),
-        NavbarComponent
-    ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    GameApiModule,
+    GameLogsApiModule,
+    CreateGameComponent,
+    FormsModule,
+    AppRoutingModule,
+    GameListComponent,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    NavbarComponent
+  ],
   providers: [
     {provide: GameServiceAbstract, useClass: GameService},
     {provide: GameLogsServiceAbstract, useClass: GameLogsService},
