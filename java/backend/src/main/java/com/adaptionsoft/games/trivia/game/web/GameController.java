@@ -132,6 +132,7 @@ public class GameController {
         Player creator = playerFactory.fromDto(requestDto.creator());
         Game game = gameFactory.create(requestDto.gameName(), creator);
         gameRepository.save(game);
+        game.flush();
         template.convertAndSend("/topic/games/created", GameResponseDto.from(game));
         return GameResponseDto.from(game);
     }
@@ -147,6 +148,7 @@ public class GameController {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         game.addPlayer(playerFactory.fromDto(playerDto));
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -158,6 +160,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.start(player);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -170,6 +173,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.rollDice(player);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -182,6 +186,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.drawQuestion(game.getCurrentPlayer());
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -194,6 +199,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         Answer answer = game.answerCurrentQuestion(player, answerCode);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return AnswerDto.from(answer);
     }
@@ -206,6 +212,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.validate(player);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
     }
 

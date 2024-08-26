@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.game.application;
 
 import com.adaptionsoft.games.trivia.game.domain.*;
 import com.adaptionsoft.games.trivia.game.domain.event.MockEventPublisher;
+import com.adaptionsoft.games.trivia.game.domain.event.PlayerAddedEvent;
 import com.adaptionsoft.games.trivia.game.domain.event.QuestionAskedToPlayerEvent;
 import com.adaptionsoft.games.trivia.game.web.*;
 import com.adaptionsoft.games.trivia.gamelogs.GameLog;
@@ -190,7 +191,7 @@ class TriviaBackendTest {
         gameRepository.save(game);
 
         // WHEN a new player joins the game
-        @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2());
+        @NotBlank PlayerDto newPlayerDto = PlayerDto.from(player2);
         ResultActions resultActions = mvc.perform(
                 post("/api/games/{gameId}/players/{playerId}/join",
                         game.getId().getValue(),
@@ -226,6 +227,14 @@ class TriviaBackendTest {
                     assertThat(g.getPlayersCount()).isEqualTo(2);
                     assertThat(g.getPlayersList()).contains(playerFactory.fromDto(newPlayerDto));
                 });
+
+        // AND the PlayerAddedEvent is published
+        Player player2Added = game.findPlayerById(player2.getId()).get();
+        assertThat(eventPublisher.getPublishedEvents())
+                .last()
+                .usingRecursiveComparison()
+                .ignoringFields("orderNumber")
+                .isEqualTo(new PlayerAddedEvent(player2Added, 2));
     }
 
     @SneakyThrows

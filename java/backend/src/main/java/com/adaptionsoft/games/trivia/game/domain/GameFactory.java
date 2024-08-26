@@ -48,7 +48,6 @@ public class GameFactory {
 
         game.producePlayersAddedEvents();
         game.produceGameCreatedEvent();
-        game.flush();
         return game;
     }
 }
