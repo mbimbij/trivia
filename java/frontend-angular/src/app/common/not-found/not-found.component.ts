@@ -7,6 +7,7 @@ import {Identifiable} from "../identifiable";
   imports: [],
   template: `
     Page not found
+    {{ checkRender() }}
   `,
   styleUrl: './not-found.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

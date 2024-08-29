@@ -24,9 +24,15 @@ import {Identifiable} from "../identifiable";
 
 export class NavbarComponent extends Identifiable {
   user$: Observable<User>;
+  // isAnonymous: Observable<Boolean>;
 
   constructor(private userService: UserServiceAbstract, protected router: Router) {
     super()
     this.user$ = this.userService.getUser();
+  }
+
+
+  override checkRender(): string {
+    return super.checkRender();
   }
 }

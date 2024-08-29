@@ -23,6 +23,7 @@ import {State} from "../../openapi-generated/game";
     >
       go to
     </button>
+    {{ checkRender() }}
   `,
   styleUrl: './goto-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

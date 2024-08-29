@@ -23,6 +23,7 @@ import {State} from "../../openapi-generated/game";
     } @else {
       <span>{{ 'cannot join' }}</span>
     }
+    {{ checkRender() }}
   `,
   styleUrl: './join-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

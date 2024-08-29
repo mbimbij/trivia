@@ -24,9 +24,9 @@ import {Identifiable} from "../../identifiable";
     >
       <mat-icon>logout</mat-icon>
     </button>
+    {{ checkRender() }}
   `,
-  styleUrl: './logout-button.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './logout-button.component.css'
 })
 export class LogoutButtonComponent extends Identifiable {
 

@@ -25,6 +25,7 @@ import {State} from "../../openapi-generated/game";
     <button [attr.data-testid]="'start-button-'+game.id" (click)="startGame()" *ngIf="canStartGameAttr">
       start
     </button>
+    {{ checkRender() }}
   `,
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

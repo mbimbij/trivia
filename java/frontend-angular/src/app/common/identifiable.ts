@@ -8,6 +8,8 @@ export class Identifiable{
     }
 
     checkRender(){
-      console.log(`${this.id} is rendering`)
+      let message = `${this.id} is rendering`;
+      console.log(message)
+      return ''
     }
 }

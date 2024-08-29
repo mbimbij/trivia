@@ -10,6 +10,7 @@ import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
+import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-authentication',
@@ -21,14 +22,14 @@ import {FirebaseAuthenticationService} from "../../adapters/authentication/fireb
     ConsoleLogPipe
   ],
   templateUrl: './authentication.component.html',
-  styleUrl: './authentication.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './authentication.component.css'
 })
-export class AuthenticationComponent {
+export class AuthenticationComponent extends Identifiable{
 
   constructor(protected authenticationService: FirebaseAuthenticationService,
               protected userService: UserServiceAbstract,
               protected router: Router) {
+    super()
   }
 
   successCallback($event: FirebaseUISignInSuccessWithAuthResult) {

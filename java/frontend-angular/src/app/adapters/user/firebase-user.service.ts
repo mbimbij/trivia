@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
+import {BehaviorSubject, map, Observable, ReplaySubject, Subscription} from "rxjs";
 import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -8,7 +8,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
   providedIn: 'root'
 })
 export class FirebaseUserService extends UserServiceAbstract implements OnDestroy{
-  userSubject = new BehaviorSubject<User>(Nobody.instance);
+  userSubject = new ReplaySubject<User>(1);
   private subscription1?: Subscription;
   private subscription2?: Subscription;
 

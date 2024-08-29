@@ -15,6 +15,7 @@ import {Identifiable} from "../../common/identifiable";
     <button [attr.data-testid]="'delete-button-'+game.id" [disabled]="!canDeleteGame()" (click)="deleteGame()">
       delete
     </button>
+    {{ checkRender() }}
   `,
   styleUrl: './delete-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

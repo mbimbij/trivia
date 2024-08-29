@@ -22,6 +22,7 @@ import {Identifiable} from "../../../common/identifiable";
         roll dice
       </button>
     </div>
+    {{ checkRender() }}
   `,
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

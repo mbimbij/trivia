@@ -20,8 +20,8 @@
       <th>creator</th>
       <th>players</th>
       <th>status</th>
-      <th>start</th>
       <th>join</th>
+      <th>start</th>
       <th>go to</th>
       <th>delete</th>
     </tr>
@@ -38,11 +38,11 @@
       <td class="creator-name">{{ game.creator.name }}</td>
       <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
       <td class="state">{{ game.state }}</td>
-      <td class="start">
-        <app-start-game-button [game]="game"/>
-      </td>
       <td class="join">
         <app-join-game-button [game]="game"/>
+      </td>
+      <td class="start">
+        <app-start-game-button [game]="game"/>
       </td>
       <td class="goto">
         <app-goto-game-button [game]="game"/>
@@ -53,3 +53,4 @@
     </tr>
   </table>
 </ng-container>
+{{ checkRender() }}

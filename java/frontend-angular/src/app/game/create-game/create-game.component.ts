@@ -25,6 +25,7 @@ import {Identifiable} from "../../common/identifiable";
     <button
       [attr.data-testid]="'create-game-validate'"
       (click)="createGame(newGameName.value)">create</button>
+    {{ checkRender() }}
   `,
   styleUrl: './create-game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

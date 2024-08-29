@@ -12,6 +12,7 @@ import {Identifiable} from "../../../common/identifiable";
       (click)="this.gameService.drawQuestion(gameId, playerId).subscribe()">
       draw question
     </button>
+    {{ checkRender() }}
   `,
   styleUrl: './draw-question.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
