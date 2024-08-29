@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
@@ -30,7 +30,8 @@ import {Identifiable} from "../../common/identifiable";
     ErrorDisplayComponent
   ],
   templateUrl: './game-details.component.html',
-  styleUrl: './game-details.component.css'
+  styleUrl: './game-details.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameDetailsComponent extends Identifiable implements OnDestroy{
   gameId!: number;

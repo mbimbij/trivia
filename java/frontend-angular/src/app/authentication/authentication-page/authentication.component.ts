@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {
   FirebaseuiAngularLibraryComponent,
   FirebaseUISignInFailure,
@@ -21,7 +21,8 @@ import {FirebaseAuthenticationService} from "../../adapters/authentication/fireb
     ConsoleLogPipe
   ],
   templateUrl: './authentication.component.html',
-  styleUrl: './authentication.component.css'
+  styleUrl: './authentication.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthenticationComponent {
 

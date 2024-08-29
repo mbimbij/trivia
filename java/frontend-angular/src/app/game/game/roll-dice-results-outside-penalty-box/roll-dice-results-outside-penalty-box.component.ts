@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Game} from "../../game";
 import {Player} from "../../../user/player";
 import {DrawQuestionComponent} from "../draw-question/draw-question.component";
@@ -13,7 +13,8 @@ import {Identifiable} from "../../../common/identifiable";
     NgIf
   ],
   templateUrl: './roll-dice-results-outside-penalty-box.component.html',
-  styleUrl: './roll-dice-results-outside-penalty-box.component.css'
+  styleUrl: './roll-dice-results-outside-penalty-box.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RollDiceResultsOutsidePenaltyBoxComponent extends Identifiable implements OnChanges{
   @Input() game!: Game;

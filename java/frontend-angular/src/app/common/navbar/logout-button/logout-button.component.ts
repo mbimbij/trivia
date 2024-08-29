@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
@@ -25,7 +25,8 @@ import {Identifiable} from "../../identifiable";
       <mat-icon>logout</mat-icon>
     </button>
   `,
-  styleUrl: './logout-button.component.css'
+  styleUrl: './logout-button.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LogoutButtonComponent extends Identifiable {
 

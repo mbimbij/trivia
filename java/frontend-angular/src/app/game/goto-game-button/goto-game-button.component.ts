@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -24,7 +24,8 @@ import {State} from "../../openapi-generated/game";
       go to
     </button>
   `,
-  styleUrl: './goto-game-button.component.css'
+  styleUrl: './goto-game-button.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GotoGameButtonComponent extends Identifiable implements OnDestroy {
   @Input() game!: Game

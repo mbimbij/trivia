@@ -40,23 +40,20 @@ import {Identifiable} from "../../common/identifiable";
   styleUrl: './game-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameListComponent extends Identifiable implements OnInit{
-  user$!: Observable<User>;
-  games$!: Observable<Array<Game>>
+export class GameListComponent extends Identifiable {
+  user$: Observable<User>;
+  games$: Observable<Array<Game>>
 
   constructor(
     protected gameService: GameServiceAbstract,
     protected userService: UserServiceAbstract) {
     super()
+    this.user$ = this.userService.getUser();
+    this.games$ = this.gameService.getGames();
   }
 
   updateName(name: string) {
     this.userService.renameUser(name)
-  }
-
-  ngOnInit(): void {
-    this.user$ = this.userService.getUser();
-    this.games$ = this.gameService.getGames();
   }
 
   trackByFn(index: number, game: Game): number {

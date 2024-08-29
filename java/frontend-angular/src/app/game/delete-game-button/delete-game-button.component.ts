@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {User} from "../../user/user";
@@ -16,7 +16,8 @@ import {Identifiable} from "../../common/identifiable";
       delete
     </button>
   `,
-  styleUrl: './delete-game-button.component.css'
+  styleUrl: './delete-game-button.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteGameButtonComponent extends Identifiable implements OnDestroy {
   @Input() game!: Game;

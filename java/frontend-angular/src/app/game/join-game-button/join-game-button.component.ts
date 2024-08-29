@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -24,7 +24,8 @@ import {State} from "../../openapi-generated/game";
       <span>{{ 'cannot join' }}</span>
     }
   `,
-  styleUrl: './join-game-button.component.css'
+  styleUrl: './join-game-button.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinGameButtonComponent extends Identifiable implements OnDestroy {
 

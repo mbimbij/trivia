@@ -6,4 +6,5 @@ export class Identifiable{
     constructor() {
         this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
     }
+
 }

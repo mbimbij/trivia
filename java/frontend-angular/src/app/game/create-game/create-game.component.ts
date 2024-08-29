@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Nobody, User} from "../../user/user";
@@ -26,7 +26,8 @@ import {Identifiable} from "../../common/identifiable";
       [attr.data-testid]="'create-game-validate'"
       (click)="createGame(newGameName.value)">create</button>
   `,
-  styleUrl: './create-game.component.css'
+  styleUrl: './create-game.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateGameComponent extends Identifiable implements OnDestroy{
   private user: User = Nobody.instance;
