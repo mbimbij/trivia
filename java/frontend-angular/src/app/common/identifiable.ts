@@ -7,4 +7,7 @@ export class Identifiable{
         this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
     }
 
+    checkRender(){
+      console.log(`${this.id} is rendering`)
+    }
 }
