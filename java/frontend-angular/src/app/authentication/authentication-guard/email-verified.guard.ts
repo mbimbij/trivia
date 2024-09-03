@@ -1,12 +1,12 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
-import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.mock";
 import {map} from "rxjs";
 
 export const emailVerifiedGuard: CanActivateFn = (route, state) => {
   const authenticationService = inject(AuthenticationServiceAbstract);
   const router = inject(Router);
-  return authenticationService.isEmailVerified()
+  return authenticationService.isEmailVerified$
     .pipe(
       map(isEmailVerified => {
         if (!isEmailVerified) {

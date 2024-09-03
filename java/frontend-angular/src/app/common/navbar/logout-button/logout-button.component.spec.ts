@@ -4,7 +4,7 @@ import { LogoutButtonComponent } from './logout-button.component';
 import {
   AuthenticationServiceAbstract,
   AuthenticationServiceMock
-} from "../../../services/authentication-service.abstract";
+} from "../../../services/authentication-service.mock";
 
 describe('LogoutButtonComponent', () => {
   let component: LogoutButtonComponent;

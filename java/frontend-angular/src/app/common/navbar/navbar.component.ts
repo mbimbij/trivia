@@ -10,7 +10,7 @@ import {Observable} from "rxjs";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {Router} from "@angular/router";
 import {Identifiable} from "../identifiable";
-import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.mock";
 
 @Component({
   selector: 'app-navbar',
@@ -25,16 +25,13 @@ import {AuthenticationServiceAbstract} from "../../services/authentication-servi
 
 export class NavbarComponent extends Identifiable {
   user$: Observable<User>;
-  protected isLoggedIn$: Observable<boolean>
 
   constructor(private userService: UserServiceAbstract,
               protected authenticationService: AuthenticationServiceAbstract,
               protected router: Router) {
     super()
     this.user$ = this.userService.getUser();
-    this.isLoggedIn$ = this.authenticationService.isLoggedIn()
   }
-
 
   override checkRender(): string {
     return super.checkRender();

@@ -26,13 +26,11 @@ import {Observable} from "rxjs";
   styleUrl: './authentication.component.css'
 })
 export class AuthenticationComponent extends Identifiable {
-  protected isLoggedIn$: Observable<boolean>
 
   constructor(protected authenticationService: FirebaseAuthenticationService,
               protected userService: UserServiceAbstract,
               protected router: Router) {
     super()
-    this.isLoggedIn$ = this.authenticationService.isLoggedIn();
   }
 
   successCallback($event: FirebaseUISignInSuccessWithAuthResult) {

@@ -8,6 +8,6 @@
     </span>
     <span>{{ user.name }}</span>
   </ng-container>
-  <app-logout-button *ngIf="(isLoggedIn$ | async)"></app-logout-button>
+  <app-logout-button *ngIf="(authenticationService.isLoggedIn$ | async)"></app-logout-button>
 </mat-toolbar>
 {{ checkRender() }}

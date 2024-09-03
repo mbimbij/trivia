@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.mock";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {Identifiable} from "../../common/identifiable";
 import {Observable} from "rxjs";
@@ -16,11 +16,9 @@ import {Observable} from "rxjs";
   styleUrl: './waiting-for-email-verification.component.css'
 })
 export class WaitingForEmailVerificationComponent extends Identifiable{
-  protected isEmailVerified$: Observable<Boolean>
 
   constructor(protected router: Router,
               protected authenticationService:AuthenticationServiceAbstract) {
     super()
-    this.isEmailVerified$ = this.authenticationService.isEmailVerified()
   }
 }

@@ -16,10 +16,10 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
 
   constructor(private afAuth: AngularFireAuth) {
     super();
-    this.initUserSubject();
+    this.initService();
   }
 
-  private initUserSubject() {
+  private initService() {
     this.afAuth.onAuthStateChanged(afUser => {
       this.firebaseUser = afUser
       this.userSubject.next(this.buildDomainUser(afUser))
