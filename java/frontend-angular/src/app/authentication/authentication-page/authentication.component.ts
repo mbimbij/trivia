@@ -11,6 +11,7 @@ import {ConsoleLogPipe} from "../../console-log.pipe";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
 import {Identifiable} from "../../common/identifiable";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-authentication',
@@ -25,11 +26,13 @@ import {Identifiable} from "../../common/identifiable";
   styleUrl: './authentication.component.css'
 })
 export class AuthenticationComponent extends Identifiable{
+  protected isLoggedIn$: Observable<boolean>
 
   constructor(protected authenticationService: FirebaseAuthenticationService,
               protected userService: UserServiceAbstract,
               protected router: Router) {
     super()
+    this.isLoggedIn$ = this.authenticationService.isLoggedIn();
   }
 
   successCallback($event: FirebaseUISignInSuccessWithAuthResult) {

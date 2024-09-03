@@ -8,7 +8,7 @@ export class Identifiable{
     }
 
     checkRender(){
-      let message = `${this.id} is rendering`;
+      let message = `${this.id} - view refresh`;
       console.log(message)
       return ''
     }

@@ -9,16 +9,10 @@ import firebase from "firebase/compat";
   providedIn: 'root'
 })
 export class FirebaseAuthenticationService extends AuthenticationServiceAbstract implements OnDestroy {
-  override loggedIn: boolean = false;
-  override emailVerified: boolean = false;
   private activationEmailSendSubscription?: Subscription
 
   constructor(private afAuth: AngularFireAuth) {
     super();
-    this.afAuth.onAuthStateChanged(user => {
-      this.loggedIn = user !== null;
-      this.emailVerified = this.isEmailVerifiedInner(user);
-    }).then(() => {})
   }
 
   ngOnDestroy(): void {
@@ -27,15 +21,16 @@ export class FirebaseAuthenticationService extends AuthenticationServiceAbstract
 
   override sendActivationEmail(): void {
     this.activationEmailSendSubscription = this.afAuth.user
-      .subscribe(user => user?.sendEmailVerification()
+      .subscribe(user => user?.sendEmailVerification().then(() => {})
       );
   }
 
   override isEmailVerified(): Observable<boolean> {
-    return this.afAuth.user.pipe(map(user => this.isEmailVerifiedInner(user)))
+    return this.afAuth.user
+      .pipe(map(user => this.isUserAnonymousOrEmailVerified(user)))
   }
 
-  private isEmailVerifiedInner(user: firebase.User | null): boolean {
+  private isUserAnonymousOrEmailVerified(user: firebase.User | null): boolean {
     return (user?.isAnonymous || user?.emailVerified) ?? false;
   }
 

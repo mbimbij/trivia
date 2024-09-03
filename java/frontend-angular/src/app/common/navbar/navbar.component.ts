@@ -10,6 +10,7 @@ import {Observable} from "rxjs";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {Router} from "@angular/router";
 import {Identifiable} from "../identifiable";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 
 @Component({
   selector: 'app-navbar',
@@ -24,11 +25,14 @@ import {Identifiable} from "../identifiable";
 
 export class NavbarComponent extends Identifiable {
   user$: Observable<User>;
-  // isAnonymous: Observable<Boolean>;
+  protected isLoggedIn$: Observable<boolean>
 
-  constructor(private userService: UserServiceAbstract, protected router: Router) {
+  constructor(private userService: UserServiceAbstract,
+              protected authenticationService: AuthenticationServiceAbstract,
+              protected router: Router) {
     super()
     this.user$ = this.userService.getUser();
+    this.isLoggedIn$ = this.authenticationService.isLoggedIn()
   }
 
 
