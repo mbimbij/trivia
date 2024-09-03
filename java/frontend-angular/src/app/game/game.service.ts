@@ -6,7 +6,6 @@ import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
 import {gameDtoToGame, userToUserDto} from "../common/helpers";
 import {Game} from "./game";
-import {GameLog, GameLogsControllerService} from "../openapi-generated/gamelogs";
 import {AnswerCode, AnswerDto, GameControllerService, GameResponseDto, QuestionDto} from "../openapi-generated/game";
 
 @Injectable({

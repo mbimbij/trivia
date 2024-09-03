@@ -37,7 +37,7 @@ export class LogoutButtonComponent extends Identifiable {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.authenticationService.logout().subscribe();
     this.router.navigate(['/authentication'])
   }
 

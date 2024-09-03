@@ -1,56 +1,50 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, map, Observable, ReplaySubject, Subscription} from "rxjs";
+import {BehaviorSubject, map, Observable, Subscription} from "rxjs";
 import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {generateRandomString} from "../../common/helpers";
+import firebase from "firebase/compat";
 
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseUserService extends UserServiceAbstract implements OnDestroy{
-  userSubject = new ReplaySubject<User>(1);
-  private subscription1?: Subscription;
-  private subscription2?: Subscription;
+export class FirebaseUserService extends UserServiceAbstract implements OnDestroy {
+  userSubject = new BehaviorSubject<User>(Nobody.instance);
+  private firebaseUser: firebase.User | null = null;
+  private subscription?: Subscription;
 
   constructor(private afAuth: AngularFireAuth) {
     super();
-    this.updateUserSubject();
+    this.initUserSubject();
+  }
+
+  private initUserSubject() {
+    this.afAuth.onAuthStateChanged(afUser => {
+      this.firebaseUser = afUser
+      this.userSubject.next(this.buildDomainUser(afUser))
+    }).then(() => {
+    })
   }
 
   ngOnDestroy(): void {
-        this.subscription1?.unsubscribe();
-        this.subscription2?.unsubscribe();
-    }
+    this.subscription?.unsubscribe();
+  }
 
   override getUser(): Observable<User> {
     return this.userSubject.asObservable()
   }
 
   override renameUser(newUserName: string): void {
-    if(this.subscription1){
-      this.subscription1.unsubscribe()
-    }
-    this.subscription1 = this.afAuth.user
-      .subscribe(user => {
-        user?.updateProfile({displayName: newUserName})
-          .then(() => {
-            this.updateUserSubject()
-          })
-      });
+    this.firebaseUser?.updateProfile({displayName: newUserName})
+      .then(() => {
+        let newUser = this.userSubject.value;
+        newUser.name = newUserName
+        this.userSubject.next(newUser);
+      })
   }
 
-  private updateUserSubject() {
-    if(this.subscription2){
-      this.subscription2.unsubscribe()
-    }
-    this.subscription2 = this.afAuth.user.pipe(map(user => this.buildDomainUser(user))).subscribe(
-      value => {
-        this.userSubject.next(value);
-      }
-    );
-  }
-
-  private buildDomainUser(user: firebase.default.User | null) {
+  private buildDomainUser(user: firebase.User | null) {
     return user ? new User(user.uid, user.displayName!, user.isAnonymous) : Nobody.instance;
   }
 }

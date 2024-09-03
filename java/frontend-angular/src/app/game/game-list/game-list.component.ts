@@ -16,6 +16,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable} from "rxjs";
 import {Game} from "../game";
 import {Identifiable} from "../../common/identifiable";
+import {RenameUserComponent} from "../../user/rename-user/rename-user.component";
 
 @Component({
   selector: 'app-game-list',
@@ -34,26 +35,21 @@ import {Identifiable} from "../../common/identifiable";
     FirebaseuiAngularLibraryComponent,
     NavbarComponent,
     AsyncPipe,
-    NgClass
+    NgClass,
+    RenameUserComponent
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameListComponent extends Identifiable {
-  user$: Observable<User>;
   games$: Observable<Array<Game>>
 
   constructor(
     protected gameService: GameServiceAbstract,
-    protected userService: UserServiceAbstract) {
+  ) {
     super()
-    this.user$ = this.userService.getUser();
     this.games$ = this.gameService.getGames();
-  }
-
-  updateName(name: string) {
-    this.userService.renameUser(name)
   }
 
   trackByFn(index: number, game: Game): number {

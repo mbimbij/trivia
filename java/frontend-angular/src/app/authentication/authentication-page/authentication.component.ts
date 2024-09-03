@@ -25,7 +25,7 @@ import {Observable} from "rxjs";
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css'
 })
-export class AuthenticationComponent extends Identifiable{
+export class AuthenticationComponent extends Identifiable {
   protected isLoggedIn$: Observable<boolean>
 
   constructor(protected authenticationService: FirebaseAuthenticationService,
@@ -43,13 +43,13 @@ export class AuthenticationComponent extends Identifiable{
       this.router.navigate(['waiting-for-email-verification']);
     } else {
       let userName = user.displayName ?? generateName(user.isAnonymous);
-      if(user.displayName == null){
+      if (user.displayName == null) {
         this.userService.renameUser(userName)
       }
       this.router.navigate(['/games']);
     }
 
-    function generateName(isAnonymous: boolean): string{
+    function generateName(isAnonymous: boolean): string {
       let hash = generateRandomString(6);
       return isAnonymous ? `anon-${hash}` : `user-${hash}`;
     }

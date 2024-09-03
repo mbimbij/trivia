@@ -1,0 +1,11 @@
+<ng-container *ngIf="(user$ | async) as user">
+  <label for="playerName">Player Name</label>
+  <input
+    type="text"
+    id="playerName" required minlength="1" maxlength="100" size="20"
+    #newUserName
+    [value]="user.name"
+    (keyup.enter)="updateName(newUserName.value)"
+  />
+  <button (click)="updateName(newUserName.value)">ok</button>
+</ng-container>

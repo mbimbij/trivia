@@ -16,7 +16,7 @@
     </button>
     <button
       style="display: block; margin: auto"
-      (click)="authenticationService.logout();"
+      (click)="authenticationService.logout().subscribe();"
     >Logout
     </button>
   }

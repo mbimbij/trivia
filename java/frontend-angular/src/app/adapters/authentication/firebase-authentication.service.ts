@@ -4,6 +4,7 @@ import {from, map, Observable, Subscription} from "rxjs";
 import {AuthenticationServiceAbstract} from "../../services/authentication-service.abstract";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import firebase from "firebase/compat";
+import {FirebaseUserService} from "../user/firebase-user.service";
 
 @Injectable({
   providedIn: 'root'
