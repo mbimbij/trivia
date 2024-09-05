@@ -9,7 +9,7 @@ import {RouterModule} from "@angular/router";
 import {NavbarComponent} from "./common/navbar/navbar.component";
 import {UserServiceAbstract} from "./services/user-service.abstract";
 import {UserServiceMock} from "./adapters/user/user-service.mock";
-import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "./services/authentication-service.mock";
+import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "./services/authentication-service-abstract";
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({

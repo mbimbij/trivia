@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {ConsoleLogPipe} from "../../../console-log.pipe";
-import {AuthenticationServiceAbstract} from "../../../services/authentication-service.mock";
+import {AuthenticationServiceAbstract} from "../../../services/authentication-service-abstract";
 import {Identifiable} from "../../identifiable";
 import {flatMap, mergeMap, Observable} from "rxjs";
 import {fromPromise} from "rxjs/internal/observable/innerFrom";

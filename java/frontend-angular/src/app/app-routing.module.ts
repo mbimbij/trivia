@@ -25,7 +25,9 @@ const routes: Routes = [
   },
   {path: "", redirectTo: "/games", pathMatch: "full"},
   {path: "games/:id/details", component: GameDetailsComponent, canActivate: [loginActivateGuard, emailVerifiedGuard]},
-  {path: "games/:id", component: GameComponent, canActivate: [loginActivateGuard, emailVerifiedGuard]},
+  {path: "games/:id", component: GameComponent
+    , canActivate: [loginActivateGuard, emailVerifiedGuard]
+  },
   {path: 'not-found', component: NotFoundComponent},
   {path: 'health', component: HealthComponent},
   {path: '**', redirectTo: '/not-found'}
@@ -33,7 +35,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

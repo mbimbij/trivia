@@ -18,7 +18,7 @@ import {AngularFireAuthModule, USE_EMULATOR as USE_AUTH_EMULATOR} from "@angular
 import {FirebaseUIModule} from "firebaseui-angular";
 import {firebaseUiAuthConfig} from "./adapters/authentication/firebase-ui-auth-config";
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {AuthenticationServiceAbstract} from "./services/authentication-service.mock";
+import {AuthenticationServiceAbstract} from "./services/authentication-service-abstract";
 import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
 import {FirebaseUserService} from "./adapters/user/firebase-user.service";
 import {UserServiceAbstract} from "./services/user-service.abstract";

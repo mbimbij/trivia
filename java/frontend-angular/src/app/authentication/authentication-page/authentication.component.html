@@ -1,5 +1,4 @@
 <div>
-<!--  @if (!authenticationService.loggedIn) {-->
   @if (!(authenticationService.isLoggedIn$ | async)) {
     <h1 style="text-align: center">Select an sign-in method</h1>
     <firebase-ui

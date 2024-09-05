@@ -10,7 +10,7 @@ import {Observable} from "rxjs";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {Router} from "@angular/router";
 import {Identifiable} from "../identifiable";
-import {AuthenticationServiceAbstract} from "../../services/authentication-service.mock";
+import {AuthenticationServiceAbstract} from "../../services/authentication-service-abstract";
 
 @Component({
   selector: 'app-navbar',
