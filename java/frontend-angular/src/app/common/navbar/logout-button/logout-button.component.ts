@@ -36,8 +36,4 @@ export class LogoutButtonComponent extends Identifiable {
               protected authenticationService: AuthenticationServiceAbstract) {
     super()
   }
-
-  override checkRender(): string {
-    return super.checkRender();
-  }
 }

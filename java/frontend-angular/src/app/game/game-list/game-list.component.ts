@@ -53,8 +53,4 @@ export class GameListComponent extends Identifiable {
   trackByFn(index: number, game: Game): number {
     return game.id; // Assuming each game has a unique ID
   }
-
-  override checkRender(): string {
-    return super.checkRender();
-  }
 }

@@ -56,15 +56,15 @@ export class GotoGameButtonComponent extends Identifiable implements OnDestroy {
     });
   }
 
-  private updateButtonVisibility() {
-    this.canGotoGame$.next(this.canGotoGame(this.user))
-  }
-
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
   }
 
-  canGotoGame(user: User) {
+  private updateButtonVisibility() {
+    this.canGotoGame$.next(this.canGotoGame(this.user))
+  }
+
+  private canGotoGame(user: User) {
     return this.isPlayer(user) && this.isGameStarted();
   }
 
