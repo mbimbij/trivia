@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {
   FirebaseuiAngularLibraryComponent,
   FirebaseUISignInFailure,
@@ -11,7 +11,6 @@ import {ConsoleLogPipe} from "../../console-log.pipe";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
 import {Identifiable} from "../../common/identifiable";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-authentication',
@@ -35,16 +34,21 @@ export class AuthenticationComponent extends Identifiable {
 
   successCallback($event: FirebaseUISignInSuccessWithAuthResult) {
     let user = $event.authResult.user!;
+    generateNameIfUndefined.call(this);
+
     if (!user?.isAnonymous && user?.emailVerified === false) {
       // TODO stocker en base si un email a été envoyé à l'utilisateur
       // user.sendEmailVerification()
       this.router.navigate(['waiting-for-email-verification']);
     } else {
+      this.router.navigate(['/games']);
+    }
+
+    function generateNameIfUndefined(this: AuthenticationComponent) {
       let userName = user.displayName ?? generateName(user.isAnonymous);
       if (user.displayName == null) {
         this.userService.renameUser(userName)
       }
-      this.router.navigate(['/games']);
     }
 
     function generateName(isAnonymous: boolean): string {

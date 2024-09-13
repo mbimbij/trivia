@@ -10,22 +10,14 @@ import {Router} from "@angular/router";
 })
 export class FirebaseAuthenticationService extends AuthenticationServiceAbstract implements OnDestroy {
   private isLoggedInSubject = new ReplaySubject<boolean>(1);
-  override isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
   private isEmailVerifiedSubject = new ReplaySubject<boolean>(1);
-  override isEmailVerified$: Observable<boolean> = this.isEmailVerifiedSubject.asObservable()
   private afUser: firebase.User | null = null;
   private subscription?: Subscription;
-
   constructor(private afAuth: AngularFireAuth,
               private router: Router) {
     super();
     this.initService();
   }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe()
-  }
-
   private initService() {
     this.afAuth.onAuthStateChanged(afUser => {
       this.afUser = afUser;
@@ -34,12 +26,24 @@ export class FirebaseAuthenticationService extends AuthenticationServiceAbstract
     })
   }
 
-  override sendActivationEmail(): void {
-    this.afUser?.sendEmailVerification().then();
-  }
-
   private isUserAnonymousOrEmailVerified(user: firebase.User | null): boolean {
     return (user?.isAnonymous || user?.emailVerified) ?? false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe()
+  }
+
+  override isLoggedIn(): Observable<boolean> {
+    return this.isLoggedInSubject.asObservable()
+  }
+
+  override isEmailVerified(): Observable<boolean> {
+    return this.isEmailVerifiedSubject.asObservable()
+  }
+
+  override sendActivationEmail(): void {
+    this.afUser?.sendEmailVerification().then();
   }
 
   override logout() {

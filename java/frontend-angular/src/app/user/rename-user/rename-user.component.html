@@ -1,4 +1,4 @@
-<ng-container *ngIf="(user$ | async) as user">
+<ng-container *ngIf="(userService.getUser() | async) as user">
   <label for="playerName">Player Name</label>
   <input
     type="text"
@@ -9,3 +9,4 @@
   />
   <button (click)="updateName(newUserName.value)">ok</button>
 </ng-container>
+{{ checkRender() }}

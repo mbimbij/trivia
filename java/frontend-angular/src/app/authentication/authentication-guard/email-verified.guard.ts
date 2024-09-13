@@ -7,7 +7,7 @@ export const emailVerifiedGuard: CanActivateFn = (route, state) => {
   const authenticationService = inject(AuthenticationServiceAbstract);
   const router = inject(Router);
 
-  return authenticationService.isEmailVerified$
+  return authenticationService.isEmailVerified()
     .pipe(
       map(isEmailVerified => {
         if (!isEmailVerified) {

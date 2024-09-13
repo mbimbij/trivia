@@ -1,13 +1,6 @@
 <mat-toolbar class="navbar">
   <span id="app-logo" (click)="router.navigate(['/games'])">Trivia Web</span>
   <span class="example-spacer"></span>
-  <ng-container *ngIf="(userService.getUser() | async) as user">
-    <span id="anonymous-icon" *ngIf="user.isAnonymous" class="example-icon"
-          aria-label="Example icon-button with share icon">
-      <mat-icon>no_accounts</mat-icon>
-    </span>
-    <span>{{ user.name }}</span>
-  </ng-container>
-  <app-logout-button *ngIf="(authenticationService.isLoggedIn$ | async)"></app-logout-button>
+  <app-navbar-user></app-navbar-user>
 </mat-toolbar>
 {{ checkRender() }}

@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant main.ts
+participant angular
+participant createPlatformFactory
+participant createPlatformInjector
+participant createPlatform
+participant injector
+participant platformRef
+participant compileNgModuleFactory
+participant ngZone
+participant moduleRef
+'participant appRef
+'participant appComponent
+
+main.ts -> angular ++: platformBrowserDynamic().bootstrapModule(AppModule)
+angular -> angular: resolve platformBrowserDynamic to createPlatformFactory
+return
+main.ts -> createPlatformFactory ++: createPlatformFactory(...)
+createPlatformFactory -> createPlatformInjector ++: createPlatformInjector(...)
+createPlatformInjector -> injector **: createPlatformInjector(...)
+return injector:R3Injector
+
+createPlatformFactory -> createPlatform ++: createPlatform(injector, ...)
+createPlatform -> platformRef **: create platformRef
+return platformRef:PlatformRef
+return platformRef:PlatformRef
+
+main.ts -> platformRef ++: platformRef.bootstrapModule(AppModule)
+platformRef -> compileNgModuleFactory++: compileNgModuleFactory(this.injector, ...)
+compileNgModuleFactory -> moduleFactory **: compileNgModuleFactory(this.injector, ...)
+return moduleFactory
+
+platformRef -> platformRef ++: this.bootstrapModuleFactory(moduleFactory, ...)
+platformRef -> ngZone **: create ngZone
+platformRef -> moduleRef **: create moduleRef
+platformRef -> platformRef ++: this._moduleDoBootstrap(moduleRef)
+
+platformRef -> applicationRef **: create applicationRef
+platformRef -> platformRef: appComponent <- moduleRef._bootstrapComponents[0]
+platformRef -> applicationRef ++: applicationRef.bootstrap(appComponent)
+
+applicationRef -> componentFactory **: get component factory from param or resolver via injector
+applicationRef -> componentFactory: compRef <- componentFactory.create(AppComponent, ...)
+applicationRef -> applicationRef ++: this._loadComponent(compRef)
+applicationRef -> applicationRef: this.attachView(compRef.hostView)
+applicationRef -> applicationRef++: this.tick()
+applicationRef -> applicationRef++: this.detectChangesInAttachedViews()
+applicationRef -> applicationRef++: this.detectChangesInViewIfRequired()
+@enduml

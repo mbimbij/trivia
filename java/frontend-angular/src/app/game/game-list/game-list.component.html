@@ -2,7 +2,7 @@
 <br>
 <app-create-game></app-create-game>
 
-<ng-container *ngIf="(this.games$ | async) as games">
+<ng-container *ngIf="(gameService.getGames() | async) as games">
   <table>
     <tr>
       <th>id</th>
@@ -43,4 +43,11 @@
     </tr>
   </table>
 </ng-container>
+
+<div #div1>div1
+  <ng-container #ngContainer1>div2</ng-container>
+</div>
+<ng-template #tpl>
+  <div>template</div>
+</ng-template>
 {{ checkRender() }}

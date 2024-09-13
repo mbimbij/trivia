@@ -6,17 +6,8 @@ import {map} from "rxjs";
 export const loginActivateGuard: CanActivateFn = (route, state) => {
   const authenticationService = inject(AuthenticationServiceAbstract);
   const router = inject(Router);
-  // return authenticationService.isLoggedIn()
-  //   .pipe(
-  //     map(isLoggedIn => {
-  //       if (!isLoggedIn) {
-  //         return router.createUrlTree(['authentication']);
-  //       }
-  //       return true;
-  //     })
-  //   )
 
-  return authenticationService.isLoggedIn$
+  return authenticationService.isLoggedIn()
     .pipe(
       map(isLoggedIn => {
         if (!isLoggedIn) {

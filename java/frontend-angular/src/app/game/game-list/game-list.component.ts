@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
@@ -41,16 +41,39 @@ import {RenameUserComponent} from "../../user/rename-user/rename-user.component"
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameListComponent extends Identifiable {
-  games$: Observable<Array<Game>>
+
+  // @ViewChild('template', {static: true}) template!: TemplateRef<any>;
+  @ViewChild("tpl") tpl!: TemplateRef<any>;
+  @ViewChild('div1', {read: ViewContainerRef}) div1!: ViewContainerRef;
+  @ViewChild('ngContainer1', {read: ViewContainerRef}) ngContainer1!: ViewContainerRef;
 
   constructor(
     protected gameService: GameServiceAbstract,
   ) {
     super()
-    this.games$ = this.gameService.getGames();
   }
+
+  ngOnInit(){
+    console.log()
+    // let embeddedViewRef = this.viewContainerRef.createEmbeddedView(this.template);
+  }
+
+  // ngAfterViewInit(){
+  //   this.div1.clear();
+  //   let mytestComponentComponentRef = this.div1.createComponent(MytestComponent);
+  //   console.log()
+  // }
+  //
+  // ngAfterViewChecked(){
+  //   console.log()
+  // }
 
   trackByFn(index: number, game: Game): number {
     return game.id; // Assuming each game has a unique ID
+  }
+
+
+  override checkRender(): string {
+    return super.checkRender();
   }
 }

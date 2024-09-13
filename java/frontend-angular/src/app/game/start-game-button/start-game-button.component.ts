@@ -5,13 +5,13 @@ import {
   Input,
   OnDestroy,
 } from '@angular/core';
-import {NgIf} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {compareUserAndPlayer, generateRandomString} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Game} from "../game";
-import {combineLatest, Subscription} from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, Subscription} from "rxjs";
 import {Identifiable} from "../../common/identifiable";
 import {State} from "../../openapi-generated/game";
 
@@ -19,10 +19,11 @@ import {State} from "../../openapi-generated/game";
   standalone: true,
   selector: 'app-start-game-button',
   imports: [
-    NgIf
+    NgIf,
+    AsyncPipe
   ],
   template: `
-    <button [attr.data-testid]="'start-button-'+game.id" (click)="startGame()" *ngIf="canStartGameAttr">
+    <button [attr.data-testid]="'start-button-'+game.id" (click)="startGame()" *ngIf="(canStartGameAttr | async)">
       start
     </button>
     {{ checkRender() }}
@@ -34,21 +35,18 @@ export class StartGameButtonComponent extends Identifiable implements OnDestroy 
 
   @Input() game!: Game
   protected user!: User;
-  protected canStartGameAttr: boolean = false
+  protected canStartGameAttr = new BehaviorSubject(false)
 
   constructor(private service: GameServiceAbstract,
               private userService: UserServiceAbstract,
-              private gameService: GameServiceAbstract,
-              private cdr: ChangeDetectorRef)  {
+              private gameService: GameServiceAbstract)  {
     super()
-    // console.log(`constructor ${this.constructor.name} - ${this.id} called`)
   }
 
   private userGameSubscription: Subscription | undefined;
   private startActionSubscription: Subscription | undefined;
 
   ngOnInit() {
-    // console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
     let user$ = this.userService.getUser();
     let game$ = this.gameService.getGame(this.game.id);
 
@@ -56,13 +54,11 @@ export class StartGameButtonComponent extends Identifiable implements OnDestroy 
       .subscribe(([user, game]) => {
         this.user = user;
         this.game = game;
-        this.canStartGameAttr = this.canStartGame();
-        this.cdr.markForCheck()
+        this.canStartGameAttr.next(this.canStartGame());
       });
   }
 
   ngOnDestroy() {
-    // console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
     this.userGameSubscription?.unsubscribe()
     this.startActionSubscription?.unsubscribe()
   }
@@ -78,15 +74,15 @@ export class StartGameButtonComponent extends Identifiable implements OnDestroy 
     return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
   }
 
-  private playersCountIsValid() {
-    return this.game.players.length >= 2 && this.game.players.length <= 6;
-  }
-
   private isPlayerCreator(): boolean {
     return compareUserAndPlayer(this.user, this.game.creator);
   }
 
   private isGameJustCreated(): boolean {
     return this.game.state === State.Created
+  }
+
+  private playersCountIsValid() {
+    return this.game.players.length >= 2 && this.game.players.length <= 6;
   }
 }

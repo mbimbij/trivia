@@ -1,31 +1,30 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
-import {LogoutButtonComponent} from "./logout-button/logout-button.component";
 import {AsyncPipe, KeyValuePipe, NgIf} from "@angular/common";
-import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {ObjectAttributePipe} from "../object-attribute.pipe";
 import {Router} from "@angular/router";
 import {Identifiable} from "../identifiable";
-import {AuthenticationServiceAbstract} from "../../services/authentication-service-abstract";
+import {NavbarUserComponent} from "./navbar-user/navbar-user.component";
+import {LogoutButtonComponent} from "./navbar-user/logout-button/logout-button.component";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    MatToolbarModule, MatButtonModule, MatIconModule, LogoutButtonComponent, NgIf, AsyncPipe, ObjectAttributePipe, KeyValuePipe
+    MatToolbarModule, MatButtonModule, MatIconModule, LogoutButtonComponent, NgIf, AsyncPipe, ObjectAttributePipe, KeyValuePipe, NavbarUserComponent
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class NavbarComponent extends Identifiable {
-
-  constructor(protected userService: UserServiceAbstract,
-              protected authenticationService: AuthenticationServiceAbstract,
-              protected router: Router) {
+export class NavbarComponent extends Identifiable implements AfterViewChecked {
+  constructor(protected router: Router) {
     super()
+  }
+
+  ngAfterViewChecked(): void {
   }
 }
