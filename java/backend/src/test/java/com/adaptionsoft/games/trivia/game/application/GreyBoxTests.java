@@ -51,6 +51,7 @@ public class GreyBoxTests {
 
         // WHEN
         Game game = gameFactory.create("game name", player1, player2);
+        game.flush();
 
         // THEN
         Collection<GameLog> gameLogs = gameLogsRepository.getLogsForGame(game.getId());

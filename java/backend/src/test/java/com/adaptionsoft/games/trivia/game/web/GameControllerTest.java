@@ -5,8 +5,6 @@ import com.adaptionsoft.games.trivia.game.domain.GameFactory;
 import com.adaptionsoft.games.trivia.game.domain.GameRepository;
 import com.adaptionsoft.games.trivia.game.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayerNotFoundInGameException;
-import com.adaptionsoft.games.trivia.game.web.GameController;
-import com.adaptionsoft.games.trivia.game.web.PlayerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +19,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-class TriviaControllerTest {
+class GameControllerTest {
     @Mock
     private GameRepository gameRepository;
     @Mock

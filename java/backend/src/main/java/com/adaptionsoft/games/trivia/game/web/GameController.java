@@ -3,6 +3,7 @@ package com.adaptionsoft.games.trivia.game.web;
 import com.adaptionsoft.games.trivia.game.domain.*;
 import com.adaptionsoft.games.trivia.game.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayerNotFoundInGameException;
+import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Id;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -130,6 +132,7 @@ public class GameController {
         Player creator = playerFactory.fromDto(requestDto.creator());
         Game game = gameFactory.create(requestDto.gameName(), creator);
         gameRepository.save(game);
+        game.flush();
         template.convertAndSend("/topic/games/created", GameResponseDto.from(game));
         return GameResponseDto.from(game);
     }
@@ -145,6 +148,7 @@ public class GameController {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         game.addPlayer(playerFactory.fromDto(playerDto));
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -156,6 +160,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.start(player);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -168,6 +173,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.rollDice(player);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -180,6 +186,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.drawQuestion(game.getCurrentPlayer());
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return GameResponseDto.from(game);
     }
@@ -192,6 +199,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         Answer answer = game.answerCurrentQuestion(player, answerCode);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
         return AnswerDto.from(answer);
     }
@@ -204,6 +212,7 @@ public class GameController {
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.validate(player);
         gameRepository.save(game);
+        game.flush();
         notifyGameUpdatedViaWebsocket(game);
     }
 

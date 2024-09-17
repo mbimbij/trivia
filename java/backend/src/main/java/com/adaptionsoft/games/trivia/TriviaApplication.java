@@ -11,12 +11,19 @@ import com.adaptionsoft.games.trivia.shared.microarchitecture.EventListener;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collection;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
 
 @SpringBootApplication
 public class TriviaApplication {
@@ -73,4 +80,14 @@ public class TriviaApplication {
         listeners.forEach(eventPublisher::register);
         return eventPublisher;
     }
+
+//    @Bean
+////    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//    @Scope(value = SCOPE_SINGLETON, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//    public EventPublisher gameEventPublisher(
+//            Collection<EventListener> listeners) {
+//        ObserverBasedEventPublisher eventPublisher = new ObserverBasedEventPublisher();
+//        listeners.forEach(eventPublisher::register);
+//        return eventPublisher;
+//    }
 }

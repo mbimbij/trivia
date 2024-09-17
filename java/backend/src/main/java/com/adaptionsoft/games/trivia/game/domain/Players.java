@@ -32,7 +32,6 @@ public class Players extends EventRaiser {
     private void addCreator(Player creator) {
         setCreator(creator);
         this.individualPlayers.add(creator);
-        raise(new PlayerAddedEvent(creator, this.individualPlayers.size(), creator.getTurn()));
     }
 
     public void add(Player newPlayer) {
@@ -46,7 +45,6 @@ public class Players extends EventRaiser {
             throw InvalidNumberOfPlayersException.onAdd();
         }
         individualPlayers.add(newPlayer);
-        raise(new PlayerAddedEvent(newPlayer, this.individualPlayers.size(), newPlayer.getTurn()));
     }
 
     private boolean isNameDuplicate(Player newPlayer) {
@@ -92,5 +90,12 @@ public class Players extends EventRaiser {
 
     public void shuffle() {
         this.individualPlayers = this.shuffler.shuffle(this.individualPlayers);
+    }
+
+
+    public List<Player> getIndividualPlayersOtherThanCreator() {
+        return this.individualPlayers.stream()
+                .filter(player -> !Objects.equals(creator, player))
+                .toList();
     }
 }

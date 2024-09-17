@@ -131,6 +131,7 @@ class GameTest {
                     game.answerCurrentQuestion(game.getCurrentPlayer(), getRandomAnswer(rand));
                     game.validate(game.getCurrentPlayer());
                 }
+                game.flush();
             } while (game.isGameInProgress());
         }
 
@@ -249,12 +250,13 @@ class GameTest {
             Player player1 = player1();
             Player player2 = player2();
             Game game = gameFactory.create("game", player1, player2);
+            game.flush();
 
             // THEN the domain events are produced in the correct order
             List<Event> events = eventPublisher.getPublishedEvents();
             Assertions.assertArrayEquals(events.toArray(), new Event[]{
-                    new PlayerAddedEvent(player1, 1, player1.getTurn()),
-                    new PlayerAddedEvent(player2, 2, player2.getTurn()),
+                    new PlayerAddedEvent(player1, 1),
+                    new PlayerAddedEvent(player2, 2),
                     new GameCreatedEvent(game.getId())
             });
         }
@@ -327,6 +329,7 @@ class GameTest {
         void creator_can_start_game() {
             // WHEN
             game.start(player1);
+            game.flush();
 
             // THEN
             assertSoftly(softAssertions -> {
@@ -422,6 +425,11 @@ class GameTest {
 
             // AND the expected output
             String expectedOutput = """
+                    player1 was added
+                    They are player number 1
+                    player2 was added
+                    They are player number 2
+                    Game created
                     Game Id(value=1) started
                     player1 is the current player
                     They have rolled a 5
@@ -443,6 +451,7 @@ class GameTest {
             game.answerCurrentQuestion(player1, A);
             // AND validate
             game.validate(player1);
+            game.flush();
 
             // THEN event is raised
             assertThat(eventPublisher.getPublishedEvents()).contains(new PlayerAnsweredCorrectlyEvent(player1, turn));
@@ -470,6 +479,11 @@ class GameTest {
 
             // AND the expected output
             String expectedOutput = """
+                    player1 was added
+                    They are player number 1
+                    player2 was added
+                    They are player number 2
+                    Game created
                     Game Id(value=1) started
                     player1 is the current player
                     They have rolled a 5
@@ -498,6 +512,8 @@ class GameTest {
             game.answerCurrentQuestion(player1, B);
             // AND validate
             game.validate(player1);
+            // AND flush events
+            game.flush();
             // THEN event is raised
             assertThat(eventPublisher.getPublishedEvents()).containsOnlyOnce(expectedEvent);
             // AND turn not incremented
@@ -513,6 +529,8 @@ class GameTest {
             game.answerCurrentQuestion(player1, C);
             // AND validate
             game.validate(player1);
+            // AND flush events
+            game.flush();
             // THEN output as expected
             assertThat(baos.toString()).isEqualTo(expectedOutput);
             // AND the current question has been set to null
@@ -529,6 +547,11 @@ class GameTest {
             currentPlayer.setInPenaltyBox(true);
             ByteArrayOutputStream baos = redirectStdoutToString();
             String expectedOutput = """
+                    player1 was added
+                    They are player number 1
+                    player2 was added
+                    They are player number 2
+                    Game created
                     Game Id(value=1) started
                     player1 is the current player
                     They have rolled a 3
@@ -540,6 +563,7 @@ class GameTest {
             // WHEN
             game.rollDice(currentPlayer);
             game.validate(currentPlayer);
+            game.flush();
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);
@@ -553,6 +577,11 @@ class GameTest {
             currentPlayer.setInPenaltyBox(true);
             ByteArrayOutputStream baos = redirectStdoutToString();
             String expectedOutput = """
+                    player1 was added
+                    They are player number 1
+                    player2 was added
+                    They are player number 2
+                    Game created
                     Game Id(value=1) started
                     player1 is the current player
                     They have rolled a 2
@@ -565,6 +594,7 @@ class GameTest {
             // WHEN
             game.rollDice(currentPlayer);
             game.validate(currentPlayer);
+            game.flush();
 
             // THEN
             assertThat(baos.toString()).isEqualTo(expectedOutput);
@@ -618,6 +648,11 @@ class GameTest {
             // AND stdout redirected to a string
             ByteArrayOutputStream baos = redirectStdoutToString();
             String expectedOutput = """
+                    player1 was added
+                    They are player number 1
+                    player2 was added
+                    They are player number 2
+                    Game created
                     Answer was correct!!!!
                     player1 now has 1 Gold Coins.
                     player Id(value=id-player1) won game Id(value=1)
@@ -627,6 +662,7 @@ class GameTest {
             // WHEN
             game.answerCurrentQuestion(currentPlayer, A);
             game.validate(currentPlayer);
+            game.flush();
 
             // THEN
             assertSoftly(softAssertions -> {

@@ -42,14 +42,17 @@ public class TestFixtures {
     }
 
     public static Game a1playerGame() {
+        eventPublisher.clearEvents();
         return gameFactory.create(GAME_TEST_NAME, player1());
     }
 
     public static Game a2playersGame() {
+        eventPublisher.clearEvents();
         return gameFactory.create(GAME_TEST_NAME, player1(), player2());
     }
 
     public static Game a6playersGame() {
+        eventPublisher.clearEvents();
         return gameFactory.create(GAME_TEST_NAME, player1(),
                 player2(),
                 player(3),
