@@ -4,40 +4,38 @@
   back to games
 </button>
 <ng-container *ngIf="(game$ | async) as game; else loadingOrError">
-  <table>
-    <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
-    <tr>
-      <th>id</th>
-      <th>game</th>
-      <th>creator</th>
-      <th>players</th>
-      <th>status</th>
-      <th>join</th>
-      <th>start</th>
-      <th>go to</th>
-    </tr>
-    <tr  [ngClass]="'game-row'">
-      <td class="id">{{ game.id }}</td>
-      <td class="name">{{ game.name }}</td>
-      <td class="creator-name">{{ game.creator.name }}</td>
-      <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
-      <td class="state">{{ game.state }}</td>
-      <td class="join">
-        <app-join-game-button
-          [game]="game"
-        >
-        </app-join-game-button>
-      </td>
-      <td class="start">
-        <app-start-game-button
-          [game]="game"
-        />
-      </td>
-      <td class="goto">
-        <app-goto-game-button [game]="game"></app-goto-game-button>
-      </td>
-    </tr>
-  </table>
+  <ng-container *ngIf="(userService.getUser() | async) as user">
+
+    <table>
+      <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
+      <tr>
+        <th>id</th>
+        <th>game</th>
+        <th>creator</th>
+        <th>players</th>
+        <th>status</th>
+        <th>join</th>
+        <th>start</th>
+        <th>go to</th>
+      </tr>
+      <tr [ngClass]="'game-row'">
+        <td class="id">{{ game.id }}</td>
+        <td class="name">{{ game.name }}</td>
+        <td class="creator-name">{{ game.creator.name }}</td>
+        <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
+        <td class="state">{{ game.state }}</td>
+        <td class="join">
+          <app-join-game-button [game]="game" [user]="user"/>
+        </td>
+        <td class="start">
+          <app-start-game-button [game]="game" [userId]="user.id"/>
+        </td>
+        <td class="goto">
+          <app-goto-game-button [game]="game" [userId]="user.id"/>
+        </td>
+      </tr>
+    </table>
+  </ng-container>
 </ng-container>
 
 <ng-template #loadingOrError>

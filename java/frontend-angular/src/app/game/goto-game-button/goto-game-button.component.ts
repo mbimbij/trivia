@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges
+} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {compareUserAndPlayer} from "../../common/helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -31,45 +39,35 @@ import {AsyncPipe, NgIf} from "@angular/common";
   styleUrl: './goto-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GotoGameButtonComponent extends Identifiable implements OnDestroy {
+export class GotoGameButtonComponent extends Identifiable implements OnChanges{
   @Input() game!: Game
-  private user!: User
+  @Input() userId!: string
   protected canGotoGame$ = new BehaviorSubject<boolean>(false);
-  private subscription?: Subscription;
 
-  constructor(protected router: Router,
-              private userService: UserServiceAbstract) {
+  constructor(protected router: Router) {
     super()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['game']){
       this.game = changes['game'].currentValue;
-      this.updateButtonVisibility();
     }
-  }
-
-  ngOnInit(){
-    this.subscription = this.userService.getUser().subscribe(updatedUser => {
-      this.user = updatedUser;
-      this.updateButtonVisibility();
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    if(changes['userId']){
+      this.userId = changes['userId'].currentValue;
+    }
+    this.updateButtonVisibility();
   }
 
   private updateButtonVisibility() {
-    this.canGotoGame$.next(this.canGotoGame(this.user))
+    this.canGotoGame$.next(this.canGotoGame())
   }
 
-  private canGotoGame(user: User) {
-    return this.isPlayer(user) && this.isGameStarted();
+  private canGotoGame() {
+    return this.isPlayer() && this.isGameStarted();
   }
 
-  private isPlayer(user: User) {
-    return this.game.players.find(player => compareUserAndPlayer(user, player)) != null;
+  private isPlayer() {
+    return this.game.players.find(player => this.userId === player?.id) != null;
   }
 
   private isGameStarted() {

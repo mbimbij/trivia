@@ -1,10 +1,8 @@
-import {ChangeDetectionStrategy, Component, ElementRef, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {LogoutButtonComponent} from "./logout-button/logout-button.component";
 import {MatIcon} from "@angular/material/icon";
 import {Identifiable} from "../../identifiable";
-import {Observable} from "rxjs";
-import {User} from "../../../user/user";
 import {UserServiceAbstract} from "../../../services/user-service.abstract";
 import {AuthenticationServiceAbstract} from "../../../services/authentication-service-abstract";
 
@@ -21,19 +19,10 @@ import {AuthenticationServiceAbstract} from "../../../services/authentication-se
   styleUrl: './navbar-user.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavbarUserComponent extends Identifiable{
-  user$: Observable<User>;
+export class NavbarUserComponent extends Identifiable {
 
-  constructor(private userService: UserServiceAbstract,
-              protected authenticationService: AuthenticationServiceAbstract,
-              private viewContainerRef: ViewContainerRef,
-              private hostElement: ElementRef) {
+  constructor(protected userService: UserServiceAbstract,
+              protected authenticationService: AuthenticationServiceAbstract) {
     super()
-    this.user$ = this.userService.getUser();
-    console.log(this.hostElement.nativeElement.outerHTML);
-  }
-
-  override checkRender(): string {
-    return super.checkRender();
   }
 }

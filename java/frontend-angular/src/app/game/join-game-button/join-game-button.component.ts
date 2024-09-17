@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, SimpleChanges} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {Nobody, User} from "../../user/user";
-import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable, Subscription} from "rxjs";
+import {User} from "../../user/user";
+import {Subscription} from "rxjs";
 import {Game} from '../game';
 import {compareUserAndPlayer} from "../../common/helpers";
 import {Identifiable} from "../../common/identifiable";
@@ -31,34 +30,38 @@ import {State} from "../../openapi-generated/game";
 export class JoinGameButtonComponent extends Identifiable implements OnDestroy {
 
   @Input() game!: Game
-  protected user: User = Nobody.instance;
-  user$: Observable<User>;
-  private subscription: Subscription;
-  private subscription2?: Subscription;
+  @Input() user!: User;
+  private joinActionSubscription?: Subscription;
 
-  constructor(private gameService: GameServiceAbstract,
-              private userService: UserServiceAbstract) {
+  constructor(private gameService: GameServiceAbstract) {
     super()
-    this.user$ = userService.getUser();
-    this.subscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['user']) {
+      this.user = changes['user'].currentValue;
+    }
+    if (changes['game']) {
+      this.game = changes['game'].currentValue;
+    }
   }
 
   ngOnDestroy(): void {
-        this.subscription.unsubscribe();
-        this.subscription2?.unsubscribe();
-    }
+    this.joinActionSubscription?.unsubscribe();
+  }
+
   canJoin(): boolean {
     // TODO empêcher cette fonction d'être appelée 36 fois
     // console.log(`canJoin called`)
-    return !this.isPlayerInGame() && this.playersCountsLessThanMax() && !this.isGameStarted()
+    return !this.isPlayerInGame() && playersCountsLessThanMax(this.game) && !this.isGameStarted()
+
+    function playersCountsLessThanMax(game: Game) {
+      return game.players.length < 6;
+    }
   }
 
   protected isPlayerInGame(): boolean {
     return this.game.players.some(player => compareUserAndPlayer(this.user, player));
-  }
-
-  private playersCountsLessThanMax() {
-    return this.game.players.length < 6;
   }
 
   protected isGameStarted(): boolean {
@@ -66,8 +69,7 @@ export class JoinGameButtonComponent extends Identifiable implements OnDestroy {
   }
 
   joinGame() {
-    this.subscription2 = this.gameService.join(this.game, this.user)
-      .subscribe(() => {
-      });
+    this.joinActionSubscription = this.gameService.join(this.game, this.user)
+      .subscribe();
   }
 }

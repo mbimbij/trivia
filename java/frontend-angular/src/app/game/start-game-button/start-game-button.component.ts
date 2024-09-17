@@ -1,17 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges,} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
-import {User} from "../../user/user";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {compareUserAndPlayer, generateRandomString} from "../../common/helpers";
-import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Game} from "../game";
-import {BehaviorSubject, combineLatest, Observable, Subscription} from "rxjs";
+import {BehaviorSubject, Subscription} from "rxjs";
 import {Identifiable} from "../../common/identifiable";
 import {State} from "../../openapi-generated/game";
 
@@ -23,7 +14,7 @@ import {State} from "../../openapi-generated/game";
     AsyncPipe
   ],
   template: `
-    <button [attr.data-testid]="'start-button-'+game.id" (click)="startGame()" *ngIf="(canStartGameAttr | async)">
+    <button [attr.data-testid]="'start-button-'+game.id" (click)="startGame()" *ngIf="(canStartGameSubject | async)">
       start
     </button>
     {{ checkRender() }}
@@ -31,58 +22,50 @@ import {State} from "../../openapi-generated/game";
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartGameButtonComponent extends Identifiable implements OnDestroy {
+export class StartGameButtonComponent extends Identifiable implements OnChanges, OnDestroy {
 
   @Input() game!: Game
-  protected user!: User;
-  protected canStartGameAttr = new BehaviorSubject(false)
+  @Input() userId!: string;
+  protected canStartGameSubject = new BehaviorSubject(false)
 
-  constructor(private service: GameServiceAbstract,
-              private userService: UserServiceAbstract,
-              private gameService: GameServiceAbstract)  {
+  constructor(private gameService: GameServiceAbstract) {
     super()
   }
 
-  private userGameSubscription: Subscription | undefined;
   private startActionSubscription: Subscription | undefined;
 
-  ngOnInit() {
-    let user$ = this.userService.getUser();
-    let game$ = this.gameService.getGame(this.game.id);
-
-    this.userGameSubscription = combineLatest([user$, game$])
-      .subscribe(([user, game]) => {
-        this.user = user;
-        this.game = game;
-        this.canStartGameAttr.next(this.canStartGame());
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['userId']) {
+      this.userId = changes['userId'].currentValue;
+    }
+    if (changes['game']) {
+      this.game = changes['game'].currentValue;
+    }
+    this.canStartGameSubject.next(this.canStartGame(this.game, this.userId));
   }
 
   ngOnDestroy() {
-    this.userGameSubscription?.unsubscribe()
     this.startActionSubscription?.unsubscribe()
   }
 
+  private canStartGame(game: Game, userId: string): boolean {
+    return isPlayerCreator(game, userId) && isGameJustCreated(game) && playersCountIsValid(game)
+
+    function isPlayerCreator(game: Game, userId: string): boolean {
+      return userId == game.creator.id;
+    }
+
+    function isGameJustCreated(game: Game): boolean {
+      return game.state === State.Created
+    }
+
+    function playersCountIsValid(game: Game) {
+      return game.players.length >= 2 && game.players.length <= 6;
+    }
+  }
+
   startGame() {
-    this.startActionSubscription = this.service.start(this.game.id, this.user.id)
-      .subscribe(() => {
-        }
-      )
-  }
-
-  private canStartGame(): boolean {
-    return this.isPlayerCreator() && this.isGameJustCreated() && this.playersCountIsValid()
-  }
-
-  private isPlayerCreator(): boolean {
-    return compareUserAndPlayer(this.user, this.game.creator);
-  }
-
-  private isGameJustCreated(): boolean {
-    return this.game.state === State.Created
-  }
-
-  private playersCountIsValid() {
-    return this.game.players.length >= 2 && this.game.players.length <= 6;
+    this.startActionSubscription = this.gameService.start(this.game.id, this.userId)
+      .subscribe()
   }
 }

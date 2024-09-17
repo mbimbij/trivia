@@ -18,9 +18,7 @@ import {AuthenticationServiceAbstract} from "../../../../services/authentication
     ConsoleLogPipe
   ],
   template: `
-    <button mat-icon-button class="example-icon" aria-label="logout"
-            (click)="logout()"
-    >
+    <button mat-icon-button class="example-icon" aria-label="logout" (click)="authenticationService.logout()">
       <mat-icon>logout</mat-icon>
     </button>
     {{ checkRender() }}
@@ -29,18 +27,7 @@ import {AuthenticationServiceAbstract} from "../../../../services/authentication
 })
 export class LogoutButtonComponent extends Identifiable {
 
-  constructor(private router: Router,
-              protected authenticationService: AuthenticationServiceAbstract,
-              private viewContainerRef: ViewContainerRef) {
+  constructor(protected authenticationService: AuthenticationServiceAbstract) {
     super()
-  }
-
-  ngOnInit(){
-    console.log()
-  }
-
-  logout() {
-    this.authenticationService.logout();
-    // this.router.navigate(['/authentication'])
   }
 }
