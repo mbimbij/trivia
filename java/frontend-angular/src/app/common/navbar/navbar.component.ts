@@ -20,11 +20,12 @@ import {LogoutButtonComponent} from "./navbar-user/logout-button/logout-button.c
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class NavbarComponent extends Identifiable implements AfterViewChecked {
+export class NavbarComponent extends Identifiable {
   constructor(protected router: Router) {
     super()
   }
 
-  ngAfterViewChecked(): void {
+  override checkRender(): string {
+    return super.checkRender();
   }
 }

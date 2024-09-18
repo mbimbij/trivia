@@ -22,7 +22,7 @@ export class RenameUserComponent extends Identifiable{
     super()
   }
 
-  updateName(name: string) {
-    this.userService.renameUser(name)
+  override checkRender(): string {
+    return super.checkRender();
   }
 }
