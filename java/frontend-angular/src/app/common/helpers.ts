@@ -12,6 +12,10 @@ export function compareUserAndPlayer(user: User | null, player: PlayerDto | Play
   return user !== null && player !== null && user?.id === player?.id;
 }
 
+export function compareUserIdAndPlayer(userId: string, player: PlayerDto | Player): boolean {
+  return userId === player.id;
+}
+
 export function comparePlayers(player1: Player | null, player2?: Player | null): boolean {
   return player1 !== null && player2 !== null && player1?.id === player2?.id;
 }

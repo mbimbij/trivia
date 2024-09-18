@@ -1,6 +1,7 @@
 import {Player} from "../user/player";
-import {comparePlayers} from "../common/helpers";
+import {comparePlayers, compareUserAndPlayer} from "../common/helpers";
 import {AnswerDto, QuestionDto, State} from "../openapi-generated/game";
+import {User} from "../user/user";
 
 export class Game {
   id: number
@@ -73,5 +74,46 @@ export class Game {
 
   public isWinner(player: Player): boolean {
     return comparePlayers(player, this.winner)
+  }
+
+  public canDelete(user: User) {
+    return compareUserAndPlayer(user, this.creator);
+  }
+
+  public canGoto(user: User) {
+    return this.isPlayer(user) && this.isStarted();
+  }
+
+  isPlayer(user: User) {
+    return this.players.find(player => user.id === player?.id) != null;
+  }
+
+  isStarted() {
+    return this.state === State.Started;
+  }
+
+  public canStart(user: User): boolean {
+    return this.isPlayerCreator(user.id) && this.isGameCreated() && isPlayersCountValid(this.players.length)
+
+  function isPlayersCountValid(playersCount: number) {
+      return playersCount >= 2 && playersCount <= 6;
+    }
+  }
+
+  private isPlayerCreator(userId: string): boolean {
+    return userId == this.creator.id;
+  }
+
+  private isGameCreated(): boolean {
+    return this.state === State.Created
+  }
+
+  public canJoin(user: User): boolean {
+    console.log(`canJoin ${this.id} called`)
+    return !this.isPlayer(user) && isPlayersCountValid(this.players.length) && !this.isStarted()
+
+    function isPlayersCountValid(playersCount: number) {
+      return playersCount < 6;
+    }
   }
 }

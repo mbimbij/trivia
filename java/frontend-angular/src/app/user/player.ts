@@ -22,4 +22,17 @@ export class Player {
     this.location = location;
     this.gotOutOfPenaltyBox = gotOutOfPenaltyBox;
   }
+
+  public canShowRollDiceResultsInsidePenaltyBox() {
+    return new Set<State>([
+      State.WaitingToValidateEvenDiceRollFromPenaltyBox,
+      State.WaitingToValidateOddDiceRollFromPenaltyBox
+    ]).has(this.state);
+  }
+
+  public canShowRollDiceResultsOutsidePenaltyBox() {
+    return new Set<State>([
+      State.WaitingToDraw1StQuestion])
+      .has(this.state);
+  }
 }

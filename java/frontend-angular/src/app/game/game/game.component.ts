@@ -1,7 +1,7 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {generateRandomString, userToPlayer} from "../../common/helpers";
+import {userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {combineLatest, Observable, of, Subject, Subscription} from "rxjs";
@@ -27,6 +27,7 @@ import {
 import {Identifiable} from "../../common/identifiable";
 import {GameLog} from "../../openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
+import {DisplayMessageService} from "../../services/display-message.service";
 
 @Component({
   selector: 'app-game',
@@ -64,7 +65,8 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
               protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract,
-              private gameLogsService: GameLogsServiceAbstract) {
+              private gameLogsService: GameLogsServiceAbstract,
+              protected msgService: DisplayMessageService) {
     super()
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);

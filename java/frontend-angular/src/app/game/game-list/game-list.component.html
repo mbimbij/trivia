@@ -30,16 +30,20 @@
         <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
         <td class="state">{{ game.state }}</td>
         <td class="join">
-          <app-join-game-button [game]="game" [user]="user"/>
+          <app-join-game-button [gameId]="game.id"
+                                [user]="user"
+                                [canJoin]="game.canJoin(user)"
+                                [isPlayerInGame]="game.isPlayer(user)"
+                                [isGameStarted]="game.isStarted()"/>
         </td>
         <td class="start">
-          <app-start-game-button [game]="game" [userId]="user.id"/>
+          <app-start-game-button [gameId]="game.id" [userId]="user.id" [canStart]="game.canStart(user)"/>
         </td>
         <td class="goto">
-          <app-goto-game-button [game]="game" [userId]="user.id"/>
+          <app-goto-game-button [gameId]="game.id" [userId]="user.id" [canGoto]="game.canGoto(user)"/>
         </td>
         <td class="delete">
-          <app-delete-game-button [game]="game"/>
+          <app-delete-game-button [gameId]="game.id" [userId]="user.id" [canDelete]="game.canDelete(user)"/>
         </td>
       </tr>
     </table>

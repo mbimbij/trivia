@@ -27,35 +27,22 @@ import {Identifiable} from "../../../common/identifiable";
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceComponent extends Identifiable implements OnChanges, OnDestroy {
-  @Input() game!: Game;
-  @Input() player!: Player;
-  canRollDice: boolean | undefined;
-  private subscription?: Subscription;
+export class RollDiceComponent extends Identifiable implements OnDestroy {
+  @Input() gameId!: number;
+  @Input() userId!: Player;
+  @Input() canRollDice: boolean | undefined;
+  private actionSubscription?: Subscription;
 
   constructor(protected gameService: GameServiceAbstract) {
     super()
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.actionSubscription?.unsubscribe();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['player']) {
-      this.player = changes['player'].currentValue;
-    }
-    if (changes['game']) {
-      this.game = changes['game'].currentValue;
-    }
-    this.updateAttributes();
-  }
-
-  updateAttributes() {
-    this.canRollDice = this.game.canRollDice(this.player)
-  }
   rollDice() {
-    this.subscription = this.gameService.rollDice(this.game.id, this.player.id)
+    this.actionSubscription = this.gameService.rollDice(this.gameId, this.userId.id)
       .subscribe();
   }
 }

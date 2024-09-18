@@ -107,7 +107,7 @@ export class GameService extends GameServiceAbstract {
     return this.gamesSubjectsMap.get(gameId)!.asObservable();
   }
 
-  override delete(gameId: number): Observable<any> {
+  override delete(gameId: number): Observable<void> {
     return this.gameOpenApiService.deleteGameById(gameId)
   }
 
@@ -116,8 +116,8 @@ export class GameService extends GameServiceAbstract {
       .pipe(map(dto => gameDtoToGame(dto)));
   }
 
-  override join(game: Game, user: User): Observable<Game> {
-    return this.gameOpenApiService.addPlayerToGame(game.id, user.id, userToUserDto(user))
+  override join(gameId: number, user: User): Observable<Game> {
+    return this.gameOpenApiService.addPlayerToGame(gameId, user.id, userToUserDto(user))
       .pipe(map(dto => gameDtoToGame(dto)));
   }
 

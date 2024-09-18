@@ -23,7 +23,7 @@ describe('RollDiceComponent',
       fixture = TestBed.createComponent(RollDiceComponent);
       component = fixture.componentInstance;
       component.game = getMockGame2()
-      component.player = getMockPlayer2()
+      component.userId = getMockPlayer2()
     });
 
     it('should create', () => {
