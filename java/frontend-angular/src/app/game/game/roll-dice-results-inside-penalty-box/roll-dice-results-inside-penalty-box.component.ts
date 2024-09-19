@@ -20,6 +20,5 @@ import {State} from "../../../openapi-generated/game";
 export class RollDiceResultsInsidePenaltyBoxComponent extends Identifiable {
   @Input() gameId!: number;
   @Input() playerId!: string;
-  @Input() canShowComponent: boolean | undefined;
   @Input() displayMessage: string | undefined;
 }

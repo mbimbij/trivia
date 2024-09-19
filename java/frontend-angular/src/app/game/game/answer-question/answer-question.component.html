@@ -1,11 +1,10 @@
 <div
   [attr.data-testid]="'answer-question'"
-  *ngIf="canShowComponent || false"
 >
   <h2>{{ question.questionText }}</h2>
   <button
     [attr.data-testid]="'answer-A'"
-    (click)="answerQuestion(game.id, player.id, AnswerCode.A)"
+    (click)="answerQuestion(AnswerCode.A)"
   >
     A
   </button>
@@ -13,7 +12,7 @@
   <br>
   <button
     [attr.data-testid]="'answer-B'"
-    (click)="answerQuestion(game.id, player.id, AnswerCode.B)"
+    (click)="answerQuestion(AnswerCode.B)"
   >
     B
   </button>
@@ -21,7 +20,7 @@
   <br>
   <button
     [attr.data-testid]="'answer-C'"
-    (click)="answerQuestion(game.id, player.id, AnswerCode.C)"
+    (click)="answerQuestion(AnswerCode.C)"
   >
     C
   </button>
@@ -29,7 +28,7 @@
   <br>
   <button
     [attr.data-testid]="'answer-D'"
-    (click)="answerQuestion(game.id, player.id, AnswerCode.D)"
+    (click)="answerQuestion(AnswerCode.D)"
   >
     D
   </button>

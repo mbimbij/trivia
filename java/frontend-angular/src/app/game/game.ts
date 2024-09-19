@@ -59,6 +59,30 @@ export class Game {
     return comparePlayers(player, this.currentPlayer)
   }
 
+  public canJoin(user: User): boolean {
+    return !this.isPlayer(user) && isPlayersCountValid(this.players.length) && !this.isStarted()
+
+    function isPlayersCountValid(playersCount: number) {
+      return playersCount < 6;
+    }
+  }
+
+  public canStart(user: User): boolean {
+    return this.isPlayerCreator(user.id) && this.isGameCreated() && isPlayersCountValid(this.players.length)
+
+    function isPlayersCountValid(playersCount: number) {
+      return playersCount >= 2 && playersCount <= 6;
+    }
+  }
+
+  public canGoto(user: User) {
+    return this.isPlayer(user) && this.isStarted();
+  }
+
+  public canDelete(user: User) {
+    return compareUserAndPlayer(user, this.creator);
+  }
+
   public canRollDice(player: Player): boolean {
     return this.isCurrentPlayer(player)
       && (this.currentPlayer.state === State.WaitingForDiceRoll || this.currentPlayer.state === State.InPenaltyBox)
@@ -76,14 +100,6 @@ export class Game {
     return comparePlayers(player, this.winner)
   }
 
-  public canDelete(user: User) {
-    return compareUserAndPlayer(user, this.creator);
-  }
-
-  public canGoto(user: User) {
-    return this.isPlayer(user) && this.isStarted();
-  }
-
   isPlayer(user: User) {
     return this.players.find(player => user.id === player?.id) != null;
   }
@@ -92,28 +108,11 @@ export class Game {
     return this.state === State.Started;
   }
 
-  public canStart(user: User): boolean {
-    return this.isPlayerCreator(user.id) && this.isGameCreated() && isPlayersCountValid(this.players.length)
-
-  function isPlayersCountValid(playersCount: number) {
-      return playersCount >= 2 && playersCount <= 6;
-    }
-  }
-
   private isPlayerCreator(userId: string): boolean {
     return userId == this.creator.id;
   }
 
   private isGameCreated(): boolean {
     return this.state === State.Created
-  }
-
-  public canJoin(user: User): boolean {
-    console.log(`canJoin ${this.id} called`)
-    return !this.isPlayer(user) && isPlayersCountValid(this.players.length) && !this.isStarted()
-
-    function isPlayersCountValid(playersCount: number) {
-      return playersCount < 6;
-    }
   }
 }

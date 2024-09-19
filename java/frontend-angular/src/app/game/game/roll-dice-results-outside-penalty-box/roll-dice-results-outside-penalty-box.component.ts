@@ -19,6 +19,5 @@ import {Identifiable} from "../../../common/identifiable";
 export class RollDiceResultsOutsidePenaltyBoxComponent extends Identifiable{
   @Input() gameId!: number;
   @Input() playerId!: string;
-  @Input() canShowComponent: boolean | undefined;
   @Input() displayMessage: string | undefined;
 }

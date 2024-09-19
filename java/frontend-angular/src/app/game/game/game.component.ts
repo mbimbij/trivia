@@ -27,7 +27,7 @@ import {
 import {Identifiable} from "../../common/identifiable";
 import {GameLog} from "../../openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
-import {DisplayMessageService} from "../../services/display-message.service";
+import {MessageService} from "../../services/message.service";
 
 @Component({
   selector: 'app-game',
@@ -66,10 +66,13 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract,
               private gameLogsService: GameLogsServiceAbstract,
-              protected msgService: DisplayMessageService) {
+              protected msgService: MessageService) {
     super()
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
+
+      this.gameLogsService.initGameLogs(this.gameId);
+      this.gameLogs$ = this.gameLogsService.getGameLogs(this.gameId);
 
       this.game$ = this.gameService.getGame(this.gameId);
       let user$ = this.userService.getUser();
@@ -80,8 +83,6 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
             let playerFromUser = userToPlayer(user);
             this.player = game.getCurrentStateOf(playerFromUser);
             this.isGameEnded = game.isEnded();
-            this.gameLogsService.initGameLogs(game.id);
-            this.gameLogs$ = this.gameLogsService.getGameLogs(game.id);
           },
           error: err => {
             this.gameLoadingError$.next(err);

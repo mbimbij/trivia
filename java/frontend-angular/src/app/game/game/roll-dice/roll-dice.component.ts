@@ -16,7 +16,6 @@ import {Identifiable} from "../../../common/identifiable";
     <div>
       <button
         [attr.data-testid]="'roll-dice'"
-        *ngIf="canRollDice || false"
         (click)="rollDice()"
       >
         roll dice
@@ -30,7 +29,6 @@ import {Identifiable} from "../../../common/identifiable";
 export class RollDiceComponent extends Identifiable implements OnDestroy {
   @Input() gameId!: number;
   @Input() userId!: Player;
-  @Input() canRollDice: boolean | undefined;
   private actionSubscription?: Subscription;
 
   constructor(protected gameService: GameServiceAbstract) {
@@ -38,6 +36,7 @@ export class RollDiceComponent extends Identifiable implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log(`ngOnDestroy ${this.id}`)
     this.actionSubscription?.unsubscribe();
   }
 

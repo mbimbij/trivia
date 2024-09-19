@@ -9,7 +9,7 @@ import {Identifiable} from "../../../common/identifiable";
   template: `
     <button
       [attr.data-testid]="'draw-question'"
-      (click)="this.gameService.drawQuestion(gameId, playerId).subscribe()">
+      (click)="drawQuestion()">
       draw question
     </button>
     {{ checkRender() }}
@@ -23,5 +23,9 @@ export class DrawQuestionComponent extends Identifiable {
 
   constructor(protected gameService: GameServiceAbstract) {
     super()
+  }
+
+  protected drawQuestion(){
+    this.gameService.drawQuestion(this.gameId, this.playerId).subscribe()
   }
 }

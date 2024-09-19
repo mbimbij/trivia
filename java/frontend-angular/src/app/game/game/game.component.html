@@ -31,21 +31,28 @@
       *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
     >
       <hr>
-      <app-roll-dice [gameId]="game.id" [userId]="player" [canRollDice]="game.canRollDice(player)"/>
-      <app-roll-dice-results-inside-penalty-box [gameId]="game.id"
+      <app-roll-dice *ngIf="game.canRollDice(player)" [gameId]="game.id" [userId]="player"/>
+      <app-roll-dice-results-inside-penalty-box *ngIf="player.isWaitingToValidateRollDiceInsidePenaltyBox()"
+                                                [gameId]="game.id"
                                                 [playerId]="player.id"
-                                                [canShowComponent]="player.canShowRollDiceResultsInsidePenaltyBox()"
-                                                [displayMessage]="msgService.getRollDiceResultsInsidePenaltyBoxMessage(game.currentRoll)"
+                                                [displayMessage]="msgService.getRollDiceResultsInsidePenaltyBoxMessage(game,player)"
       />
-      <app-roll-dice-results-outside-penalty-box [gameId]="game.id"
+      <app-roll-dice-results-outside-penalty-box *ngIf="player.isWaitingToValidateRollDiceOutsidePenaltyBox()"
+                                                 [gameId]="game.id"
                                                  [playerId]="player.id"
-                                                 [canShowComponent]="player.canShowRollDiceResultsOutsidePenaltyBox()"
                                                  [displayMessage]="msgService.getRollDiceResultsOutsidePenaltyBoxMessage(game, player)"
       />
 
-      <app-answer-question [player]="player" [game]="game" [question]="game.currentQuestion!"/>
-      <app-answer-question-results-wrapper [gameId]="game.id" [player]="player"
-                                           [explanations]="game.currentAnswer?.explanations"/>
+      <app-answer-question *ngIf="game.canAnswerQuestion(player)" [gameId]="game.id"
+                           [playerId]="player.id"
+                           [question]="game.currentQuestion!"
+      />
+      <app-answer-question-results-wrapper [gameId]="game.id" [playerId]="player.id"
+                                           [explanations]="game.currentAnswer?.explanations"
+                                           [isWaitingToValidateCorrectAnswer]="player.isWaitingToValidateCorrectAnswer()"
+                                           [isWaitingToValidateFirstIncorrectAnswer]="player.isWaitingToValidateFirstIncorrectAnswer()"
+                                           [isWaitingToValidateSecondIncorrectAnswer]="player.isWaitingToValidateSecondIncorrectAnswer()"
+      />
     </div>
 
     <hr>
