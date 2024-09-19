@@ -1,10 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy,} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {Game} from "../game";
-import {BehaviorSubject, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {Identifiable} from "../../common/identifiable";
-import {State} from "../../openapi-generated/game";
 
 @Component({
   standalone: true,
@@ -14,7 +12,9 @@ import {State} from "../../openapi-generated/game";
     AsyncPipe
   ],
   template: `
-    <button [attr.data-testid]="'start-button-'+gameId" (click)="startGame()" *ngIf="canStart">
+    <button [attr.data-testid]="'start-button-'+gameId"
+            [disabled]="!canStart"
+            (click)="startGame()">
       start
     </button>
     {{ checkRender() }}

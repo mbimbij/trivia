@@ -11,7 +11,8 @@ import {AsyncPipe} from "@angular/common";
     AsyncPipe
   ],
   template: `
-    <button [attr.data-testid]="'delete-button-'+gameId" [disabled]="!canDelete"
+    <button [attr.data-testid]="'delete-button-'+gameId"
+            [disabled]="!canDelete"
             (click)="deleteGame()">
       delete
     </button>

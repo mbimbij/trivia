@@ -36,7 +36,6 @@ export class RollDiceComponent extends Identifiable implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log(`ngOnDestroy ${this.id}`)
     this.actionSubscription?.unsubscribe();
   }
 
