@@ -8,7 +8,7 @@ import {Identifiable} from "../../../identifiable";
 import {AuthenticationServiceAbstract} from "../../../../services/authentication-service-abstract";
 
 @Component({
-  selector: 'app-logout-button',
+  selector: 'app-navbar-logout-button',
   standalone: true,
   imports: [
     NgIf,
@@ -23,9 +23,9 @@ import {AuthenticationServiceAbstract} from "../../../../services/authentication
     </button>
     {{ checkRender() }}
   `,
-  styleUrl: './logout-button.component.css'
+  styleUrl: './navbar-logout-button.component.css'
 })
-export class LogoutButtonComponent extends Identifiable {
+export class NavbarLogoutButtonComponent extends Identifiable {
 
   constructor(protected authenticationService: AuthenticationServiceAbstract) {
     super()

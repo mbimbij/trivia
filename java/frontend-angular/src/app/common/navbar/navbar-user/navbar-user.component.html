@@ -3,6 +3,6 @@
             aria-label="Example icon-button with share icon">no_accounts
   </mat-icon>
   <span>{{ user.name }}</span>
-  <app-logout-button *ngIf="(authenticationService.isLoggedIn() | async)"></app-logout-button>
+  <app-navbar-logout-button *ngIf="(authenticationService.isLoggedIn() | async)"></app-navbar-logout-button>
 </ng-container>
 {{ checkRender() }}

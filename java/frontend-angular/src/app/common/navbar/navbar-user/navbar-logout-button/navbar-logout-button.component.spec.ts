@@ -1,25 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LogoutButtonComponent } from './logout-button.component';
+import { NavbarLogoutButtonComponent } from './navbar-logout-button.component';
 import {
   AuthenticationServiceAbstract,
   AuthenticationServiceMock
 } from "../../../../services/authentication-service-abstract";
 
 describe('LogoutButtonComponent', () => {
-  let component: LogoutButtonComponent;
-  let fixture: ComponentFixture<LogoutButtonComponent>;
+  let component: NavbarLogoutButtonComponent;
+  let fixture: ComponentFixture<NavbarLogoutButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LogoutButtonComponent],
+      imports: [NavbarLogoutButtonComponent],
       providers:[
         {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
       ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LogoutButtonComponent);
+    fixture = TestBed.createComponent(NavbarLogoutButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
