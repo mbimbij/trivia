@@ -24,11 +24,12 @@ describe('GameService', () => {
     // WHEN
     let gamesObservable = service.getGames();
 
-    // THEN
+    // THEN games are returned
     gamesObservable.subscribe(games => {
       expect(games).toEqual([getMockGame1(), getMockGame2()])
     })
 
+    // AND handler registration is performed as expected
     expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(1)
     expect(service.registerGameDeletedHandler).toHaveBeenCalledTimes(1)
     expect(service.registerGameUpdatedHandler).toHaveBeenCalledTimes(2)
@@ -46,6 +47,7 @@ describe('GameService', () => {
       expect(games).toEqual([])
     })
 
+    // AND handler registration is performed as expected
     expect(service.registerGameCreatedHandler).toHaveBeenCalledTimes(1)
     expect(service.registerGameDeletedHandler).toHaveBeenCalledTimes(1)
     expect(service.registerGameUpdatedHandler).toHaveBeenCalledTimes(0)

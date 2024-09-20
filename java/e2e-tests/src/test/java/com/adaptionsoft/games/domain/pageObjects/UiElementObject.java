@@ -1,8 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import lombok.Getter;
 
 @Getter
@@ -18,14 +16,10 @@ public class UiElementObject {
     }
 
     public void clickButtonByTestid(String testid) {
-        Locator button = page.getByTestId(testid);
-        PlaywrightAssertions.assertThat(button).isVisible();
-        PlaywrightAssertions.assertThat(button).isEnabled();
-        button.click();
+        page.getByTestId(testid).click();
     }
 
     public void clickElementByTestid(int gameId, Page page) {
-        Locator locator = page.getByTestId("game-details-%d".formatted(gameId));
-        locator.click();
+        page.getByTestId("game-details-%d".formatted(gameId)).click();
     }
 }

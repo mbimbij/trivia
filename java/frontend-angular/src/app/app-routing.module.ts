@@ -9,8 +9,9 @@ import {
 } from "./authentication/waiting-for-email-verification/waiting-for-email-verification.component";
 import {loginActivateGuard} from "./authentication/authentication-guard/login-activate.guard";
 import {emailVerifiedGuard} from "./authentication/authentication-guard/email-verified.guard";
-import { NotFoundComponent } from './common/not-found/not-found.component';
+import {NotFoundComponent} from './common/not-found/not-found.component';
 import {HealthComponent} from "./health/health.component";
+import {gameListResolver} from "./game-list.resolver";
 
 const routes: Routes = [
   {path: "authentication", component: AuthenticationComponent},
@@ -20,8 +21,10 @@ const routes: Routes = [
     canActivate: [loginActivateGuard]
   },
   {
-    path: "games", component: GameListComponent
-    , canActivate: [loginActivateGuard, emailVerifiedGuard]
+    path: "games",
+    component: GameListComponent,
+    canActivate: [loginActivateGuard, emailVerifiedGuard],
+    resolve: {data: gameListResolver}
   },
   {path: "", redirectTo: "/games", pathMatch: "full"},
   {path: "games/:id/details", component: GameDetailsComponent, canActivate: [loginActivateGuard, emailVerifiedGuard]},

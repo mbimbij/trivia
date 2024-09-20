@@ -2,8 +2,8 @@
 <br>
 <app-create-game></app-create-game>
 
-<ng-container *ngIf="(gameService.getGames() | async) as games">
-  <ng-container *ngIf="(userService.getUser() | async) as user">
+<ng-container *ngIf="(games$ | async) as games">
+  <ng-container *ngIf="(user$ | async) as user">
     <table>
       <tr>
         <th>id</th>

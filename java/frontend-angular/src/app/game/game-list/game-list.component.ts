@@ -3,7 +3,7 @@ import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {RouterLink} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 import {FirebaseuiAngularLibraryComponent} from "firebaseui-angular";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
@@ -15,6 +15,8 @@ import {Game} from "../game";
 import {Identifiable} from "../../common/identifiable";
 import {RenameUserComponent} from "../../user/rename-user/rename-user.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {Observable} from "rxjs";
+import {User} from "../../user/user";
 
 @Component({
   selector: 'app-game-list',
@@ -42,11 +44,20 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
 })
 export class GameListComponent extends Identifiable {
 
+  user$!: Observable<User>;
+  games$!: Observable<Array<Game>>
+
   constructor(
     protected gameService: GameServiceAbstract,
-    protected userService: UserServiceAbstract
-  ) {
+    protected userService: UserServiceAbstract,
+    private activatedRoute: ActivatedRoute) {
     super()
+  }
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({data}) => {
+      this.user$ = data.user$
+      this.games$ = data.games$
+    });
   }
 
   trackByFn(index: number, game: Game): number {

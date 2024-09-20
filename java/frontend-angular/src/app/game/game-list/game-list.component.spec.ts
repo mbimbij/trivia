@@ -6,25 +6,35 @@ import {GameServiceMock} from "../game-service-mock";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {CreateGameComponent} from "../create-game/create-game.component";
 import {FormsModule} from "@angular/forms";
-import {provideRouter} from "@angular/router";
+import {ActivatedRoute, provideRouter} from "@angular/router";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service-abstract";
 import {DebugElement} from "@angular/core";
+import {of} from "rxjs";
+import {getMockGame1, getMockGame2, getMockUser1} from "../../common/test-helpers";
+
+const ROW_SELECTOR = '.game-row'
 
 describe('GameListComponent', () => {
   let component: GameListComponent;
   let fixture: ComponentFixture<GameListComponent>;
   let htmlElement: HTMLElement;
-  let debugElement: DebugElement;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
         {provide: GameServiceAbstract, useClass: GameServiceMock},
         {provide: UserServiceAbstract, useClass: UserServiceMock},
-        {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
-        provideRouter([])
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              user$: of(getMockUser1()),
+              games$: of([getMockGame1(), getMockGame2()])
+            })
+
+          }
+        }
       ],
       imports: [HttpClientTestingModule, CreateGameComponent, FormsModule],
     })
@@ -33,8 +43,6 @@ describe('GameListComponent', () => {
     fixture = TestBed.createComponent(GameListComponent);
     component = fixture.componentInstance;
     htmlElement = fixture.nativeElement;
-    debugElement = fixture.debugElement;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -42,7 +50,11 @@ describe('GameListComponent', () => {
   });
 
   it('should display games list', () => {
-    let htmlGameRows = htmlElement.querySelectorAll('.game-row');
-    expect(htmlGameRows).toHaveSize(2);
+    fixture.detectChanges();
+
+    fixture.whenStable().then(value => {
+      let htmlGameRows = htmlElement.querySelectorAll(ROW_SELECTOR);
+      expect(htmlGameRows).toHaveSize(2);
+    })
   });
 });

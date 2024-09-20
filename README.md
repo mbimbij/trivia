@@ -36,10 +36,10 @@ and a reason to get my hand on Angular and other tools or techniques.
 ## Tools
 
 - IntelliJ
-- java (optional if using IJ provided JVM)
-- maven (optional if using IJ provided maven)
-- Node & npm
-- Angular CLI v17
+- java 21 (optional if using IJ provided JVM)
+- node & npm - [Using nvm for example](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
+- Angular CLI v17 - [Installation guide](https://v17.angular.io/cli#installing-angular-cli)
+- openapi-generator-cli - [Installation guide](https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#globally)
 - make (optional if you are not interested in executing actions using Makefile targets)
 
 ## Configure .env file
@@ -57,11 +57,18 @@ Most actions should also have an associated `Makefile` target
 
 Both rely on a properly configured `.env` file
 
-# Frontend dependencies
+## Frontend dependencies
 
-1. dsds
-2. 
-2. Generate the openapi stubs with the Makefile target `generate-frontend-stubs-from-openapi`
+- node & npm - [Using nvm for example](https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script)
+- Angular CLI v17 - [Installation guide](https://v17.angular.io/cli#installing-angular-cli)
+- openapi-generator-cli - [Installation guide](https://github.com/OpenAPITools/openapi-generator-cli?tab=readme-ov-file#globally)
+- Generate the openapi stubs with the Makefile target `generate-frontend-stubs-from-openapi`
+- Generate the environment files with the Makefile target `generate-frontend-environment-files`
+
+## Backend dependencies
+
+- java 21
+- maven is not necessary as maven wrapper is used in Makefile targets
 
 # Run the app locally
 
@@ -196,6 +203,12 @@ The goal of these tests is to ensure beyond any doubt that the application does 
 
 The way the app is configured to run called is called "profile". cf section [Run the app locally](#run-the-app-locally) for more info.
 
+## Prerequisites
+
+1. Create a test user and rename it "qa-user"
+2. (Re)define the values `QA_USER_ID`, `QA_USER_EMAIL`, `QA_USER_PASSWORD`, `FIREBASE_API_KEY` in the .env file
+3. (Re)define the value `HOSTNAME_PROD` to run tests against the prod environment if configured
+
 ## Profile "local-ide"
 
 the backend and the frontend are ran locally from the IDE or the CLI.
@@ -214,6 +227,7 @@ At the moment, e2e tests are configured to use Chrome. A browser should open and
 
 ![](/java/docs/readme-images/3.2-profile-local-ide-run-config-output.jpg)
 
+Or run the Makefile target `e2e-tests-local-ide`
 
 ## Profile "local-ide-embedded"
 
@@ -227,6 +241,8 @@ Select the run config `e2e-tests - local-ide-embedded` to run all tests.
 
 Just like for the `local-ide` profile, there are run configurations available for specific features / pages.
 
+Or run the Makefile target `e2e-tests-local-ide-embedded`
+
 ## Profile "local-docker"
 
 Just like the configuration "local-ide-embedded", but packaged in a Docker image 
@@ -236,6 +252,12 @@ Just like the configuration "local-ide-embedded", but packaged in a Docker image
 cf section [run the app locally - profile "local-docker"](#profile-local-docker) for more details and instructions to run this configuration.
 
 Just like for the other profiles described above, there are run configurations available for specific features / pages.
+
+Or run the Makefile target `e2e-tests-local-docker`
+
+## Profile "prod"
+
+After setting up the prod environment, the cicd pipeline and everything else necessary to deploy the application in production (README section coming soon)
 
 ---
 
