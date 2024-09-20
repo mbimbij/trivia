@@ -1,24 +1,25 @@
-@if (player.state == State.WaitingToValidateFirstIncorrectAnswer) {
+@if (isWaitingToValidateCorrectAnswer) {
   <hr/>
   <app-answer-question-results
-    [gameId]="gameId" [playerId]="player.id"
-    [isAnswerCorrectPrompt]="'First Incorrect Answer. You are given a second chance'"
-    [explanations]="explanations!"
-    [buttonText]="'draw 2nd question'"
-  />
-} @else if (player.state == State.WaitingToValidateSecondIncorrectAnswer) {
-  <hr/>
-  <app-answer-question-results
-    [gameId]="gameId" [playerId]="player.id"
-    [isAnswerCorrectPrompt]="'Second Incorrect Answer. You are sent to the penalty box.'"
+    [gameId]="gameId" [playerId]="playerId"
+    [isAnswerCorrectPrompt]="messageService.getMessage('answer-question.results.correct')"
     [explanations]="explanations!"
   />
 
-} @else if (player.state == State.WaitingToValidateFirstCorrectAnswer || player.state == State.WaitingToValidateSecondCorrectAnswer) {
+} @else if (isWaitingToValidateFirstIncorrectAnswer ) {
   <hr/>
   <app-answer-question-results
-    [gameId]="gameId" [playerId]="player.id"
-    [isAnswerCorrectPrompt]="'Correct Answer'"
+    [gameId]="gameId" [playerId]="playerId"
+    [isAnswerCorrectPrompt]="messageService.getMessage('answer-question.results.first-incorrect')"
+    [explanations]="explanations!"
+    [buttonText]="'draw 2nd question'"
+  />
+} @else if (isWaitingToValidateSecondIncorrectAnswer) {
+  <hr/>
+  <app-answer-question-results
+    [gameId]="gameId" [playerId]="playerId"
+    [isAnswerCorrectPrompt]="messageService.getMessage('answer-question.results.second-incorrect')"
     [explanations]="explanations!"
   />
 }
+{{ checkRender() }}

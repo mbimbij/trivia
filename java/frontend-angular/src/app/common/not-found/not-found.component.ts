@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Identifiable} from "../identifiable";
 
 @Component({
@@ -7,8 +7,10 @@ import {Identifiable} from "../identifiable";
   imports: [],
   template: `
     Page not found
+    {{ checkRender() }}
   `,
-  styleUrl: './not-found.component.css'
+  styleUrl: './not-found.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotFoundComponent extends Identifiable {
 

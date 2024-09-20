@@ -11,6 +11,7 @@ import {Identifiable} from "../../../common/identifiable";
       [attr.data-testid]="'validate'"
       (click)="validate(gameId, playerId)">{{ buttonText || 'ok' }}
     </button>
+    {{ checkRender() }}
   `,
   styleUrl: './validation-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

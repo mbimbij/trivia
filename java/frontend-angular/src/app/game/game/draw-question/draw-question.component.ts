@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 
@@ -9,11 +9,13 @@ import {Identifiable} from "../../../common/identifiable";
   template: `
     <button
       [attr.data-testid]="'draw-question'"
-      (click)="this.gameService.drawQuestion(gameId, playerId).subscribe()">
+      (click)="drawQuestion()">
       draw question
     </button>
+    {{ checkRender() }}
   `,
-  styleUrl: './draw-question.component.css'
+  styleUrl: './draw-question.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DrawQuestionComponent extends Identifiable {
   @Input() gameId!: number;
@@ -21,5 +23,9 @@ export class DrawQuestionComponent extends Identifiable {
 
   constructor(protected gameService: GameServiceAbstract) {
     super()
+  }
+
+  protected drawQuestion(){
+    this.gameService.drawQuestion(this.gameId, this.playerId).subscribe()
   }
 }

@@ -1,8 +1,14 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="backend - local-ide-embedded" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="local-ide-embedded" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/.env" />
+    </option>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="backend" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.adaptionsoft.games.trivia.TriviaApplication" />
     <method v="2">
       <option name="Make" enabled="true" />

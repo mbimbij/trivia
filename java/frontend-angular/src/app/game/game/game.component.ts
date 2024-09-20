@@ -1,7 +1,7 @@
-import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {generateRandomString, userToPlayer} from "../../common/helpers";
+import {userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {combineLatest, Observable, of, Subject, Subscription} from "rxjs";
@@ -27,6 +27,7 @@ import {
 import {Identifiable} from "../../common/identifiable";
 import {GameLog} from "../../openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
+import {MessageService} from "../../services/message.service";
 
 @Component({
   selector: 'app-game',
@@ -64,10 +65,14 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
               protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract,
-              private gameLogsService: GameLogsServiceAbstract) {
+              private gameLogsService: GameLogsServiceAbstract,
+              protected msgService: MessageService) {
     super()
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
+
+      this.gameLogsService.initGameLogs(this.gameId);
+      this.gameLogs$ = this.gameLogsService.getGameLogs(this.gameId);
 
       this.game$ = this.gameService.getGame(this.gameId);
       let user$ = this.userService.getUser();
@@ -78,8 +83,6 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
             let playerFromUser = userToPlayer(user);
             this.player = game.getCurrentStateOf(playerFromUser);
             this.isGameEnded = game.isEnded();
-            this.gameLogsService.initGameLogs(game.id);
-            this.gameLogs$ = this.gameLogsService.getGameLogs(game.id);
           },
           error: err => {
             this.gameLoadingError$.next(err);

@@ -6,4 +6,10 @@ export class Identifiable{
     constructor() {
         this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
     }
+
+    checkRender(){
+      let message = `${this.id} - view refresh`;
+      console.log(message)
+      return ''
+    }
 }

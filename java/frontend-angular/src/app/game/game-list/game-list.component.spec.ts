@@ -9,7 +9,7 @@ import {FormsModule} from "@angular/forms";
 import {provideRouter} from "@angular/router";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service-abstract";
 import {DebugElement} from "@angular/core";
 
 describe('GameListComponent', () => {

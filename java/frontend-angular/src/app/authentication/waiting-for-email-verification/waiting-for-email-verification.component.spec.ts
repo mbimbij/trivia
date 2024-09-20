@@ -6,7 +6,7 @@ import {MockActivatedRoute} from "../../common/test-helpers";
 import {
   AuthenticationServiceAbstract,
   AuthenticationServiceMock
-} from "../../services/authentication-service.abstract";
+} from "../../services/authentication-service-abstract";
 
 describe('WaitingForEmailVerificationComponent', () => {
   let component: WaitingForEmailVerificationComponent;

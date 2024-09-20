@@ -2,6 +2,7 @@ package com.adaptionsoft.games.trivia.game.domain;
 
 import com.adaptionsoft.games.trivia.game.domain.event.MockEventPublisher;
 import com.adaptionsoft.games.trivia.game.infra.EventConsoleLogger;
+import com.adaptionsoft.games.trivia.game.web.UserDto;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;
 
 import static com.adaptionsoft.games.trivia.game.domain.AnswerCode.*;
@@ -71,6 +72,10 @@ public class TestFixtures {
 
     public static Player player(int n) {
         return playerFactory.create(new UserId("id-player%d".formatted(n)), "player%d".formatted(n));
+    }
+
+    public static UserDto userDto(int n) {
+        return new UserDto("id-player%d".formatted(n), "player%d".formatted(n));
     }
 
     public static MockEventPublisher eventPublisher() {

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavbarComponent } from './navbar.component';
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
-import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service-abstract";
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;

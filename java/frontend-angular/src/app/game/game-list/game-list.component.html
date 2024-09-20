@@ -1,55 +1,56 @@
-<ng-container *ngIf="(user$ | async) as user">
-  <label for="playerName">Player Name</label>
-  <input
-    type="text"
-    id="playerName" required minlength="1" maxlength="100" size="20"
-    #newUserName
-    [value]="user.name"
-    (keyup.enter)="updateName(newUserName.value)"
-  />
-  <button (click)="updateName(newUserName.value)">ok</button>
-</ng-container>
+<app-rename-user></app-rename-user>
 <br>
 <app-create-game></app-create-game>
 
-<ng-container *ngIf="(this.games$ | async) as games">
-  <table>
-    <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>creator</th>
-      <th>players</th>
-      <th>status</th>
-      <th>start</th>
-      <th>join</th>
-      <th>go to</th>
-      <th>delete</th>
-    </tr>
-    <tr [ngClass]="'game-row'" *ngFor="let game of games; trackBy: trackByFn">
-      <td class="id">{{ game.id }}</td>
-      <td class="name">
-        <a
-          [attr.data-testid]="'game-details-'+game.id"
-          [routerLink]="['/games',game.id,'details']"
-        >
-          {{ game.name }}
-        </a>
-      </td>
-      <td class="creator-name">{{ game.creator.name }}</td>
-      <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
-      <td class="state">{{ game.state }}</td>
-      <td class="start">
-        <app-start-game-button [game]="game"/>
-      </td>
-      <td class="join">
-        <app-join-game-button [game]="game"/>
-      </td>
-      <td class="goto">
-        <app-goto-game-button [game]="game"/>
-      </td>
-      <td class="delete">
-        <app-delete-game-button [game]="game"/>
-      </td>
-    </tr>
-  </table>
+<ng-container *ngIf="(gameService.getGames() | async) as games">
+  <ng-container *ngIf="(userService.getUser() | async) as user">
+    <table>
+      <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>creator</th>
+        <th>players</th>
+        <th>status</th>
+        <th>join</th>
+        <th>start</th>
+        <th>go to</th>
+        <th>delete</th>
+      </tr>
+      <tr [ngClass]="'game-row'" *ngFor="let game of games; trackBy: trackByFn">
+        <td class="id">{{ game.id }}</td>
+        <td class="name">
+          <a
+            [attr.data-testid]="'game-details-'+game.id"
+            [routerLink]="['/games',game.id,'details']"
+          >
+            {{ game.name }}
+          </a>
+        </td>
+        <td class="creator-name">{{ game.creator.name }}</td>
+        <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
+        <td class="state">{{ game.state }}</td>
+        <td class="join">
+          <app-join-game-button [gameId]="game.id"
+                                [user]="user"
+                                [canJoin]="game.canJoin(user)"
+                                [isPlayerInGame]="game.isPlayer(user)"
+                                [isGameStarted]="game.isStarted()"/>
+        </td>
+        <td class="start">
+          <app-start-game-button [gameId]="game.id" [userId]="user.id" [canStart]="game.canStart(user)"/>
+        </td>
+        <td class="goto">
+          <app-goto-game-button [gameId]="game.id" [userId]="user.id" [canGoto]="game.canGoto(user)"/>
+        </td>
+        <td class="delete">
+          <app-delete-game-button [gameId]="game.id" [userId]="user.id" [canDelete]="game.canDelete(user)"/>
+        </td>
+      </tr>
+    </table>
+  </ng-container>
 </ng-container>
+
+<ng-template #tpl>
+  <div>template</div>
+</ng-template>
+{{ checkRender() }}

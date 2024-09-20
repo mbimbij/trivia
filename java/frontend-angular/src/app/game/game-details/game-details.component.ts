@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
@@ -13,6 +13,7 @@ import {ConsoleLogPipe} from "../../console-log.pipe";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {Identifiable} from "../../common/identifiable";
+import {UserServiceAbstract} from "../../services/user-service.abstract";
 
 @Component({
   selector: 'app-game',
@@ -30,7 +31,8 @@ import {Identifiable} from "../../common/identifiable";
     ErrorDisplayComponent
   ],
   templateUrl: './game-details.component.html',
-  styleUrl: './game-details.component.css'
+  styleUrl: './game-details.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameDetailsComponent extends Identifiable implements OnDestroy{
   gameId!: number;
@@ -40,9 +42,9 @@ export class GameDetailsComponent extends Identifiable implements OnDestroy{
 
   constructor(private route: ActivatedRoute,
               protected router: Router,
-              private gameService: GameServiceAbstract) {
+              protected gameService: GameServiceAbstract,
+              protected userService: UserServiceAbstract) {
     super()
-    // console.log(`constructor ${this.id} called`)
     this.routeParamsSubscription = this.route.params.subscribe(value => {
       this.gameId = Number.parseInt(value['id']);
       this.game$ = gameService.getGame(this.gameId)
@@ -55,12 +57,7 @@ export class GameDetailsComponent extends Identifiable implements OnDestroy{
     });
   }
 
-  ngOnInit(): void {
-    // console.log(`ngOnInit ${this.constructor.name} - ${this.id} called`)
-  }
-
   ngOnDestroy(): void {
-    // console.log(`ngOnDestroy ${this.constructor.name} - ${this.id} called`)
     this.routeParamsSubscription?.unsubscribe();
   }
 

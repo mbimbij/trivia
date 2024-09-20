@@ -1,0 +1,8 @@
+<ng-container *ngIf="(userService.getUser() | async) as user">
+  <mat-icon id="anonymous-icon" *ngIf="user.isAnonymous" class="example-icon"
+            aria-label="Example icon-button with share icon">no_accounts
+  </mat-icon>
+  <span>{{ user.name }}</span>
+  <app-logout-button *ngIf="(authenticationService.isLoggedIn() | async)"></app-logout-button>
+</ng-container>
+{{ checkRender() }}

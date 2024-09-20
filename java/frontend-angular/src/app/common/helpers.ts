@@ -4,15 +4,19 @@ import {Game} from "../game/game";
 import {GameResponseDto, PlayerDto, State, UserDto} from "../openapi-generated/game";
 
 // TODO move these functions into appropriate classes
-export function compareUserDtos(user1: UserDto, user2: UserDto): boolean {
-  return user1 !== null && user2 !== null && user1.constructor === user2.constructor && user1.id === user2.id;
+export function compareUserDtos(user1: UserDto | null, user2: UserDto | null): boolean {
+  return user1 !== null && user2 !== null && user1?.constructor === user2?.constructor && user1?.id === user2?.id;
 }
 
-export function compareUserAndPlayer(user: User, player: PlayerDto | Player): boolean {
-  return user !== null && player !== null && user.id === player.id;
+export function compareUserAndPlayer(user: User | null, player: PlayerDto | Player | null): boolean {
+  return user !== null && player !== null && user?.id === player?.id;
 }
 
-export function comparePlayers(player1?: Player, player2?: Player): boolean {
+export function compareUserIdAndPlayer(userId: string, player: PlayerDto | Player): boolean {
+  return userId === player.id;
+}
+
+export function comparePlayers(player1: Player | null, player2?: Player | null): boolean {
   return player1 !== null && player2 !== null && player1?.id === player2?.id;
 }
 

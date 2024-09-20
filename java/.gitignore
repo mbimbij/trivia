@@ -10,8 +10,8 @@ e2e-tests/videos
 **/test.http
 backend/src/main/resources/static
 **/SketchTest.java
-../../../.config/JetBrains/IntelliJIdea2024.2/scratches/toto.json
-../../../.config/JetBrains/IntelliJIdea2024.2/scratches/toto.txt
+**/toto.json
+**/toto.txt
 **/environment.local-docker.ts
 **/environment.local-ide.ts
 **/environment.local-ide-embedded.ts

@@ -22,4 +22,36 @@ export class Player {
     this.location = location;
     this.gotOutOfPenaltyBox = gotOutOfPenaltyBox;
   }
+
+  public isWaitingToValidateRollDiceInsidePenaltyBox() {
+    return new Set<State>([
+      State.WaitingToValidateEvenDiceRollFromPenaltyBox,
+      State.WaitingToValidateOddDiceRollFromPenaltyBox
+    ]).has(this.state);
+  }
+
+  public isWaitingToValidateRollDiceOutsidePenaltyBox() {
+    return new Set<State>([
+      State.WaitingToDraw1StQuestion
+    ]).has(this.state);
+  }
+
+  public isWaitingToValidateCorrectAnswer() {
+    return new Set<State>([
+      State.WaitingToValidateFirstCorrectAnswer,
+      State.WaitingToValidateSecondCorrectAnswer
+    ]).has(this.state);
+  }
+
+  public isWaitingToValidateFirstIncorrectAnswer() {
+    return new Set<State>([
+      State.WaitingToValidateFirstIncorrectAnswer
+    ]).has(this.state);
+  }
+
+  public isWaitingToValidateSecondIncorrectAnswer() {
+    return new Set<State>([
+      State.WaitingToValidateSecondIncorrectAnswer
+    ]).has(this.state);
+  }
 }

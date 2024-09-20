@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {AuthenticationComponent} from './authentication.component';
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
-import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service.abstract";
+import {AuthenticationServiceAbstract, AuthenticationService} from "../../services/authentication-service.abstract";
 
 describe('AuthenticationComponent', () => {
   let component: AuthenticationComponent;
@@ -13,7 +13,7 @@ describe('AuthenticationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AuthenticationComponent],
       providers: [
-        {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
+        {provide: AuthenticationServiceAbstract, useClass: AuthenticationService},
         {provide: UserServiceAbstract, useClass: UserServiceMock},
       ]
     })

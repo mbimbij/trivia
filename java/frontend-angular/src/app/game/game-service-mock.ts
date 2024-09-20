@@ -49,8 +49,8 @@ export class GameServiceMock extends GameServiceAbstract {
     ]);
   }
 
-  join(game: Game, user: User): Observable<Game> {
-    return of(game);
+  join(gameId: number, user: User): Observable<Game> {
+    return of(getMockGame1());
   }
 
   override start(gameId: number, userId: string): Observable<Game> {

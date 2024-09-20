@@ -31,6 +31,7 @@ import {Identifiable} from "../../../../common/identifiable";
       <p>{{ explanations }}</p>
       <app-validation-button [gameId]="gameId" [playerId]="playerId" [buttonText]="buttonText"/>
     </div>
+    {{ checkRender() }}
   `,
   styleUrl: './answer-question-results.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush

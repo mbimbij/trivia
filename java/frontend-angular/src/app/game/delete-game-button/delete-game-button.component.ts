@@ -1,48 +1,41 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
-import {compareUserAndPlayer} from "../../common/helpers";
-import {User} from "../../user/user";
-import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Observable, Subscription} from "rxjs";
-import {Game} from "../game";
+import {Subscription} from "rxjs";
 import {Identifiable} from "../../common/identifiable";
+import {AsyncPipe} from "@angular/common";
 
 @Component({
   selector: 'app-delete-game-button',
   standalone: true,
-  imports: [],
+  imports: [
+    AsyncPipe
+  ],
   template: `
-    <button [attr.data-testid]="'delete-button-'+game.id" [disabled]="!canDeleteGame()" (click)="deleteGame()">
+    <button [attr.data-testid]="'delete-button-'+gameId"
+            [disabled]="!canDelete"
+            (click)="deleteGame()">
       delete
     </button>
+    {{ checkRender() }}
   `,
-  styleUrl: './delete-game-button.component.css'
+  styleUrl: './delete-game-button.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteGameButtonComponent extends Identifiable implements OnDestroy {
-  @Input() game!: Game;
-  private user!: User;
-  private user$: Observable<User>;
-  private userSubscription: Subscription;
-  private gameSubscription?: Subscription;
+  @Input() gameId!: number;
+  @Input() userId!: string;
+  @Input() canDelete!: boolean;
+  private actionSubscription?: Subscription;
 
-  constructor(private gameService: GameServiceAbstract,
-              private userService: UserServiceAbstract) {
+  constructor(private gameService: GameServiceAbstract) {
     super()
-    this.user$ = userService.getUser();
-    this.userSubscription = this.user$.subscribe(updatedUser => this.user = updatedUser);
   }
 
   ngOnDestroy(): void {
-        this.userSubscription.unsubscribe();
-        this.gameSubscription?.unsubscribe();
-    }
-  protected canDeleteGame() {
-    // TODO empêcher la fonction d'être appelée 36 fois
-    // console.log(`canDeleteGame called`)
-    return compareUserAndPlayer(this.user, this.game.creator)
+    this.actionSubscription?.unsubscribe();
   }
 
   protected deleteGame() {
-    this.gameSubscription = this.gameService.delete(this.game.id).subscribe(() => {});
+    this.actionSubscription = this.gameService.delete(this.gameId).subscribe();
   }
 }

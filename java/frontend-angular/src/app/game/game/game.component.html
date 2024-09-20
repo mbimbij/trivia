@@ -3,54 +3,73 @@
         (click)="router.navigate(['/games'])">
   back to games
 </button>
-<div
-  [attr.data-testid]="'ok-section'"
-  *ngIf="(game$ | async) as game; else loadingOrError"
->
+<ng-container *ngIf="(game$ | async) as game; else loadingOrError">
   <div
-    [attr.data-testid]="'game-header-section'"
+    [attr.data-testid]="'ok-section'"
   >
-    <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
+    <div
+      [attr.data-testid]="'game-header-section'"
+    >
+      <h1>Welcome to Game - "{{ game.name }}" {{ isGameEnded ? " - ENDED" : "" }}</h1>
 
-    <h2
-      [attr.data-testid]="'winner-prompt-section'"
-      *ngIf="isGameEnded"><span *ngIf="game.isWinner(player); then you_won else other_won"></span></h2>
-    <ng-template #you_won>You won, Congratulations !</ng-template>
-    <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
+      <h2
+        [attr.data-testid]="'winner-prompt-section'"
+        *ngIf="isGameEnded"><span *ngIf="game.isWinner(player); then you_won else other_won"></span></h2>
+      <ng-template #you_won>You won, Congratulations !</ng-template>
+      <ng-template #other_won>{{ game.winner?.name }} won. Maybe next time.</ng-template>
 
-    <br>
-    <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span></p>
-    <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
-    <p>Current Player - "{{ game.currentPlayer.name }}"</p>
+      <br>
+      <p>Turn #{{ game.turn }} <span *ngIf="!isGameEnded && game.isCurrentPlayer(player)">- <b>Your Turn !</b></span>
+      </p>
+      <p>you are - "{{ player.name }}". Coin count: {{ player.coinCount }}</p>
+      <p>Current Player - "{{ game.currentPlayer.name }}"</p>
 
-  </div>
+    </div>
 
-  <div
-    [attr.data-testid]="'player-action-section'"
-    *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
-  >
+    <div
+      [attr.data-testid]="'player-action-section'"
+      *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
+    >
+      <hr>
+      <app-roll-dice *ngIf="game.canRollDice(player)" [gameId]="game.id" [userId]="player"/>
+      <app-roll-dice-results-inside-penalty-box *ngIf="player.isWaitingToValidateRollDiceInsidePenaltyBox()"
+                                                [gameId]="game.id"
+                                                [playerId]="player.id"
+                                                [displayMessage]="msgService.getRollDiceResultsInsidePenaltyBoxMessage(game,player)"
+      />
+      <app-roll-dice-results-outside-penalty-box *ngIf="player.isWaitingToValidateRollDiceOutsidePenaltyBox()"
+                                                 [gameId]="game.id"
+                                                 [playerId]="player.id"
+                                                 [displayMessage]="msgService.getRollDiceResultsOutsidePenaltyBoxMessage(game, player)"
+      />
+
+      <app-answer-question *ngIf="game.canAnswerQuestion(player)" [gameId]="game.id"
+                           [playerId]="player.id"
+                           [question]="game.currentQuestion!"
+      />
+      <app-answer-question-results-wrapper [gameId]="game.id" [playerId]="player.id"
+                                           [explanations]="game.currentAnswer?.explanations"
+                                           [isWaitingToValidateCorrectAnswer]="player.isWaitingToValidateCorrectAnswer()"
+                                           [isWaitingToValidateFirstIncorrectAnswer]="player.isWaitingToValidateFirstIncorrectAnswer()"
+                                           [isWaitingToValidateSecondIncorrectAnswer]="player.isWaitingToValidateSecondIncorrectAnswer()"
+      />
+    </div>
+
     <hr>
-    <app-roll-dice [game]="game" [player]="player"/>
-    <app-roll-dice-results-inside-penalty-box [game]="game" [player]="player"/>
-    <app-roll-dice-results-outside-penalty-box [game]="game" [player]="player"/>
 
-    <app-answer-question [player]="player" [game]="game" [question]="game.currentQuestion!"/>
-    <app-answer-question-results-wrapper [gameId]="game.id" [player]="player" [explanations]="game.currentAnswer?.explanations"/>
-  </div>
-
-  <hr>
-
-  <div
-    [attr.data-testid]="'game-logs-section'"
-    *ngIf="(gameLogs$ | async) as logs"
-  >
-    <div id="messagesContainer" style="overflow-y: scroll; height:100px;">
-      <!--    TODO introduire un style différent pour distinguer les logs des différents joueurs-->
-      <div [ngClass]="'log-line'" *ngFor="let log of logs">{{ log.value }}</div>
+    <div
+      [attr.data-testid]="'game-logs-section'"
+      *ngIf="(gameLogs$ | async) as logs"
+    >
+      <div id="messagesContainer" style="overflow-y: scroll; height:100px;">
+        <!--    TODO introduire un style différent pour distinguer les logs des différents joueurs-->
+        <div [ngClass]="'log-line'" *ngFor="let log of logs">{{ log.value }}</div>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #loadingOrError>
   <app-error-display [gameId]="gameId" [gameLoadingError$]="gameLoadingError$"></app-error-display>
 </ng-template>
+{{ checkRender() }}
