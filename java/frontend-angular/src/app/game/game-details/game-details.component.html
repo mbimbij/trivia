@@ -1,8 +1,4 @@
-<button style="display: block"
-        [attr.data-testid]="'go-back'"
-        (click)="router.navigate(['/games'])">
-  back to games
-</button>
+<app-go-back-button></app-go-back-button>
 <ng-container *ngIf="(game$ | async) as game; else loadingOrError">
   <ng-container *ngIf="(userService.getUser() | async) as user">
 

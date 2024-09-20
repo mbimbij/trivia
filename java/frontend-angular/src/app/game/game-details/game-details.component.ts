@@ -14,6 +14,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {Identifiable} from "../../common/identifiable";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.component";
 
 @Component({
   selector: 'app-game',
@@ -28,7 +29,8 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
     AsyncPipe,
     NgClass,
     ConsoleLogPipe,
-    ErrorDisplayComponent
+    ErrorDisplayComponent,
+    GoBackButtonComponent
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css',

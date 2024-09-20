@@ -28,7 +28,7 @@ import {Identifiable} from "../../../common/identifiable";
 })
 export class RollDiceComponent extends Identifiable implements OnDestroy {
   @Input() gameId!: number;
-  @Input() userId!: Player;
+  @Input() userId!: string;
   private actionSubscription?: Subscription;
 
   constructor(protected gameService: GameServiceAbstract) {
@@ -40,7 +40,7 @@ export class RollDiceComponent extends Identifiable implements OnDestroy {
   }
 
   rollDice() {
-    this.actionSubscription = this.gameService.rollDice(this.gameId, this.userId.id)
+    this.actionSubscription = this.gameService.rollDice(this.gameId, this.userId)
       .subscribe();
   }
 }

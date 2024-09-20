@@ -28,6 +28,7 @@ import {Identifiable} from "../../common/identifiable";
 import {GameLog} from "../../openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
 import {MessageService} from "../../services/message.service";
+import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.component";
 
 @Component({
   selector: 'app-game',
@@ -44,7 +45,8 @@ import {MessageService} from "../../services/message.service";
     RollDiceResultsInsidePenaltyBoxComponent,
     RollDiceResultsOutsidePenaltyBoxComponent,
     AnswerQuestionResultsComponent,
-    AnswerQuestionResultsWrapperComponent
+    AnswerQuestionResultsWrapperComponent,
+    GoBackButtonComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
@@ -62,7 +64,6 @@ export class GameComponent extends Identifiable implements OnDestroy, AfterViewC
   private routeParamsSubscription: Subscription;
 
   constructor(private route: ActivatedRoute,
-              protected router: Router,
               private userService: UserServiceAbstract,
               private gameService: GameServiceAbstract,
               private gameLogsService: GameLogsServiceAbstract,

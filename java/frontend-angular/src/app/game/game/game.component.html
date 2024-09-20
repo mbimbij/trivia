@@ -1,8 +1,4 @@
-<button style="display: block"
-        [attr.data-testid]="'go-back'"
-        (click)="router.navigate(['/games'])">
-  back to games
-</button>
+<app-go-back-button></app-go-back-button>
 <ng-container *ngIf="(game$ | async) as game; else loadingOrError">
   <div
     [attr.data-testid]="'ok-section'"
@@ -31,7 +27,7 @@
       *ngIf="game.isCurrentPlayer(player) && !isGameEnded"
     >
       <hr>
-      <app-roll-dice *ngIf="game.canRollDice(player)" [gameId]="game.id" [userId]="player"/>
+      <app-roll-dice *ngIf="game.canRollDice(player)" [gameId]="game.id" [userId]="player.id"/>
       <app-roll-dice-results-inside-penalty-box *ngIf="player.isWaitingToValidateRollDiceInsidePenaltyBox()"
                                                 [gameId]="game.id"
                                                 [playerId]="player.id"

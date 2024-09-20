@@ -19,6 +19,7 @@ export class MessageService {
     ['answer-question.results.correct']: 'Correct Answer',
     ['answer-question.results.first-incorrect']: 'First Incorrect Answer. You are given a second chance',
     ['answer-question.results.second-incorrect']: 'Second Incorrect Answer. You are sent to the penalty box.',
+    ['go-back-button']: 'back to games',
   };
 
   getMessage(code: string): string {
@@ -55,4 +56,8 @@ export class MessageService {
         game.currentCategory)
     }
   }
+}
+
+export enum MessageCode{
+
 }
