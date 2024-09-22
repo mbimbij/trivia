@@ -20,9 +20,8 @@ public class CreateGameUiElement extends UiElementObject {
     @SneakyThrows
     public int createGame(String gameName) {
         page.getByTestId("create-game-name").fill(gameName);
-        Locator button = page.getByTestId("create-game-validate");
-        PlaywrightAssertions.assertThat(button).isVisible();
-        PlaywrightAssertions.assertThat(button).isEnabled();
+        PlaywrightAssertions.assertThat(page.getByTestId("create-game-validate")).isVisible();
+        PlaywrightAssertions.assertThat(page.getByTestId("create-game-validate")).isEnabled();
 
         AtomicReference<String> logText = new AtomicReference<>();
         page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(
@@ -31,7 +30,7 @@ public class CreateGameUiElement extends UiElementObject {
                             logText.set(text);
                             return text.startsWith("created game: ");
                         }),
-                button::click);
+                page.getByTestId("create-game-validate")::click);
 
         return Integer.parseInt(logText.get().split("created game: ")[1]);
     }
