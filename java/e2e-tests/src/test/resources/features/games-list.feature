@@ -52,19 +52,18 @@ Feature: List games
         | test-game-1 | test-user-1 | test-user-1,test-user-2 | STARTED | false          | null         | game started   | false        | false          |
         | test-game-2 | qa-user     | qa-user                 | CREATED | false          | null         | already joined | false        | true           |
 
-  Rule: Changes on one's own game
-    Scenario: create, join & start game created by qa-user updates the UI
-#      TODO use the UI and not API when qa-user creates a game
-      When qa-user creates a game named "newGame" from the frontend
+  Rule: Game created by qa-user
+    Scenario: actions on a game created without changing player's name
+      When qa-user creates a game named "newGame" from the backend
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name        | creator | players | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-        | test-game-2 | qa-user | qa-user | CREATED | false          | null         | already joined | false        | true           |
-        | newGame     | qa-user | qa-user | CREATED | false          | null         | already joined | false        | true           |
+        | test-game-2 | qa-user | qa-user | CREATED | false         | null         | already joined | false        | true           |
+        | newGame     | qa-user | qa-user | CREATED | false         | null         | already joined | false        | true           |
       When test-user-1 joins "test-game-2" from the backend
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
         | test-game-2 | qa-user | qa-user,test-user-1 | CREATED | true          | null         | already joined | false        | true           |
-        | newGame     | qa-user | qa-user             | CREATED | false          | null         | already joined | false        | true           |
+        | newGame     | qa-user | qa-user             | CREATED | false         | null         | already joined | false        | true           |
 #      TODO create a seperate independent test
       When test-user-1 joins "newGame" from the backend
       Then qa-user sees the following games, filtered for creators "qa-user"
@@ -75,21 +74,20 @@ Feature: List games
       When qa-user starts "test-game-2" from the frontend
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name        | creator | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-        | test-game-2 | qa-user | qa-user,test-user-1 | STARTED | false          | null         | game started   | true         | true           |
+        | test-game-2 | qa-user | qa-user,test-user-1 | STARTED | false         | null         | game started   | true         | true           |
         | newGame     | qa-user | qa-user,test-user-1 | CREATED | true          | null         | already joined | false        | true           |
 #      TODO create a seperate independent test
       When qa-user starts "newGame" from the frontend
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name        | creator | players             | state   | start_enabled | join_enabled | join_text    | goto_enabled | delete_enabled |
-        | test-game-2 | qa-user | qa-user,test-user-1 | STARTED | false          | null         | game started | true         | true           |
-        | newGame     | qa-user | qa-user,test-user-1 | STARTED | false          | null         | game started | true         | true           |
+        | test-game-2 | qa-user | qa-user,test-user-1 | STARTED | false         | null         | game started | true         | true           |
+        | newGame     | qa-user | qa-user,test-user-1 | STARTED | false         | null         | game started | true         | true           |
 #      TODO create a seperate independent test
       When qa-user deletes "test-game-2" from the frontend
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name    | creator | players             | state   | start_enabled | join_enabled | join_text    | goto_enabled | delete_enabled |
-        | newGame | qa-user | qa-user,test-user-1 | STARTED | false          | null         | game started | true         | true           |
+        | newGame | qa-user | qa-user,test-user-1 | STARTED | false         | null         | game started | true         | true           |
 #      TODO create a seperate independent test
       When qa-user deletes "newGame" from the frontend
       Then qa-user sees the following games, filtered for creators "qa-user"
         | name | creator | players | state | start_enabled | join_enabled | join_text | goto_enabled | delete_enabled |
-

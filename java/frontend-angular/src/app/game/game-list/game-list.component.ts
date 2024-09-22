@@ -34,7 +34,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
     NavbarComponent,
     AsyncPipe,
     NgClass,
-    RenameUserComponent
+    RenameUserComponent,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css',

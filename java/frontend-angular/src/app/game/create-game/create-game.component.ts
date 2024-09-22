@@ -1,58 +1,34 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {FormsModule} from "@angular/forms";
-import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {Component, Input} from '@angular/core';
+import {MatButton} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogContentComponent} from "./dialog-content/dialog-content.component";
+import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
-
-import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Subscription} from "rxjs";
-import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-create-game',
   standalone: true,
   imports: [
-    FormsModule
+    MatButton,
+    MatLabel
   ],
   template: `
-    <label for="newGameName">Create Game</label>
-    <input
-      [attr.data-testid]="'create-game-name'"
-      #newGameName
-      type="text" id="newGameName"
-      required minlength="1" maxlength="100" size="20"
-      (keyup.enter)="createGame(newGameName.value)"
-    />
     <button
-      [attr.data-testid]="'create-game-validate'"
-      (click)="createGame(newGameName.value)">create
-    </button>
-    {{ checkRender() }}
+      [attr.data-testid]="'create-game'"
+      mat-raised-button color="primary" (click)="openDialog()">create game</button>
   `,
-  styleUrl: './create-game.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './create-game.component.css'
 })
-export class CreateGameComponent extends Identifiable implements OnDestroy {
-  private user: User | null = null;
-  private userSubscription: Subscription;
-  private newGameSubscription?: Subscription;
+export class CreateGameComponent {
+  @Input() user!: User
+  readonly dialog!: MatDialog
 
-  constructor(private gameService: GameServiceAbstract,
-              private userService: UserServiceAbstract) {
-    super()
-    this.userSubscription = userService.getUser().subscribe(updatedUser => {
-      this.user = updatedUser;
-    });
+  constructor(dialog: MatDialog) {
+    this.dialog = dialog;
   }
 
-  ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
-    this.newGameSubscription?.unsubscribe();
-  }
-
-  protected createGame(newGameName: string) {
-    this.newGameSubscription = this.gameService.create(newGameName, this.user!)
-      .subscribe(newGame => {
-        console.log(`created game: ${newGame.id}`)
-      });
+  openDialog() {
+    let dialogRef = this.dialog.open(DialogContentComponent);
+    dialogRef.componentRef?.setInput('user', this.user)
   }
 }

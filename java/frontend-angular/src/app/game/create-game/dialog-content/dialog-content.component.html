@@ -1,0 +1,25 @@
+<div [attr.data-testid]="'create-game-dialog'"></div>
+<h2 mat-dialog-title> Create a New Game </h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Game Name</mat-label>
+    <input
+      [attr.data-testid]="'create-game-name'"
+      matInput #newGameName>
+  </mat-form-field>
+  <!--  <mat-form-field>-->
+  <!--    <mat-label>Join as</mat-label>-->
+  <!--    <input matInput>-->
+  <!--  </mat-form-field>-->
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    [attr.data-testid]="'cancel'"
+    mat-button mat-dialog-close>Cancel
+  </button>
+  <button
+    [attr.data-testid]="'validate'"
+    mat-raised-button color="primary"
+    mat-button (click)="createGame(newGameName.value)">Create
+  </button>
+</mat-dialog-actions>
