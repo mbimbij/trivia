@@ -6,7 +6,14 @@ import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
 import {gameDtoToGame, userToUserDto} from "../common/helpers";
 import {Game} from "./game";
-import {AnswerCode, AnswerDto, GameControllerService, GameResponseDto, QuestionDto} from "../openapi-generated/game";
+import {
+  AnswerCode,
+  AnswerDto,
+  CreateGameRequestDto,
+  GameControllerService,
+  GameResponseDto,
+  QuestionDto, UserDto
+} from "../openapi-generated/game";
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +79,7 @@ export class GameService extends GameServiceAbstract {
   initSingleGame(gameId: number) {
     this.createSubjectForSingleGame(gameId);
     let gameObservable = this.gameOpenApiService.getGameById(gameId)
-      .pipe(map( dto => gameDtoToGame(dto)));
+      .pipe(map(dto => gameDtoToGame(dto)));
     gameObservable
       .subscribe({
         next: game => {
@@ -92,9 +99,8 @@ export class GameService extends GameServiceAbstract {
     }
   }
 
-  override create(name: string, user: User): Observable<Game> {
-    let requestDto = {gameName: name, creator: userToUserDto(user)};
-    return this.gameOpenApiService.createGame(requestDto)
+  override create(gameName: string, creator: UserDto): Observable<Game> {
+    return this.gameOpenApiService.createGame({gameName: gameName, creator: creator} as CreateGameRequestDto)
       .pipe(
         map(dto => gameDtoToGame(dto)),
       );

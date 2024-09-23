@@ -48,9 +48,16 @@ public class GameListStepDefs {
         testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
     }
 
-    @When("{actor} creates a game named {string} from the frontend")
-    public void qaUserCreatesAGameNamed(Actor actor, String gameName) {
+    @When("qa-user creates a game named {string} from the frontend")
+    public void qaUserCreatesAGameNamed(String gameName) {
         int createdGameId = createGameUiElement.createGame(gameName);
+        janitor.disablePlayersShuffling(createdGameId);
+        testContext.putGameId(gameName, createdGameId);
+    }
+
+    @When("qa-user creates a game named {string}, with username {string}, from the frontend")
+    public void qaUserCreatesAGameNamedWithUsernameFromTheFrontend(String gameName, String creatorName) {
+        int createdGameId = createGameUiElement.createGame(gameName, creatorName);
         janitor.disablePlayersShuffling(createdGameId);
         testContext.putGameId(gameName, createdGameId);
     }

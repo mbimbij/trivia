@@ -12,6 +12,7 @@ import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 import {User} from "../../../user/user";
+import {CreateGameRequestDto, UserDto} from "../../../openapi-generated/game";
 
 @Component({
   selector: 'app-dialog-content',
@@ -29,18 +30,19 @@ import {User} from "../../../user/user";
   templateUrl: './dialog-content.component.html',
   styleUrl: './dialog-content.component.css'
 })
-export class DialogContentComponent extends Identifiable{
+export class DialogContentComponent extends Identifiable {
 
   @Input() user!: User
 
   constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
-              private gameService:GameServiceAbstract) {
+              private gameService: GameServiceAbstract) {
     super()
   }
 
-  protected createGame(newGameName: string){
-    console.log(`create game ${newGameName} with name ${this.user.name}`)
-    this.gameService.create(newGameName, this.user).subscribe({
+  protected createGame(newGameName: string, creatorName: string) {
+    console.log(`create game ${newGameName} with name ${creatorName}`)
+    let creator = {name: creatorName, id: this.user.id} as UserDto
+    this.gameService.create(newGameName, creator).subscribe({
       next: newGame => {
         console.log(`created game: ${newGame.id}`)
         this.matDialogRef.close()

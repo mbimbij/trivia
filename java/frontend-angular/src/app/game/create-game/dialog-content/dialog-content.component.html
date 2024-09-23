@@ -1,16 +1,20 @@
 <div [attr.data-testid]="'create-game-dialog'"></div>
 <h2 mat-dialog-title> Create a New Game </h2>
 <mat-dialog-content>
-  <mat-form-field>
-    <mat-label>Game Name</mat-label>
-    <input
-      [attr.data-testid]="'create-game-name'"
-      matInput #newGameName>
-  </mat-form-field>
-  <!--  <mat-form-field>-->
-  <!--    <mat-label>Join as</mat-label>-->
-  <!--    <input matInput>-->
-  <!--  </mat-form-field>-->
+  <form>
+    <mat-form-field>
+      <mat-label>Game Name</mat-label>
+      <input [attr.data-testid]="'game-name'"
+             matInput #newGameName>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Join as</mat-label>
+      <input [attr.data-testid]="'creator-name'"
+             matInput #creatorName
+             [value]="user.name"
+      >
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button
@@ -20,6 +24,6 @@
   <button
     [attr.data-testid]="'validate'"
     mat-raised-button color="primary"
-    mat-button (click)="createGame(newGameName.value)">Create
+    mat-button (click)="createGame(newGameName.value, creatorName.value)">Create
   </button>
 </mat-dialog-actions>
