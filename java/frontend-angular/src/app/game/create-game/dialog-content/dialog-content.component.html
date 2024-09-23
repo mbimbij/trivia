@@ -18,10 +18,12 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button
+    class="rounded"
     [attr.data-testid]="'cancel'"
     mat-button mat-dialog-close>Cancel
   </button>
   <button
+    class="rounded"
     [attr.data-testid]="'validate'"
     mat-raised-button color="primary"
     mat-button (click)="createGame(newGameName.value, creatorName.value)">Create

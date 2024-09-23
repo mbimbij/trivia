@@ -15,6 +15,7 @@ import {User} from "../../user/user";
   template: `
     <button
       [attr.data-testid]="'create-game'"
+      class="rounded"
       mat-raised-button color="primary" (click)="openDialog()">create game</button>
   `,
   styleUrl: './create-game.component.css'

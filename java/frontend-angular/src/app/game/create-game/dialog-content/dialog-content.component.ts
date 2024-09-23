@@ -12,7 +12,8 @@ import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 import {User} from "../../../user/user";
-import {CreateGameRequestDto, UserDto} from "../../../openapi-generated/game";
+import {UserDto} from "../../../openapi-generated/game";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-dialog-content',
@@ -25,7 +26,8 @@ import {CreateGameRequestDto, UserDto} from "../../../openapi-generated/game";
     MatDialogClose,
     MatFormField,
     MatInput,
-    MatLabel
+    MatLabel,
+    MatIcon
   ],
   templateUrl: './dialog-content.component.html',
   styleUrl: './dialog-content.component.css'
