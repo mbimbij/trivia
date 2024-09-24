@@ -10,6 +10,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateGameUiElement extends UiElementObject {
+    public static final String OPEN_DIALOG_BUTTON = "create-game";
+    public static final String DIALOG = "create-game-dialog";
+    public static final String GAME_NAME = "game-name";
+    public static final String CREATOR_NAME = "creator-name";
+    public static final String CANCEL = "cancel";
+    public static final String RESET = "reset";
+    public static final String VALIDATE = "validate";
 
     public CreateGameUiElement(Page page, TestContext testContext) {
         super(page);

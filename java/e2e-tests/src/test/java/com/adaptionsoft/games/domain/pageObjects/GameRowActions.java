@@ -34,4 +34,7 @@ public class GameRowActions extends UiElementObject {
         return locator.getAttribute("href");
     }
 
+    public void clickGameDetailsLink(int gameId) {
+        clickElementByTestid("game-details-%d".formatted(gameId));
+    }
 }

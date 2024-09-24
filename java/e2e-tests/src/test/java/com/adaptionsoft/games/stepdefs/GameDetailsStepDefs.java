@@ -24,7 +24,7 @@ public class GameDetailsStepDefs {
         assertThat(gameRowActions.getGameDetailsLink(gameId))
                 .isEqualTo("/games/%d/details".formatted(gameId));
 
-        gameRowActions.clickElementByTestid(gameId, page);
+        gameRowActions.clickGameDetailsLink(gameId);
     }
 
     @When("i am on the on game details page for {string}")
