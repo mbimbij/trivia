@@ -1,16 +1,20 @@
-<div [attr.data-testid]="'create-game-dialog'"></div>
+<div [attr.data-testid]="CreateGameComponentTestIds.DIALOG"></div>
 <h2 mat-dialog-title> Create a New Game </h2>
 <mat-dialog-content>
   <form>
     <mat-form-field>
       <mat-label>Game Name</mat-label>
-      <input [attr.data-testid]="'game-name'"
-             matInput #newGameName>
+      <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
+             name="CreateGameComponentTestIds.GAME_NAME"
+             matInput
+             [(ngModel)]="newGameName">
     </mat-form-field>
     <mat-form-field>
       <mat-label>Join as</mat-label>
-      <input [attr.data-testid]="'creator-name'"
-             matInput #creatorName
+      <input [attr.data-testid]="CreateGameComponentTestIds.CREATOR_NAME"
+             name="CreateGameComponentTestIds.CREATOR_NAME"
+             matInput
+             [(ngModel)]="creatorName"
              [value]="user.name"
       >
     </mat-form-field>
@@ -19,13 +23,13 @@
 <mat-dialog-actions align="end">
   <button
     class="rounded"
-    [attr.data-testid]="'cancel'"
+    [attr.data-testid]="CreateGameComponentTestIds.CANCEL"
     mat-button mat-dialog-close>Cancel
   </button>
   <button
     class="rounded"
-    [attr.data-testid]="'validate'"
+    [attr.data-testid]="CreateGameComponentTestIds.VALIDATE"
     mat-raised-button color="primary"
-    mat-button (click)="createGame(newGameName.value, creatorName.value)">Create
+    mat-button (click)="createGame(newGameName, creatorName)">Create
   </button>
 </mat-dialog-actions>

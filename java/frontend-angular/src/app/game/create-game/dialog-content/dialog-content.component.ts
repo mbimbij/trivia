@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -14,6 +14,8 @@ import {Identifiable} from "../../../common/identifiable";
 import {User} from "../../../user/user";
 import {UserDto} from "../../../openapi-generated/game";
 import {MatIcon} from "@angular/material/icon";
+import {FormsModule} from "@angular/forms";
+import {CreateGameComponentTestIds} from "../create-game.component";
 
 @Component({
   selector: 'app-dialog-content',
@@ -27,18 +29,31 @@ import {MatIcon} from "@angular/material/icon";
     MatFormField,
     MatInput,
     MatLabel,
-    MatIcon
+    MatIcon,
+    FormsModule
   ],
   templateUrl: './dialog-content.component.html',
-  styleUrl: './dialog-content.component.css'
+  styleUrl: './dialog-content.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DialogContentComponent extends Identifiable {
+export class DialogContentComponent extends Identifiable implements OnInit, OnDestroy{
 
   @Input() user!: User
+  newGameName!: string;
+  creatorName!: string;
 
   constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
               private gameService: GameServiceAbstract) {
     super()
+  }
+
+  ngOnInit() {
+    console.log(`ngOnInit ${this.id}`)
+    this.creatorName = this.user.name
+  }
+
+  ngOnDestroy() {
+    console.log(`ngOnDestroy ${this.id}`)
   }
 
   protected createGame(newGameName: string, creatorName: string) {
@@ -51,4 +66,6 @@ export class DialogContentComponent extends Identifiable {
       }
     })
   }
+
+  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
 }
