@@ -7,8 +7,8 @@
       <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
              name="CreateGameComponentTestIds.GAME_NAME"
              matInput
-             [(ngModel)]="data.gameName"
-             [value]="data.gameName"
+             [(ngModel)]="currentContent.gameName"
+             [value]="currentContent.gameName"
       >
     </mat-form-field>
     <mat-form-field>
@@ -16,8 +16,8 @@
       <input [attr.data-testid]="CreateGameComponentTestIds.CREATOR_NAME"
              name="CreateGameComponentTestIds.CREATOR_NAME"
              matInput
-             [(ngModel)]="data.creatorName"
-             [value]="data.creatorName"
+             [(ngModel)]="currentContent.creatorName"
+             [value]="currentContent.creatorName"
       >
     </mat-form-field>
   </form>
@@ -26,7 +26,15 @@
   <button
     class="rounded"
     [attr.data-testid]="CreateGameComponentTestIds.CANCEL"
-    mat-button mat-dialog-close>Cancel
+    mat-button mat-dialog-close
+  >Cancel
+  </button>
+  <button
+    class="rounded"
+    [attr.data-testid]="CreateGameComponentTestIds.RESET"
+    mat-button
+    (click)="resetDialogContent()"
+  >Reset
   </button>
   <button
     class="rounded"

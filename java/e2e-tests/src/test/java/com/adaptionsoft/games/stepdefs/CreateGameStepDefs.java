@@ -40,6 +40,11 @@ public class CreateGameStepDefs {
         createGameUiElement.verifyExistenceByTestId(CreateGameUiElement.DIALOG);
     }
 
+    @Then("qa-user cannot see the create game dialog")
+    public void qaUserCannotSeeTheCreateGameDialog() {
+        createGameUiElement.verifyAbsenceByTestId(CreateGameUiElement.DIALOG);
+    }
+
     @Then("the displayed value for game name is {string}")
     public void theDisplayedValueForGameNameIs(String expectedTextContent) {
         createGameUiElement.verifyInputContentByTestId(CreateGameUiElement.GAME_NAME, expectedTextContent);
@@ -68,5 +73,15 @@ public class CreateGameStepDefs {
     @When("qa-user clicks outside the dialog")
     public void qaUserClicksOutsideTheDialog() {
         createGameUiElement.clickOutsideDialog();
+    }
+
+    @When("qa-user clicks on reset button")
+    public void qaUserClicksOnResetButton() {
+        createGameUiElement.clickButtonByTestid(CreateGameUiElement.RESET);
+    }
+
+    @When("qa-user clicks on the create-game.validation button")
+    public void qaUserClicksOnTheCreateGameValidationButton() {
+        createGameUiElement.clickButtonByTestid(CreateGameUiElement.VALIDATE);
     }
 }

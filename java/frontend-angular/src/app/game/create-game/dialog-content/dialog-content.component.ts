@@ -15,7 +15,11 @@ import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
 import {MatIcon} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
-import {CreateGameComponentTestIds, CreateGameDialogContent} from "../create-game.component";
+import {
+  CreateGameComponentTestIds,
+  CreateGameDialogContent,
+  CreateGameDialogContentParams
+} from "../create-game.component";
 
 @Component({
   selector: 'app-dialog-content',
@@ -37,27 +41,35 @@ import {CreateGameComponentTestIds, CreateGameDialogContent} from "../create-gam
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogContentComponent extends Identifiable {
-
   @Input() userId!: string
-  @Output() resetDialogContentEvent = new EventEmitter<null>();
+  currentContent!: CreateGameDialogContent
+  defaultContent!: CreateGameDialogContent
+  resetDialogContentEvent = new EventEmitter<null>();
 
   constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContent) {
+              @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContentParams) {
     super()
+    this.currentContent = data.currentContent;
+    this.defaultContent = data.defaultContent;
   }
 
   protected createGame() {
-    console.log(`create game ${this.data.gameName} with name ${this.data.creatorName}`)
-    let creator = {name: this.data.creatorName, id: this.userId} as UserDto
-    this.gameService.create(this.data.gameName, creator).subscribe({
+    console.log(`create game ${this.currentContent.gameName} with name ${this.currentContent.creatorName}`)
+    let creator = {name: this.currentContent.creatorName, id: this.userId} as UserDto
+    this.gameService.create(this.currentContent.gameName, creator).subscribe({
       next: newGame => {
         console.log(`created game: ${newGame.id}`)
-        this.resetDialogContentEvent.next(null)
+        this.resetDialogContent()
         this.matDialogRef.close()
       }
     })
   }
 
   protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
+
+  resetDialogContent() {
+    this.currentContent = {...this.defaultContent}
+    this.resetDialogContentEvent.next(null)
+  }
 }

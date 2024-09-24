@@ -27,7 +27,6 @@ export class CreateGameComponentTestIds {
       [attr.data-testid]="CreateGameComponentTestIds.OPEN_DIALOG_BUTTON"
       class="rounded"
       mat-raised-button color="primary" (click)="openDialog()"
-      (resetDialogContentEvent)="resetDialogContent()"
     >create game
     </button>
   `,
@@ -37,8 +36,8 @@ export class CreateGameComponentTestIds {
 export class CreateGameComponent {
   @Input() user!: User
   readonly dialog!: MatDialog
-  private defaultDialogContent!: CreateGameDialogContent
-  private dialogContent!: CreateGameDialogContent
+  private defaultContent!: CreateGameDialogContent
+  private currentContent!: CreateGameDialogContent
 
   protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
 
@@ -47,18 +46,19 @@ export class CreateGameComponent {
   }
 
   ngOnInit(): void {
-    this.defaultDialogContent = {gameName: "", creatorName: this.user.name}
+    this.defaultContent = {gameName: "", creatorName: this.user.name}
     this.resetDialogContent()
   }
 
   resetDialogContent(){
-      this.dialogContent = {...this.defaultDialogContent}
+      this.currentContent = {...this.defaultContent}
   }
 
   openDialog() {
+    let params: CreateGameDialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
       DialogContentComponent,
-      {data: this.dialogContent}
+      {data: params}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
     let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
@@ -73,4 +73,9 @@ export class CreateGameComponent {
 export interface CreateGameDialogContent {
   gameName: string;
   creatorName: string;
+}
+
+export interface CreateGameDialogContentParams {
+  currentContent: CreateGameDialogContent;
+  defaultContent: CreateGameDialogContent;
 }

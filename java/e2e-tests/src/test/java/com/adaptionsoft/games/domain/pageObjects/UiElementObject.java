@@ -36,6 +36,10 @@ public class UiElementObject {
         PlaywrightAssertions.assertThat(page.getByTestId(testid)).isAttached();
     }
 
+    public void verifyAbsenceByTestId(String testid) {
+        PlaywrightAssertions.assertThat(page.getByTestId(testid)).not().isAttached();
+    }
+
     public void clickButtonByTestid(String testid) {
         PlaywrightAssertions.assertThat(page.getByTestId(testid)).isVisible();
         PlaywrightAssertions.assertThat(page.getByTestId(testid)).isEnabled();
