@@ -5,7 +5,7 @@ import {DialogContentComponent} from "./dialog-content/dialog-content.component"
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 
-export class CreateGameComponentTestIds{
+export class CreateGameComponentTestIds {
   public static readonly OPEN_DIALOG_BUTTON = 'create-game'
   public static readonly DIALOG = 'create-game-dialog'
   public static readonly GAME_NAME = 'game-name'
@@ -26,7 +26,9 @@ export class CreateGameComponentTestIds{
     <button
       [attr.data-testid]="CreateGameComponentTestIds.OPEN_DIALOG_BUTTON"
       class="rounded"
-      mat-raised-button color="primary" (click)="openDialog()">create game
+      mat-raised-button color="primary" (click)="openDialog()"
+      (resetDialogContentEvent)="resetDialogContent()"
+    >create game
     </button>
   `,
   styleUrl: './create-game.component.css',
@@ -35,15 +37,40 @@ export class CreateGameComponentTestIds{
 export class CreateGameComponent {
   @Input() user!: User
   readonly dialog!: MatDialog
+  private defaultDialogContent!: CreateGameDialogContent
+  private dialogContent!: CreateGameDialogContent
+
+  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
 
   constructor(dialog: MatDialog) {
     this.dialog = dialog;
   }
 
-  openDialog() {
-    let dialogRef = this.dialog.open(DialogContentComponent);
-    dialogRef.componentRef?.setInput('user', this.user)
+  ngOnInit(): void {
+    this.defaultDialogContent = {gameName: "", creatorName: this.user.name}
+    this.resetDialogContent()
   }
 
-  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
+  resetDialogContent(){
+      this.dialogContent = {...this.defaultDialogContent}
+  }
+
+  openDialog() {
+    let dialogRef = this.dialog.open(
+      DialogContentComponent,
+      {data: this.dialogContent}
+    );
+    dialogRef.componentRef?.setInput('userId', this.user.id)
+    let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
+      this.resetDialogContent();
+    });
+    dialogRef.afterClosed().subscribe(value => {
+      subscription.unsubscribe();
+    });
+  }
+}
+
+export interface CreateGameDialogContent {
+  gameName: string;
+  creatorName: string;
 }

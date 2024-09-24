@@ -23,11 +23,17 @@ Feature: Game Creation
     And the displayed value for creator name is "qa-user"
 
   Rule: preserve input values when closing dialog
-    Scenario: click on cancel button preserves input values
-      When qa-user clics on create game button
+    Background:
+      Given qa-user clics on create game button
       And qa-user enters the game name "some game name"
       And qa-user enters the creator name "some creator name"
-      And qa-user clicks on cancel button
+    Scenario: closing the dialog by clicking on cancel button preserves input values
+      When qa-user clicks on cancel button
+      And qa-user clics on create game button
+      Then the displayed value for game name is "some game name"
+      And the displayed value for creator name is "some creator name"
+    Scenario: closing the dialog by clicking outside the dialog preserves input values
+      When qa-user clicks outside the dialog
       And qa-user clics on create game button
       Then the displayed value for game name is "some game name"
       And the displayed value for creator name is "some creator name"

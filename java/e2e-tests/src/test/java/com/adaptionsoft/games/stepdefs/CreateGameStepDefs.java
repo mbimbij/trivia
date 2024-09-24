@@ -64,4 +64,9 @@ public class CreateGameStepDefs {
     public void qaUserClicksOnCancelButton() {
         createGameUiElement.clickElementByTestid(CreateGameUiElement.CANCEL);
     }
+
+    @When("qa-user clicks outside the dialog")
+    public void qaUserClicksOutsideTheDialog() {
+        createGameUiElement.clickOutsideDialog();
+    }
 }

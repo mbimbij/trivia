@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -11,11 +12,10 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
-import {User} from "../../../user/user";
 import {UserDto} from "../../../openapi-generated/game";
 import {MatIcon} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
-import {CreateGameComponentTestIds} from "../create-game.component";
+import {CreateGameComponentTestIds, CreateGameDialogContent} from "../create-game.component";
 
 @Component({
   selector: 'app-dialog-content',
@@ -36,32 +36,24 @@ import {CreateGameComponentTestIds} from "../create-game.component";
   styleUrl: './dialog-content.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DialogContentComponent extends Identifiable implements OnInit, OnDestroy{
+export class DialogContentComponent extends Identifiable {
 
-  @Input() user!: User
-  newGameName!: string;
-  creatorName!: string;
+  @Input() userId!: string
+  @Output() resetDialogContentEvent = new EventEmitter<null>();
 
   constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
-              private gameService: GameServiceAbstract) {
+              private gameService: GameServiceAbstract,
+              @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContent) {
     super()
   }
 
-  ngOnInit() {
-    console.log(`ngOnInit ${this.id}`)
-    this.creatorName = this.user.name
-  }
-
-  ngOnDestroy() {
-    console.log(`ngOnDestroy ${this.id}`)
-  }
-
-  protected createGame(newGameName: string, creatorName: string) {
-    console.log(`create game ${newGameName} with name ${creatorName}`)
-    let creator = {name: creatorName, id: this.user.id} as UserDto
-    this.gameService.create(newGameName, creator).subscribe({
+  protected createGame() {
+    console.log(`create game ${this.data.gameName} with name ${this.data.creatorName}`)
+    let creator = {name: this.data.creatorName, id: this.userId} as UserDto
+    this.gameService.create(this.data.gameName, creator).subscribe({
       next: newGame => {
         console.log(`created game: ${newGame.id}`)
+        this.resetDialogContentEvent.next(null)
         this.matDialogRef.close()
       }
     })

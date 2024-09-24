@@ -1,8 +1,10 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.domain.TestContext;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.microsoft.playwright.options.BoundingBox;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -67,5 +69,14 @@ public class CreateGameUiElement extends UiElementObject {
         PlaywrightAssertions.assertThat(page.getByTestId("create-game-dialog")).not().isAttached();
 
         return Integer.parseInt(logText.get().split("created game: ")[1]);
+    }
+
+    public void clickOutsideDialog() {
+        Locator locator = page.getByTestId(VALIDATE);
+        BoundingBox boundingBox = locator.boundingBox();
+        // TODO être un peu plus malin sur ce test, que ça soit robuste à la taille de l'écran et que ça ne puisse pas sortir
+        double xPosition = boundingBox.x + boundingBox.width + 20;
+        double yPosition = boundingBox.y;
+        page.mouse().click(xPosition,yPosition);
     }
 }
