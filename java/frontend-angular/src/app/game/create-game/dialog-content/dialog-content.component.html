@@ -2,17 +2,17 @@
 <mat-dialog-content>
   <mat-form-field>
     <mat-label>Game Name</mat-label>
-<!--    TODO replace [(ngModel)] as it is deprecated -->
+    <!--    TODO replace [(ngModel)] as it is deprecated -->
     <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
-           name="CreateGameComponentTestIds.GAME_NAME"
            matInput
            [(ngModel)]="currentContent.gameName"
-           [value]="currentContent.gameName"
-           [formControl]="gameNameControl"
+           #gameName="ngModel"
+           required
+           notBlank
     >
-    @if (gameNameControl.hasError('required')){
-      <mat-error>game name cannot be empty</mat-error>
-    }
+    <mat-error *ngIf="gameName.errors?.['notBlank']">
+      game name cannot be empty
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Join as</mat-label>
@@ -20,11 +20,24 @@
            name="CreateGameComponentTestIds.CREATOR_NAME"
            matInput
            [(ngModel)]="currentContent.creatorName"
-           [value]="currentContent.creatorName"
+           #creatorName="ngModel"
+           required
+           notBlank
     >
+    <mat-error *ngIf="creatorName.errors?.['notBlank']">
+      creator name cannot be empty
+    </mat-error>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
+  <button
+    class="rounded red"
+    [attr.data-testid]="CreateGameComponentTestIds.RESET"
+    mat-stroked-button
+    (click)="resetDialogContent()"
+  >Reset
+  </button>
+  <mat-divider [vertical]="true"></mat-divider>
   <button
     class="rounded"
     [attr.data-testid]="CreateGameComponentTestIds.CANCEL"
@@ -33,16 +46,9 @@
   </button>
   <button
     class="rounded"
-    [attr.data-testid]="CreateGameComponentTestIds.RESET"
-    mat-button
-    (click)="resetDialogContent()"
-  >Reset
-  </button>
-  <button
-    class="rounded"
     [attr.data-testid]="CreateGameComponentTestIds.VALIDATE"
     mat-raised-button color="primary"
-    [disabled]="!!gameNameControl.errors"
+    [disabled]="(!!gameName.errors) || (!!creatorName.errors) "
     mat-button (click)="createGame()">Create
   </button>
 </mat-dialog-actions>

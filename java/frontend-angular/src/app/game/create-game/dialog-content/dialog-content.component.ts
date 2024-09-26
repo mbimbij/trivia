@@ -19,7 +19,10 @@ import {
   CreateGameDialogContent,
   CreateGameDialogContentParams
 } from "../create-game.component";
-import {notBlankValidator} from "../../../common/validators";
+import {notBlankValidator} from "../../../common/validation/validators";
+import {NgIf} from "@angular/common";
+import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
+import {MatDivider} from "@angular/material/divider";
 
 @Component({
   selector: 'app-dialog-content',
@@ -35,7 +38,10 @@ import {notBlankValidator} from "../../../common/validators";
     MatInput,
     MatDialogActions,
     MatButton,
-    MatDialogClose
+    MatDialogClose,
+    NgIf,
+    NotBlankValidatorDirective,
+    MatDivider
   ],
   templateUrl: './dialog-content.component.html',
   styleUrl: './dialog-content.component.css',
@@ -46,7 +52,6 @@ export class DialogContentComponent extends Identifiable {
   currentContent!: CreateGameDialogContent
   defaultContent!: CreateGameDialogContent
   resetDialogContentEvent = new EventEmitter<null>();
-  protected gameNameControl = new FormControl('',[Validators.required, notBlankValidator])
 
   constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
               private gameService: GameServiceAbstract,
