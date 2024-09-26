@@ -43,7 +43,7 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
   override renameUser(newUserName: string): void {
     this.firebaseUser?.updateProfile({displayName: newUserName})
       .then(() => {
-        this.user.name = newUserName
+        this.user = {...this.user,name: newUserName}
         this.userSubject.next(this.user);
       })
   }

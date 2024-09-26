@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogContentComponent} from "./dialog-content/dialog-content.component";
@@ -45,7 +45,7 @@ export class CreateGameComponent {
     this.dialog = dialog;
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges){
     this.defaultContent = {gameName: "", creatorName: this.user.name}
     this.resetDialogContent()
   }
