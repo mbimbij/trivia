@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -8,33 +8,34 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
-import {MatIcon} from "@angular/material/icon";
-import {FormsModule} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
   CreateGameComponentTestIds,
   CreateGameDialogContent,
   CreateGameDialogContentParams
 } from "../create-game.component";
+import {notBlankValidator} from "../../../common/validators";
 
 @Component({
   selector: 'app-dialog-content',
   standalone: true,
   imports: [
     MatDialogTitle,
+    MatError,
+    ReactiveFormsModule,
+    MatLabel,
+    MatFormField,
     MatDialogContent,
+    FormsModule,
+    MatInput,
     MatDialogActions,
     MatButton,
-    MatDialogClose,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatIcon,
-    FormsModule
+    MatDialogClose
   ],
   templateUrl: './dialog-content.component.html',
   styleUrl: './dialog-content.component.css',
@@ -45,6 +46,7 @@ export class DialogContentComponent extends Identifiable {
   currentContent!: CreateGameDialogContent
   defaultContent!: CreateGameDialogContent
   resetDialogContentEvent = new EventEmitter<null>();
+  protected gameNameControl = new FormControl('',[Validators.required, notBlankValidator])
 
   constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
               private gameService: GameServiceAbstract,

@@ -9,7 +9,11 @@
              matInput
              [(ngModel)]="currentContent.gameName"
              [value]="currentContent.gameName"
+             [formControl]="gameNameControl"
       >
+      @if (gameNameControl.hasError('required')){
+        <mat-error>game name cannot be empty</mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Join as</mat-label>
@@ -40,6 +44,7 @@
     class="rounded"
     [attr.data-testid]="CreateGameComponentTestIds.VALIDATE"
     mat-raised-button color="primary"
+    [disabled]="!!gameNameControl.errors"
     mat-button (click)="createGame()">Create
   </button>
 </mat-dialog-actions>
