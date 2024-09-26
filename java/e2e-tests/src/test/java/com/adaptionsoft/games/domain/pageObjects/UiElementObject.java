@@ -49,4 +49,12 @@ public class UiElementObject {
     public void clickElementByTestid(String testId) {
         page.getByTestId(testId).click();
     }
+
+    public void verifyButtonDisabledByTestid(String testId) {
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).isDisabled();
+    }
+
+    public void verifyButtonEnabledByTestid(String testId) {
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).isEnabled();
+    }
 }

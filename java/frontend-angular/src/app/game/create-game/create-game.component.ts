@@ -61,16 +61,18 @@ export class CreateGameComponent {
       {data: params}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
+
     let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
       this.resetDialogContent();
     });
-    dialogRef.afterOpened().subscribe(value => {
-      document.querySelector("mat-dialog-container")
-        ?.setAttribute("data-testid", CreateGameComponentTestIds.DIALOG)
-    })
     dialogRef.afterClosed().subscribe(() => {
       subscription.unsubscribe();
     });
+
+    dialogRef.afterOpened().subscribe(() => {
+      document.querySelector("mat-dialog-container")
+        ?.setAttribute("data-testid", CreateGameComponentTestIds.DIALOG)
+    })
   }
 }
 
