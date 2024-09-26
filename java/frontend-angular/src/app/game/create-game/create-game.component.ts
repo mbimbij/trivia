@@ -64,7 +64,11 @@ export class CreateGameComponent {
     let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
       this.resetDialogContent();
     });
-    dialogRef.afterClosed().subscribe(value => {
+    dialogRef.afterOpened().subscribe(value => {
+      document.querySelector("mat-dialog-container")
+        ?.setAttribute("data-testid", CreateGameComponentTestIds.DIALOG)
+    })
+    dialogRef.afterClosed().subscribe(() => {
       subscription.unsubscribe();
     });
   }

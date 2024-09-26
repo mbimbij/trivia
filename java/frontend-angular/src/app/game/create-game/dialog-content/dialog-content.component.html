@@ -1,30 +1,28 @@
-<div [attr.data-testid]="CreateGameComponentTestIds.DIALOG"></div>
 <h2 mat-dialog-title> Create a New Game </h2>
 <mat-dialog-content>
-  <form>
-    <mat-form-field>
-      <mat-label>Game Name</mat-label>
-      <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
-             name="CreateGameComponentTestIds.GAME_NAME"
-             matInput
-             [(ngModel)]="currentContent.gameName"
-             [value]="currentContent.gameName"
-             [formControl]="gameNameControl"
-      >
-      @if (gameNameControl.hasError('required')){
-        <mat-error>game name cannot be empty</mat-error>
-      }
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Join as</mat-label>
-      <input [attr.data-testid]="CreateGameComponentTestIds.CREATOR_NAME"
-             name="CreateGameComponentTestIds.CREATOR_NAME"
-             matInput
-             [(ngModel)]="currentContent.creatorName"
-             [value]="currentContent.creatorName"
-      >
-    </mat-form-field>
-  </form>
+  <mat-form-field>
+    <mat-label>Game Name</mat-label>
+<!--    TODO replace [(ngModel)] as it is deprecated -->
+    <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
+           name="CreateGameComponentTestIds.GAME_NAME"
+           matInput
+           [(ngModel)]="currentContent.gameName"
+           [value]="currentContent.gameName"
+           [formControl]="gameNameControl"
+    >
+    @if (gameNameControl.hasError('required')){
+      <mat-error>game name cannot be empty</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Join as</mat-label>
+    <input [attr.data-testid]="CreateGameComponentTestIds.CREATOR_NAME"
+           name="CreateGameComponentTestIds.CREATOR_NAME"
+           matInput
+           [(ngModel)]="currentContent.creatorName"
+           [value]="currentContent.creatorName"
+    >
+  </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button
