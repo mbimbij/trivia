@@ -37,7 +37,7 @@ public class CreateGameStepDefs {
 
     @Then("qa-user can see the create game dialog")
     public void qaUserCanSeeTheCreateGameDialog() {
-        createGameUiElement.verifyExistenceByTestId(CreateGameUiElement.DIALOG);
+        createGameUiElement.verifyPresenceByTestId(CreateGameUiElement.DIALOG);
     }
 
     @Then("qa-user cannot see the create game dialog")

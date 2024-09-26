@@ -27,12 +27,16 @@ public class CreateGameUiElement extends UiElementObject {
     // TODO ajouter un test de création de partie depuis le frontend
     @SneakyThrows
     public int createGame(String gameName) {
-        PlaywrightAssertions.assertThat(page.getByTestId("create-game-dialog")).not().isAttached();
-        page.getByTestId("create-game").click();
-        PlaywrightAssertions.assertThat(page.getByTestId("create-game-dialog")).isAttached();
+        verifyAbsenceByTestId(DIALOG);
+        clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        verifyPresenceByTestId(DIALOG);
+        fillInputByTestId(GAME_NAME, gameName);
+        int newGameId = clickValidateAndGetGameIdFromConsoleLogs();
+        verifyAbsenceByTestId(DIALOG);
+        return newGameId;
+    }
 
-        page.getByTestId("game-name").fill(gameName);
-
+    private int clickValidateAndGetGameIdFromConsoleLogs() {
         AtomicReference<String> logText = new AtomicReference<>();
         page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(
                         consoleMessage -> {
@@ -40,10 +44,7 @@ public class CreateGameUiElement extends UiElementObject {
                             logText.set(text);
                             return text.startsWith("created game: ");
                         }),
-                page.getByTestId("validate")::click);
-
-        PlaywrightAssertions.assertThat(page.getByTestId("create-game-dialog")).not().isAttached();
-
+                () -> this.clickButtonByTestid(VALIDATE));
         return Integer.parseInt(logText.get().split("created game: ")[1]);
     }
 

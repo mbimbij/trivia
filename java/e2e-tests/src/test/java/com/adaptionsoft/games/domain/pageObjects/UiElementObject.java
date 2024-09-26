@@ -19,20 +19,20 @@ public class UiElementObject {
         return page.getByTestId(testid).textContent().trim();
     }
 
-    public void fillInputByTestId(String testid, String textContent) {
-        verifyExistenceByTestId(testid);
-        page.getByTestId(testid).fill(textContent);
+    public void fillInputByTestId(String testid, String content) {
+        verifyPresenceByTestId(testid);
+        page.getByTestId(testid).fill(content);
     }
 
     public void verifyInputContentByTestId(String testid, String expectedContent) {
-        verifyExistenceByTestId(testid);
+        verifyPresenceByTestId(testid);
         String content = Optional.ofNullable(page.getByTestId(testid).getAttribute("ng-reflect-model"))
                 .map(String::trim)
                 .orElse("");
         Assertions.assertThat(content).isEqualTo(expectedContent);
     }
 
-    public void verifyExistenceByTestId(String testid) {
+    public void verifyPresenceByTestId(String testid) {
         PlaywrightAssertions.assertThat(page.getByTestId(testid)).isAttached();
     }
 
