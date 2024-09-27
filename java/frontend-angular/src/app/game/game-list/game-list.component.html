@@ -1,5 +1,5 @@
 <ng-container *ngIf="(userService.getUser() | async) as user">
-  <app-rename-user></app-rename-user>
+  <app-rename-user [user]="user"></app-rename-user>
   <br>
   <div style="display: flex; justify-content: flex-end; padding-top:0.5rem; padding-bottom:0.5rem">
     <app-create-game [user]="user"/>

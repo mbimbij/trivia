@@ -8,6 +8,7 @@ import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -32,11 +33,12 @@ public class CommonStepDefs {
     private final AuthenticationPage authenticationPage;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameDetailsPage;
-    private final HealthPage healthPage;
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;
     public static final String GO_BACK_BUTTON_TESTID = "go-back";
+    private final Navbar navbar;
+    private final RenameUserStepdefs renameUserStepdefs;
 
     @Given("2 existing games")
     public void games() {
@@ -115,4 +117,10 @@ public class CommonStepDefs {
         janitor.throwExceptionWhenCallGetGameById();
     }
 
+    @And("qa-user name was not changed")
+    public void qaUserNameWasNotChanged() {
+        if(!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)){
+            renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
+        }
+    }
 }

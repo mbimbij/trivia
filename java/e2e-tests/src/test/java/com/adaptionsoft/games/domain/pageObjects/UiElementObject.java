@@ -33,7 +33,8 @@ public class UiElementObject {
     }
 
     public void verifyPresenceByTestId(String testid) {
-        PlaywrightAssertions.assertThat(page.getByTestId(testid)).isAttached();
+        page.waitForSelector("[data-testid=%s]".formatted(testid));
+//        PlaywrightAssertions.assertThat(page.getByTestId(testid)).isAttached();
     }
 
     public void verifyAbsenceByTestId(String testid) {
@@ -56,5 +57,9 @@ public class UiElementObject {
 
     public void verifyButtonEnabledByTestid(String testId) {
         PlaywrightAssertions.assertThat(page.getByTestId(testId)).isEnabled();
+    }
+
+    public void verifyTextContent(String testId, String expectedContent) {
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).hasText(expectedContent);
     }
 }

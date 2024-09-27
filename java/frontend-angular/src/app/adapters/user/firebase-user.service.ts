@@ -44,6 +44,7 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
     this.firebaseUser?.updateProfile({displayName: newUserName})
       .then(() => {
         this.user = {...this.user,name: newUserName}
+        // this.user.name = newUserName
         this.userSubject.next(this.user);
       })
   }

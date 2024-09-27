@@ -1,16 +1,18 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
+import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.Console;
 import com.adaptionsoft.games.domain.pageObjects.HealthPage;
-import com.adaptionsoft.games.utils.PlaywrightSingleton;
+import com.adaptionsoft.games.domain.pageObjects.Navbar;
 import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +22,9 @@ public class Hooks {
     private final Janitor janitor;
     private final HealthPage healthPage;
     private final Console console;
+    private final TestContext testContext;
     private boolean noErrorLogsExpectedInConsole;
+    private final RenameUserStepdefs renameUserStepdefs;
 
     @Before
     public void setUp() {
@@ -37,6 +41,10 @@ public class Hooks {
             verifyNoErrorIsDisplayedInTheConsole();
         }
         janitor.deleteTestGames();
+        if(testContext.isUserRenamed()){
+            renameUserStepdefs.renameQaUser("qa-user");
+            testContext.setUserRenamed(false);
+        }
     }
 
     public void verifyNoErrorIsDisplayedInTheConsole() {

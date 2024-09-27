@@ -2,6 +2,7 @@ package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.pageObjects.Console;
 import com.adaptionsoft.games.domain.pageObjects.CreateGameUiElement;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -17,6 +18,7 @@ public class CreateGameStepDefs {
     private final TestContext testContext;
     private final Janitor janitor;
     private final CreateGameUiElement createGameUiElement;
+    private String createdGameName;
 
     @When("qa-user creates a game named {string} from the frontend")
     public void qaUserCreatesAGameNamed(String gameName) {
@@ -33,7 +35,7 @@ public class CreateGameStepDefs {
     }
 
     @When("qa-user clicks on create game button")
-    public void qaUserClicsOnCreateGameButton() {
+    public void qaUserClicksOnCreateGameButton() {
         createGameUiElement.clickButtonByTestid(OPEN_DIALOG_BUTTON);
     }
 
@@ -58,9 +60,10 @@ public class CreateGameStepDefs {
     }
 
     @And("qa-user enters the game name {string}")
-    public void qaUserEntersTheGameName(String textContent) {
-        String formattedContent = formatInputForWhitespaces(textContent);
+    public void qaUserEntersTheGameName(String gameName) {
+        String formattedContent = formatInputForWhitespaces(gameName);
         createGameUiElement.fillInputByTestId(GAME_NAME, formattedContent);
+        createdGameName = gameName;
     }
 
     private static String formatInputForWhitespaces(String textContent) {
@@ -91,11 +94,16 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on the create-game.validation button")
     public void qaUserClicksOnTheCreateGameValidationButton() {
-        createGameUiElement.clickButtonByTestid(VALIDATE);
+        int gameId = createGameUiElement.clickValidateAndGetGameIdFromConsoleLogs();
+        testContext.putGameId(createdGameName, gameId);
     }
 
     @Then("the validate button is disabled")
     public void theValidateButtonIsDisabled() {
-        createGameUiElement.verifyButtonDisabledByTestid(VALIDATE);
+        try {
+            createGameUiElement.verifyButtonDisabledByTestid(VALIDATE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

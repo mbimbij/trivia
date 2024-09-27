@@ -33,7 +33,7 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false)
+                .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
@@ -111,5 +111,15 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Backend backend(RestTemplate restTemplate, TestProperties testProperties) {
         return new Backend(restTemplate,testProperties.getBackendUrlBase());
+    }
+
+    @Bean
+    public RenameUser renameUser(Page page) {
+        return new RenameUser(page);
+    }
+
+    @Bean
+    public Navbar navbar(Page page) {
+        return new Navbar(page);
     }
 }

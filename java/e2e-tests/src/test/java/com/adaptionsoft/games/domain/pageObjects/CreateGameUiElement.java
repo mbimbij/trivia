@@ -36,7 +36,7 @@ public class CreateGameUiElement extends UiElementObject {
         return newGameId;
     }
 
-    private int clickValidateAndGetGameIdFromConsoleLogs() {
+    public int clickValidateAndGetGameIdFromConsoleLogs() {
         AtomicReference<String> logText = new AtomicReference<>();
         page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(
                         consoleMessage -> {
