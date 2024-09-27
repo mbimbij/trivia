@@ -3,9 +3,7 @@ package com.adaptionsoft.games.domain.pageObjects;
 import com.microsoft.playwright.ConsoleMessage;
 import com.microsoft.playwright.Page;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Console {
     private final List<ConsoleMessage> currentScenarioLogs = new ArrayList<>();
@@ -22,8 +20,8 @@ public class Console {
 
     public List<String> getErrorLogs() {
         return getCurrentScenarioLogs().stream()
-                .filter(consoleMessage -> Objects.equals("error", consoleMessage.type()))
-                .map(consoleMessage -> consoleMessage.text()+consoleMessage.location())
+                .filter(m -> Objects.equals("error", m.type()))
+                .map(m -> m.location() + " - " + m.text())
                 .toList();
     }
 

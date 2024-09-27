@@ -23,7 +23,6 @@ public class RenameUserStepdefs {
     public void renameQaUser(String newName) {
         gamesListPage.navigateTo();
         renameUser.renameUser(newName);
-        testContext.setUserRenamed(!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME));
         navbar.verifyDisplayedUserName(newName);
     }
 }

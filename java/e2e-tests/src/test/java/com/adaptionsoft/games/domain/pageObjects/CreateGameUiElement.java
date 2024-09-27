@@ -5,6 +5,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.BoundingBox;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -68,5 +69,10 @@ public class CreateGameUiElement extends UiElementObject {
         double xPosition = boundingBox.x + boundingBox.width + 20;
         double yPosition = boundingBox.y;
         page.mouse().click(xPosition,yPosition);
+    }
+
+    public void waitForDialogToOpen() {
+       page.waitForSelector("[data-testid=%s]".formatted(DIALOG),
+               new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
     }
 }

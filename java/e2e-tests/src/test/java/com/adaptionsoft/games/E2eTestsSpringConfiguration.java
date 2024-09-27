@@ -1,8 +1,10 @@
 package com.adaptionsoft.games;
 
-import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.ActorService;
+import com.adaptionsoft.games.domain.Janitor;
+import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.*;
-import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
 import com.adaptionsoft.games.trivia.game.web.WebConfig;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.fasterxml.jackson.databind.Module;
@@ -39,7 +41,7 @@ public class E2eTestsSpringConfiguration {
         Browser browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
 //                .setRecordVideoDir(Path.of("videos"))
-//                .setRecordVideoSize(640, 480)
+//                .setRecordVideoSize(1280, 1024)
                 ;
         BrowserContext newContext = browser.newContext(contextOptions);
         return newContext.newPage();

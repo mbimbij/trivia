@@ -37,8 +37,6 @@ public class CommonStepDefs {
     private final TestProperties testProperties;
     private final Page page;
     public static final String GO_BACK_BUTTON_TESTID = "go-back";
-    private final Navbar navbar;
-    private final RenameUserStepdefs renameUserStepdefs;
 
     @Given("2 existing games")
     public void games() {
@@ -115,12 +113,5 @@ public class CommonStepDefs {
     @Given("an exception is thrown when calling getGameById")
     public void anExceptionIsThrownWhenCallingGetGameById() {
         janitor.throwExceptionWhenCallGetGameById();
-    }
-
-    @And("qa-user name was not changed")
-    public void qaUserNameWasNotChanged() {
-        if(!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)){
-            renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
-        }
     }
 }

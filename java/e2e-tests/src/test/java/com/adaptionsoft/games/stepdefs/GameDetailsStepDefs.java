@@ -15,7 +15,6 @@ public class GameDetailsStepDefs {
     private final TestContext testContext;
     private final GameRowActions gameRowActions;
     private final GameDetailsPage gameDetailsPage;
-    private final Page page;
 
     @And("qa-user clicks on game details link for {string}")
     public void iClickOnGameDetailsLinkFor(String gameName) {

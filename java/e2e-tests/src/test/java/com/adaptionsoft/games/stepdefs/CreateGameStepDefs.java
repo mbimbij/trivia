@@ -2,13 +2,16 @@ package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.pageObjects.Console;
+import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.CreateGameUiElement;
+import com.adaptionsoft.games.domain.pageObjects.Navbar;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 import static com.adaptionsoft.games.domain.pageObjects.CreateGameUiElement.*;
 
@@ -19,12 +22,15 @@ public class CreateGameStepDefs {
     private final Janitor janitor;
     private final CreateGameUiElement createGameUiElement;
     private String createdGameName;
+    private final Navbar navbar;
+    private final RenameUserStepdefs renameUserStepdefs;
 
     @When("qa-user creates a game named {string} from the frontend")
     public void qaUserCreatesAGameNamed(String gameName) {
         int createdGameId = createGameUiElement.createGame(gameName);
         janitor.disablePlayersShuffling(createdGameId);
         testContext.putGameId(gameName, createdGameId);
+        createdGameName = gameName;
     }
 
     @When("qa-user creates a game named {string}, with username {string}, from the frontend")
@@ -32,11 +38,13 @@ public class CreateGameStepDefs {
         int createdGameId = createGameUiElement.createGame(gameName, creatorName);
         janitor.disablePlayersShuffling(createdGameId);
         testContext.putGameId(gameName, createdGameId);
+        createdGameName = gameName;
     }
 
     @When("qa-user clicks on create game button")
     public void qaUserClicksOnCreateGameButton() {
         createGameUiElement.clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        createGameUiElement.waitForDialogToOpen();
     }
 
     @Then("qa-user can see the create game dialog")
@@ -104,6 +112,13 @@ public class CreateGameStepDefs {
             createGameUiElement.verifyButtonDisabledByTestid(VALIDATE);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @And("qa-user name was not changed")
+    public void qaUserNameWasNotChanged() {
+        if(!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)){
+            renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
         }
     }
 }

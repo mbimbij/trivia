@@ -1,8 +1,6 @@
 package com.adaptionsoft.games.domain;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +9,6 @@ import java.util.Map;
 public class TestContext {
 
     private final Map<String, Integer> gameIdByName = new HashMap<>();
-    @Getter
-    @Setter
-    private boolean userRenamed = false;
 
     public Integer getGameIdForName(String gameName) {
         return gameIdByName.get(gameName);

@@ -3,6 +3,7 @@ package com.adaptionsoft.games.domain.pageObjects;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 
 import java.util.Optional;
@@ -20,7 +21,6 @@ public class UiElementObject {
     }
 
     public void fillInputByTestId(String testid, String content) {
-        verifyPresenceByTestId(testid);
         page.getByTestId(testid).fill(content);
     }
 
@@ -32,9 +32,9 @@ public class UiElementObject {
         Assertions.assertThat(content).isEqualTo(expectedContent);
     }
 
+    @SneakyThrows
     public void verifyPresenceByTestId(String testid) {
         page.waitForSelector("[data-testid=%s]".formatted(testid));
-//        PlaywrightAssertions.assertThat(page.getByTestId(testid)).isAttached();
     }
 
     public void verifyAbsenceByTestId(String testid) {
@@ -53,10 +53,6 @@ public class UiElementObject {
 
     public void verifyButtonDisabledByTestid(String testId) {
         PlaywrightAssertions.assertThat(page.getByTestId(testId)).isDisabled();
-    }
-
-    public void verifyButtonEnabledByTestid(String testId) {
-        PlaywrightAssertions.assertThat(page.getByTestId(testId)).isEnabled();
     }
 
     public void verifyTextContent(String testId, String expectedContent) {
