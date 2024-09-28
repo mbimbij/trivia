@@ -1,58 +1,87 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {FormsModule} from "@angular/forms";
-import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
+import {MatButton} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogContentComponent} from "./dialog-content/dialog-content.component";
+import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 
-import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Subscription} from "rxjs";
-import {Identifiable} from "../../common/identifiable";
+export class CreateGameComponentTestIds {
+  public static readonly OPEN_DIALOG_BUTTON = 'create-game'
+  public static readonly DIALOG = 'create-game-dialog'
+  public static readonly GAME_NAME = 'game-name'
+  public static readonly CREATOR_NAME = 'creator-name'
+  public static readonly CANCEL = 'cancel'
+  public static readonly RESET = 'reset'
+  public static readonly VALIDATE = 'validate'
+}
 
 @Component({
   selector: 'app-create-game',
   standalone: true,
   imports: [
-    FormsModule
+    MatButton,
+    MatLabel
   ],
   template: `
-    <label for="newGameName">Create Game</label>
-    <input
-      [attr.data-testid]="'create-game-name'"
-      #newGameName
-      type="text" id="newGameName"
-      required minlength="1" maxlength="100" size="20"
-      (keyup.enter)="createGame(newGameName.value)"
-    />
     <button
-      [attr.data-testid]="'create-game-validate'"
-      (click)="createGame(newGameName.value)">create
+      [attr.data-testid]="CreateGameComponentTestIds.OPEN_DIALOG_BUTTON"
+      class="rounded"
+      mat-raised-button color="primary" (click)="openDialog()"
+    >create game
     </button>
-    {{ checkRender() }}
   `,
   styleUrl: './create-game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateGameComponent extends Identifiable implements OnDestroy {
-  private user: User | null = null;
-  private userSubscription: Subscription;
-  private newGameSubscription?: Subscription;
+export class CreateGameComponent {
+  @Input() user!: User
+  readonly dialog!: MatDialog
+  private defaultContent!: CreateGameDialogContent
+  private currentContent!: CreateGameDialogContent
 
-  constructor(private gameService: GameServiceAbstract,
-              private userService: UserServiceAbstract) {
-    super()
-    this.userSubscription = userService.getUser().subscribe(updatedUser => {
-      this.user = updatedUser;
+  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
+
+  constructor(dialog: MatDialog) {
+    this.dialog = dialog;
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    this.defaultContent = {gameName: "", creatorName: this.user.name}
+    this.resetDialogContent()
+  }
+
+  resetDialogContent(){
+      this.currentContent = {...this.defaultContent}
+  }
+
+  openDialog() {
+    let params: CreateGameDialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
+    let dialogRef = this.dialog.open(
+      DialogContentComponent,
+      {data: params}
+    );
+    dialogRef.componentRef?.setInput('userId', this.user.id)
+
+    let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
+      this.resetDialogContent();
     });
-  }
+    dialogRef.afterClosed().subscribe(() => {
+      subscription.unsubscribe();
+    });
 
-  ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
-    this.newGameSubscription?.unsubscribe();
+    dialogRef.afterOpened().subscribe(() => {
+      document.querySelector("mat-dialog-container")
+        ?.setAttribute("data-testid", CreateGameComponentTestIds.DIALOG)
+    })
   }
+}
 
-  protected createGame(newGameName: string) {
-    this.newGameSubscription = this.gameService.create(newGameName, this.user!)
-      .subscribe(newGame => {
-        console.log(`created game: ${newGame.id}`)
-      });
-  }
+export interface CreateGameDialogContent {
+  gameName: string;
+  creatorName: string;
+}
+
+export interface CreateGameDialogContentParams {
+  currentContent: CreateGameDialogContent;
+  defaultContent: CreateGameDialogContent;
 }

@@ -15,10 +15,12 @@ public abstract class PageWithStaticUrl extends PageWithUrl {
     public void navigateTo() {
         log.info("Navigating to %s".formatted(url));
         page.navigate(url);
+        page.waitForLoadState();
     }
 
     public void waitForUrl() {
         log.info("Waiting for url %s".formatted(url));
         page.waitForURL(url);
+        page.waitForLoadState();
     }
 }

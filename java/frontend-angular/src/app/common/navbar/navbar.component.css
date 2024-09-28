@@ -3,7 +3,7 @@
 }
 
 .navbar{
-  background-color: blueviolet;
+  background-color: var(--primary);
   color: white;
 }
 

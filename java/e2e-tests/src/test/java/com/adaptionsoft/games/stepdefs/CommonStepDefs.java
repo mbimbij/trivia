@@ -8,6 +8,7 @@ import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -32,7 +33,6 @@ public class CommonStepDefs {
     private final AuthenticationPage authenticationPage;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameDetailsPage;
-    private final HealthPage healthPage;
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;
@@ -114,5 +114,4 @@ public class CommonStepDefs {
     public void anExceptionIsThrownWhenCallingGetGameById() {
         janitor.throwExceptionWhenCallGetGameById();
     }
-
 }

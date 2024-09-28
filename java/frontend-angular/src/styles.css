@@ -8,3 +8,13 @@ table, th, td {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+button.rounded{
+  border-radius: 20px;
+}
+
+:root {
+  --primary: #3f51b5; /* Default Primary Color */
+  --accent: #e91e63;  /* Default Accent Color */
+  --warn: #f44336;    /* Default Warn Color */
+}

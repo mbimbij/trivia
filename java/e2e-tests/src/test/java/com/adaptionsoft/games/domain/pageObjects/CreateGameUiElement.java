@@ -4,6 +4,8 @@ import com.adaptionsoft.games.domain.TestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.microsoft.playwright.options.BoundingBox;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -11,6 +13,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateGameUiElement extends UiElementObject {
+    public static final String OPEN_DIALOG_BUTTON = "create-game";
+    public static final String DIALOG = "create-game-dialog";
+    public static final String GAME_NAME = "game-name";
+    public static final String CREATOR_NAME = "creator-name";
+    public static final String CANCEL = "cancel";
+    public static final String RESET = "reset";
+    public static final String VALIDATE = "validate";
 
     public CreateGameUiElement(Page page, TestContext testContext) {
         super(page);
@@ -19,11 +28,16 @@ public class CreateGameUiElement extends UiElementObject {
     // TODO ajouter un test de création de partie depuis le frontend
     @SneakyThrows
     public int createGame(String gameName) {
-        page.getByTestId("create-game-name").fill(gameName);
-        Locator button = page.getByTestId("create-game-validate");
-        PlaywrightAssertions.assertThat(button).isVisible();
-        PlaywrightAssertions.assertThat(button).isEnabled();
+        verifyAbsenceByTestId(DIALOG);
+        clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        verifyPresenceByTestId(DIALOG);
+        fillInputByTestId(GAME_NAME, gameName);
+        int newGameId = clickValidateAndGetGameIdFromConsoleLogs();
+        verifyAbsenceByTestId(DIALOG);
+        return newGameId;
+    }
 
+    public int clickValidateAndGetGameIdFromConsoleLogs() {
         AtomicReference<String> logText = new AtomicReference<>();
         page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(
                         consoleMessage -> {
@@ -31,8 +45,34 @@ public class CreateGameUiElement extends UiElementObject {
                             logText.set(text);
                             return text.startsWith("created game: ");
                         }),
-                button::click);
-
+                () -> this.clickButtonByTestid(VALIDATE));
         return Integer.parseInt(logText.get().split("created game: ")[1]);
+    }
+
+    // TODO ajouter un test de création de partie depuis le frontend
+    @SneakyThrows
+    public int createGame(String gameName, String creatorName) {
+        verifyAbsenceByTestId(DIALOG);
+        clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        verifyPresenceByTestId(DIALOG);
+        fillInputByTestId(GAME_NAME, gameName);
+        fillInputByTestId(CREATOR_NAME, creatorName);
+        int newGameId = clickValidateAndGetGameIdFromConsoleLogs();
+        verifyAbsenceByTestId(DIALOG);
+        return newGameId;
+    }
+
+    public void clickOutsideDialog() {
+        Locator locator = page.getByTestId(VALIDATE);
+        BoundingBox boundingBox = locator.boundingBox();
+        // TODO être un peu plus malin sur ce test, que ça soit robuste à la taille de l'écran et que ça ne puisse pas sortir
+        double xPosition = boundingBox.x + boundingBox.width + 20;
+        double yPosition = boundingBox.y;
+        page.mouse().click(xPosition,yPosition);
+    }
+
+    public void waitForDialogToOpen() {
+       page.waitForSelector("[data-testid=%s]".formatted(DIALOG),
+               new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
     }
 }

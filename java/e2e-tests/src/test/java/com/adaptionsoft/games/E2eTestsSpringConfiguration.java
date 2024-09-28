@@ -1,8 +1,10 @@
 package com.adaptionsoft.games;
 
-import com.adaptionsoft.games.domain.*;
+import com.adaptionsoft.games.domain.ActorService;
+import com.adaptionsoft.games.domain.Janitor;
+import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.*;
-import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
 import com.adaptionsoft.games.trivia.game.web.WebConfig;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.fasterxml.jackson.databind.Module;
@@ -33,13 +35,13 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false)
+                .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.firefox().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
 //                .setRecordVideoDir(Path.of("videos"))
-//                .setRecordVideoSize(640, 480)
+//                .setRecordVideoSize(1280, 1024)
                 ;
         BrowserContext newContext = browser.newContext(contextOptions);
         return newContext.newPage();
@@ -111,5 +113,15 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Backend backend(RestTemplate restTemplate, TestProperties testProperties) {
         return new Backend(restTemplate,testProperties.getBackendUrlBase());
+    }
+
+    @Bean
+    public RenameUser renameUser(Page page) {
+        return new RenameUser(page);
+    }
+
+    @Bean
+    public Navbar navbar(Page page) {
+        return new Navbar(page);
     }
 }

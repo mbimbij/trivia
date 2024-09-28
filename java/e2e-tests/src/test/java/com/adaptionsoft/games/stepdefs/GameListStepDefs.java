@@ -25,7 +25,6 @@ public class GameListStepDefs {
     private final TestContext testContext;
     private final GamesListPage gamesListPage;
     private final GameRowActions gameRowActions;
-    private final CreateGameUiElement createGameUiElement;
     private final Backend backend;
     private final Janitor janitor;
 
@@ -46,13 +45,6 @@ public class GameListStepDefs {
         GameResponseDto gameResponseDto = backend.createGame(gameName, actor.toUserDto());
         janitor.disablePlayersShuffling(gameResponseDto.id());
         testContext.putGameId(gameName, Objects.requireNonNull(gameResponseDto).id());
-    }
-
-    @When("{actor} creates a game named {string} from the frontend")
-    public void qaUserCreatesAGameNamed(Actor actor, String gameName) {
-        int createdGameId = createGameUiElement.createGame(gameName);
-        janitor.disablePlayersShuffling(createdGameId);
-        testContext.putGameId(gameName, createdGameId);
     }
 
     @When("{string} deletes {string} from the backend")

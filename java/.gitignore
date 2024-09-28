@@ -16,3 +16,4 @@ backend/src/main/resources/static
 **/environment.local-ide.ts
 **/environment.local-ide-embedded.ts
 **/environment.production.ts
+**/multi-run-e2e-tests.sh

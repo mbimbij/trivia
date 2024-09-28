@@ -1,0 +1,54 @@
+<h2 mat-dialog-title> Create a New Game </h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Game Name</mat-label>
+    <!--    TODO replace [(ngModel)] as it is deprecated -->
+    <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
+           matInput
+           [(ngModel)]="currentContent.gameName"
+           #gameName="ngModel"
+           required
+           notBlank
+    >
+    <mat-error *ngIf="gameName.errors?.['notBlank']">
+      game name cannot be empty
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Join as</mat-label>
+    <input [attr.data-testid]="CreateGameComponentTestIds.CREATOR_NAME"
+           name="CreateGameComponentTestIds.CREATOR_NAME"
+           matInput
+           [(ngModel)]="currentContent.creatorName"
+           #creatorName="ngModel"
+           required
+           notBlank
+    >
+    <mat-error *ngIf="creatorName.errors?.['notBlank']">
+      creator name cannot be empty
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    class="rounded red"
+    [attr.data-testid]="CreateGameComponentTestIds.RESET"
+    mat-stroked-button
+    (click)="resetDialogContent()"
+  >Reset
+  </button>
+  <mat-divider [vertical]="true"></mat-divider>
+  <button
+    class="rounded"
+    [attr.data-testid]="CreateGameComponentTestIds.CANCEL"
+    mat-button mat-dialog-close
+  >Cancel
+  </button>
+  <button
+    class="rounded"
+    [attr.data-testid]="CreateGameComponentTestIds.VALIDATE"
+    mat-raised-button color="primary"
+    [disabled]="(!!gameName.errors) || (!!creatorName.errors) "
+    mat-button (click)="createGame()">Create
+  </button>
+</mat-dialog-actions>

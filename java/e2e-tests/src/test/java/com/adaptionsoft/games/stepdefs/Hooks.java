@@ -1,19 +1,20 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
+import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.pageObjects.Console;
 import com.adaptionsoft.games.domain.pageObjects.HealthPage;
-import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 @RequiredArgsConstructor
 public class Hooks {
 
@@ -33,10 +34,13 @@ public class Hooks {
 
     @After
     public void tearDown() {
-        if(noErrorLogsExpectedInConsole){
-            verifyNoErrorIsDisplayedInTheConsole();
+        try {
+            if(noErrorLogsExpectedInConsole){
+                verifyNoErrorIsDisplayedInTheConsole();
+            }
+        } finally {
+            janitor.deleteTestGames();
         }
-        janitor.deleteTestGames();
     }
 
     public void verifyNoErrorIsDisplayedInTheConsole() {

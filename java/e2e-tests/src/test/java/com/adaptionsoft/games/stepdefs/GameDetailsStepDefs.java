@@ -15,7 +15,6 @@ public class GameDetailsStepDefs {
     private final TestContext testContext;
     private final GameRowActions gameRowActions;
     private final GameDetailsPage gameDetailsPage;
-    private final Page page;
 
     @And("qa-user clicks on game details link for {string}")
     public void iClickOnGameDetailsLinkFor(String gameName) {
@@ -24,7 +23,7 @@ public class GameDetailsStepDefs {
         assertThat(gameRowActions.getGameDetailsLink(gameId))
                 .isEqualTo("/games/%d/details".formatted(gameId));
 
-        gameRowActions.clickElementByTestid(gameId, page);
+        gameRowActions.clickGameDetailsLink(gameId);
     }
 
     @When("i am on the on game details page for {string}")

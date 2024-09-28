@@ -1,7 +1,7 @@
 import {Observable} from "rxjs";
 import {User} from "../user/user";
 import {Game} from "../game/game";
-import {AnswerCode, AnswerDto, QuestionDto} from "../openapi-generated/game";
+import {AnswerCode, AnswerDto, CreateGameRequestDto, QuestionDto, UserDto} from "../openapi-generated/game";
 
 export abstract class GameServiceAbstract {
   abstract initGamesList(): void;
@@ -10,7 +10,7 @@ export abstract class GameServiceAbstract {
 
   abstract getGame(gameId: number): Observable<Game>;
 
-  abstract create(name: string, user: User): Observable<Game>;
+  abstract create(gameName: string, creator: UserDto): Observable<Game>;
 
   abstract join(gameId: number, user: User): Observable<Game>;
 
@@ -27,4 +27,3 @@ export abstract class GameServiceAbstract {
   abstract delete(gameId: number): Observable<void> ;
 
 }
-

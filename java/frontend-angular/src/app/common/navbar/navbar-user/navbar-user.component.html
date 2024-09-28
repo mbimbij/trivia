@@ -2,7 +2,9 @@
   <mat-icon id="anonymous-icon" *ngIf="user.isAnonymous" class="example-icon"
             aria-label="Example icon-button with share icon">no_accounts
   </mat-icon>
-  <span>{{ user.name }}</span>
+  <span
+    [attr.data-testid]="'navbar-username'"
+  >{{ user.name }}</span>
   <app-navbar-logout-button *ngIf="(authenticationService.isLoggedIn() | async)"></app-navbar-logout-button>
 </ng-container>
 {{ checkRender() }}

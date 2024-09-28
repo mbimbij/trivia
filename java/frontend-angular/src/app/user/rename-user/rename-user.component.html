@@ -1,12 +1,11 @@
-<ng-container *ngIf="(userService.getUser() | async) as user">
-  <label for="playerName">Player Name</label>
-  <input
-    type="text"
-    id="playerName" required minlength="1" maxlength="100" size="20"
-    #newUserName
-    [value]="user.name"
-    (keyup.enter)="userService.renameUser(newUserName.value)"
-  />
-  <button (click)="userService.renameUser(newUserName.value)">ok</button>
-</ng-container>
+<label for="userName">User Name</label>
+<input
+  [attr.data-testid]="'userName'"
+  type="text"
+  id="userName" required minlength="1" maxlength="100" size="20"
+  #newUserName
+  [value]="user.name"
+  (keyup.enter)="userService.renameUser(newUserName.value)"
+/>
+<button (click)="userService.renameUser(newUserName.value)">ok</button>
 {{ checkRender() }}
