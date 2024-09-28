@@ -1,7 +1,11 @@
 package com.adaptionsoft.games.stepdefs;
 
-import com.adaptionsoft.games.domain.*;
-import com.adaptionsoft.games.domain.pageObjects.*;
+import com.adaptionsoft.games.domain.Actor;
+import com.adaptionsoft.games.domain.Janitor;
+import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.pageObjects.Backend;
+import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
+import com.adaptionsoft.games.domain.pageObjects.GamesListPage;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;

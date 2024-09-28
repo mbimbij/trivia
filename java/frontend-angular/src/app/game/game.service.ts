@@ -12,7 +12,8 @@ import {
   CreateGameRequestDto,
   GameControllerService,
   GameResponseDto,
-  QuestionDto, UserDto
+  QuestionDto,
+  UserDto
 } from "../openapi-generated/game";
 
 @Injectable({

@@ -1,8 +1,8 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
-import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.game.web.PlayerDto;
 import com.adaptionsoft.games.trivia.game.web.UserDto;
+import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

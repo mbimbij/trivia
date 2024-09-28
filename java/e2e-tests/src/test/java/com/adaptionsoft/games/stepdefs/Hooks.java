@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
-import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.pageObjects.Console;
 import com.adaptionsoft.games.domain.pageObjects.HealthPage;
 import io.cucumber.java.After;

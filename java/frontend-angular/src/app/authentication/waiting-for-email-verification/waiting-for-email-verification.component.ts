@@ -1,9 +1,8 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthenticationServiceAbstract} from "../../services/authentication-service-abstract";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {Identifiable} from "../../common/identifiable";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-waiting-for-email-verification',

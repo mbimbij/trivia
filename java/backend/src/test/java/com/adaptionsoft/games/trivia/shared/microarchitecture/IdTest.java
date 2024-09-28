@@ -1,6 +1,5 @@
 package com.adaptionsoft.games.trivia.shared.microarchitecture;
 
-import com.adaptionsoft.games.trivia.shared.microarchitecture.Id;
 import lombok.EqualsAndHashCode;
 import org.junit.jupiter.api.Test;
 

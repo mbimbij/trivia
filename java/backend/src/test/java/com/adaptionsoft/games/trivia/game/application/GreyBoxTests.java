@@ -7,7 +7,6 @@ import com.adaptionsoft.games.trivia.game.web.UserDto;
 import com.adaptionsoft.games.trivia.gamelogs.GameLog;
 import com.adaptionsoft.games.trivia.gamelogs.GameLogsRepository;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

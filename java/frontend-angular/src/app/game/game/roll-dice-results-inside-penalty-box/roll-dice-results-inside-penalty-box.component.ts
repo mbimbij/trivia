@@ -1,10 +1,7 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Player} from "../../../user/player";
-import {Game} from "../../game";
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 import {NgIf} from "@angular/common";
 import {Identifiable} from "../../../common/identifiable";
-import {State} from "../../../openapi-generated/game";
 
 @Component({
   selector: 'app-roll-dice-results-inside-penalty-box',

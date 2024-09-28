@@ -5,7 +5,7 @@ import com.adaptionsoft.games.trivia.game.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.game.web.UserDto;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;
 
-import static com.adaptionsoft.games.trivia.game.domain.AnswerCode.*;
+import static com.adaptionsoft.games.trivia.game.domain.AnswerCode.A;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 

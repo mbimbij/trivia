@@ -1,6 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
-import {Game} from "../../game";
-import {Player} from "../../../user/player";
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Subscription} from "rxjs";

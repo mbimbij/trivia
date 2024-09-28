@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ErrorDisplayComponent } from './error-display.component';
+import {ErrorDisplayComponent} from './error-display.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {ActivatedRoute} from "@angular/router";
 import {MockActivatedRoute} from "../../common/test-helpers";

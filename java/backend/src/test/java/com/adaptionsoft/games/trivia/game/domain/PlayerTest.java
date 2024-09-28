@@ -1,8 +1,8 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
 import com.adaptionsoft.games.trivia.game.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
-import com.adaptionsoft.games.trivia.shared.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
+import com.adaptionsoft.games.trivia.shared.statemachine.StateManager;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import {TestBed} from '@angular/core/testing';
+import {CanActivateFn} from '@angular/router';
 
-import { loginActivateGuard } from './login-activate.guard';
+import {loginActivateGuard} from './login-activate.guard';
 
 describe('loginActivateGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
+  const executeGuard: CanActivateFn = (...guardParameters) =>
       TestBed.runInInjectionContext(() => loginActivateGuard(...guardParameters));
 
   beforeEach(() => {

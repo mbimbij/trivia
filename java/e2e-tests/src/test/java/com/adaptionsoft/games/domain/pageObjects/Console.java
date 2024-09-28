@@ -3,7 +3,9 @@ package com.adaptionsoft.games.domain.pageObjects;
 import com.microsoft.playwright.ConsoleMessage;
 import com.microsoft.playwright.Page;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Console {
     private final List<ConsoleMessage> currentScenarioLogs = new ArrayList<>();

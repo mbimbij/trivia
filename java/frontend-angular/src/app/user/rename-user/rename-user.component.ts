@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Identifiable} from "../../common/identifiable";
 import {AsyncPipe, NgIf} from "@angular/common";

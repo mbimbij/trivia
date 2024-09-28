@@ -2,8 +2,6 @@ import {TestBed} from '@angular/core/testing';
 
 import {GameService} from './game.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {getMockGame1, getMockGame2} from "../common/test-helpers";
-import {gameToGameDto} from "../common/helpers";
 import {GameLogsControllerService} from "../openapi-generated/gamelogs";
 import {GameLogsService} from "./gamelogs.service";
 

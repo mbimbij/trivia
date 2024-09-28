@@ -1,6 +1,5 @@
 package com.adaptionsoft.games.trivia.game.domain.event;
 
-import com.adaptionsoft.games.trivia.game.domain.event.ObserverBasedEventPublisher;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Event;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import lombok.Getter;

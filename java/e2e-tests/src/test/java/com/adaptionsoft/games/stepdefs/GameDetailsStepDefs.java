@@ -3,7 +3,6 @@ package com.adaptionsoft.games.stepdefs;
 import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
 import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
-import com.microsoft.playwright.Page;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;

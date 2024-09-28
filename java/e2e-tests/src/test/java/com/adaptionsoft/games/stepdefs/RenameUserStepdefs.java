@@ -1,6 +1,5 @@
 package com.adaptionsoft.games.stepdefs;
 
-import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.pageObjects.GamesListPage;
 import com.adaptionsoft.games.domain.pageObjects.Navbar;
 import com.adaptionsoft.games.domain.pageObjects.RenameUser;

@@ -1,6 +1,5 @@
-import {ChangeDetectionStrategy, Component, ViewContainerRef} from '@angular/core';
+import {Component} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
-import {Router} from "@angular/router";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {ConsoleLogPipe} from "../../../../console-log.pipe";
