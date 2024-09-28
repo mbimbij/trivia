@@ -37,11 +37,6 @@ export class GameServiceMock extends GameServiceAbstract {
   override getGame(gameId: number): Observable<Game> {
     return this.gameSubject.asObservable();
   }
-
-  setGame(game: Game){
-    this.gameSubject.next(game);
-  }
-
   getGames(): Observable<Array<Game>> {
     return of([
       getMockGame1(),
@@ -49,7 +44,7 @@ export class GameServiceMock extends GameServiceAbstract {
     ]);
   }
 
-  join(gameId: number, user: User): Observable<Game> {
+  override join(gameId: number, user: User): Observable<Game> {
     return of(getMockGame1());
   }
 
