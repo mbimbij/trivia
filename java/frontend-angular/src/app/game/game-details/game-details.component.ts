@@ -8,7 +8,6 @@ import {StartGameButtonComponent} from "../start-game-button/start-game-button.c
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {catchError, Observable, Subject, Subscription} from "rxjs";
 import {Game} from "../game";
-import {generateRandomString} from "../../common/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";

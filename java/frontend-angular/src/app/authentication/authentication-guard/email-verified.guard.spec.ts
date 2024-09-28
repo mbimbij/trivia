@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
-import { CanActivateFn } from '@angular/router';
+import {TestBed} from '@angular/core/testing';
+import {CanActivateFn} from '@angular/router';
 
-import { emailVerifiedGuard } from './email-verified.guard';
+import {emailVerifiedGuard} from './email-verified.guard';
 
 describe('emailVerifiedGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
+  const executeGuard: CanActivateFn = (...guardParameters) =>
       TestBed.runInInjectionContext(() => emailVerifiedGuard(...guardParameters));
 
   beforeEach(() => {

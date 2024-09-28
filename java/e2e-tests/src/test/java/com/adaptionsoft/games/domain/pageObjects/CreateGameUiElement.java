@@ -3,14 +3,11 @@ package com.adaptionsoft.games.domain.pageObjects;
 import com.adaptionsoft.games.domain.TestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.atomic.AtomicReference;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateGameUiElement extends UiElementObject {
     public static final String OPEN_DIALOG_BUTTON = "create-game";

@@ -1,4 +1,4 @@
-import { ConsoleLogPipe } from './console-log.pipe';
+import {ConsoleLogPipe} from './console-log.pipe';
 
 describe('ConsoleLogPipe', () => {
   it('create an instance', () => {

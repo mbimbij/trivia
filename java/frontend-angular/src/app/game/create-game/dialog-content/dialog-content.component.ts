@@ -13,13 +13,12 @@ import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
-import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
   CreateGameComponentTestIds,
   CreateGameDialogContent,
   CreateGameDialogContentParams
 } from "../create-game.component";
-import {notBlankValidator} from "../../../common/validation/validators";
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";

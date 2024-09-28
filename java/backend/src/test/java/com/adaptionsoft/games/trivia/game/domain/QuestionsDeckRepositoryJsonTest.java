@@ -1,7 +1,5 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
-import com.adaptionsoft.games.trivia.game.domain.QuestionsDeck;
-import com.adaptionsoft.games.trivia.game.domain.QuestionsRepositoryJson;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

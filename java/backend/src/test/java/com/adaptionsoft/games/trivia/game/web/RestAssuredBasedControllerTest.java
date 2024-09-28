@@ -2,9 +2,6 @@ package com.adaptionsoft.games.trivia.game.web;
 
 import com.adaptionsoft.games.trivia.game.domain.exception.InvalidGameStateException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayTurnException;
-import com.adaptionsoft.games.trivia.game.web.GameController;
-import com.adaptionsoft.games.trivia.game.web.PlayerDto;
-import com.adaptionsoft.games.trivia.game.web.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.config.ObjectMapperConfig;
 import io.restassured.config.RestAssuredConfig;

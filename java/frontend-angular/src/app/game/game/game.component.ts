@@ -1,5 +1,5 @@
 import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {userToPlayer} from "../../common/helpers";
 import {Player} from "../../user/player";

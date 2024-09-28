@@ -1,20 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
-import {compareUserAndPlayer} from "../../common/helpers";
-import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {User} from "../../user/user";
-import {BehaviorSubject, Subscription} from "rxjs";
-import {Game} from "../game";
 import {Identifiable} from "../../common/identifiable";
-import {State} from "../../openapi-generated/game";
 import {AsyncPipe, NgIf} from "@angular/common";
 
 @Component({

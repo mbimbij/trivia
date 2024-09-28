@@ -3,25 +3,17 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GameComponent} from './game.component';
 import {ActivatedRoute} from "@angular/router";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {
-  getMockGame1,
-  getMockGame2,
-  getMockPlayer1,
-  getMockQuestion1,
-  getMockUser2,
-  MockActivatedRoute
-} from "../../common/test-helpers";
+import {getMockGame1, getMockGame2, getMockPlayer1, getMockUser2, MockActivatedRoute} from "../../common/test-helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
-import {ChangeDetectorRef, DebugElement} from "@angular/core";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {BehaviorSubject, of} from "rxjs";
 import {GameService} from "../game.service";
 import {HttpErrorResponse} from "@angular/common/http";
-import any = jasmine.any;
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
 import {GameLogsService} from "../gamelogs.service";
+import any = jasmine.any;
 
 describe('GameComponent', () => {
   let component: GameComponent

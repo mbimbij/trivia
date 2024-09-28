@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NavbarLogoutButtonComponent } from './navbar-logout-button.component';
+import {NavbarLogoutButtonComponent} from './navbar-logout-button.component';
 import {
   AuthenticationServiceAbstract,
   AuthenticationServiceMock

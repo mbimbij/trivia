@@ -1,12 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WaitingForEmailVerificationComponent } from './waiting-for-email-verification.component';
-import {ActivatedRoute} from "@angular/router";
-import {MockActivatedRoute} from "../../common/test-helpers";
-import {
-  AuthenticationServiceAbstract,
-  AuthenticationServiceMock
-} from "../../services/authentication-service-abstract";
+import {WaitingForEmailVerificationComponent} from './waiting-for-email-verification.component';
+import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "../../services/authentication-service-abstract";
 
 describe('WaitingForEmailVerificationComponent', () => {
   let component: WaitingForEmailVerificationComponent;

@@ -1,15 +1,17 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
-import com.adaptionsoft.games.trivia.game.domain.event.PlayerAddedEvent;
-import com.adaptionsoft.games.trivia.game.domain.exception.PlayerAlreadyJoinedException;
 import com.adaptionsoft.games.trivia.game.domain.exception.DuplicatePlayerNameException;
 import com.adaptionsoft.games.trivia.game.domain.exception.InvalidNumberOfPlayersException;
+import com.adaptionsoft.games.trivia.game.domain.exception.PlayerAlreadyJoinedException;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventRaiser;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class Players extends EventRaiser {
     public static final int MIN_PLAYER_COUNT_AT_START_TIME = 2;

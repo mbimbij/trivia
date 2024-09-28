@@ -1,7 +1,7 @@
 import {Observable} from "rxjs";
 import {User} from "../user/user";
 import {Game} from "../game/game";
-import {AnswerCode, AnswerDto, CreateGameRequestDto, QuestionDto, UserDto} from "../openapi-generated/game";
+import {AnswerCode, AnswerDto, QuestionDto, UserDto} from "../openapi-generated/game";
 
 export abstract class GameServiceAbstract {
   abstract initGamesList(): void;

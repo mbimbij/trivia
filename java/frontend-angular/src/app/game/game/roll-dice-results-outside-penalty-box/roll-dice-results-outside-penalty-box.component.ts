@@ -1,6 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Game} from "../../game";
-import {Player} from "../../../user/player";
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DrawQuestionComponent} from "../draw-question/draw-question.component";
 import {NgIf} from "@angular/common";
 import {Identifiable} from "../../../common/identifiable";

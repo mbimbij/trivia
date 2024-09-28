@@ -1,8 +1,5 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
-import com.adaptionsoft.games.trivia.game.domain.Question;
-import com.adaptionsoft.games.trivia.game.domain.QuestionsDeck;
-
 import java.util.Collections;
 
 public class LoadedQuestionsDeck extends QuestionsDeck {

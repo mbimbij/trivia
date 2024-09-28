@@ -1,14 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ValidationButtonComponent} from "../../validation-button/validation-button.component";
-import {Player} from "../../../../user/player";
 import {NgIf} from "@angular/common";
 import {Identifiable} from "../../../../common/identifiable";
 
