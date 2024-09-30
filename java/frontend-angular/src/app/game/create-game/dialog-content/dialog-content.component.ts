@@ -15,13 +15,13 @@ import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
-  CreateGameComponentTestIds,
   CreateGameDialogContent,
   CreateGameDialogContentParams
 } from "../create-game.component";
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
+import {ids} from "../../../Ids";
 
 @Component({
   selector: 'app-dialog-content',
@@ -72,10 +72,10 @@ export class DialogContentComponent extends Identifiable {
     })
   }
 
-  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
-
   resetDialogContent() {
     this.currentContent = {...this.defaultContent}
     this.resetDialogContentEvent.next(null)
   }
+
+  protected readonly ids = ids;
 }

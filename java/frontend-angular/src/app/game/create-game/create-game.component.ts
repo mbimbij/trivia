@@ -4,16 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogContentComponent} from "./dialog-content/dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
-
-export class CreateGameComponentTestIds {
-  public static readonly OPEN_DIALOG_BUTTON = 'create-game'
-  public static readonly DIALOG = 'create-game-dialog'
-  public static readonly GAME_NAME = 'game-name'
-  public static readonly CREATOR_NAME = 'creator-name'
-  public static readonly CANCEL = 'cancel'
-  public static readonly RESET = 'reset'
-  public static readonly VALIDATE = 'validate'
-}
+import {ids} from "../../Ids";
 
 @Component({
   selector: 'app-create-game',
@@ -24,7 +15,7 @@ export class CreateGameComponentTestIds {
   ],
   template: `
     <button
-      [attr.data-testid]="CreateGameComponentTestIds.OPEN_DIALOG_BUTTON"
+      [attr.data-testid]="ids.createGame.OPEN_DIALOG_BUTTON"
       class="rounded"
       mat-raised-button color="primary" (click)="openDialog()"
     >create game
@@ -38,9 +29,6 @@ export class CreateGameComponent {
   readonly dialog!: MatDialog
   private defaultContent!: CreateGameDialogContent
   private currentContent!: CreateGameDialogContent
-
-  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
-
   constructor(dialog: MatDialog) {
     this.dialog = dialog;
   }
@@ -71,9 +59,11 @@ export class CreateGameComponent {
 
     dialogRef.afterOpened().subscribe(() => {
       document.querySelector("mat-dialog-container")
-        ?.setAttribute("data-testid", CreateGameComponentTestIds.DIALOG)
+        ?.setAttribute("data-testid", ids.createGame.DIALOG)
     })
   }
+
+  protected readonly ids = ids;
 }
 
 export interface CreateGameDialogContent {
