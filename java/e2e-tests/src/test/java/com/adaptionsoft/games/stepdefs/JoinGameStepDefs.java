@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.adaptionsoft.games.domain.pageObjects.JoinGameDialog.PLAYER_NAME;
+import static com.adaptionsoft.games.domain.pageObjects.JoinGameDialog.VALIDATE;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,9 +32,9 @@ public class JoinGameStepDefs {
     @Given("an already existing game")
     public void anAlreadyExistingGameCreatedBy() {
         Actor testUser1 = actorService.getActorByLookupName(TestProperties.TEST_USER_NAME_1);
-        GameResponseDto gameResponseDto = backend.createGame(TestProperties.CREATED_GAME_NAME, testUser1.toUserDto());
+        GameResponseDto gameResponseDto = backend.createGame(TestProperties.TEST_GAME_NAME_1, testUser1.toUserDto());
         gameId = gameResponseDto.id();
-        testContext.putGameId(TestProperties.CREATED_GAME_NAME, gameId);
+        testContext.putGameId(TestProperties.TEST_GAME_NAME_1, gameId);
     }
 
     @When("qa-user clicks on the join button")
@@ -49,5 +50,15 @@ public class JoinGameStepDefs {
     @And("the displayed value for player name is {string}")
     public void theDisplayedValueForPlayerNameIs(String expectedPlayerName) {
         joinGameDialog.verifyInputContentByTestId(PLAYER_NAME, expectedPlayerName);
+    }
+
+    @And("qa-user clicks on the join-game.validation button")
+    public void qaUserClicksOnTheJoinGameValidationButton() {
+        joinGameDialog.clickButtonByTestid(VALIDATE);
+    }
+
+    @And("When qa-user enters {string} in the join-game.player-name field")
+    public void whenQaUserEntersInTheJoinGamePlayerNameField(String playerName) {
+        joinGameDialog.fillInputByTestId(PLAYER_NAME, playerName);
     }
 }

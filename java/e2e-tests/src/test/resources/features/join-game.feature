@@ -15,3 +15,18 @@ Feature: Join Game
       When qa-user changes his name to "other name"
       When qa-user clicks on the join button
       And the displayed value for player name is "other name"
+
+  Rule: Can join a game
+    Scenario: Can join a game without changing the player name
+      When qa-user clicks on the join button
+      And qa-user clicks on the join-game.validation button
+      Then qa-user sees the following games, filtered for creators "test-user-1"
+        | name        | creator     | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-1 | test-user-1 | test-user-1,qa-user | CREATED | false         | null         | already joined | false        | false          |
+    Scenario: Can join a game with another name
+      When qa-user clicks on the join button
+      And When qa-user enters "other name" in the join-game.player-name field
+      And qa-user clicks on the join-game.validation button
+      Then qa-user sees the following games, filtered for creators "test-user-1"
+        | name        | creator     | players                | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-1 | test-user-1 | test-user-1,other name | CREATED | false         | null         | already joined | false        | false          |
