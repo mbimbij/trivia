@@ -34,7 +34,7 @@ public class GameDetailsStepDefs {
     @When("qa-user joins {string} from the frontend")
     public void userJoinsGameFromTheFrontend(String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
-        gameRowActions.join(gameId);
+        gameRowActions.clickJoinButton(gameId);
     }
 
     @When("qa-user directly access the game-details page for {string}")

@@ -1,6 +1,5 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
-import com.adaptionsoft.games.domain.TestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.BoundingBox;
@@ -9,7 +8,7 @@ import lombok.SneakyThrows;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class CreateGameUiElement extends UiElementObject {
+public class CreateGameDialog extends UiElementObject {
     public static final String OPEN_DIALOG_BUTTON = "create-game";
     public static final String DIALOG = "create-game-dialog";
     public static final String GAME_NAME = "game-name";
@@ -18,11 +17,10 @@ public class CreateGameUiElement extends UiElementObject {
     public static final String RESET = "reset";
     public static final String VALIDATE = "validate";
 
-    public CreateGameUiElement(Page page, TestContext testContext) {
+    public CreateGameDialog(Page page) {
         super(page);
     }
 
-    // TODO ajouter un test de création de partie depuis le frontend
     @SneakyThrows
     public int createGame(String gameName) {
         verifyAbsenceByTestId(DIALOG);

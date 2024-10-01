@@ -3,7 +3,7 @@ package com.adaptionsoft.games.stepdefs;
 import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.TestProperties;
-import com.adaptionsoft.games.domain.pageObjects.CreateGameUiElement;
+import com.adaptionsoft.games.domain.pageObjects.CreateGameDialog;
 import com.adaptionsoft.games.domain.pageObjects.Navbar;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -13,14 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
-import static com.adaptionsoft.games.domain.pageObjects.CreateGameUiElement.*;
+import static com.adaptionsoft.games.domain.pageObjects.CreateGameDialog.*;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CreateGameStepDefs {
     private final TestContext testContext;
     private final Janitor janitor;
-    private final CreateGameUiElement createGameUiElement;
+    private final CreateGameDialog createGameUiElement;
     private String createdGameName;
     private final Navbar navbar;
     private final RenameUserStepdefs renameUserStepdefs;

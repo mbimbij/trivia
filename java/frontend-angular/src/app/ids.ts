@@ -10,7 +10,7 @@ export const ids = {
   },
   joinGame:{
     openDialogButtonForGameId: function (gameId: number){
-      return 'join-game-'+gameId;
+      return 'join-button-'+gameId;
     },
     DIALOG: 'join-game-dialog',
     PLAYER_NAME: 'player-name',

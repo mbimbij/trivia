@@ -8,7 +8,7 @@ public class GameRowActions extends UiElementObject {
         super(page);
     }
 
-    public void join(int gameId) {
+    public void clickJoinButton(int gameId) {
         String testid = "join-button-%d".formatted(gameId);
         clickButtonByTestid(testid);
     }
