@@ -15,7 +15,7 @@ import {Identifiable} from "../../common/identifiable";
   template: `
     @if (canJoin) {
       <button
-        [attr.data-testid]="ids.joinGame.OPEN_DIALOG_BUTTON"
+        [attr.data-testid]="ids.joinGame.openDialogButtonForGameId(gameId)"
         class="rounded"
         mat-stroked-button (click)="openDialog()"
       >join
@@ -48,7 +48,7 @@ export class JoinGameButton2Component extends Identifiable {
     this.dialog = dialog;
   }
 
-  ngOnChanges(changes: SimpleChanges){
+  ngOnChanges(changes: SimpleChanges) {
     this.defaultContent = {playerName: this.user.name}
     this.resetDialogContent()
   }
@@ -57,7 +57,7 @@ export class JoinGameButton2Component extends Identifiable {
     let params: DialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
       JoinDialogContentComponent,
-      {data: params}
+      {data: params, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
     dialogRef.componentRef?.setInput('gameId', this.gameId)
@@ -75,7 +75,7 @@ export class JoinGameButton2Component extends Identifiable {
     })
   }
 
-  resetDialogContent(){
+  resetDialogContent() {
     this.defaultContent = {playerName: this.user.name}
     this.currentContent = {...this.defaultContent}
   }

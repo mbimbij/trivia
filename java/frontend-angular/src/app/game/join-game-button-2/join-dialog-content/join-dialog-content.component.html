@@ -1,8 +1,9 @@
 <h2 mat-dialog-title>Join the Game</h2>
 <mat-dialog-content>
   <mat-form-field>
-    <mat-label>Join as</mat-label>
+    <mat-label [id]="ids.joinGame.PLAYER_NAME_LABEL">Join as</mat-label>
     <input [attr.data-testid]="ids.joinGame.PLAYER_NAME"
+           [id]="ids.joinGame.PLAYER_NAME"
            matInput
            [(ngModel)]="currentContent.playerName"
            #playerName="ngModel"
@@ -17,6 +18,7 @@
 <mat-dialog-actions align="end">
   <button
     class="rounded tonal-button"
+    [id]="ids.joinGame.RESET"
     [attr.data-testid]="ids.joinGame.RESET"
     mat-stroked-button
     (click)="resetDialogContent()"
@@ -25,12 +27,14 @@
   <mat-divider [vertical]="true"></mat-divider>
   <button
     class="rounded"
+    [id]="ids.joinGame.CANCEL"
     [attr.data-testid]="ids.joinGame.CANCEL"
     mat-button mat-dialog-close
   >Cancel
   </button>
   <button
     class="rounded"
+    [id]="ids.joinGame.VALIDATE"
     [attr.data-testid]="ids.joinGame.VALIDATE"
     mat-raised-button color="primary"
     [disabled]="!!playerName.errors "

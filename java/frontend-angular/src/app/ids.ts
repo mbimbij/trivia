@@ -9,9 +9,12 @@ export const ids = {
     VALIDATE: 'validate',
   },
   joinGame:{
-    OPEN_DIALOG_BUTTON: 'join-game-',
+    openDialogButtonForGameId: function (gameId: number){
+      return 'join-game-'+gameId;
+    },
     DIALOG: 'join-game-dialog',
     PLAYER_NAME: 'player-name',
+    PLAYER_NAME_LABEL: 'player-name-label',
     CANCEL: 'cancel',
     RESET: 'reset',
     VALIDATE: 'validate',
