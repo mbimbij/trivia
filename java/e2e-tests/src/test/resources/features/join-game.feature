@@ -11,7 +11,7 @@ Feature: Join Game
       When qa-user clicks on the join button
       Then qa-user can see the join game dialog
       And the displayed value for player name is "qa-user"
-#    Scenario: After renaming user
-#      When qa-user changes his name to "other name"
-#      And qa-user clicks on create game button
-#      And the displayed value for creator name is "other name"
+    Scenario: After renaming user
+      When qa-user changes his name to "other name"
+      When qa-user clicks on the join button
+      And the displayed value for player name is "other name"
