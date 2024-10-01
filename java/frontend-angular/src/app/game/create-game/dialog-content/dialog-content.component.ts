@@ -21,7 +21,7 @@ import {
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
-import {ids} from "../../../Ids";
+import { ids } from 'src/app/ids';
 
 @Component({
   selector: 'app-dialog-content',
@@ -61,7 +61,6 @@ export class DialogContentComponent extends Identifiable {
   }
 
   protected createGame() {
-    console.log(`create game ${this.currentContent.gameName} with name ${this.currentContent.creatorName}`)
     let creator = {name: this.currentContent.creatorName, id: this.userId} as UserDto
     this.gameService.create(this.currentContent.gameName, creator).subscribe({
       next: newGame => {

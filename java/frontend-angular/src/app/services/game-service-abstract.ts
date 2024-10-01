@@ -12,7 +12,7 @@ export abstract class GameServiceAbstract {
 
   abstract create(gameName: string, creator: UserDto): Observable<Game>;
 
-  abstract join(gameId: number, user: User): Observable<Game>;
+  abstract join(gameId: number, user: UserDto): Observable<Game>;
 
   abstract start(gameId: number, userId: string): Observable<Game>;
 

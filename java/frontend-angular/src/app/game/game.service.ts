@@ -123,8 +123,8 @@ export class GameService extends GameServiceAbstract {
       .pipe(map(dto => gameDtoToGame(dto)));
   }
 
-  override join(gameId: number, user: User): Observable<Game> {
-    return this.gameOpenApiService.addPlayerToGame(gameId, user.id, userToUserDto(user))
+  override join(gameId: number, userDto: UserDto): Observable<Game> {
+    return this.gameOpenApiService.addPlayerToGame(gameId, userDto.id, userDto)
       .pipe(map(dto => gameDtoToGame(dto)));
   }
 

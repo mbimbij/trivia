@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable, of} from "rxjs";
 import {getMockGame1, getMockGame2} from "../common/test-helpers";
 import {User} from "../user/user";
 import {Game} from "./game";
-import {AnswerCode, AnswerDto, QuestionDto} from "../openapi-generated/game";
+import {AnswerCode, AnswerDto, QuestionDto, UserDto} from "../openapi-generated/game";
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +44,7 @@ export class GameServiceMock extends GameServiceAbstract {
     ]);
   }
 
-  override join(gameId: number, user: User): Observable<Game> {
+  override join(gameId: number, user: UserDto): Observable<Game> {
     return of(getMockGame1());
   }
 

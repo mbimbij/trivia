@@ -7,5 +7,13 @@ export const ids = {
     CANCEL: 'cancel',
     RESET: 'reset',
     VALIDATE: 'validate',
+  },
+  joinGame:{
+    OPEN_DIALOG_BUTTON: 'join-game-',
+    DIALOG: 'join-game-dialog',
+    PLAYER_NAME: 'player-name',
+    CANCEL: 'cancel',
+    RESET: 'reset',
+    VALIDATE: 'validate',
   }
 }

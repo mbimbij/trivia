@@ -4,7 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogContentComponent} from "./dialog-content/dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
-import {ids} from "../../Ids";
+import { ids } from 'src/app/ids';
 
 @Component({
   selector: 'app-create-game',

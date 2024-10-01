@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Join the Game</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Join as</mat-label>
+    <input [attr.data-testid]="ids.joinGame.PLAYER_NAME"
+           matInput
+           [(ngModel)]="currentContent.playerName"
+           #playerName="ngModel"
+           required
+           notBlank
+    >
+    <mat-error *ngIf="playerName.errors?.['notBlank']">
+      player name cannot be empty
+    </mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    class="rounded tonal-button"
+    [attr.data-testid]="ids.joinGame.RESET"
+    mat-stroked-button
+    (click)="resetDialogContent()"
+  >Reset
+  </button>
+  <mat-divider [vertical]="true"></mat-divider>
+  <button
+    class="rounded"
+    [attr.data-testid]="ids.joinGame.CANCEL"
+    mat-button mat-dialog-close
+  >Cancel
+  </button>
+  <button
+    class="rounded"
+    [attr.data-testid]="ids.joinGame.VALIDATE"
+    mat-raised-button color="primary"
+    [disabled]="!!playerName.errors "
+    (click)="joinGame()">Join
+  </button>
+</mat-dialog-actions>

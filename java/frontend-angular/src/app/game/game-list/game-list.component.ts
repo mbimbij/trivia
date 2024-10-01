@@ -15,6 +15,7 @@ import {Game} from "../game";
 import {Identifiable} from "../../common/identifiable";
 import {RenameUserComponent} from "../../user/rename-user/rename-user.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
+import {JoinGameButton2Component} from "../join-game-button-2/join-game-button-2.component";
 
 @Component({
   selector: 'app-game-list',
@@ -35,6 +36,7 @@ import {UserServiceAbstract} from "../../services/user-service.abstract";
     AsyncPipe,
     NgClass,
     RenameUserComponent,
+    JoinGameButton2Component,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css',
