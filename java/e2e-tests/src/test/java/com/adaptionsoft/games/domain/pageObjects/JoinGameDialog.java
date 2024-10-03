@@ -13,7 +13,11 @@ public class JoinGameDialog extends UiElementObject {
         super(page);
     }
 
-    public void verifyIsPresent() {
+    public void verifyPresence() {
         verifyPresenceByTestId(DIALOG);
+    }
+
+    public void verifyAbsence() {
+        verifyAbsenceByTestId(DIALOG);
     }
 }

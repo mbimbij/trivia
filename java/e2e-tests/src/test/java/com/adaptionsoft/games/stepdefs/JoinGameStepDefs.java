@@ -44,7 +44,7 @@ public class JoinGameStepDefs {
 
     @Then("qa-user can see the join game dialog")
     public void qaUserCanSeeTheJoinGameDialog() {
-        joinGameDialog.verifyIsPresent();
+        joinGameDialog.verifyPresence();
     }
 
     @And("the displayed value for player name is {string}")
@@ -57,8 +57,18 @@ public class JoinGameStepDefs {
         joinGameDialog.clickButtonByTestid(VALIDATE);
     }
 
-    @And("When qa-user enters {string} in the join-game.player-name field")
+    @And("qa-user enters {string} in the join-game.player-name field")
     public void whenQaUserEntersInTheJoinGamePlayerNameField(String playerName) {
         joinGameDialog.fillInputByTestId(PLAYER_NAME, playerName);
+    }
+
+    @When("qa-user clicks on the join-game.reset button")
+    public void qaUserClicksOnTheJoinGameResetButton() {
+        joinGameDialog.clickButtonByTestid(JoinGameDialog.RESET);
+    }
+
+    @Then("qa-user cannot see the join game dialog")
+    public void qaUserCannotSeeTheJoinGameDialog() {
+        joinGameDialog.verifyAbsence();
     }
 }
