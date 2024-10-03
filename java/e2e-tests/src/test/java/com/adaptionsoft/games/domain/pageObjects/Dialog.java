@@ -19,6 +19,7 @@ public abstract class Dialog extends UiElementObject {
         double xPosition = boundingBox.x + boundingBox.width + 10;
         double yPosition = boundingBox.y;
         page.mouse().click(xPosition,yPosition);
+        verifyAbsence();
     }
 
     public void verifyPresence() {

@@ -94,7 +94,6 @@ public class JoinGameStepDefs {
     @And("qa-user clicks outside the join dialog")
     public void qaUserClicksOutsideTheJoinDialog() {
         joinGameDialog.clickOutside();
-        joinGameDialog.verifyAbsence();
     }
 
     @When("qa-user presses the escape key on the join dialog")
