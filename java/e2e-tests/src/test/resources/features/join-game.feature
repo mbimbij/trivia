@@ -60,3 +60,18 @@ Feature: Join Game
       When qa-user presses the escape key on the join dialog
       And qa-user clicks on the join button
       Then the displayed value for player name is "other name"
+
+  Rule: Form Validation
+    Background:
+      Given qa-user clicks on the join button
+    Scenario Outline: Cannot create a game with a blank name
+      When qa-user enters <name> in the join-game.player-name field
+      Then the join-game.validate button is disabled
+      Examples:
+        | name              |
+        | ""                |
+        | " "               |
+        | "  "              |
+        | "[TAB]"           |
+        | "[NEWLINE]"       |
+        | "[NEWLINE] [TAB]" |

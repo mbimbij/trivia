@@ -5,6 +5,7 @@ import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.CreateGameDialog;
 import com.adaptionsoft.games.domain.pageObjects.Navbar;
+import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -69,19 +70,14 @@ public class CreateGameStepDefs {
 
     @And("qa-user enters the game name {string}")
     public void qaUserEntersTheGameName(String gameName) {
-        String formattedContent = formatInputForWhitespaces(gameName);
+        String formattedContent = TestUtils.formatInputForWhitespaces(gameName);
         createGameDialog.fillInputByTestId(GAME_NAME, formattedContent);
         createdGameName = gameName;
     }
 
-    private static String formatInputForWhitespaces(String textContent) {
-        return textContent.replace("[TAB]", "\t")
-                .replace("[NEWLINE]", "\n");
-    }
-
     @And("qa-user enters the creator name {string}")
     public void qaUserEntersTheCreatorName(String textContent) {
-        String formattedContent = formatInputForWhitespaces(textContent);
+        String formattedContent = TestUtils.formatInputForWhitespaces(textContent);
         createGameDialog.fillInputByTestId(CREATOR_NAME, formattedContent);
     }
 
@@ -108,16 +104,12 @@ public class CreateGameStepDefs {
 
     @Then("the validate button is disabled")
     public void theValidateButtonIsDisabled() {
-        try {
-            createGameDialog.verifyButtonDisabledByTestid(VALIDATE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        createGameDialog.verifyButtonDisabledByTestid(VALIDATE);
     }
 
     @And("qa-user name was not changed")
     public void qaUserNameWasNotChanged() {
-        if(!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)){
+        if (!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)) {
             renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
         }
     }

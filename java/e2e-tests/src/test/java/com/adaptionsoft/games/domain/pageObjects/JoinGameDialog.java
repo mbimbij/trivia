@@ -13,4 +13,7 @@ public class JoinGameDialog extends Dialog {
         super(page, DIALOG);
     }
 
+    public void verifyValidateButtonDisabled() {
+        verifyButtonDisabledByTestid(VALIDATE);
+    }
 }

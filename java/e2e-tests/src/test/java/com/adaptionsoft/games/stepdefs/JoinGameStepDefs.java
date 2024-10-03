@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import static com.adaptionsoft.games.domain.pageObjects.JoinGameDialog.PLAYER_NAME;
 import static com.adaptionsoft.games.domain.pageObjects.JoinGameDialog.VALIDATE;
+import static com.adaptionsoft.games.utils.TestUtils.formatInputForWhitespaces;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -72,7 +73,8 @@ public class JoinGameStepDefs {
 
     @And("qa-user enters {string} in the join-game.player-name field")
     public void whenQaUserEntersInTheJoinGamePlayerNameField(String playerName) {
-        joinGameDialog.fillInputByTestId(PLAYER_NAME, playerName);
+        String formattedContent = formatInputForWhitespaces(playerName);
+        joinGameDialog.fillInputByTestId(PLAYER_NAME, formattedContent);
     }
 
     @When("qa-user clicks on the join-game.reset button")
@@ -100,4 +102,10 @@ public class JoinGameStepDefs {
     public void qaUserPressesTheEscapeKeyOnTheJoinDialog() {
         joinGameDialog.pressEscape();
     }
+
+    @Then("the join-game.validate button is disabled")
+    public void theJoinGameValidateButtonIsDisabled() {
+        joinGameDialog.verifyValidateButtonDisabled();
+    }
+
 }

@@ -69,8 +69,6 @@ Feature: Game Creation
   Rule: Form Validation
     Background:
       Given qa-user clicks on create game button
-    Scenario: Cannot create a game without entering a game name
-      Then the validate button is disabled
     Scenario Outline: Cannot create a game with a blank name
       When qa-user enters the game name <name>
       Then the validate button is disabled

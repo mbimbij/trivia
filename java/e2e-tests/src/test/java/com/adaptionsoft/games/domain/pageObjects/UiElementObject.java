@@ -21,6 +21,7 @@ public abstract class UiElementObject {
     }
 
     public void fillInputByTestId(String testid, String content) {
+        page.getByTestId(testid).clear();
         page.getByTestId(testid).fill(content);
     }
 
