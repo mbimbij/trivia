@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions;
 import java.util.Optional;
 
 @Getter
-public class UiElementObject {
+public abstract class UiElementObject {
     protected final Page page;
 
     public UiElementObject(Page page) {

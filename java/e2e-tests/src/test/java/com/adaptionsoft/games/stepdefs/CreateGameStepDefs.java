@@ -20,14 +20,14 @@ import static com.adaptionsoft.games.domain.pageObjects.CreateGameDialog.*;
 public class CreateGameStepDefs {
     private final TestContext testContext;
     private final Janitor janitor;
-    private final CreateGameDialog createGameUiElement;
+    private final CreateGameDialog createGameDialog;
     private String createdGameName;
     private final Navbar navbar;
     private final RenameUserStepdefs renameUserStepdefs;
 
     @When("qa-user creates a game named {string} from the frontend")
     public void qaUserCreatesAGameNamed(String gameName) {
-        int createdGameId = createGameUiElement.createGame(gameName);
+        int createdGameId = createGameDialog.createGame(gameName);
         janitor.disablePlayersShuffling(createdGameId);
         testContext.putGameId(gameName, createdGameId);
         createdGameName = gameName;
@@ -35,7 +35,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user creates a game named {string}, with username {string}, from the frontend")
     public void qaUserCreatesAGameNamedWithUsernameFromTheFrontend(String gameName, String creatorName) {
-        int createdGameId = createGameUiElement.createGame(gameName, creatorName);
+        int createdGameId = createGameDialog.createGame(gameName, creatorName);
         janitor.disablePlayersShuffling(createdGameId);
         testContext.putGameId(gameName, createdGameId);
         createdGameName = gameName;
@@ -43,34 +43,34 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on create game button")
     public void qaUserClicksOnCreateGameButton() {
-        createGameUiElement.clickButtonByTestid(OPEN_DIALOG_BUTTON);
-        createGameUiElement.verifyPresence();
+        createGameDialog.clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        createGameDialog.verifyPresence();
     }
 
     @Then("qa-user can see the create game dialog")
     public void qaUserCanSeeTheCreateGameDialog() {
-        createGameUiElement.verifyPresence();
+        createGameDialog.verifyPresence();
     }
 
     @Then("qa-user cannot see the create game dialog")
     public void qaUserCannotSeeTheCreateGameDialog() {
-        createGameUiElement.verifyAbsence();
+        createGameDialog.verifyAbsence();
     }
 
     @Then("the displayed value for game name is {string}")
     public void theDisplayedValueForGameNameIs(String expectedTextContent) {
-        createGameUiElement.verifyInputContentByTestId(GAME_NAME, expectedTextContent);
+        createGameDialog.verifyInputContentByTestId(GAME_NAME, expectedTextContent);
     }
 
     @And("the displayed value for creator name is {string}")
     public void theDisplayedValueForCreatorNameIs(String expectedTextContent) {
-        createGameUiElement.verifyInputContentByTestId(CREATOR_NAME, expectedTextContent);
+        createGameDialog.verifyInputContentByTestId(CREATOR_NAME, expectedTextContent);
     }
 
     @And("qa-user enters the game name {string}")
     public void qaUserEntersTheGameName(String gameName) {
         String formattedContent = formatInputForWhitespaces(gameName);
-        createGameUiElement.fillInputByTestId(GAME_NAME, formattedContent);
+        createGameDialog.fillInputByTestId(GAME_NAME, formattedContent);
         createdGameName = gameName;
     }
 
@@ -82,34 +82,34 @@ public class CreateGameStepDefs {
     @And("qa-user enters the creator name {string}")
     public void qaUserEntersTheCreatorName(String textContent) {
         String formattedContent = formatInputForWhitespaces(textContent);
-        createGameUiElement.fillInputByTestId(CREATOR_NAME, formattedContent);
+        createGameDialog.fillInputByTestId(CREATOR_NAME, formattedContent);
     }
 
     @And("qa-user clicks on cancel button")
     public void qaUserClicksOnCancelButton() {
-        createGameUiElement.clickElementByTestid(CANCEL);
+        createGameDialog.clickElementByTestid(CANCEL);
     }
 
     @When("qa-user clicks outside the dialog")
     public void qaUserClicksOutsideTheDialog() {
-        createGameUiElement.clickOutside();
+        createGameDialog.clickOutside();
     }
 
     @When("qa-user clicks on reset button")
     public void qaUserClicksOnResetButton() {
-        createGameUiElement.clickButtonByTestid(RESET);
+        createGameDialog.clickButtonByTestid(RESET);
     }
 
     @When("qa-user clicks on the create-game.validation button")
     public void qaUserClicksOnTheCreateGameValidationButton() {
-        int gameId = createGameUiElement.clickValidateAndGetGameIdFromConsoleLogs();
+        int gameId = createGameDialog.clickValidateAndGetGameIdFromConsoleLogs();
         testContext.putGameId(createdGameName, gameId);
     }
 
     @Then("the validate button is disabled")
     public void theValidateButtonIsDisabled() {
         try {
-            createGameUiElement.verifyButtonDisabledByTestid(VALIDATE);
+            createGameDialog.verifyButtonDisabledByTestid(VALIDATE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,5 +120,10 @@ public class CreateGameStepDefs {
         if(!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)){
             renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
         }
+    }
+
+    @When("qa-user presses the escape key on the create dialog")
+    public void qaUserPressesTheEscapeKeyOnTheCreateDialog() {
+        createGameDialog.pressEscape();
     }
 }

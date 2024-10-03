@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.BoundingBox;
 
-public class Dialog extends UiElementObject {
+public abstract class Dialog extends UiElementObject {
     protected final String testId;
 
     public Dialog(Page page, String testId) {
@@ -29,7 +29,8 @@ public class Dialog extends UiElementObject {
         verifyAbsenceByTestId(testId);
     }
 
-    public void closeByPressingEscape() {
+    public void pressEscape() {
         page.keyboard().press("Escape");
+        verifyAbsence();
     }
 }
