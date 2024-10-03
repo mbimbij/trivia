@@ -43,6 +43,11 @@ Feature: Game Creation
       And qa-user clicks on create game button
       Then the displayed value for game name is "newGame"
       And the displayed value for creator name is "some creator name"
+    Scenario: closing the dialog by pressing escape preserves input values
+      When qa-user presses the escape key on the create dialog
+      And qa-user clicks on create game button
+      Then the displayed value for game name is "newGame"
+      And the displayed value for creator name is "some creator name"
 
   Rule: Clear input values
     Background:

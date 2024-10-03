@@ -88,5 +88,17 @@ public class JoinGameStepDefs {
     @When("qa-user clicks on the join-game.cancel button")
     public void qaUserClicksOnTheJoinGameCancelButton() {
         joinGameDialog.clickButtonByTestid(JoinGameDialog.CANCEL);
+        joinGameDialog.verifyAbsence();
+    }
+
+    @And("qa-user clicks outside the join dialog")
+    public void qaUserClicksOutsideTheJoinDialog() {
+        joinGameDialog.clickOutside();
+        joinGameDialog.verifyAbsence();
+    }
+
+    @When("qa-user presses the escape key on the join dialog")
+    public void qaUserPressesTheEscapeKeyOnTheJoinDialog() {
+        joinGameDialog.pressEscape();
     }
 }

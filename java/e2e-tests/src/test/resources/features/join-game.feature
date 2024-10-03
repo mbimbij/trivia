@@ -52,7 +52,11 @@ Feature: Join Game
       When qa-user clicks on the join-game.cancel button
       And qa-user clicks on the join button
       Then the displayed value for player name is "other name"
-    Scenario: clicking on the cancel button saves the input field - 2
-      When qa-user clicks on the join-game.cancel button
+    Scenario: closing the dialog by clicking outside of it saves the input field
+      When qa-user clicks outside the join dialog
+      And qa-user clicks on the join button
+      Then the displayed value for player name is "other name"
+    Scenario: closing the dialog by pressing escape saves the input field
+      When qa-user presses the escape key on the join dialog
       And qa-user clicks on the join button
       Then the displayed value for player name is "other name"
