@@ -4,6 +4,7 @@ Feature: Game Details Page
     And previous test data cleared
     And 2 existing games
     And qa-user on the game-list page
+    And qa-user name was not changed
 
   Rule: Verify Error display
     Scenario: Display error message when game not found
@@ -66,9 +67,9 @@ Feature: Game Details Page
         | game    | creator     | cBeFe             | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
     # (I) joins an (new) game created by (other)
         | newGame | test-user-1 | from the backend  | from the backend  | qa-user     | from the frontend | false | true | join           | false | false | null | already joined | false | false | null | game started | true  |
-#    # (other) joins an (new) game created by (me)
+    # (other) joins an (new) game created by (me)
         | newGame | qa-user     | from the frontend | from the frontend | test-user-1 | from the backend  | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
-#    # (other) joins an (new) game created by (other)
+    # (other) joins an (new) game created by (other)
         | newGame | test-user-1 | from the backend  | from the backend  | test-user-2 | from the backend  | false | true | join           | false | false | true | join           | false | false | null | game started | false |
 
 

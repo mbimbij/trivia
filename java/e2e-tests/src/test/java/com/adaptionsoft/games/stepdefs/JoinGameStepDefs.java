@@ -27,19 +27,31 @@ public class JoinGameStepDefs {
     private final ActorService actorService;
     private final GameRowActions gameRowActions;
     private final JoinGameDialog joinGameDialog;
-    private @NotBlank Integer gameId;
+    private @NotBlank Integer gameId1;
+    private @NotBlank Integer gameId2
+            ;
 
     @Given("an already existing game")
     public void anAlreadyExistingGameCreatedBy() {
         Actor testUser1 = actorService.getActorByLookupName(TestProperties.TEST_USER_NAME_1);
-        GameResponseDto gameResponseDto = backend.createGame(TestProperties.TEST_GAME_NAME_1, testUser1.toUserDto());
-        gameId = gameResponseDto.id();
-        testContext.putGameId(TestProperties.TEST_GAME_NAME_1, gameId);
+        GameResponseDto gameResponseDto1 = backend.createGame(TestProperties.TEST_GAME_NAME_1, testUser1.toUserDto());
+        gameId1 = gameResponseDto1.id();
+        testContext.putGameId(TestProperties.TEST_GAME_NAME_1, gameId1);
+
+        Actor testUser2 = actorService.getActorByLookupName(TestProperties.TEST_USER_NAME_2);
+        GameResponseDto gameResponseDto2 = backend.createGame(TestProperties.TEST_GAME_NAME_2, testUser2.toUserDto());
+        gameId2 = gameResponseDto2.id();
+        testContext.putGameId(TestProperties.TEST_GAME_NAME_2, gameId2);
     }
 
     @When("qa-user clicks on the join button")
     public void qaUserClicksOnTheJoinButton() {
-        gameRowActions.clickJoinButton(gameId);
+        gameRowActions.clickJoinButton(gameId1);
+    }
+
+    @And("qa-user clicks on the join button for the other game")
+    public void qaUserClicksOnTheJoinButtonForTheOtherGame() {
+        gameRowActions.clickJoinButton(gameId2);
     }
 
     @Then("qa-user can see the join game dialog")

@@ -39,7 +39,7 @@ public class E2eTestsSpringConfiguration {
                 .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
-        Browser browser = playwright.firefox().launch(launchOptions);
+        Browser browser = playwright.chromium().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
 //                .setRecordVideoDir(Path.of("videos"))
 //                .setRecordVideoSize(1280, 1024)

@@ -16,25 +16,29 @@ Feature: Join Game
       When qa-user clicks on the join button
       And the displayed value for player name is "other name"
 
-#  Rule: Can join a game
-#    Scenario: Can join a game without changing the player name
-#      When qa-user clicks on the join button
-#      And qa-user clicks on the join-game.validation button
-#      Then qa-user sees the following games, filtered for creators "test-user-1"
-#        | name        | creator     | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-#        | test-game-1 | test-user-1 | test-user-1,qa-user | CREATED | false         | null         | already joined | false        | false          |
-#    Scenario: Can join a game with another name
-#      When qa-user clicks on the join button
-#      And qa-user enters "other name" in the join-game.player-name field
-#      And qa-user clicks on the join-game.validation button
-#      Then qa-user sees the following games, filtered for creators "test-user-1"
-#        | name        | creator     | players                | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
-#        | test-game-1 | test-user-1 | test-user-1,other name | CREATED | false         | null         | already joined | false        | false          |
-#
-#  Rule: Reset input field
-#    Background: qa-user has already entered another name
-#      Given qa-user clicks on the join button
-#      And qa-user enters "other name" in the join-game.player-name field
-#    Scenario: clicking on the reset button reset the player name to the user name
-#      When qa-user clicks on the join-game.reset button
-#      Then the displayed value for player name is "qa-user"
+  Rule: Can join a game
+    Scenario: Can join a game without changing the player name
+      When qa-user clicks on the join button
+      And qa-user clicks on the join-game.validation button
+      Then qa-user sees the following games, filtered for creators "test-user-1"
+        | name        | creator     | players             | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-1 | test-user-1 | test-user-1,qa-user | CREATED | false         | null         | already joined | false        | false          |
+    Scenario: Can join a game with another name
+      When qa-user clicks on the join button
+      And qa-user enters "other name" in the join-game.player-name field
+      And qa-user clicks on the join-game.validation button
+      Then qa-user sees the following games, filtered for creators "test-user-1"
+        | name        | creator     | players                | state   | start_enabled | join_enabled | join_text      | goto_enabled | delete_enabled |
+        | test-game-1 | test-user-1 | test-user-1,other name | CREATED | false         | null         | already joined | false        | false          |
+
+  Rule: Reset input field
+    Background: qa-user has already entered another name
+      Given qa-user clicks on the join button
+      And qa-user enters "other name" in the join-game.player-name field
+    Scenario: clicking on the reset button reset the player name to the user name
+      When qa-user clicks on the join-game.reset button
+      Then the displayed value for player name is "qa-user"
+    Scenario: clicking on the validation button resets the player name to the user name
+      When qa-user clicks on the join-game.validation button
+      And qa-user clicks on the join button for the other game
+      Then the displayed value for player name is "qa-user"

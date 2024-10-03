@@ -6,6 +6,7 @@ Feature: On-Going Game Page
     And current game is "test-game-2"
     And current game question deck has been replaced with a test one
     And qa-user on the game-list page
+    And qa-user name was not changed
     And game started
     And qa-user goes to the game
     And qa-user is on the on game page for "test-game-2"
