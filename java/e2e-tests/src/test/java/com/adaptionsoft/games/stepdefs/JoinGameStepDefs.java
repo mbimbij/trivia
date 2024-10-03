@@ -52,6 +52,7 @@ public class JoinGameStepDefs {
     @And("qa-user clicks on the join button for the other game")
     public void qaUserClicksOnTheJoinButtonForTheOtherGame() {
         gameRowActions.clickJoinButton(gameId2);
+        joinGameDialog.verifyPresence();
     }
 
     @Then("qa-user can see the join game dialog")
@@ -61,6 +62,7 @@ public class JoinGameStepDefs {
 
     @And("the displayed value for player name is {string}")
     public void theDisplayedValueForPlayerNameIs(String expectedPlayerName) {
+        joinGameDialog.verifyPresence();
         joinGameDialog.verifyInputContentByTestId(PLAYER_NAME, expectedPlayerName);
     }
 
@@ -82,5 +84,10 @@ public class JoinGameStepDefs {
     @Then("qa-user cannot see the join game dialog")
     public void qaUserCannotSeeTheJoinGameDialog() {
         joinGameDialog.verifyAbsence();
+    }
+
+    @When("qa-user clicks on the join-game.cancel button")
+    public void qaUserClicksOnTheJoinGameCancelButton() {
+        joinGameDialog.clickButtonByTestid(JoinGameDialog.CANCEL);
     }
 }

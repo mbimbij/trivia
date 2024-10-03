@@ -40,5 +40,15 @@ Feature: Join Game
       Then the displayed value for player name is "qa-user"
     Scenario: clicking on the validation button resets the player name to the user name
       When qa-user clicks on the join-game.validation button
-      And qa-user clicks on the join button for the other game
+      Then qa-user cannot see the join game dialog
+      When qa-user clicks on the join button for the other game
       Then the displayed value for player name is "qa-user"
+
+  Rule: Save input field
+    Background: qa-user has already entered another name
+      Given qa-user clicks on the join button
+      And qa-user enters "other name" in the join-game.player-name field
+    Scenario: clicking on the cancel button saves the input field
+      When qa-user clicks on the join-game.cancel button
+      And qa-user clicks on the join button
+      Then the displayed value for player name is "other name"
