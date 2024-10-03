@@ -28,8 +28,7 @@ public class JoinGameStepDefs {
     private final GameRowActions gameRowActions;
     private final JoinGameDialog joinGameDialog;
     private @NotBlank Integer gameId1;
-    private @NotBlank Integer gameId2
-            ;
+    private @NotBlank Integer gameId2;
 
     @Given("an already existing game")
     public void anAlreadyExistingGameCreatedBy() {

@@ -2,7 +2,7 @@ package com.adaptionsoft.games.domain.pageObjects;
 
 import com.microsoft.playwright.Page;
 
-public class JoinGameDialog extends UiElementObject {
+public class JoinGameDialog extends Dialog {
     public static final String DIALOG = "join-game-dialog";
     public static final String PLAYER_NAME = "player-name";
     public static final String CANCEL = "cancel";
@@ -10,14 +10,7 @@ public class JoinGameDialog extends UiElementObject {
     public static final String VALIDATE = "validate";
 
     public JoinGameDialog(Page page) {
-        super(page);
+        super(page, DIALOG);
     }
 
-    public void verifyPresence() {
-        verifyPresenceByTestId(DIALOG);
-    }
-
-    public void verifyAbsence() {
-        verifyAbsenceByTestId(DIALOG);
-    }
 }

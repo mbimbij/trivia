@@ -44,17 +44,17 @@ public class CreateGameStepDefs {
     @When("qa-user clicks on create game button")
     public void qaUserClicksOnCreateGameButton() {
         createGameUiElement.clickButtonByTestid(OPEN_DIALOG_BUTTON);
-        createGameUiElement.waitForDialogToOpen();
+        createGameUiElement.verifyPresence();
     }
 
     @Then("qa-user can see the create game dialog")
     public void qaUserCanSeeTheCreateGameDialog() {
-        createGameUiElement.verifyPresenceByTestId(DIALOG);
+        createGameUiElement.verifyPresence();
     }
 
     @Then("qa-user cannot see the create game dialog")
     public void qaUserCannotSeeTheCreateGameDialog() {
-        createGameUiElement.verifyAbsenceByTestId(DIALOG);
+        createGameUiElement.verifyAbsence();
     }
 
     @Then("the displayed value for game name is {string}")
@@ -92,7 +92,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks outside the dialog")
     public void qaUserClicksOutsideTheDialog() {
-        createGameUiElement.clickOutsideDialog();
+        createGameUiElement.clickOutside();
     }
 
     @When("qa-user clicks on reset button")
