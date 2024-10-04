@@ -70,8 +70,8 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public GamesListPage gamesListPage(TestProperties testProperties, Page page) {
-        return new GamesListPage(testProperties.getFrontendUrlBase(), page);
+    public GamesListPage gamesListPage(TestProperties testProperties, Page page, TestContext testContext) {
+        return new GamesListPage(testProperties.getFrontendUrlBase(), page, testContext);
     }
 
     @Bean

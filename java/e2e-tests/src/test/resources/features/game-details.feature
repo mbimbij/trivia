@@ -64,13 +64,13 @@ Feature: Game Details Page
         | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
         | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
       Examples:
-        | game    | creator     | cBeFe             | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
+        | game    | creator     | cBeFe             | newcomer    | jBeFe             | sBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
     # (I) joins an (new) game created by (other)
-        | newGame | test-user-1 | from the backend  | from the backend  | qa-user     | from the frontend | false | true | join           | false | false | null | already joined | false | false | null | game started | true  |
+        | newGame | test-user-1 | from the backend  | qa-user     | from the frontend | from the backend  | false | true | join           | false | false | null | already joined | false | false | null | game started | true  |
     # (other) joins an (new) game created by (me)
-        | newGame | qa-user     | from the frontend | from the frontend | test-user-1 | from the backend  | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
+        | newGame | qa-user     | from the frontend | test-user-1 | from the backend  | from the frontend | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
     # (other) joins an (new) game created by (other)
-        | newGame | test-user-1 | from the backend  | from the backend  | test-user-2 | from the backend  | false | true | join           | false | false | true | join           | false | false | null | game started | false |
+        | newGame | test-user-1 | from the backend  | test-user-2 | from the backend  | from the backend  | false | true | join           | false | false | true | join           | false | false | null | game started | false |
 
 
     Scenario Outline: Verify Game Details Displayed - Direct url access and refresh

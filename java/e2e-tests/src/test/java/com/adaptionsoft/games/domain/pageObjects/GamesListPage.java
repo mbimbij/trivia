@@ -1,18 +1,23 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
+import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.WebSocket;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class GamesListPage extends PageWithStaticUrl {
-    public GamesListPage(String basePath, Page page) {
+    private final TestContext testContext;
+
+    public GamesListPage(String basePath, Page page, TestContext testContext) {
         super(basePath + "/games", page);
+        this.testContext = testContext;
     }
 
     /**
@@ -45,5 +50,40 @@ public class GamesListPage extends PageWithStaticUrl {
 
     public Boolean getButtonState(ElementHandle elementHandle, String buttonName) {
         return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button")).map(ElementHandle::isEnabled).orElse(null);
+    }
+
+    @Override
+    public void navigateTo() {
+        executeAndWaitForWebSocketMessages(() -> page.navigate(url));
+    }
+
+    public void executeAndWaitForWebSocketMessages(Runnable runnable) {
+        Collection<String> expectedMessages = getExpectedWebSocketMessages();
+        log.info("Navigating to %s".formatted(url));
+        page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
+            if(Objects.equals("ws://localhost:8080/ws/gs-guide-websocket",webSocket.url())){
+                webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
+                String text = webSocketFrame.text();
+                expectedMessages.removeIf(text::contains);
+                return expectedMessages.isEmpty();
+                }), () -> {
+                    System.out.println(expectedMessages);
+                });
+                return true;
+            } else {
+                return false;
+            }
+        }), runnable);
+    }
+
+    private Collection<String> getExpectedWebSocketMessages() {
+        Set<String> messages = new HashSet<>();
+        messages.add("destination:/topic/games/created");
+        messages.add("destination:/topic/games/deleted");
+        testContext.listGameIds()
+                .stream()
+                .map("destination:/topic/games/%d"::formatted)
+                .forEach(messages::add);
+        return messages;
     }
 }

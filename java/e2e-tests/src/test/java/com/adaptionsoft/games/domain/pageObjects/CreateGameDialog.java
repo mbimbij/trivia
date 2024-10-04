@@ -21,7 +21,7 @@ public class CreateGameDialog extends Dialog {
     @SneakyThrows
     public int createGame(String gameName) {
         verifyAbsenceByTestId(DIALOG);
-        clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        clickButtonByTestId(OPEN_DIALOG_BUTTON);
         verifyPresenceByTestId(DIALOG);
         fillInputByTestId(GAME_NAME, gameName);
         int newGameId = clickValidateAndGetGameIdFromConsoleLogs();
@@ -37,7 +37,7 @@ public class CreateGameDialog extends Dialog {
                             logText.set(text);
                             return text.startsWith("created game: ");
                         }),
-                () -> this.clickButtonByTestid(VALIDATE));
+                () -> this.clickButtonByTestId(VALIDATE));
         return Integer.parseInt(logText.get().split("created game: ")[1]);
     }
 
@@ -45,7 +45,7 @@ public class CreateGameDialog extends Dialog {
     @SneakyThrows
     public int createGame(String gameName, String creatorName) {
         verifyAbsenceByTestId(DIALOG);
-        clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        clickButtonByTestId(OPEN_DIALOG_BUTTON);
         verifyPresenceByTestId(DIALOG);
         fillInputByTestId(GAME_NAME, gameName);
         fillInputByTestId(CREATOR_NAME, creatorName);

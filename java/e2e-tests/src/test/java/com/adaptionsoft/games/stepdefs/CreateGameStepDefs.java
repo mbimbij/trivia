@@ -44,7 +44,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on create game button")
     public void qaUserClicksOnCreateGameButton() {
-        createGameDialog.clickButtonByTestid(OPEN_DIALOG_BUTTON);
+        createGameDialog.clickButtonByTestId(OPEN_DIALOG_BUTTON);
         createGameDialog.verifyPresence();
     }
 
@@ -83,7 +83,7 @@ public class CreateGameStepDefs {
 
     @And("qa-user clicks on cancel button")
     public void qaUserClicksOnCancelButton() {
-        createGameDialog.clickElementByTestid(CANCEL);
+        createGameDialog.clickElementByTestId(CANCEL);
     }
 
     @When("qa-user clicks outside the dialog")
@@ -93,7 +93,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on reset button")
     public void qaUserClicksOnResetButton() {
-        createGameDialog.clickButtonByTestid(RESET);
+        createGameDialog.clickButtonByTestId(RESET);
     }
 
     @When("qa-user clicks on the create-game.validation button")
@@ -104,7 +104,7 @@ public class CreateGameStepDefs {
 
     @Then("the validate button is disabled")
     public void theValidateButtonIsDisabled() {
-        createGameDialog.verifyButtonDisabledByTestid(VALIDATE);
+        createGameDialog.verifyButtonDisabledByTestId(VALIDATE);
     }
 
     @And("qa-user name was not changed")

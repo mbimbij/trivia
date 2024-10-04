@@ -10,23 +10,23 @@ public class GameRowActions extends UiElementObject {
 
     public void clickJoinButton(int gameId) {
         String testid = "join-button-%d".formatted(gameId);
-        clickButtonByTestid(testid);
+        clickButtonByTestId(testid);
     }
 
     public void start(int gameId) {
         String testid = "start-button-%d".formatted(gameId);
-        clickButtonByTestid(testid);
+        clickButtonByTestId(testid);
     }
 
     public void goTo(Integer gameId) {
         String testid = "goto-button-%d".formatted(gameId);
-        clickButtonByTestid(testid);
+        clickButtonByTestId(testid);
     }
 
 
     public void delete(int gameId) {
         String testid = "delete-button-%d".formatted(gameId);
-        clickButtonByTestid(testid);
+        clickButtonByTestId(testid);
     }
 
     public String getGameDetailsLink(int gameId) {
@@ -35,6 +35,6 @@ public class GameRowActions extends UiElementObject {
     }
 
     public void clickGameDetailsLink(int gameId) {
-        clickElementByTestid("game-details-%d".formatted(gameId));
+        clickElementByTestId("game-details-%d".formatted(gameId));
     }
 }

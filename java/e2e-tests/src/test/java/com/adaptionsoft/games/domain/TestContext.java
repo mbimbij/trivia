@@ -2,6 +2,7 @@ package com.adaptionsoft.games.domain;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,5 +23,7 @@ public class TestContext {
         gameIdByName.put(gameName, gameId);
     }
 
-
+    public Collection<Integer> listGameIds(){
+        return gameIdByName.values();
+    }
 }

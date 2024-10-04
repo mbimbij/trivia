@@ -3,6 +3,7 @@ package com.adaptionsoft.games.domain.pageObjects;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.BoundingBox;
+import com.microsoft.playwright.options.WaitForSelectorState;
 
 public abstract class Dialog extends UiElementObject {
     protected final String testId;
@@ -24,6 +25,11 @@ public abstract class Dialog extends UiElementObject {
 
     public void verifyPresence() {
         verifyPresenceByTestId(testId);
+    }
+
+    @Override
+    public void verifyAbsenceByTestId(String testId) {
+        page.getByTestId(this.testId).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.DETACHED));
     }
 
     public void verifyAbsence() {

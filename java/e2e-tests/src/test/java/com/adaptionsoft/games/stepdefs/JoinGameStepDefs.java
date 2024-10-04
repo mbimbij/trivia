@@ -47,6 +47,7 @@ public class JoinGameStepDefs {
     @When("qa-user clicks on the join button")
     public void qaUserClicksOnTheJoinButton() {
         gameRowActions.clickJoinButton(gameId1);
+        joinGameDialog.verifyPresence();
     }
 
     @And("qa-user clicks on the join button for the other game")
@@ -68,7 +69,7 @@ public class JoinGameStepDefs {
 
     @And("qa-user clicks on the join-game.validation button")
     public void qaUserClicksOnTheJoinGameValidationButton() {
-        joinGameDialog.clickButtonByTestid(VALIDATE);
+        joinGameDialog.clickButtonByTestId(VALIDATE);
     }
 
     @And("qa-user enters {string} in the join-game.player-name field")
@@ -79,7 +80,7 @@ public class JoinGameStepDefs {
 
     @When("qa-user clicks on the join-game.reset button")
     public void qaUserClicksOnTheJoinGameResetButton() {
-        joinGameDialog.clickButtonByTestid(JoinGameDialog.RESET);
+        joinGameDialog.clickButtonByTestId(JoinGameDialog.RESET);
     }
 
     @Then("qa-user cannot see the join game dialog")
@@ -89,7 +90,7 @@ public class JoinGameStepDefs {
 
     @When("qa-user clicks on the join-game.cancel button")
     public void qaUserClicksOnTheJoinGameCancelButton() {
-        joinGameDialog.clickButtonByTestid(JoinGameDialog.CANCEL);
+        joinGameDialog.clickButtonByTestId(JoinGameDialog.CANCEL);
         joinGameDialog.verifyAbsence();
     }
 
