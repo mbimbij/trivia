@@ -10,7 +10,7 @@
            required
            notBlank
     >
-    <mat-error *ngIf="gameName.errors?.['notBlank']">
+    <mat-error *ngIf="gameName.errors?.[ValidationErrorCodes.NOT_BLANK]">
       game name cannot be empty
     </mat-error>
   </mat-form-field>
@@ -23,7 +23,7 @@
            required
            notBlank
     >
-    <mat-error *ngIf="creatorName.errors?.['notBlank']">
+    <mat-error *ngIf="creatorName.errors?.[ValidationErrorCodes.NOT_BLANK]">
       creator name cannot be empty
     </mat-error>
   </mat-form-field>

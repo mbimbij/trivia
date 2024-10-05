@@ -22,6 +22,7 @@ import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
 import { ids } from 'src/app/ids';
+import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
 
 @Component({
   selector: 'app-dialog-content',
@@ -42,17 +43,17 @@ import { ids } from 'src/app/ids';
     NotBlankValidatorDirective,
     MatDivider
   ],
-  templateUrl: './dialog-content.component.html',
-  styleUrl: './dialog-content.component.css',
+  templateUrl: './create-dialog-content.component.html',
+  styleUrl: './create-dialog-content.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DialogContentComponent extends Identifiable {
+export class CreateDialogContentComponent extends Identifiable {
   @Input() userId!: string
   currentContent!: CreateGameDialogContent
   defaultContent!: CreateGameDialogContent
   resetDialogContentEvent = new EventEmitter<null>();
 
-  constructor(private matDialogRef: MatDialogRef<DialogContentComponent>,
+  constructor(private matDialogRef: MatDialogRef<CreateDialogContentComponent>,
               private gameService: GameServiceAbstract,
               @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContentParams) {
     super()
@@ -77,4 +78,5 @@ export class DialogContentComponent extends Identifiable {
   }
 
   protected readonly ids = ids;
+  protected readonly ValidationErrorCodes = ValidationErrorCodes;
 }

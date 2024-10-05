@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, SimpleChanges} from '@angular/core';
 import {CreateGameDialogContent, CreateGameDialogContentParams} from "../../create-game/create-game.component";
 import {
   MAT_DIALOG_DATA,
@@ -19,6 +19,8 @@ import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DialogContent, DialogContentParams} from "../join-game-button-2.component";
+import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
+import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -37,15 +39,17 @@ import {DialogContent, DialogContentParams} from "../join-game-button-2.componen
     NgIf,
     NotBlankValidatorDirective,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NotDuplicateValidatorDirective
   ],
   templateUrl: './join-dialog-content.component.html',
   styleUrl: './join-dialog-content.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinDialogContentComponent extends Identifiable {
-  @Input() gameId!: number
   @Input() userId!: string
+  @Input() gameId!: number
+  @Input() playersNames!: string[]
   currentContent!: DialogContent
   defaultContent!: DialogContent
   resetDialogContentEvent = new EventEmitter<null>();
@@ -74,4 +78,5 @@ export class JoinDialogContentComponent extends Identifiable {
   }
 
   protected readonly ids = ids;
+  protected readonly ValidationErrorCodes = ValidationErrorCodes;
 }

@@ -27,6 +27,7 @@ import {Identifiable} from "../../common/identifiable";
     } @else {
       <span>{{ 'cannot join' }}</span>
     }
+    {{ checkRender() }}
   `,
   styleUrl: './join-game-button-2.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,6 +37,7 @@ export class JoinGameButton2Component extends Identifiable {
 
   @Input() user!: User
   @Input() gameId!: number
+  @Input() playersNames!: string[]
   @Input() canJoin!: boolean;
   @Input() isGameStarted!: boolean;
   @Input() isPlayerInGame!: boolean;
@@ -48,24 +50,32 @@ export class JoinGameButton2Component extends Identifiable {
     this.dialog = dialog;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.defaultContent = {playerName: this.user.name}
+  ngOnInit(): void {
     this.resetDialogContent()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['user']) {
+      this.resetDialogContent();
+    }
   }
 
   openDialog() {
     let params: DialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
       JoinDialogContentComponent,
+      // {data: params, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
       {data: params, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
     dialogRef.componentRef?.setInput('gameId', this.gameId)
+    dialogRef.componentRef?.setInput('playersNames', this.playersNames)
 
     let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
       this.resetDialogContent();
     });
-    dialogRef.afterClosed().subscribe(() => {
+
+    dialogRef.afterClosed().subscribe(d => {
       subscription.unsubscribe();
     });
 

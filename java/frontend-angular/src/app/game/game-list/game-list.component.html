@@ -31,8 +31,9 @@
         <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
         <td class="state">{{ game.state }}</td>
         <td class="join">
-          <app-join-game-button-2 [gameId]="game.id"
-                                  [user]="user"
+          <app-join-game-button-2 [user]="user"
+                                  [gameId]="game.id"
+                                  [playersNames]="game.getPlayersNames()"
                                   [canJoin]="game.canJoin(user)"
                                   [isPlayerInGame]="game.isPlayer(user)"
                                   [isGameStarted]="game.isStarted()"

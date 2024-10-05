@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
-import {DialogContentComponent} from "./dialog-content/dialog-content.component";
+import {CreateDialogContentComponent} from "./dialog-content/create-dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 import { ids } from 'src/app/ids';
@@ -45,7 +45,7 @@ export class CreateGameComponent {
   openDialog() {
     let params: CreateGameDialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
-      DialogContentComponent,
+      CreateDialogContentComponent,
       {data: params}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)

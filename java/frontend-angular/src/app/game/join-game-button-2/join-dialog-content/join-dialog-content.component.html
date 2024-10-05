@@ -9,9 +9,13 @@
            #playerName="ngModel"
            required
            notBlank
+           [notDuplicate]="playersNames"
     >
-    <mat-error *ngIf="playerName.errors?.['notBlank']">
+    <mat-error *ngIf="playerName.errors?.[ValidationErrorCodes.NOT_BLANK]">
       player name cannot be empty
+    </mat-error>
+    <mat-error *ngIf="playerName.errors?.[ValidationErrorCodes.DUPLICATE_PLAYER_NAME]">
+      player name already used
     </mat-error>
   </mat-form-field>
 </mat-dialog-content>
@@ -37,7 +41,7 @@
     [id]="ids.joinGame.VALIDATE"
     [attr.data-testid]="ids.joinGame.VALIDATE"
     mat-raised-button color="primary"
-    [disabled]="!!playerName.errors "
+    [disabled]="!!playerName.errors"
     (click)="joinGame()">Join
   </button>
 </mat-dialog-actions>

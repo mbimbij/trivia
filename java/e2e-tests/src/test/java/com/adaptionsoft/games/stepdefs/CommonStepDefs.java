@@ -58,8 +58,6 @@ public class CommonStepDefs {
         if (!qaActor.isLoggedIn()) {
             authenticationPage.loginViaEmailAndPassword(testProperties.getQaUserEmail(), testProperties.getQaUserPassword());
             qaActor.setLoggedIn(true);
-            // TODO find a better way to wait for websocket connection for game state update
-//            Thread.sleep(1000);
         } else {
             gamesListPage.navigateTo();
         }
