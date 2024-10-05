@@ -64,20 +64,11 @@ export class JoinGameButton2Component extends Identifiable {
     let params: DialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
       JoinDialogContentComponent,
-      // {data: params, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
       {data: params, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
     dialogRef.componentRef?.setInput('gameId', this.gameId)
     dialogRef.componentRef?.setInput('playersNames', this.playersNames)
-
-    let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
-      this.resetDialogContent();
-    });
-
-    dialogRef.afterClosed().subscribe(d => {
-      subscription.unsubscribe();
-    });
 
     dialogRef.afterOpened().subscribe(() => {
       document.querySelector("mat-dialog-container")

@@ -4,7 +4,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CreateDialogContentComponent} from "./dialog-content/create-dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
-import { ids } from 'src/app/ids';
+import {ids} from 'src/app/ids';
 
 @Component({
   selector: 'app-create-game',
@@ -27,40 +27,51 @@ import { ids } from 'src/app/ids';
 export class CreateGameComponent {
   @Input() user!: User
   readonly dialog!: MatDialog
-  private defaultContent!: CreateGameDialogContent
-  private currentContent!: CreateGameDialogContent
+  private defaultData!: CreateGameDialogContent
+  private data = {} as CreateGameDialogContent
+  // private data = {
+  //   currentContent: {} as CreateGameDialogContent,
+  //   defaultContent: {} as CreateGameDialogContent
+  // } as CreateGameDialogComponentData
+
   constructor(dialog: MatDialog) {
     this.dialog = dialog;
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    this.defaultContent = {gameName: "", creatorName: this.user.name}
-    this.resetDialogContent()
+  ngOnInit(): void {
+    this.resetDefaultData();
+    this.resetData();
   }
 
-  resetDialogContent(){
-      this.currentContent = {...this.defaultContent}
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['user']) {
+      this.resetDefaultData();
+      this.resetData();
+    }
+  }
+
+  private resetDefaultData() {
+    this.defaultData = {gameName: "", creatorName: this.user.name}
+  }
+
+  private resetData() {
+    this.data.creatorName = this.defaultData.creatorName
+    this.data.gameName = this.defaultData.gameName
   }
 
   openDialog() {
-    let params: CreateGameDialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
       CreateDialogContentComponent,
-      {data: params}
+      {data: this.data, id: ids.createGame.DIALOG, ariaLabelledBy: ids.createGame.DIALOG}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
-
-    let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
-      this.resetDialogContent();
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      subscription.unsubscribe();
-    });
 
     dialogRef.afterOpened().subscribe(() => {
       document.querySelector("mat-dialog-container")
         ?.setAttribute("data-testid", ids.createGame.DIALOG)
     })
+
+    dialogRef.componentInstance.resetEvent.subscribe(() => this.resetData())
   }
 
   protected readonly ids = ids;
@@ -69,9 +80,4 @@ export class CreateGameComponent {
 export interface CreateGameDialogContent {
   gameName: string;
   creatorName: string;
-}
-
-export interface CreateGameDialogContentParams {
-  currentContent: CreateGameDialogContent;
-  defaultContent: CreateGameDialogContent;
 }

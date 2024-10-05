@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, SimpleChanges} from '@angular/core';
-import {CreateGameDialogContent, CreateGameDialogContentParams} from "../../create-game/create-game.component";
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
-  MatDialogRef, MatDialogTitle
+  MatDialogRef,
+  MatDialogTitle
 } from "@angular/material/dialog";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {UserDto} from "../../../openapi-generated/game";

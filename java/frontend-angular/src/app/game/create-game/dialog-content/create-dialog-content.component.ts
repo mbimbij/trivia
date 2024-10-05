@@ -14,14 +14,11 @@ import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {
-  CreateGameDialogContent,
-  CreateGameDialogContentParams
-} from "../create-game.component";
+import {CreateGameDialogContent} from "../create-game.component";
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
-import { ids } from 'src/app/ids';
+import {ids} from 'src/app/ids';
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
 
 @Component({
@@ -49,32 +46,27 @@ import {ValidationErrorCodes} from "../../../common/validation/validation-error-
 })
 export class CreateDialogContentComponent extends Identifiable {
   @Input() userId!: string
-  currentContent!: CreateGameDialogContent
-  defaultContent!: CreateGameDialogContent
-  resetDialogContentEvent = new EventEmitter<null>();
+  resetEvent = new EventEmitter<null>();
 
   constructor(private matDialogRef: MatDialogRef<CreateDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContentParams) {
+              @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContent) {
     super()
-    this.currentContent = data.currentContent;
-    this.defaultContent = data.defaultContent;
   }
 
   protected createGame() {
-    let creator = {name: this.currentContent.creatorName, id: this.userId} as UserDto
-    this.gameService.create(this.currentContent.gameName, creator).subscribe({
+    let creator = {name: this.data.creatorName, id: this.userId} as UserDto
+    this.gameService.create(this.data.gameName, creator).subscribe({
       next: newGame => {
         console.log(`created game: ${newGame.id}`)
-        this.resetDialogContent()
+        this.resetData()
         this.matDialogRef.close()
       }
     })
   }
 
-  resetDialogContent() {
-    this.currentContent = {...this.defaultContent}
-    this.resetDialogContentEvent.next(null)
+  protected resetData() {
+    this.resetEvent.next(null)
   }
 
   protected readonly ids = ids;

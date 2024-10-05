@@ -35,8 +35,8 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-//                .setHeadless(false)
-                .setHeadless(true)
+                .setHeadless(false)
+//                .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.chromium().launch(launchOptions);

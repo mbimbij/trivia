@@ -5,7 +5,7 @@
     <!--    TODO replace [(ngModel)] as it is deprecated -->
     <input [attr.data-testid]="ids.createGame.GAME_NAME"
            matInput
-           [(ngModel)]="currentContent.gameName"
+           [(ngModel)]="data.gameName"
            #gameName="ngModel"
            required
            notBlank
@@ -18,7 +18,7 @@
     <mat-label>Join as</mat-label>
     <input [attr.data-testid]="ids.createGame.CREATOR_NAME"
            matInput
-           [(ngModel)]="currentContent.creatorName"
+           [(ngModel)]="data.creatorName"
            #creatorName="ngModel"
            required
            notBlank
@@ -33,7 +33,7 @@
     class="rounded tonal-button"
     [attr.data-testid]="ids.createGame.RESET"
     mat-stroked-button
-    (click)="resetDialogContent()"
+    (click)="resetData()"
   >Reset
   </button>
   <mat-divider [vertical]="true"></mat-divider>

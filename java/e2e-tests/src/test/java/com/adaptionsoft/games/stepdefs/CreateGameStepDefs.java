@@ -84,6 +84,7 @@ public class CreateGameStepDefs {
     @And("qa-user clicks on cancel button")
     public void qaUserClicksOnCancelButton() {
         createGameDialog.clickElementByTestId(CANCEL);
+        createGameDialog.verifyAbsence();
     }
 
     @When("qa-user clicks outside the dialog")
