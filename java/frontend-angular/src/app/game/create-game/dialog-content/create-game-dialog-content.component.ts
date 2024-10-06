@@ -40,15 +40,15 @@ import {ValidationErrorCodes} from "../../../common/validation/validation-error-
     NotBlankValidatorDirective,
     MatDivider
   ],
-  templateUrl: './create-dialog-content.component.html',
-  styleUrl: './create-dialog-content.component.css',
+  templateUrl: './create-game-dialog-content.component.html',
+  styleUrl: './create-game-dialog-content.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateDialogContentComponent extends Identifiable {
+export class CreateGameDialogContentComponent extends Identifiable {
   @Input() userId!: string
   resetEvent = new EventEmitter<null>();
 
-  constructor(private matDialogRef: MatDialogRef<CreateDialogContentComponent>,
+  constructor(private matDialogRef: MatDialogRef<CreateGameDialogContentComponent>,
               private gameService: GameServiceAbstract,
               @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContent) {
     super()
