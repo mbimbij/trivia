@@ -46,7 +46,7 @@ export class CreateGameComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user']) {
       this.resetDefaultData();
-      this.resetData();
+      this.resetCreatorName()
     }
   }
 
@@ -55,7 +55,15 @@ export class CreateGameComponent {
   }
 
   private resetData() {
+    this.resetGameName();
+    this.resetCreatorName();
+  }
+
+  private resetCreatorName() {
     this.data.creatorName = this.defaultData.creatorName
+  }
+
+  private resetGameName() {
     this.data.gameName = this.defaultData.gameName
   }
 

@@ -49,7 +49,7 @@ Feature: Game Creation
       Then the displayed value for game name is "newGame"
       And the displayed value for creator name is "some creator name"
 
-  Rule: Clear input values
+  Rule: Reset input values
     Background:
       Given qa-user clicks on create game button
       And qa-user enters the game name "newGame"
@@ -65,6 +65,12 @@ Feature: Game Creation
       When qa-user clicks on create game button
       Then the displayed value for game name is ""
       And the displayed value for creator name is "qa-user"
+    Scenario: Renaming the user reset the creator name field but preserves the game name
+      When qa-user presses the escape key on the create dialog
+      When qa-user changes his name to "other name" without navigation
+      Given qa-user clicks on create game button
+      Then the displayed value for game name is "newGame"
+      And the displayed value for creator name is "other name"
 
   Rule: Form Validation
     Background:

@@ -119,4 +119,9 @@ public class CreateGameStepDefs {
     public void qaUserPressesTheEscapeKeyOnTheCreateDialog() {
         createGameDialog.pressEscape();
     }
+
+    @When("qa-user changes his name to {string} without navigation")
+    public void qaUserChangesHisNameToWithoutNavigation(String newName) {
+        renameUserStepdefs.renameQaUserWithoutNavigation(newName);
+    }
 }
