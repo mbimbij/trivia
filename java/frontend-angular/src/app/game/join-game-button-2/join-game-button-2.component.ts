@@ -42,8 +42,8 @@ export class JoinGameButton2Component extends Identifiable {
   @Input() isGameStarted!: boolean;
   @Input() isPlayerInGame!: boolean;
   readonly dialog!: MatDialog
-  private defaultContent!: DialogContent
-  private currentContent!: DialogContent
+  private data = {} as JoinDialogContent
+  private defaultData!: JoinDialogContent
 
   constructor(dialog: MatDialog) {
     super()
@@ -61,14 +61,14 @@ export class JoinGameButton2Component extends Identifiable {
   }
 
   openDialog() {
-    let params: DialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
     let dialogRef = this.dialog.open(
       JoinDialogContentComponent,
-      {data: params, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
+      {data: this.data, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
     dialogRef.componentRef?.setInput('gameId', this.gameId)
     dialogRef.componentRef?.setInput('playersNames', this.playersNames)
+    dialogRef.componentRef?.setInput('defaultData', this.defaultData)
 
     dialogRef.afterOpened().subscribe(() => {
       document.querySelector("mat-dialog-container")
@@ -77,17 +77,17 @@ export class JoinGameButton2Component extends Identifiable {
   }
 
   resetDialogContent() {
-    this.defaultContent = {playerName: this.user.name}
-    this.currentContent = {...this.defaultContent}
+    this.defaultData = {playerName: this.user.name}
+    this.data.playerName = this.defaultData.playerName
   }
 
 }
 
-export interface DialogContent {
+export interface JoinDialogContent {
   playerName: string;
 }
 
-export interface DialogContentParams {
-  currentContent: DialogContent;
-  defaultContent: DialogContent;
+export interface JoinDialogContentParams {
+  currentContent: JoinDialogContent;
+  defaultContent: JoinDialogContent;
 }

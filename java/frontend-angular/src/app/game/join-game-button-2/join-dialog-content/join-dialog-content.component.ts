@@ -18,7 +18,7 @@ import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DialogContent, DialogContentParams} from "../join-game-button-2.component";
+import {JoinDialogContent, JoinDialogContentParams} from "../join-game-button-2.component";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
 
@@ -50,31 +50,26 @@ export class JoinDialogContentComponent extends Identifiable {
   @Input() userId!: string
   @Input() gameId!: number
   @Input() playersNames!: string[]
-  currentContent!: DialogContent
-  defaultContent!: DialogContent
-  resetDialogContentEvent = new EventEmitter<null>();
+  @Input() defaultData!: JoinDialogContent
 
   constructor(private matDialogRef: MatDialogRef<JoinDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public data: DialogContentParams) {
+              @Inject(MAT_DIALOG_DATA) public data: JoinDialogContent) {
     super()
-    this.currentContent = data.currentContent;
-    this.defaultContent = data.defaultContent;
   }
 
   protected joinGame() {
-    let creator = {name: this.currentContent.playerName, id: this.userId} as UserDto
+    let creator = {name: this.data.playerName, id: this.userId} as UserDto
     this.gameService.join(this.gameId, creator).subscribe({
       next: () => {
-        this.resetDialogContent()
+        this.resetData()
         this.matDialogRef.close()
       }
     })
   }
 
-  resetDialogContent() {
-    this.currentContent = {...this.defaultContent}
-    this.resetDialogContentEvent.next(null)
+  resetData() {
+    this.data.playerName = this.defaultData.playerName
   }
 
   protected readonly ids = ids;

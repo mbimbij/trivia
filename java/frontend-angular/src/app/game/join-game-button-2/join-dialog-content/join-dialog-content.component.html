@@ -5,7 +5,7 @@
     <input [attr.data-testid]="ids.joinGame.PLAYER_NAME"
            [id]="ids.joinGame.PLAYER_NAME"
            matInput
-           [(ngModel)]="currentContent.playerName"
+           [(ngModel)]="data.playerName"
            #playerName="ngModel"
            required
            notBlank
@@ -25,7 +25,7 @@
     [id]="ids.joinGame.RESET"
     [attr.data-testid]="ids.joinGame.RESET"
     mat-stroked-button
-    (click)="resetDialogContent()"
+    (click)="resetData()"
   >Reset
   </button>
   <mat-divider [vertical]="true"></mat-divider>
