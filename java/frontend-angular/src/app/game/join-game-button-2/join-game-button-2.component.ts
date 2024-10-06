@@ -3,8 +3,8 @@ import {MatButton} from "@angular/material/button";
 import {ids} from "../../ids";
 import {User} from "../../user/user";
 import {MatDialog} from "@angular/material/dialog";
+import {BaseDialogComponent} from "../base-dialog/base-dialog.component";
 import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-content.component";
-import {Identifiable} from "../../common/identifiable";
 
 @Component({
   selector: 'app-join-game-button-2',
@@ -17,7 +17,7 @@ import {Identifiable} from "../../common/identifiable";
       <button
         [attr.data-testid]="ids.joinGame.openDialogButtonForGameId(gameId)"
         class="rounded"
-        mat-stroked-button (click)="openDialog()"
+        mat-stroked-button (click)="openDialog(JoinDialogContentComponent)"
       >join
       </button>
     } @else if (isGameStarted) {
@@ -27,12 +27,11 @@ import {Identifiable} from "../../common/identifiable";
     } @else {
       <span>{{ 'cannot join' }}</span>
     }
-    {{ checkRender() }}
   `,
   styleUrl: './join-game-button-2.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JoinGameButton2Component extends Identifiable {
+export class JoinGameButton2Component extends BaseDialogComponent<JoinDialogContentComponent, JoinDialogContent> {
   protected readonly ids = ids;
 
   @Input() user!: User
@@ -41,53 +40,28 @@ export class JoinGameButton2Component extends Identifiable {
   @Input() canJoin!: boolean;
   @Input() isGameStarted!: boolean;
   @Input() isPlayerInGame!: boolean;
-  readonly dialog!: MatDialog
-  private data = {} as JoinDialogContent
-  private defaultData!: JoinDialogContent
 
   constructor(dialog: MatDialog) {
-    super()
-    this.dialog = dialog;
+    super(dialog,ids.joinGame.DIALOG);
   }
 
-  ngOnInit(): void {
-    this.resetDialogContent()
+  protected override changesRequireReset(changes: SimpleChanges) {
+    return !!changes['user'];
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['user']) {
-      this.resetDialogContent();
-    }
+  protected override doAfterOpenDialog() {
+    this.dialogRef.componentRef?.setInput('userId', this.user.id)
+    this.dialogRef.componentRef?.setInput('gameId', this.gameId)
+    this.dialogRef.componentRef?.setInput('playersNames', this.playersNames)
   }
 
-  openDialog() {
-    let dialogRef = this.dialog.open(
-      JoinDialogContentComponent,
-      {data: this.data, id: ids.joinGame.DIALOG, ariaLabelledBy: ids.joinGame.DIALOG}
-    );
-    dialogRef.componentRef?.setInput('userId', this.user.id)
-    dialogRef.componentRef?.setInput('gameId', this.gameId)
-    dialogRef.componentRef?.setInput('playersNames', this.playersNames)
-    dialogRef.componentRef?.setInput('defaultData', this.defaultData)
-
-    dialogRef.afterOpened().subscribe(() => {
-      document.querySelector("mat-dialog-container")
-        ?.setAttribute("data-testid", ids.joinGame.DIALOG)
-    })
-  }
-
-  resetDialogContent() {
+  protected override resetDefaultData() {
     this.defaultData = {playerName: this.user.name}
-    this.data.playerName = this.defaultData.playerName
   }
 
+  protected readonly JoinDialogContentComponent = JoinDialogContentComponent;
 }
 
 export interface JoinDialogContent {
   playerName: string;
-}
-
-export interface JoinDialogContentParams {
-  currentContent: JoinDialogContent;
-  defaultContent: JoinDialogContent;
 }

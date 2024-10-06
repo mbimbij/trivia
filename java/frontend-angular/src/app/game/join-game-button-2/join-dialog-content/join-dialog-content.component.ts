@@ -18,9 +18,9 @@ import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {JoinDialogContent, JoinDialogContentParams} from "../join-game-button-2.component";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
+import {JoinDialogContent} from "../join-game-button-2.component";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -54,12 +54,12 @@ export class JoinDialogContentComponent extends Identifiable {
 
   constructor(private matDialogRef: MatDialogRef<JoinDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public data: JoinDialogContent) {
+              @Inject(MAT_DIALOG_DATA) public data: { content: JoinDialogContent }) {
     super()
   }
 
   protected joinGame() {
-    let creator = {name: this.data.playerName, id: this.userId} as UserDto
+    let creator = {name: this.data.content.playerName, id: this.userId} as UserDto
     this.gameService.join(this.gameId, creator).subscribe({
       next: () => {
         this.resetData()
@@ -69,7 +69,7 @@ export class JoinDialogContentComponent extends Identifiable {
   }
 
   resetData() {
-    this.data.playerName = this.defaultData.playerName
+    this.data.content.playerName = this.defaultData.playerName
   }
 
   protected readonly ids = ids;
