@@ -29,10 +29,6 @@ export class CreateGameComponent {
   readonly dialog!: MatDialog
   private defaultData!: CreateGameDialogContent
   private data = {} as CreateGameDialogContent
-  // private data = {
-  //   currentContent: {} as CreateGameDialogContent,
-  //   defaultContent: {} as CreateGameDialogContent
-  // } as CreateGameDialogComponentData
 
   constructor(dialog: MatDialog) {
     this.dialog = dialog;
