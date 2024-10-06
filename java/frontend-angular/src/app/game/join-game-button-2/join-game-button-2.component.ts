@@ -3,7 +3,7 @@ import {MatButton} from "@angular/material/button";
 import {ids} from "../../ids";
 import {User} from "../../user/user";
 import {MatDialog} from "@angular/material/dialog";
-import {BaseDialogComponent} from "../base-dialog/base-dialog.component";
+import {BaseDialogComponent, BaseDialogData} from "../base-dialog/base-dialog.component";
 import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-content.component";
 
 @Component({
@@ -31,7 +31,7 @@ import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-cont
   styleUrl: './join-game-button-2.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JoinGameButton2Component extends BaseDialogComponent<JoinDialogContentComponent, JoinDialogContent> {
+export class JoinGameButton2Component extends BaseDialogComponent<JoinDialogContentComponent, JoinDialogData> {
   protected readonly ids = ids;
 
   @Input() user!: User
@@ -55,13 +55,13 @@ export class JoinGameButton2Component extends BaseDialogComponent<JoinDialogCont
     this.dialogRef.componentRef?.setInput('playersNames', this.playersNames)
   }
 
-  protected override resetDefaultData() {
+  protected override resetDefaultData(): void {
     this.defaultData = {playerName: this.user.name}
   }
 
   protected readonly JoinDialogContentComponent = JoinDialogContentComponent;
 }
 
-export interface JoinDialogContent {
+export interface JoinDialogData extends BaseDialogData {
   playerName: string;
 }

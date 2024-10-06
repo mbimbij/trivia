@@ -5,6 +5,8 @@ import {CreateGameDialogContentComponent} from "./dialog-content/create-game-dia
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 import {ids} from 'src/app/ids';
+import {BaseDialogContentComponent} from "../base-dialog/base-dialog-content/base-dialog-content.component";
+import {BaseDialogComponent, BaseDialogData} from "../base-dialog/base-dialog.component";
 
 @Component({
   selector: 'app-create-game',
@@ -17,70 +19,45 @@ import {ids} from 'src/app/ids';
     <button
       [attr.data-testid]="ids.createGame.OPEN_DIALOG_BUTTON"
       class="rounded"
-      mat-raised-button color="primary" (click)="openDialog()"
+      mat-raised-button color="primary" (click)="openDialog(CreateGameDialogContentComponent)"
     >create game
     </button>
   `,
   styleUrl: './create-game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateGameComponent {
+export class CreateGameComponent extends BaseDialogComponent<CreateGameDialogContentComponent, CreateGameDialogData> {
+  protected override changesRequireReset(changes: SimpleChanges): boolean {
+    return !!changes['user'];
+  }
   @Input() user!: User
-  readonly dialog!: MatDialog
-  private defaultData!: CreateGameDialogContent
-  private data = {} as CreateGameDialogContent
 
   constructor(dialog: MatDialog) {
-    this.dialog = dialog;
+    super(dialog, ids.createGame.DIALOG)
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['user']) {
-      this.resetDefaultData();
-      this.resetCreatorName()
-    }
-  }
-
-  ngOnInit(): void {
+  protected override resetDataOnChanges() {
     this.resetDefaultData();
-    this.resetData();
+    this.resetCreatorName()
   }
 
-  private resetDefaultData() {
+  protected resetDefaultData(): void {
     this.defaultData = {gameName: "", creatorName: this.user.name}
   }
 
-  private resetData() {
-    this.resetGameName();
-    this.resetCreatorName();
-  }
-
   private resetCreatorName() {
-    this.data.creatorName = this.defaultData.creatorName
+    this.data.content.creatorName = this.defaultData.creatorName
   }
 
-  private resetGameName() {
-    this.data.gameName = this.defaultData.gameName
-  }
-
-  openDialog() {
-    let dialogRef = this.dialog.open(
-      CreateGameDialogContentComponent,
-      {data: this.data, id: ids.createGame.DIALOG, ariaLabelledBy: ids.createGame.DIALOG}
-    );
-    dialogRef.componentRef?.setInput('userId', this.user.id)
-    dialogRef.componentRef?.setInput('defaultData', this.defaultData)
-
-    dialogRef.afterOpened().subscribe(() => {
-      document.querySelector("mat-dialog-container")
-        ?.setAttribute("data-testid", ids.createGame.DIALOG)
-    })
+  override doAfterOpenDialog() {
+    this.dialogRef.componentRef?.setInput('userId', this.user.id)
   }
 
   protected readonly ids = ids;
+  protected readonly CreateGameDialogContentComponent = CreateGameDialogContentComponent;
 }
 
-export interface CreateGameDialogContent {
+export interface CreateGameDialogData extends BaseDialogData{
   gameName: string;
   creatorName: string;
 }

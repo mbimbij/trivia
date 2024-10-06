@@ -14,12 +14,13 @@ import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {CreateGameDialogContent} from "../create-game.component";
+import {CreateGameDialogData} from "../create-game.component";
 import {NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
 import {ids} from 'src/app/ids';
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
+import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
 
 @Component({
   selector: 'app-dialog-content',
@@ -44,30 +45,27 @@ import {ValidationErrorCodes} from "../../../common/validation/validation-error-
   styleUrl: './create-game-dialog-content.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateGameDialogContentComponent extends Identifiable {
+export class CreateGameDialogContentComponent extends BaseDialogContentComponent<
+  CreateGameDialogContentComponent,
+  CreateGameDialogData
+> {
   @Input() userId!: string
-  @Input() defaultData!: CreateGameDialogContent
 
-  constructor(private matDialogRef: MatDialogRef<CreateGameDialogContentComponent>,
+  constructor(protected override matDialogRef: MatDialogRef<CreateGameDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public data: CreateGameDialogContent) {
-    super()
+              @Inject(MAT_DIALOG_DATA) public override data: { content: CreateGameDialogData }) {
+    super(matDialogRef, data)
   }
 
   protected createGame() {
-    let creator = {name: this.data.creatorName, id: this.userId} as UserDto
-    this.gameService.create(this.data.gameName, creator).subscribe({
+    let creator = {name: this.data.content.creatorName, id: this.userId} as UserDto
+    this.gameService.create(this.data.content.gameName, creator).subscribe({
       next: newGame => {
         console.log(`created game: ${newGame.id}`)
         this.resetData()
         this.matDialogRef.close()
       }
     })
-  }
-
-  protected resetData() {
-    this.data.gameName = this.defaultData.gameName
-    this.data.creatorName = this.defaultData.creatorName
   }
 
   protected readonly ids = ids;

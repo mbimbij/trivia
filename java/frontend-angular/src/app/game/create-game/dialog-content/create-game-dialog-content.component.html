@@ -5,7 +5,7 @@
     <!--    TODO replace [(ngModel)] as it is deprecated -->
     <input [attr.data-testid]="ids.createGame.GAME_NAME"
            matInput
-           [(ngModel)]="data.gameName"
+           [(ngModel)]="data.content.gameName"
            #gameName="ngModel"
            required
            notBlank
@@ -18,7 +18,7 @@
     <mat-label>Join as</mat-label>
     <input [attr.data-testid]="ids.createGame.CREATOR_NAME"
            matInput
-           [(ngModel)]="data.creatorName"
+           [(ngModel)]="data.content.creatorName"
            #creatorName="ngModel"
            required
            notBlank

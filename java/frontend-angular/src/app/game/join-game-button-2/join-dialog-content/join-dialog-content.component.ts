@@ -20,7 +20,8 @@ import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-v
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
-import {JoinDialogContent} from "../join-game-button-2.component";
+import {JoinDialogData} from "../join-game-button-2.component";
+import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -46,31 +47,24 @@ import {JoinDialogContent} from "../join-game-button-2.component";
   styleUrl: './join-dialog-content.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JoinDialogContentComponent extends Identifiable {
+export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinDialogContentComponent, JoinDialogData> {
   @Input() userId!: string
   @Input() gameId!: number
   @Input() playersNames!: string[]
-  @Input() defaultData!: JoinDialogContent
 
-  constructor(private matDialogRef: MatDialogRef<JoinDialogContentComponent>,
+  constructor(protected override matDialogRef: MatDialogRef<JoinDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public data: { content: JoinDialogContent }) {
-    super()
+              @Inject(MAT_DIALOG_DATA) public override data: { content: JoinDialogData }) {
+    super(matDialogRef, data)
   }
 
   protected joinGame() {
     let creator = {name: this.data.content.playerName, id: this.userId} as UserDto
     this.gameService.join(this.gameId, creator).subscribe({
-      next: () => {
-        this.resetData()
-        this.matDialogRef.close()
-      }
+      next: () => this.closeDialogAndResetData()
     })
   }
 
-  resetData() {
-    this.data.content.playerName = this.defaultData.playerName
-  }
 
   protected readonly ids = ids;
   protected readonly ValidationErrorCodes = ValidationErrorCodes;

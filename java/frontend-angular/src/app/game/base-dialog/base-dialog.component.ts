@@ -1,8 +1,8 @@
-import {Component, ComponentRef, Inject, InjectionToken, SimpleChanges} from '@angular/core';
+import {Component, Inject, InjectionToken, SimpleChanges} from '@angular/core';
 import {Identifiable} from "../../common/identifiable";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {JoinDialogContent} from "../join-game-button-2/join-game-button-2.component";
 import {ComponentType} from "@angular/cdk/overlay";
+import {BaseDialogContentComponent} from "./base-dialog-content/base-dialog-content.component";
 
 export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dialog');
 
@@ -13,7 +13,10 @@ export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dial
   template: '<p>base-dialog works!</p>',
   styleUrl: './base-dialog.component.css'
 })
-export abstract class BaseDialogComponent<T, U> extends Identifiable {
+export abstract class BaseDialogComponent<
+  T extends BaseDialogContentComponent<any, any>,
+  U extends BaseDialogData
+> extends Identifiable {
   protected data = {
     content: {} as U
   }
@@ -31,8 +34,12 @@ export abstract class BaseDialogComponent<T, U> extends Identifiable {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.changesRequireReset(changes)) {
-      this.resetAllData();
+      this.resetDataOnChanges();
     }
+  }
+
+  protected resetDataOnChanges() {
+    this.resetAllData();
   }
 
   protected abstract changesRequireReset(changes: SimpleChanges): boolean
@@ -66,4 +73,7 @@ export abstract class BaseDialogComponent<T, U> extends Identifiable {
   }
 
   protected abstract doAfterOpenDialog(): void;
+}
+
+export interface BaseDialogData {
 }
