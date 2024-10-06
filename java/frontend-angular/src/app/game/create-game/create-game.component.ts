@@ -34,16 +34,16 @@ export class CreateGameComponent {
     this.dialog = dialog;
   }
 
-  ngOnInit(): void {
-    this.resetDefaultData();
-    this.resetData();
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['user']) {
       this.resetDefaultData();
       this.resetCreatorName()
     }
+  }
+
+  ngOnInit(): void {
+    this.resetDefaultData();
+    this.resetData();
   }
 
   private resetDefaultData() {
@@ -69,13 +69,12 @@ export class CreateGameComponent {
       {data: this.data, id: ids.createGame.DIALOG, ariaLabelledBy: ids.createGame.DIALOG}
     );
     dialogRef.componentRef?.setInput('userId', this.user.id)
+    dialogRef.componentRef?.setInput('defaultData', this.defaultData)
 
     dialogRef.afterOpened().subscribe(() => {
       document.querySelector("mat-dialog-container")
         ?.setAttribute("data-testid", ids.createGame.DIALOG)
     })
-
-    dialogRef.componentInstance.resetEvent.subscribe(() => this.resetData())
   }
 
   protected readonly ids = ids;

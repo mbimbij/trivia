@@ -46,7 +46,7 @@ import {ValidationErrorCodes} from "../../../common/validation/validation-error-
 })
 export class CreateGameDialogContentComponent extends Identifiable {
   @Input() userId!: string
-  resetEvent = new EventEmitter<null>();
+  @Input() defaultData!: CreateGameDialogContent
 
   constructor(private matDialogRef: MatDialogRef<CreateGameDialogContentComponent>,
               private gameService: GameServiceAbstract,
@@ -66,7 +66,8 @@ export class CreateGameDialogContentComponent extends Identifiable {
   }
 
   protected resetData() {
-    this.resetEvent.next(null)
+    this.data.gameName = this.defaultData.gameName
+    this.data.creatorName = this.defaultData.creatorName
   }
 
   protected readonly ids = ids;
