@@ -42,6 +42,16 @@ public class JoinGameStepDefs {
         testContext.putGameId(TestProperties.TEST_GAME_NAME_2, gameId2);
     }
 
+
+    @When("qa-user joins {string} from the frontend")
+    public void userJoinsGameFromTheFrontend(String gameName) {
+        int gameId = testContext.getGameIdForName(gameName);
+        gameRowActions.clickJoinButton(gameId);
+        joinGameDialog.verifyPresence();
+        joinGameDialog.clickValidate();
+        joinGameDialog.verifyAbsence();
+    }
+
     @When("qa-user clicks on the join button")
     public void qaUserClicksOnTheJoinButton() {
         gameRowActions.clickJoinButton(gameId1);

@@ -14,6 +14,7 @@ import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {Identifiable} from "../../common/identifiable";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.component";
+import {JoinGameButton2Component} from "../join-game-button-2/join-game-button-2.component";
 
 @Component({
   selector: 'app-game',
@@ -29,7 +30,8 @@ import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.
     NgClass,
     ConsoleLogPipe,
     ErrorDisplayComponent,
-    GoBackButtonComponent
+    GoBackButtonComponent,
+    JoinGameButton2Component
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css',

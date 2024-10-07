@@ -39,14 +39,15 @@ Feature: Game Details Page
       Then the following games are displayed
         | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
         | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
-      Examples:
-        | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
-    # (I) joins an (existing) game created by (other)
-        | test-game-1 | test-user-1 | from the backend  | qa-user     | from the frontend | false | true | join           | false | false | null | already joined | false | false | null | game started | true  |
-    # (other) joins an (existing) game created by (me)
-        | test-game-2 | qa-user     | from the frontend | test-user-1 | from the backend  | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
-    # (other) joins an (existing) game created by (other)
-        | test-game-1 | test-user-1 | from the backend  | test-user-2 | from the backend  | false | true | join           | false | false | true | join           | false | false | null | game started | false |
+      Examples: (I) join an (existing) game created by (other)
+        | game        | creator     | sBeFe            | newcomer | jBeFe             | se1   | je1  | jt1  | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3  |
+        | test-game-1 | test-user-1 | from the backend | qa-user  | from the frontend | false | true | join | false | false | null | already joined | false | false | null | game started | true |
+      Examples: (other) joins an (existing) game created by (me)
+        | game        | creator     | sBeFe             | newcomer    | jBeFe            | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
+        | test-game-2 | qa-user     | from the frontend | test-user-1 | from the backend | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
+      Examples: (other) joins an (existing) game created by (other)
+        | game        | creator     | sBeFe             | newcomer    | jBeFe            | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
+        | test-game-1 | test-user-1 | from the backend  | test-user-2 | from the backend | false | true | join           | false | false | true | join           | false | false | null | game started | false |
 
     Scenario Outline: Verify Game Details Displayed - On a newly created game
       When <creator> creates a game named "<game>" <cBeFe>
@@ -63,13 +64,14 @@ Feature: Game Details Page
       Then the following games are displayed
         | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
         | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
-      Examples:
+      Examples: (I) joins an (new) game created by (other)
         | game    | creator     | cBeFe             | newcomer    | jBeFe             | sBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
-    # (I) joins an (new) game created by (other)
         | newGame | test-user-1 | from the backend  | qa-user     | from the frontend | from the backend  | false | true | join           | false | false | null | already joined | false | false | null | game started | true  |
-    # (other) joins an (new) game created by (me)
+      Examples: (other) joins an (new) game created by (me)
+        | game    | creator     | cBeFe             | newcomer    | jBeFe             | sBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
         | newGame | qa-user     | from the frontend | test-user-1 | from the backend  | from the frontend | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
-    # (other) joins an (new) game created by (other)
+      Examples: (other) joins an (new) game created by (other)
+        | game    | creator     | cBeFe             | newcomer    | jBeFe             | sBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
         | newGame | test-user-1 | from the backend  | test-user-2 | from the backend  | from the backend  | false | true | join           | false | false | true | join           | false | false | null | game started | false |
 
 
@@ -88,11 +90,12 @@ Feature: Game Details Page
       Then the following games are displayed
         | name   | creator   | players              | state   | start_enabled | join_enabled | join_text | goto_enabled |
         | <game> | <creator> | <creator>,<newcomer> | STARTED | <se3>         | <je3>        | <jt3>     | <ge3>        |
-      Examples:
-        | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3  | je3  | jt3          | ge3   |
-    # (I) joins an (existing) game created by (other)
+      Examples: (I) joins an (existing) game created by (other)
+        | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
         | test-game-1 | test-user-1 | from the backend  | qa-user     | from the frontend | false | true | join           | false | false | null | already joined | false | false | null | game started | true  |
-    # (other) joins an (existing) game created by (me)
+      Examples: (other) joins an (existing) game created by (me)
+        | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
         | test-game-2 | qa-user     | from the frontend | test-user-1 | from the backend  | false | null | already joined | false | true  | null | already joined | false | false | null | game started | true  |
-    # (other) joins an (existing) game created by (other)
+      Examples: (other) joins an (existing) game created by (other)
+        | game        | creator     | sBeFe             | newcomer    | jBeFe             | se1   | je1  | jt1            | ge1   | se2   | je2  | jt2            | ge2   | se3   | je3  | jt3          | ge3   |
         | test-game-1 | test-user-1 | from the backend  | test-user-2 | from the backend  | false | true | join           | false | false | true | join           | false | false | null | game started | false |

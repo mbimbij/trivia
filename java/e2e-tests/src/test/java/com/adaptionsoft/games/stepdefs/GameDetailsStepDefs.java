@@ -3,6 +3,7 @@ package com.adaptionsoft.games.stepdefs;
 import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.pageObjects.GameDetailsPage;
 import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
+import com.adaptionsoft.games.domain.pageObjects.JoinGameDialog;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class GameDetailsStepDefs {
     private final TestContext testContext;
     private final GameRowActions gameRowActions;
     private final GameDetailsPage gameDetailsPage;
+    private final JoinGameDialog joinGameDialog;
 
     @And("qa-user clicks on game details link for {string}")
     public void iClickOnGameDetailsLinkFor(String gameName) {
@@ -29,12 +31,6 @@ public class GameDetailsStepDefs {
     public void iAmOnTheOnGameDetailsPageFor(String gameName) {
         int gameId = testContext.getGameIdForName(gameName);
         gameDetailsPage.waitForUrl(gameId);
-    }
-
-    @When("qa-user joins {string} from the frontend")
-    public void userJoinsGameFromTheFrontend(String gameName) {
-        int gameId = testContext.getGameIdForName(gameName);
-        gameRowActions.clickJoinButton(gameId);
     }
 
     @When("qa-user directly access the game-details page for {string}")

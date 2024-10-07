@@ -9,5 +9,4 @@ public class JoinGameDialog extends Dialog {
     public JoinGameDialog(Page page) {
         super(page, DIALOG);
     }
-
 }
