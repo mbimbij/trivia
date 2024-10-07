@@ -7,6 +7,7 @@ import com.adaptionsoft.games.domain.pageObjects.CreateGameDialog;
 import com.adaptionsoft.games.domain.pageObjects.Navbar;
 import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on create game button")
     public void qaUserClicksOnCreateGameButton() {
-        createGameDialog.clickButtonByTestId(OPEN_DIALOG_BUTTON);
+        createGameDialog.clickOpenDialogButton();
         createGameDialog.verifyPresence();
     }
 
@@ -99,6 +100,11 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on the create-game.validation button")
     public void qaUserClicksOnTheCreateGameValidationButton() {
+        createGameDialog.clickValidate();
+    }
+
+    @When("qa-user clicks on the create-game.validation button and saves the game id")
+    public void qaUserClicksOnTheCreateGameValidationButtonAndSavesTheGameId() {
         int gameId = createGameDialog.clickValidateAndGetGameIdFromConsoleLogs();
         testContext.putGameId(createdGameName, gameId);
     }
@@ -124,4 +130,15 @@ public class CreateGameStepDefs {
     public void qaUserChangesHisNameToWithoutNavigation(String newName) {
         renameUserStepdefs.renameQaUserWithoutNavigation(newName);
     }
+
+    @Given("an exception is thrown when calling createGame")
+    public void anExceptionIsThrownWhenCallingCreateGame() {
+        janitor.throwExceptionWhenCallCreateGame();
+    }
+
+    @And("qa-user can see the create-game.backend-error-message")
+    public void qaUserCanSeeTheCreateGameBackendErrorMessage() {
+        createGameDialog.verifyBackendErrorMessagePresent();
+    }
+
 }

@@ -115,6 +115,34 @@ public class TestKitController {
         gameController.setGetByIdImplementation(gameController::getByIdDefaultImplementation);
     }
 
+    @PutMapping("/joinImplementation/exception")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void throwExceptionWhenCallJoin() {
+        gameController.setJoinGameImplementation(dto -> {
+            throw new RuntimeException("some backend exception on join");
+        });
+    }
+
+    @PutMapping("/joinImplementation/reset")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resetJoinMethod() {
+        gameController.setJoinGameImplementation(gameController::joinGameDefaultImplementation);
+    }
+
+    @PutMapping("/createGameImplementation/exception")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void throwExceptionWhenCallCreateGame() {
+        gameController.setCreateGameImplementation(dto -> {
+            throw new RuntimeException("some backend exception on create");
+        });
+    }
+
+    @PutMapping("/createGameImplementation/reset")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resetCreateGameMethod() {
+        gameController.setCreateGameImplementation(gameController::createGameDefaultImplementation);
+    }
+
     @PutMapping("/{gameId}/playersShuffle/disable")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void disablePlayersShuffle(@PathVariable("gameId") int gameIdInt) {

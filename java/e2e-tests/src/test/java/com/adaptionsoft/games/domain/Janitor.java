@@ -45,17 +45,12 @@ public class Janitor {
     }
 
     public void deleteTestGames() {
-        restTemplate.delete(backendUrlBase + "/games/tests");
-        deleteGame(TestProperties.TEST_GAME_NAME_1, testContext.getGameIdForName(TestProperties.TEST_GAME_NAME_1));
-        deleteGame(TestProperties.TEST_GAME_NAME_2, testContext.getGameIdForName(TestProperties.TEST_GAME_NAME_2));
-        deleteGame(TestProperties.CREATED_GAME_NAME, testContext.getGameIdForName(TestProperties.CREATED_GAME_NAME));
+        testContext.listGameIds().forEach(this::deleteGame);
+        testContext.clearGames();
     }
 
-    private void deleteGame(String gameName, Integer gameId) {
-        if (gameId != null) {
-            restTemplate.delete(backendUrlBase + "/games/{gameId}", gameId);
-            testContext.removeGameId(gameName);
-        }
+    private void deleteGame(Integer gameId) {
+        restTemplate.delete(backendUrlBase + "/games/{gameId}", gameId);
     }
 
     @SneakyThrows
@@ -93,6 +88,22 @@ public class Janitor {
 
     public void resetGetGameByIdMethodBehaviour() {
         restTemplate.put(backendUrlBase + "/testkit/games/getByIdImplementation/reset",null);
+    }
+
+    public void throwExceptionWhenCallCreateGame() {
+        restTemplate.put(backendUrlBase + "/testkit/games/createGameImplementation/exception",null);
+    }
+
+    public void resetCreateGameMethodBehaviour() {
+        restTemplate.put(backendUrlBase + "/testkit/games/createGameImplementation/reset",null);
+    }
+
+    public void throwExceptionWhenCallJoin() {
+        restTemplate.put(backendUrlBase + "/testkit/games/joinImplementation/exception",null);
+    }
+
+    public void resetJoinMethodBehaviour() {
+        restTemplate.put(backendUrlBase + "/testkit/games/joinImplementation/reset",null);
     }
 
     public void disablePlayersShuffling(int gameId) {

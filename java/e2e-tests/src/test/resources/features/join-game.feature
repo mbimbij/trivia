@@ -6,6 +6,14 @@ Feature: Join Game
     And an already existing game
     And qa-user name was not changed
 
+  Scenario: Displays an error message when an error occurred on the backend
+    Given an exception is thrown when calling joinGame
+    And error logs are expected in the console
+    When qa-user clicks on the join button
+    And qa-user clicks on the join-game.validation button
+    Then qa-user can see the join game dialog
+    And qa-user can see the join-game.backend-error-message
+
   Rule: Default input values are correct
     Scenario: Without renaming user
       When qa-user clicks on the join button

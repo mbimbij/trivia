@@ -26,4 +26,8 @@ public class TestContext {
     public Collection<Integer> listGameIds(){
         return gameIdByName.values();
     }
+
+    public void clearGames() {
+        gameIdByName.clear();
+    }
 }

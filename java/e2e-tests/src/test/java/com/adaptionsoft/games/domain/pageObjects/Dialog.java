@@ -7,6 +7,10 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 
 public abstract class Dialog extends UiElementObject {
     protected final String testId;
+    public static final String RESET = "reset";
+    public static final String CANCEL = "cancel";
+    public static final String VALIDATE = "validate";
+    public static final String BACKEND_ERROR_MESSAGE = "backend-error-message";
 
     public Dialog(Page page, String testId) {
         super(page);
@@ -27,17 +31,33 @@ public abstract class Dialog extends UiElementObject {
         verifyPresenceByTestId(testId);
     }
 
+    public void verifyAbsence() {
+        verifyAbsenceByTestId(testId);
+    }
+
     @Override
     public void verifyAbsenceByTestId(String testId) {
         page.getByTestId(this.testId).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.DETACHED));
     }
 
-    public void verifyAbsence() {
-        verifyAbsenceByTestId(testId);
-    }
-
     public void pressEscape() {
         page.keyboard().press("Escape");
         verifyAbsence();
+    }
+
+    public void verifyBackendErrorMessagePresent() {
+        verifyPresenceByTestId(BACKEND_ERROR_MESSAGE);
+    }
+
+    public void verifyValidateButtonDisabled() {
+        verifyButtonDisabledByTestId(VALIDATE);
+    }
+
+    public void clickOpenDialogButton() {
+        clickButtonByTestId(CreateGameDialog.OPEN_DIALOG_BUTTON);
+    }
+
+    public void clickValidate() {
+        clickButtonByTestId(VALIDATE);
     }
 }

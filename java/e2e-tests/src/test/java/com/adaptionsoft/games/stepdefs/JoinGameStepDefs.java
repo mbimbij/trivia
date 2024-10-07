@@ -1,9 +1,6 @@
 package com.adaptionsoft.games.stepdefs;
 
-import com.adaptionsoft.games.domain.Actor;
-import com.adaptionsoft.games.domain.ActorService;
-import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.TestProperties;
+import com.adaptionsoft.games.domain.*;
 import com.adaptionsoft.games.domain.pageObjects.Backend;
 import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
 import com.adaptionsoft.games.domain.pageObjects.JoinGameDialog;
@@ -28,6 +25,7 @@ public class JoinGameStepDefs {
     private final ActorService actorService;
     private final GameRowActions gameRowActions;
     private final JoinGameDialog joinGameDialog;
+    private final Janitor janitor;
     private @NotBlank Integer gameId1;
     private @NotBlank Integer gameId2;
 
@@ -109,4 +107,13 @@ public class JoinGameStepDefs {
         joinGameDialog.verifyValidateButtonDisabled();
     }
 
+    @Given("an exception is thrown when calling joinGame")
+    public void anExceptionIsThrownWhenCallingJoinGame() {
+        janitor.throwExceptionWhenCallJoin();
+    }
+
+    @And("qa-user can see the join-game.backend-error-message")
+    public void qaUserCanSeeTheJoinGameBackendErrorMessage() {
+        joinGameDialog.verifyBackendErrorMessagePresent();
+    }
 }

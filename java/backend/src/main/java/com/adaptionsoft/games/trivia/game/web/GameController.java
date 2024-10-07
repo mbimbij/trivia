@@ -45,6 +45,22 @@ public class GameController {
     private final GameFactory gameFactory;
     private final PlayerFactory playerFactory;
     private final SimpMessagingTemplate template;
+    /**
+     * Used by testkit controller, for e2e-tests
+     */
+    @Setter
+    private Function<Integer, GameResponseDto> getByIdImplementation = this::getByIdDefaultImplementation;
+    /**
+     * Used by testkit controller, for e2e-tests
+     */
+    @Setter
+    private Function<CreateGameRequestDto, GameResponseDto> createGameImplementation = this::createGameDefaultImplementation;
+    /**
+     * Used by testkit controller, for e2e-tests
+     */
+    @Setter
+    private Function<JoinGameRequestDto, GameResponseDto> joinGameImplementation = this::joinGameDefaultImplementation;
+
 
     @GetMapping
     public Collection<GameResponseDto> listGames() {
@@ -85,9 +101,6 @@ public class GameController {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
     }
 
-    @Setter
-    private Function<Integer, GameResponseDto> getByIdImplementation = this::getByIdDefaultImplementation;
-
     @DeleteMapping("/{gameId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGameById(@PathVariable("gameId") int gameIdInt) {
@@ -127,7 +140,10 @@ public class GameController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
-//        throw new RuntimeException("plop");
+        return createGameImplementation.apply(requestDto);
+    }
+
+    public GameResponseDto createGameDefaultImplementation(CreateGameRequestDto requestDto) {
         Player creator = playerFactory.fromDto(requestDto.creator());
         Game game = gameFactory.create(requestDto.gameName(), creator);
         gameRepository.save(game);
@@ -141,15 +157,25 @@ public class GameController {
     public GameResponseDto joinGame(@PathVariable("gameId") Integer gameIdInt,
                                     @PathVariable("playerId") String playerId,
                                     @RequestBody PlayerDto playerDto) {
-        if(!Objects.equals(playerId, playerDto.id())){
-            throw new PlayerIdMismatchException(playerId, playerDto.id());
+        JoinGameRequestDto requestDto = new JoinGameRequestDto(gameIdInt, playerId, playerDto);
+        return joinGameImplementation.apply(requestDto);
+    }
+
+    public GameResponseDto joinGameDefaultImplementation(JoinGameRequestDto joinGameRequestDto) {
+        String pathVariablePlayerId = joinGameRequestDto.pathVariablePlayerId();
+        Integer pathVariableGameId = joinGameRequestDto.pathVariableGameId();
+        PlayerDto dto = joinGameRequestDto.playerDto();
+
+        if(!Objects.equals(pathVariablePlayerId, dto.id())){
+            throw new PlayerIdMismatchException(pathVariablePlayerId, dto.id());
         }
-//        throw new RuntimeException("plop");
-        Game game = findGameOrThrow(new GameId(gameIdInt));
-        game.addPlayer(playerFactory.fromDto(playerDto));
+
+        Game game = findGameOrThrow(new GameId(pathVariableGameId));
+        game.addPlayer(playerFactory.fromDto(dto));
         gameRepository.save(game);
         game.flush();
         notifyGameUpdatedViaWebsocket(game);
+
         return GameResponseDto.from(game);
     }
 

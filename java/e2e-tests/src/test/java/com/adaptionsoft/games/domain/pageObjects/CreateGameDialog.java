@@ -10,9 +10,6 @@ public class CreateGameDialog extends Dialog {
     public static final String DIALOG = "create-game-dialog";
     public static final String GAME_NAME = "game-name";
     public static final String CREATOR_NAME = "creator-name";
-    public static final String CANCEL = "cancel";
-    public static final String RESET = "reset";
-    public static final String VALIDATE = "validate";
 
     public CreateGameDialog(Page page) {
         super(page, DIALOG);
@@ -20,12 +17,12 @@ public class CreateGameDialog extends Dialog {
 
     @SneakyThrows
     public int createGame(String gameName) {
-        verifyAbsenceByTestId(DIALOG);
-        clickButtonByTestId(OPEN_DIALOG_BUTTON);
-        verifyPresenceByTestId(DIALOG);
+        verifyAbsence();
+        clickOpenDialogButton();
+        verifyPresence();
         fillInputByTestId(GAME_NAME, gameName);
         int newGameId = clickValidateAndGetGameIdFromConsoleLogs();
-        verifyAbsenceByTestId(DIALOG);
+        verifyAbsence();
         return newGameId;
     }
 
@@ -44,13 +41,13 @@ public class CreateGameDialog extends Dialog {
     // TODO ajouter un test de création de partie depuis le frontend
     @SneakyThrows
     public int createGame(String gameName, String creatorName) {
-        verifyAbsenceByTestId(DIALOG);
-        clickButtonByTestId(OPEN_DIALOG_BUTTON);
-        verifyPresenceByTestId(DIALOG);
+        verifyAbsence();
+        clickOpenDialogButton();
+        verifyPresence();
         fillInputByTestId(GAME_NAME, gameName);
         fillInputByTestId(CREATOR_NAME, creatorName);
         int newGameId = clickValidateAndGetGameIdFromConsoleLogs();
-        verifyAbsenceByTestId(DIALOG);
+        verifyAbsence();
         return newGameId;
     }
 

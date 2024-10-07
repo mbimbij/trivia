@@ -5,6 +5,15 @@ Feature: Game Creation
     And qa-user on the game-list page
     And qa-user name was not changed
 
+  Scenario: Displays an error message when an error occurred on the backend
+    Given an exception is thrown when calling createGame
+    And error logs are expected in the console
+    When qa-user clicks on create game button
+    And qa-user enters the game name "newGame"
+    And qa-user clicks on the create-game.validation button
+    Then qa-user can see the create game dialog
+    And qa-user can see the create-game.backend-error-message
+
   Rule: Default input values are correct
     Scenario: Without renaming user
       When qa-user clicks on create game button
@@ -60,7 +69,7 @@ Feature: Game Creation
       Then the displayed value for game name is ""
       And the displayed value for creator name is "qa-user"
     Scenario: creating a game closes the dialog and resets the dialog inputs
-      When qa-user clicks on the create-game.validation button
+      When qa-user clicks on the create-game.validation button and saves the game id
       Then qa-user cannot see the create game dialog
       When qa-user clicks on create game button
       Then the displayed value for game name is ""
