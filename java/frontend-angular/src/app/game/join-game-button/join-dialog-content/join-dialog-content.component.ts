@@ -19,7 +19,7 @@ import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-v
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
-import {JoinDialogData} from "../join-game-button-2.component";
+import {JoinDialogData} from "../join-game-button.component";
 import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
 
 @Component({

@@ -6,7 +6,6 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {RouterLink} from "@angular/router";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 import {FirebaseuiAngularLibraryComponent} from "firebaseui-angular";
-import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
@@ -15,7 +14,7 @@ import {Game} from "../game";
 import {Identifiable} from "../../common/identifiable";
 import {RenameUserComponent} from "../../user/rename-user/rename-user.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {JoinGameButton2Component} from "../join-game-button-2/join-game-button-2.component";
+import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 
 @Component({
   selector: 'app-game-list',
@@ -36,7 +35,7 @@ import {JoinGameButton2Component} from "../join-game-button-2/join-game-button-2
     AsyncPipe,
     NgClass,
     RenameUserComponent,
-    JoinGameButton2Component,
+    JoinGameButtonComponent,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css',

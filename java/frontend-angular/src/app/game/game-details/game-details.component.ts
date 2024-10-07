@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ObjectAttributePipe} from "../../common/object-attribute.pipe";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
@@ -14,7 +13,7 @@ import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {Identifiable} from "../../common/identifiable";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.component";
-import {JoinGameButton2Component} from "../join-game-button-2/join-game-button-2.component";
+import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
 
 @Component({
   selector: 'app-game',
@@ -31,7 +30,7 @@ import {JoinGameButton2Component} from "../join-game-button-2/join-game-button-2
     ConsoleLogPipe,
     ErrorDisplayComponent,
     GoBackButtonComponent,
-    JoinGameButton2Component
+    JoinGameButtonComponent
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css',
