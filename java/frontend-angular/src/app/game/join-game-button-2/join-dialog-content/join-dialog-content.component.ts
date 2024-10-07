@@ -44,7 +44,7 @@ import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/
     NotDuplicateValidatorDirective
   ],
   templateUrl: './join-dialog-content.component.html',
-  styleUrl: './join-dialog-content.component.css',
+  styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinDialogContentComponent, JoinDialogData> {

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, ViewEncapsulation} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -42,8 +42,8 @@ import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/
     MatDivider
   ],
   templateUrl: './create-game-dialog-content.component.html',
-  styleUrl: './create-game-dialog-content.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./create-game-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateGameDialogContentComponent extends BaseDialogContentComponent<
   CreateGameDialogContentComponent,
