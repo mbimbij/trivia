@@ -15,12 +15,13 @@ import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CreateGameDialogData} from "../create-game.component";
-import {NgIf} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
 import {ids} from 'src/app/ids';
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
 import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
+import {Game} from "../../game";
 
 @Component({
   selector: 'app-dialog-content',
@@ -39,7 +40,8 @@ import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/
     MatDialogClose,
     NgIf,
     NotBlankValidatorDirective,
-    MatDivider
+    MatDivider,
+    AsyncPipe
   ],
   templateUrl: './create-game-dialog-content.component.html',
   styleUrls: ['./create-game-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
@@ -59,13 +61,13 @@ export class CreateGameDialogContentComponent extends BaseDialogContentComponent
 
   protected createGame() {
     let creator = {name: this.data.content.creatorName, id: this.userId} as UserDto
-    this.gameService.create(this.data.content.gameName, creator).subscribe({
-      next: newGame => {
-        console.log(`created game: ${newGame.id}`)
-        this.resetData()
-        this.matDialogRef.close()
-      }
-    })
+    this.gameService.create(this.data.content.gameName, creator)
+      .subscribe(this.handleBackendResponse)
+  }
+
+  protected override doAdditionalActionsOnBackendSuccess(response: any) {
+    let newGame = response as Game
+    console.log(`created game: ${newGame.id}`)
   }
 
   protected readonly ids = ids;

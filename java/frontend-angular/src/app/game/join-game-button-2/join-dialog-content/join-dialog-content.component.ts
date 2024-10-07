@@ -14,7 +14,7 @@ import {MatButton} from "@angular/material/button";
 import {MatDivider} from "@angular/material/divider";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {NgIf} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
@@ -40,7 +40,8 @@ import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/
     NotBlankValidatorDirective,
     ReactiveFormsModule,
     FormsModule,
-    NotDuplicateValidatorDirective
+    NotDuplicateValidatorDirective,
+    AsyncPipe
   ],
   templateUrl: './join-dialog-content.component.html',
   styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
@@ -59,11 +60,8 @@ export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinD
 
   protected joinGame() {
     let creator = {name: this.data.content.playerName, id: this.userId} as UserDto
-    this.gameService.join(this.gameId, creator).subscribe({
-      next: () => this.closeDialogAndResetData()
-    })
+    this.gameService.join(this.gameId, creator).subscribe(this.handleBackendResponse)
   }
-
 
   protected readonly ids = ids;
   protected readonly ValidationErrorCodes = ValidationErrorCodes;

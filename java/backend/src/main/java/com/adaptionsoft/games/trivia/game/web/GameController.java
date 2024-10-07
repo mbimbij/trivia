@@ -127,6 +127,7 @@ public class GameController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
+//        throw new RuntimeException("plop");
         Player creator = playerFactory.fromDto(requestDto.creator());
         Game game = gameFactory.create(requestDto.gameName(), creator);
         gameRepository.save(game);
@@ -143,6 +144,7 @@ public class GameController {
         if(!Objects.equals(playerId, playerDto.id())){
             throw new PlayerIdMismatchException(playerId, playerDto.id());
         }
+//        throw new RuntimeException("plop");
         Game game = findGameOrThrow(new GameId(gameIdInt));
         game.addPlayer(playerFactory.fromDto(playerDto));
         gameRepository.save(game);

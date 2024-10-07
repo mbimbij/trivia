@@ -27,6 +27,13 @@
       creator name cannot be empty
     </mat-error>
   </mat-form-field>
+  <mat-error [attr.data-testid]="ids.createGame.BACKEND_ERROR_MESSAGE"
+             [id]="ids.createGame.BACKEND_ERROR_MESSAGE"
+             *ngIf="backendErrorMessage$ | async as backendErrorMessage"
+             class="backend-error-message"
+  >
+    An error occurred: {{ backendErrorMessage }}
+  </mat-error>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button

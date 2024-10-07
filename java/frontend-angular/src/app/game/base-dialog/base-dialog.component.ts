@@ -10,7 +10,7 @@ export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dial
   selector: 'app-base-dialog',
   standalone: true,
   imports: [],
-  template: '<p>base-dialog works!</p>',
+  template: `<p>base-dialog works!</p>`,
   styleUrl: './base-dialog.component.css'
 })
 export abstract class BaseDialogComponent<
