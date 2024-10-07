@@ -12,6 +12,7 @@
           <option name="goals">
             <list>
               <option value="compiler:testCompile" />
+              <option value="resources:testResources" />
             </list>
           </option>
           <option name="multimoduleDir" />

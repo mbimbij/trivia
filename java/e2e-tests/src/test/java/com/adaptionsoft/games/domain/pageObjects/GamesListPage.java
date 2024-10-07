@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
@@ -14,10 +15,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GamesListPage extends PageWithStaticUrl {
     private final TestContext testContext;
+    private final String backendWebsocketUrl;
 
-    public GamesListPage(String basePath, Page page, TestContext testContext) {
+    public GamesListPage(String basePath, Page page, TestContext testContext, String backendWebsocketUrl) {
         super(basePath + "/games", page);
         this.testContext = testContext;
+        this.backendWebsocketUrl = backendWebsocketUrl;
     }
 
     /**
@@ -61,7 +64,7 @@ public class GamesListPage extends PageWithStaticUrl {
         Collection<String> expectedMessages = getExpectedWebSocketMessages();
         log.info("Navigating to %s".formatted(url));
         page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
-            if(Objects.equals("ws://localhost:8080/ws/gs-guide-websocket",webSocket.url())){
+            if(Objects.equals(backendWebsocketUrl,webSocket.url())){
                 webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
                 String text = webSocketFrame.text();
                 expectedMessages.removeIf(text::contains);

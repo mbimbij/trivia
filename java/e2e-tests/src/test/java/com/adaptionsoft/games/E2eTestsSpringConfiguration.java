@@ -55,7 +55,7 @@ public class E2eTestsSpringConfiguration {
 
     @Bean
     public Janitor testRunnerActor(RestTemplate restTemplate, TestProperties testProperties, TestContext testContext) {
-        return new Janitor(restTemplate,testProperties.getBackendUrlBase(), testContext);
+        return new Janitor(restTemplate, testProperties.getBackendUrlBase(), testContext);
     }
 
     @Bean
@@ -71,7 +71,7 @@ public class E2eTestsSpringConfiguration {
 
     @Bean
     public GamesListPage gamesListPage(TestProperties testProperties, Page page, TestContext testContext) {
-        return new GamesListPage(testProperties.getFrontendUrlBase(), page, testContext);
+        return new GamesListPage(testProperties.getFrontendUrlBase(), page, testContext, testProperties.getBackendWebsocketUrl());
     }
 
     @Bean
@@ -115,10 +115,10 @@ public class E2eTestsSpringConfiguration {
         restTemplate.getMessageConverters().add(0, converter);
         return restTemplate;
     }
-    
+
     @Bean
     public Backend backend(RestTemplate restTemplate, TestProperties testProperties) {
-        return new Backend(restTemplate,testProperties.getBackendUrlBase());
+        return new Backend(restTemplate, testProperties.getBackendUrlBase());
     }
 
     @Bean

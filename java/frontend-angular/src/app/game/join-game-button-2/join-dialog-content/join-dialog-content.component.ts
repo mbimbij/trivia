@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -9,7 +9,6 @@ import {
 } from "@angular/material/dialog";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {UserDto} from "../../../openapi-generated/game";
-import {Identifiable} from "../../../common/identifiable";
 import {ids} from 'src/app/ids';
 import {MatButton} from "@angular/material/button";
 import {MatDivider} from "@angular/material/divider";
