@@ -58,4 +58,8 @@ public class TestUtils {
         return objectMapper.readValue(JsonUnflattener.unflatten(objectMapper.writeValueAsString(map)), clazz);
     }
 
+    public static String formatInputForWhitespaces(String textContent) {
+        return textContent.replace("[TAB]", "\t")
+                .replace("[NEWLINE]", "\n");
+    }
 }

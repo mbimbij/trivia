@@ -4,6 +4,7 @@ Feature: List games
     And previous test data cleared
     And 2 existing games
     And qa-user on the game-list page
+    And qa-user name was not changed
 
   Scenario: display games list
     Then qa-user sees the following games, filtered for creators "test-user-1, qa-user"

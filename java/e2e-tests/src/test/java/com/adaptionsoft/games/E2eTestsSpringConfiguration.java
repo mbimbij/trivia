@@ -35,10 +35,11 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
+//                .setHeadless(false)
                 .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
-        Browser browser = playwright.firefox().launch(launchOptions);
+        Browser browser = playwright.chromium().launch(launchOptions);
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
 //                .setRecordVideoDir(Path.of("videos"))
 //                .setRecordVideoSize(1280, 1024)
@@ -54,7 +55,7 @@ public class E2eTestsSpringConfiguration {
 
     @Bean
     public Janitor testRunnerActor(RestTemplate restTemplate, TestProperties testProperties, TestContext testContext) {
-        return new Janitor(restTemplate,testProperties.getBackendUrlBase(), testContext);
+        return new Janitor(restTemplate, testProperties.getBackendUrlBase(), testContext);
     }
 
     @Bean
@@ -69,8 +70,8 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public GamesListPage gamesListPage(TestProperties testProperties, Page page) {
-        return new GamesListPage(testProperties.getFrontendUrlBase(), page);
+    public GamesListPage gamesListPage(TestProperties testProperties, Page page, TestContext testContext) {
+        return new GamesListPage(testProperties.getFrontendUrlBase(), page, testContext, testProperties.getBackendWebsocketUrl());
     }
 
     @Bean
@@ -96,10 +97,15 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public CreateGameUiElement createGameUiElement(Page page, TestContext testContext) {
-        return new CreateGameUiElement(page, testContext);
+    public CreateGameDialog createGameUiElement(Page page) {
+        return new CreateGameDialog(page);
     }
-    
+
+    @Bean
+    public JoinGameDialog joinGameDialog(Page page) {
+        return new JoinGameDialog(page);
+    }
+
     @Bean
     public RestTemplate restTemplate(@Qualifier("stateDeserializer") Module stateDeserializer) {
         RestTemplate restTemplate = new RestTemplate();
@@ -109,10 +115,10 @@ public class E2eTestsSpringConfiguration {
         restTemplate.getMessageConverters().add(0, converter);
         return restTemplate;
     }
-    
+
     @Bean
     public Backend backend(RestTemplate restTemplate, TestProperties testProperties) {
-        return new Backend(restTemplate,testProperties.getBackendUrlBase());
+        return new Backend(restTemplate, testProperties.getBackendUrlBase());
     }
 
     @Bean

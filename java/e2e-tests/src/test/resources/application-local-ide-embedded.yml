@@ -1,2 +1,3 @@
 test.frontend-url-base: http://localhost:${PORT_LOCAL_IDE_EMBEDDED}
 test.backend-url-base: http://localhost:${PORT_LOCAL_IDE_EMBEDDED}/api
+test.backend-websocket-url: ws://localhost:${PORT_LOCAL_IDE_EMBEDDED}/ws/gs-guide-websocket

@@ -24,8 +24,10 @@ public class AuthenticationPage extends PageWithStaticUrl {
         page.locator("css=" + EMAIL_INPUT).fill(email);
         page.locator("css=" + SUBMIT_BUTTON).click();
         page.locator("css=" + PASSWORD_INPUT).fill(password);
-        page.locator("css=" + SUBMIT_BUTTON).click();
-        gamesListPage.waitForUrl();
+        gamesListPage.executeAndWaitForWebSocketMessages(() -> {
+            page.locator("css=" + SUBMIT_BUTTON).click();
+            gamesListPage.waitForUrl();
+        });
         log.info("logged in");
     }
 }

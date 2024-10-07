@@ -1,19 +1,12 @@
 import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
-import {DialogContentComponent} from "./dialog-content/dialog-content.component";
+import {CreateGameDialogContentComponent} from "./dialog-content/create-game-dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
-
-export class CreateGameComponentTestIds {
-  public static readonly OPEN_DIALOG_BUTTON = 'create-game'
-  public static readonly DIALOG = 'create-game-dialog'
-  public static readonly GAME_NAME = 'game-name'
-  public static readonly CREATOR_NAME = 'creator-name'
-  public static readonly CANCEL = 'cancel'
-  public static readonly RESET = 'reset'
-  public static readonly VALIDATE = 'validate'
-}
+import {ids} from 'src/app/ids';
+import {BaseDialogContentComponent} from "../base-dialog/base-dialog-content/base-dialog-content.component";
+import {BaseDialogComponent, BaseDialogData} from "../base-dialog/base-dialog.component";
 
 @Component({
   selector: 'app-create-game',
@@ -24,64 +17,47 @@ export class CreateGameComponentTestIds {
   ],
   template: `
     <button
-      [attr.data-testid]="CreateGameComponentTestIds.OPEN_DIALOG_BUTTON"
+      [attr.data-testid]="ids.createGame.OPEN_DIALOG_BUTTON"
       class="rounded"
-      mat-raised-button color="primary" (click)="openDialog()"
+      mat-raised-button color="primary" (click)="openDialog(CreateGameDialogContentComponent)"
     >create game
     </button>
   `,
   styleUrl: './create-game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateGameComponent {
+export class CreateGameComponent extends BaseDialogComponent<CreateGameDialogContentComponent, CreateGameDialogData> {
+  protected override changesRequireReset(changes: SimpleChanges): boolean {
+    return !!changes['user'];
+  }
   @Input() user!: User
-  readonly dialog!: MatDialog
-  private defaultContent!: CreateGameDialogContent
-  private currentContent!: CreateGameDialogContent
-
-  protected readonly CreateGameComponentTestIds = CreateGameComponentTestIds;
 
   constructor(dialog: MatDialog) {
-    this.dialog = dialog;
+    super(dialog, ids.createGame.DIALOG)
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    this.defaultContent = {gameName: "", creatorName: this.user.name}
-    this.resetDialogContent()
+  protected override resetDataOnChanges() {
+    this.resetDefaultData();
+    this.resetCreatorName()
   }
 
-  resetDialogContent(){
-      this.currentContent = {...this.defaultContent}
+  protected resetDefaultData(): void {
+    this.defaultData = {gameName: "", creatorName: this.user.name}
   }
 
-  openDialog() {
-    let params: CreateGameDialogContentParams = {currentContent: this.currentContent, defaultContent: this.defaultContent}
-    let dialogRef = this.dialog.open(
-      DialogContentComponent,
-      {data: params}
-    );
-    dialogRef.componentRef?.setInput('userId', this.user.id)
-
-    let subscription = dialogRef.componentInstance.resetDialogContentEvent.subscribe(() => {
-      this.resetDialogContent();
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      subscription.unsubscribe();
-    });
-
-    dialogRef.afterOpened().subscribe(() => {
-      document.querySelector("mat-dialog-container")
-        ?.setAttribute("data-testid", CreateGameComponentTestIds.DIALOG)
-    })
+  private resetCreatorName() {
+    this.data.content.creatorName = this.defaultData.creatorName
   }
+
+  override doAfterOpenDialog() {
+    this.dialogRef.componentRef?.setInput('userId', this.user.id)
+  }
+
+  protected readonly ids = ids;
+  protected readonly CreateGameDialogContentComponent = CreateGameDialogContentComponent;
 }
 
-export interface CreateGameDialogContent {
+export interface CreateGameDialogData extends BaseDialogData{
   gameName: string;
   creatorName: string;
-}
-
-export interface CreateGameDialogContentParams {
-  currentContent: CreateGameDialogContent;
-  defaultContent: CreateGameDialogContent;
 }

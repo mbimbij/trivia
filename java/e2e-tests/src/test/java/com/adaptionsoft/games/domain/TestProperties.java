@@ -20,4 +20,5 @@ public class TestProperties {
     private String qaUserPassword;
     private String frontendUrlBase;
     private String backendUrlBase;
+    private String backendWebsocketUrl;
 }

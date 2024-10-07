@@ -115,4 +115,8 @@ export class Game {
   private isGameCreated(): boolean {
     return this.state === State.Created
   }
+
+  public getPlayersNames(): string[] {
+    return this.players.map(value => value.name)
+  }
 }

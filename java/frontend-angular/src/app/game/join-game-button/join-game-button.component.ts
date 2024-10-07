@@ -1,16 +1,24 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
+import {MatButton} from "@angular/material/button";
+import {ids} from "../../ids";
 import {User} from "../../user/user";
-import {Subscription} from "rxjs";
-import {Identifiable} from "../../common/identifiable";
+import {MatDialog} from "@angular/material/dialog";
+import {BaseDialogComponent, BaseDialogData} from "../base-dialog/base-dialog.component";
+import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-content.component";
 
 @Component({
   selector: 'app-join-game-button',
   standalone: true,
+  imports: [
+    MatButton
+  ],
   template: `
     @if (canJoin) {
-      <button [attr.data-testid]="'join-button-'+gameId" (click)="joinGame()">
-        join
+      <button
+        [attr.data-testid]="ids.joinGame.openDialogButtonForGameId(gameId)"
+        class="rounded"
+        mat-stroked-button (click)="openDialog(JoinDialogContentComponent)"
+      >join
       </button>
     } @else if (isGameStarted) {
       <span>{{ 'game started' }}</span>
@@ -19,30 +27,41 @@ import {Identifiable} from "../../common/identifiable";
     } @else {
       <span>{{ 'cannot join' }}</span>
     }
-    {{ checkRender() }}
   `,
   styleUrl: './join-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JoinGameButtonComponent extends Identifiable implements OnDestroy {
+export class JoinGameButtonComponent extends BaseDialogComponent<JoinDialogContentComponent, JoinDialogData> {
+  protected readonly ids = ids;
 
+  @Input() user!: User
   @Input() gameId!: number
-  @Input() user!: User;
+  @Input() playersNames!: string[]
   @Input() canJoin!: boolean;
   @Input() isGameStarted!: boolean;
   @Input() isPlayerInGame!: boolean;
-  private actionSubscription?: Subscription;
 
-  constructor(private gameService: GameServiceAbstract) {
-    super()
+  constructor(dialog: MatDialog) {
+    super(dialog,ids.joinGame.DIALOG);
   }
 
-  ngOnDestroy(): void {
-    this.actionSubscription?.unsubscribe();
+  protected override changesRequireReset(changes: SimpleChanges) {
+    return !!changes['user'];
   }
 
-  joinGame() {
-    this.actionSubscription = this.gameService.join(this.gameId, this.user)
-      .subscribe();
+  protected override doAfterOpenDialog() {
+    this.dialogRef.componentRef?.setInput('userId', this.user.id)
+    this.dialogRef.componentRef?.setInput('gameId', this.gameId)
+    this.dialogRef.componentRef?.setInput('playersNames', this.playersNames)
   }
+
+  protected override resetDefaultData(): void {
+    this.defaultData = {playerName: this.user.name}
+  }
+
+  protected readonly JoinDialogContentComponent = JoinDialogContentComponent;
+}
+
+export interface JoinDialogData extends BaseDialogData {
+  playerName: string;
 }

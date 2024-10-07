@@ -14,11 +14,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableMBeanExport;
+import org.springframework.jmx.export.MBeanExporter;
+import org.springframework.jmx.support.RegistrationPolicy;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.socket.config.WebSocketMessageBrokerStats;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
+@EnableMBeanExport
 public class TriviaApplication {
     public static void main(String[] args) {
         SpringApplication.run(TriviaApplication.class, args);
@@ -72,5 +79,20 @@ public class TriviaApplication {
         ObserverBasedEventPublisher eventPublisher = new ObserverBasedEventPublisher();
         listeners.forEach(eventPublisher::register);
         return eventPublisher;
+    }
+
+    @Bean
+    public MBeanExporter mBeanExporter(WebSocketMessageBrokerStats webSocketMessageBrokerStats) {
+        MBeanExporter exporter = new MBeanExporter();
+
+        // Create a map to expose the WebSocketMessageBrokerStats bean to JMX
+        Map<String, Object> beansToExpose = new HashMap<>();
+        beansToExpose.put("bean:name=webSocketMessageBrokerStats", webSocketMessageBrokerStats);
+
+        // Set the map in the exporter
+        exporter.setBeans(beansToExpose);
+        exporter.setRegistrationPolicy(RegistrationPolicy.IGNORE_EXISTING); // Handle bean conflicts
+
+        return exporter;
     }
 }

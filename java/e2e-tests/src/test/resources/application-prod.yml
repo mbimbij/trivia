@@ -1,2 +1,3 @@
 test.frontend-url-base: https://trivia-s3wwpuislq-od.a.run.app
 test.backend-url-base: https://trivia-s3wwpuislq-od.a.run.app/api
+test.backend-websocket-url: wss://${HOSTNAME_PROD}/ws/gs-guide-websocket

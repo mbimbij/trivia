@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Join the Game</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label [id]="ids.joinGame.PLAYER_NAME_LABEL">Join as</mat-label>
+    <input [attr.data-testid]="ids.joinGame.PLAYER_NAME"
+           [id]="ids.joinGame.PLAYER_NAME"
+           matInput
+           [(ngModel)]="data.content.playerName"
+           #playerName="ngModel"
+           required
+           notBlank
+           [notDuplicate]="playersNames"
+    >
+    <mat-error *ngIf="playerName.errors?.[ValidationErrorCodes.NOT_BLANK]">
+      player name cannot be empty
+    </mat-error>
+    <mat-error *ngIf="playerName.errors?.[ValidationErrorCodes.DUPLICATE_PLAYER_NAME]">
+      player name already used
+    </mat-error>
+  </mat-form-field>
+  <mat-error [attr.data-testid]="ids.joinGame.BACKEND_ERROR_MESSAGE"
+             [id]="ids.joinGame.BACKEND_ERROR_MESSAGE"
+             *ngIf="backendErrorMessage$ | async as backendErrorMessage"
+             class="backend-error-message"
+  >
+    An error occurred: {{ backendErrorMessage }}
+  </mat-error>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button
+    class="rounded tonal-button"
+    [id]="ids.joinGame.RESET"
+    [attr.data-testid]="ids.joinGame.RESET"
+    mat-stroked-button
+    (click)="resetData()"
+  >Reset
+  </button>
+  <mat-divider [vertical]="true"></mat-divider>
+  <button
+    class="rounded"
+    [id]="ids.joinGame.CANCEL"
+    [attr.data-testid]="ids.joinGame.CANCEL"
+    mat-button mat-dialog-close
+  >Cancel
+  </button>
+  <button
+    class="rounded"
+    [id]="ids.joinGame.VALIDATE"
+    [attr.data-testid]="ids.joinGame.VALIDATE"
+    mat-raised-button color="primary"
+    [disabled]="!!playerName.errors"
+    (click)="joinGame()">Join
+  </button>
+</mat-dialog-actions>

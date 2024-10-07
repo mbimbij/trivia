@@ -1,7 +1,9 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
@@ -9,49 +11,51 @@ import org.assertj.core.api.Assertions;
 import java.util.Optional;
 
 @Getter
-public class UiElementObject {
+public abstract class UiElementObject {
     protected final Page page;
 
     public UiElementObject(Page page) {
         this.page = page;
     }
 
-    public String getTextContentByTestid(String testid) {
-        return page.getByTestId(testid).textContent().trim();
+    public String getTextContentByTestid(String testId) {
+        return page.getByTestId(testId).textContent().trim();
     }
 
-    public void fillInputByTestId(String testid, String content) {
-        page.getByTestId(testid).fill(content);
+    public void fillInputByTestId(String testId, String content) {
+        page.getByTestId(testId).clear();
+        page.getByTestId(testId).fill(content);
     }
 
-    public void verifyInputContentByTestId(String testid, String expectedContent) {
-        verifyPresenceByTestId(testid);
-        String content = Optional.ofNullable(page.getByTestId(testid).getAttribute("ng-reflect-model"))
+    public void verifyInputContentByTestId(String testId, String expectedContent) {
+        verifyPresenceByTestId(testId);
+        String content = Optional.ofNullable(page.getByTestId(testId).getAttribute("ng-reflect-model"))
                 .map(String::trim)
                 .orElse("");
         Assertions.assertThat(content).isEqualTo(expectedContent);
     }
 
     @SneakyThrows
-    public void verifyPresenceByTestId(String testid) {
-        page.waitForSelector("[data-testid=%s]".formatted(testid));
+    public void verifyPresenceByTestId(String testId) {
+        page.waitForSelector("[data-testid=%s]".formatted(testId));
     }
 
-    public void verifyAbsenceByTestId(String testid) {
-        PlaywrightAssertions.assertThat(page.getByTestId(testid)).not().isAttached();
+    public void verifyAbsenceByTestId(String testId) {
+        page.getByTestId(testId).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.DETACHED));
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).not().isAttached();
     }
 
-    public void clickButtonByTestid(String testid) {
-        PlaywrightAssertions.assertThat(page.getByTestId(testid)).isVisible();
-        PlaywrightAssertions.assertThat(page.getByTestId(testid)).isEnabled();
-        clickElementByTestid(testid);
+    public void clickButtonByTestId(String testId) {
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).isVisible();
+        PlaywrightAssertions.assertThat(page.getByTestId(testId)).isEnabled();
+        clickElementByTestId(testId);
     }
 
-    public void clickElementByTestid(String testId) {
+    public void clickElementByTestId(String testId) {
         page.getByTestId(testId).click();
     }
 
-    public void verifyButtonDisabledByTestid(String testId) {
+    public void verifyButtonDisabledByTestId(String testId) {
         PlaywrightAssertions.assertThat(page.getByTestId(testId)).isDisabled();
     }
 

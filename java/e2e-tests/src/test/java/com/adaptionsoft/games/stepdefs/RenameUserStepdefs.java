@@ -20,4 +20,9 @@ public class RenameUserStepdefs {
         renameUser.renameUser(newName);
         navbar.verifyDisplayedUserName(newName);
     }
+
+    public void renameQaUserWithoutNavigation(String newName) {
+        renameUser.renameUser(newName);
+        navbar.verifyDisplayedUserName(newName);
+    }
 }

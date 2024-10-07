@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Feature: game-creation - prod" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
+  <configuration default="false" name="Feature: create-game - prod" type="CucumberJavaRunConfigurationType" factoryName="Cucumber java">
     <option name="CUCUMBER_CORE_VERSION" value="5" />
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/.env" />
     </option>
-    <option name="FILE_PATH" value="$PROJECT_DIR$/e2e-tests/src/test/resources/features/game-creation.feature" />
+    <option name="FILE_PATH" value="$PROJECT_DIR$/e2e-tests/src/test/resources/features/create-game.feature" />
     <option name="GLUE" value="com.adaptionsoft.games" />
     <option name="MAIN_CLASS_NAME" value="io.cucumber.core.cli.Main" />
     <module name="e2e-tests" />
@@ -21,6 +21,7 @@
     </extension>
     <method v="2">
       <option name="Make" enabled="true" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="test-compile e2e-tests" run_configuration_type="MavenRunConfiguration" />
     </method>
   </configuration>
 </component>

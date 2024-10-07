@@ -40,7 +40,7 @@ public class OngoingGamePage extends PageWithDynamicUrl {
     }
 
     public void answerQuestionWith(AnswerCode answerCode) {
-        clickButtonByTestid("answer-%s".formatted(answerCode));
+        clickButtonByTestId("answer-%s".formatted(answerCode));
     }
 
 }

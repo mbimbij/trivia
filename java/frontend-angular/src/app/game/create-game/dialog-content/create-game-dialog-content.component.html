@@ -3,50 +3,55 @@
   <mat-form-field>
     <mat-label>Game Name</mat-label>
     <!--    TODO replace [(ngModel)] as it is deprecated -->
-    <input [attr.data-testid]="CreateGameComponentTestIds.GAME_NAME"
+    <input [attr.data-testid]="ids.createGame.GAME_NAME"
            matInput
-           [(ngModel)]="currentContent.gameName"
+           [(ngModel)]="data.content.gameName"
            #gameName="ngModel"
            required
            notBlank
     >
-    <mat-error *ngIf="gameName.errors?.['notBlank']">
+    <mat-error *ngIf="gameName.errors?.[ValidationErrorCodes.NOT_BLANK]">
       game name cannot be empty
     </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Join as</mat-label>
-    <input [attr.data-testid]="CreateGameComponentTestIds.CREATOR_NAME"
-           name="CreateGameComponentTestIds.CREATOR_NAME"
+    <input [attr.data-testid]="ids.createGame.CREATOR_NAME"
            matInput
-           [(ngModel)]="currentContent.creatorName"
+           [(ngModel)]="data.content.creatorName"
            #creatorName="ngModel"
            required
            notBlank
     >
-    <mat-error *ngIf="creatorName.errors?.['notBlank']">
+    <mat-error *ngIf="creatorName.errors?.[ValidationErrorCodes.NOT_BLANK]">
       creator name cannot be empty
     </mat-error>
   </mat-form-field>
+  <mat-error [attr.data-testid]="ids.createGame.BACKEND_ERROR_MESSAGE"
+             [id]="ids.createGame.BACKEND_ERROR_MESSAGE"
+             *ngIf="backendErrorMessage$ | async as backendErrorMessage"
+             class="backend-error-message"
+  >
+    An error occurred: {{ backendErrorMessage }}
+  </mat-error>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button
-    class="rounded red"
-    [attr.data-testid]="CreateGameComponentTestIds.RESET"
+    class="rounded tonal-button"
+    [attr.data-testid]="ids.createGame.RESET"
     mat-stroked-button
-    (click)="resetDialogContent()"
+    (click)="resetData()"
   >Reset
   </button>
-  <mat-divider [vertical]="true"></mat-divider>
   <button
     class="rounded"
-    [attr.data-testid]="CreateGameComponentTestIds.CANCEL"
+    [attr.data-testid]="ids.createGame.CANCEL"
     mat-button mat-dialog-close
   >Cancel
   </button>
   <button
     class="rounded"
-    [attr.data-testid]="CreateGameComponentTestIds.VALIDATE"
+    [attr.data-testid]="ids.createGame.VALIDATE"
     mat-raised-button color="primary"
     [disabled]="(!!gameName.errors) || (!!creatorName.errors) "
     mat-button (click)="createGame()">Create
