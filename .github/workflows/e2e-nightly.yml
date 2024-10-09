@@ -1,9 +1,10 @@
 name: E2E nightly execution
 #run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
+  workflow_dispatch:
   schedule:
-#    - cron: '0 0 * * *'
-    - cron: '* * * * *'
+    - cron: '0 0 * * *'
+    - cron: '*/5 * * * *'
 
 
 jobs:
