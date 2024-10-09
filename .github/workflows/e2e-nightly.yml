@@ -1,6 +1,7 @@
 name: E2E nightly execution !
 #run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
+  push:
   schedule:
     - cron: '0 0 * * *'
     - cron: '* * * * *'
