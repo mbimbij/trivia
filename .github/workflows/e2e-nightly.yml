@@ -12,14 +12,18 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: browser-actions/setup-chrome@v1
-      - run: chrome --version
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
           cache-dependency-path: 'java/pom.xml' # optional
-      - name: Build backend with Maven
+      - uses: browser-actions/setup-chrome@v1
+      - run: chrome --version
+      - name: Maven Install
+        run: make mvn-install
+      - name: Ensure browsers are installed
+        run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
+      - name: Execute E2E tests
         working-directory: java
         run: make e2e-tests-prod
