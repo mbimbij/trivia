@@ -7,6 +7,9 @@ prepare-frontend: generate-frontend-environment-files npm-install-frontend gener
 npm-install-frontend:
 	cd frontend-angular/ && npm install
 
+mvn-install:
+	./mvnw clean install -Dmaven.test.skip=true
+
 generate-openapi-from-backend:
 	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
 
@@ -33,7 +36,7 @@ build-frontend-local-docker: generate-frontend-environment-files npm-install-fro
 	cd frontend-angular/ && ng build -c local-docker
 
 build-backend:
-	./mvnw -pl backend package -Dmaven.test.skip=true
+	./mvnw -pl backend package  -DskipTests -DskipITs
 	java -Djarmode=layertools -jar backend/target/*.jar extract --destination backend/target/extracted
 
 build-docker-local: build-frontend-local-docker build-backend
@@ -64,14 +67,14 @@ debug-backend-local-ide-embedded:
 	APPLICATION_QUESTIONS_PATH=src/main/resources/questions ./mvnw -pl backend spring-boot:run -Dserver.port=$(PORT_LOCAL_IDE_EMBEDDED) \
 -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$(PORT_LOCAL_IDE_EMBEDDED_DEBUG_BACKEND)"
 
-e2e-tests-local-ide:
+e2e-tests-local-ide: mvn-install
 	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-ide
 
-e2e-tests-local-ide-embedded:
+e2e-tests-local-ide-embedded: mvn-install
 	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-ide-embedded
 
-e2e-tests-local-docker:
+e2e-tests-local-docker: mvn-install
 	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-docker
 
-e2e-tests-prod:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=prod
+e2e-tests-prod: mvn-install
+	./mvnw -pl e2e-tests clean test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=prod
