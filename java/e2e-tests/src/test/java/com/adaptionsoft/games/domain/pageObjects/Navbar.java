@@ -14,6 +14,6 @@ public class Navbar extends UiElementObject {
     }
 
     public void verifyDisplayedUserName(String expectedUserName) {
-        verifyTextContent(NAVBAR_USERNAME_TESTID, expectedUserName);
+        verifyTextContentByTestId(NAVBAR_USERNAME_TESTID, expectedUserName);
     }
 }

@@ -10,8 +10,6 @@ import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.awaitility.Awaitility;
 
-import java.util.Optional;
-
 @Getter
 public abstract class UiElementObject {
     protected final Page page;
@@ -59,8 +57,7 @@ public abstract class UiElementObject {
         PlaywrightAssertions.assertThat(page.getByTestId(testId)).isDisabled();
     }
 
-    public void verifyTextContent(String testId, String expectedContent) {
-//        PlaywrightAssertions.assertThat(page.getByTestId(testId)).hasText(expectedContent);
+    public void verifyTextContentByTestId(String testId, String expectedContent) {
         Awaitility.await().atMost(TestUtils.maxWaitDuration)
                 .untilAsserted(() -> PlaywrightAssertions.assertThat(page.getByTestId(testId)).hasText(expectedContent));
     }
