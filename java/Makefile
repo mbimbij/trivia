@@ -8,7 +8,7 @@ npm-install-frontend:
 	cd frontend-angular/ && npm install
 
 mvn-install:
-	./mvnw clean install -Dmaven.test.skip=true --no-transfer-progress
+	./mvnw clean install -Dmaven.test.skip=true --no-transfer-progress  -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION)
 
 generate-openapi-from-backend:
 	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
@@ -77,4 +77,5 @@ e2e-tests-local-docker:
 	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-docker
 
 e2e-tests-prod:
-	./mvnw -pl e2e-tests clean test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=prod
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=prod -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/games-list.feature:9
+	#./mvnw -pl e2e-tests clean test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=prod -Dcucumber.features=/home/joseph/workspace/trivia/java/e2e-tests/src/test/resources/features/game-list.feature:9

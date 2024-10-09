@@ -25,7 +25,18 @@ jobs:
         run: make mvn-install
       - name: Ensure browsers are installed
         working-directory: java
-        run: ./mvnw exec:java -e -pl e2e-tests -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps"  --no-transfer-progress
+        run: ./mvnw exec:java -e -pl e2e-tests -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps" --no-transfer-progress
       - name: Execute E2E tests
         working-directory: java
         run: make e2e-tests-prod
+        env:
+          QA_USER_ID: ${{ secrets.QA_USER_ID }}
+          QA_USER_EMAIL: ${{ secrets.QA_USER_EMAIL }}
+          QA_USER_PASSWORD: ${{ secrets.QA_USER_PASSWORD }}
+          PORT_OPENAPI_MAVEN_GENERATION: ${{ vars.PORT_OPENAPI_MAVEN_GENERATION }}
+      - name: Upload Playwright screenshots
+        if: failure()  # Upload only if the test fails (optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-screenshots
+          path: java/e2e-tests/screenshots/
