@@ -3,7 +3,8 @@
   <mat-form-field>
     <mat-label>Game Name</mat-label>
     <!--    TODO replace [(ngModel)] as it is deprecated -->
-    <input [attr.data-testid]="ids.createGame.GAME_NAME"
+    <input [id]="ids.createGame.GAME_NAME"
+           [attr.data-testid]="ids.createGame.GAME_NAME"
            matInput
            [(ngModel)]="data.content.gameName"
            #gameName="ngModel"
@@ -16,7 +17,8 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Join as</mat-label>
-    <input [attr.data-testid]="ids.createGame.CREATOR_NAME"
+    <input [id]="ids.createGame.CREATOR_NAME"
+           [attr.data-testid]="ids.createGame.CREATOR_NAME"
            matInput
            [(ngModel)]="data.content.creatorName"
            #creatorName="ngModel"

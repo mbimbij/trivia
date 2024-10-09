@@ -232,20 +232,23 @@ public class OngoingGameStepDefs {
     }
 
     @And("the roll dice results prompt is {string}")
-    public void theRollDiceBackhandSectionContentIs(String expectedTextContent) {
-        String actualTextContent = ongoingGamePage.getTextContentByTestid(ROLL_DICE_RESULTS_MESSAGE_TESTID);
-        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+    public void theRollDiceResultsContentIs(String expectedTextContent) {
+        ongoingGamePage.verifyTextContent(ROLL_DICE_RESULTS_MESSAGE_TESTID, expectedTextContent);
+//        String actualTextContent = ongoingGamePage.getTextContentByTestid(ROLL_DICE_RESULTS_MESSAGE_TESTID);
+//        assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 
     @And("the text content of the is correct prompt is {string}")
     public void theTextContentOfTheIsCorrectPromptIs(String expectedTextContent) {
+        ongoingGamePage.verifyTextContent(ANSWER_QUESTION_RESULTS_IS_CORRECT_PROMPT_TESTID, expectedTextContent);
         String actualTextContent = ongoingGamePage.getTextContentByTestid(ANSWER_QUESTION_RESULTS_IS_CORRECT_PROMPT_TESTID);
-        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+//        assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 
     @And("the text content of the validation button is {string}")
     public void theTextContentOfTheValidationButtonIs(String expectedTextContent) {
-        String actualTextContent = ongoingGamePage.getTextContentByTestid(VALIDATION_BUTTON_TESTID);
-        assertThat(actualTextContent).isEqualTo(expectedTextContent);
+        ongoingGamePage.verifyTextContent(VALIDATION_BUTTON_TESTID, expectedTextContent);
+//        String actualTextContent = ongoingGamePage.getTextContentByTestid(VALIDATION_BUTTON_TESTID);
+//        assertThat(actualTextContent).isEqualTo(expectedTextContent);
     }
 }

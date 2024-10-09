@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -11,7 +11,6 @@ import {MatButton} from "@angular/material/button";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {Identifiable} from "../../../common/identifiable";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CreateGameDialogData} from "../create-game.component";

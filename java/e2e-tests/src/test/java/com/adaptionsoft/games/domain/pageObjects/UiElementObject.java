@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
+import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
@@ -7,6 +8,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
+import org.awaitility.Awaitility;
 
 import java.util.Optional;
 
@@ -29,9 +31,7 @@ public abstract class UiElementObject {
 
     public void verifyInputContentByTestId(String testId, String expectedContent) {
         verifyPresenceByTestId(testId);
-        String content = Optional.ofNullable(page.getByTestId(testId).getAttribute("ng-reflect-model"))
-                .map(String::trim)
-                .orElse("");
+        String content = page.getByTestId(testId).inputValue().trim();
         Assertions.assertThat(content).isEqualTo(expectedContent);
     }
 
@@ -60,6 +60,8 @@ public abstract class UiElementObject {
     }
 
     public void verifyTextContent(String testId, String expectedContent) {
-        PlaywrightAssertions.assertThat(page.getByTestId(testId)).hasText(expectedContent);
+//        PlaywrightAssertions.assertThat(page.getByTestId(testId)).hasText(expectedContent);
+        Awaitility.await().atMost(TestUtils.maxWaitDuration)
+                .untilAsserted(() -> PlaywrightAssertions.assertThat(page.getByTestId(testId)).hasText(expectedContent));
     }
 }
