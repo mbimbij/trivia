@@ -2,7 +2,9 @@ package com.adaptionsoft.games.utils;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.wnameless.json.unflattener.JsonUnflattener;
@@ -17,25 +19,22 @@ public class TestUtils {
     public static final Duration pollInterval = Duration.ofMillis(500);
     public static final Duration maxWaitDuration = Duration.ofSeconds(5);
 
-    // TODO adresser les warnings
-    private static ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
-            .registerModule(new JavaTimeModule())
-            .registerModule(new Jdk8Module())
+    private static final ObjectMapper objectMapper = JsonMapper.builder()
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true)
-            .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_VALUES, true);
-
+            .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_VALUES, true)
+            .addModules(new JavaTimeModule(), new Jdk8Module())
+            .build().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
     @SneakyThrows
     public static <T> T convertDatatableSingleObject(DataTable dataTable, Class<T> clazz) {
-        Map<String, String> map = dataTable.entries().get(0);
+        Map<String, String> map = dataTable.entries().getFirst();
         return convertMapToObject(map, clazz);
     }
 
     @SneakyThrows
     public static <T> T convertDatatableTransposedSingleObject(DataTable dataTable, Class<T> clazz) {
-        Map<String, String> map = dataTable.transpose().entries().get(0);
+        Map<String, String> map = dataTable.transpose().entries().getFirst();
         return convertMapToObject(map, clazz);
     }
 

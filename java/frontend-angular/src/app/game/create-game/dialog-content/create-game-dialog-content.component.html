@@ -3,7 +3,8 @@
   <mat-form-field>
     <mat-label>Game Name</mat-label>
     <!--    TODO replace [(ngModel)] as it is deprecated -->
-    <input [attr.data-testid]="ids.createGame.GAME_NAME"
+    <input [id]="ids.createGame.GAME_NAME"
+           [attr.data-testid]="ids.createGame.GAME_NAME"
            matInput
            [(ngModel)]="data.content.gameName"
            #gameName="ngModel"
@@ -16,7 +17,8 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Join as</mat-label>
-    <input [attr.data-testid]="ids.createGame.CREATOR_NAME"
+    <input [id]="ids.createGame.CREATOR_NAME"
+           [attr.data-testid]="ids.createGame.CREATOR_NAME"
            matInput
            [(ngModel)]="data.content.creatorName"
            #creatorName="ngModel"
@@ -38,6 +40,7 @@
 <mat-dialog-actions align="end">
   <button
     class="rounded tonal-button"
+    [id]="ids.createGame.RESET"
     [attr.data-testid]="ids.createGame.RESET"
     mat-stroked-button
     (click)="resetData()"
@@ -45,12 +48,14 @@
   </button>
   <button
     class="rounded"
+    [id]="ids.createGame.CANCEL"
     [attr.data-testid]="ids.createGame.CANCEL"
     mat-button mat-dialog-close
   >Cancel
   </button>
   <button
     class="rounded"
+    [id]="ids.createGame.VALIDATE"
     [attr.data-testid]="ids.createGame.VALIDATE"
     mat-raised-button color="primary"
     [disabled]="(!!gameName.errors) || (!!creatorName.errors) "
