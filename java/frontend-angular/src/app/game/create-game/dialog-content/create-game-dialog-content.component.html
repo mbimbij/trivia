@@ -40,6 +40,7 @@
 <mat-dialog-actions align="end">
   <button
     class="rounded tonal-button"
+    [id]="ids.createGame.RESET"
     [attr.data-testid]="ids.createGame.RESET"
     mat-stroked-button
     (click)="resetData()"
@@ -47,12 +48,14 @@
   </button>
   <button
     class="rounded"
+    [id]="ids.createGame.CANCEL"
     [attr.data-testid]="ids.createGame.CANCEL"
     mat-button mat-dialog-close
   >Cancel
   </button>
   <button
     class="rounded"
+    [id]="ids.createGame.VALIDATE"
     [attr.data-testid]="ids.createGame.VALIDATE"
     mat-raised-button color="primary"
     [disabled]="(!!gameName.errors) || (!!creatorName.errors) "
