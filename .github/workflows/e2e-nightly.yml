@@ -3,7 +3,7 @@ name: E2E nightly execution
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 2 * * *'
 
 jobs:
   Run:
@@ -27,7 +27,6 @@ jobs:
           PORT_OPENAPI_MAVEN_GENERATION: ${{ vars.PORT_OPENAPI_MAVEN_GENERATION }}
       - name: Ensure browsers are installed
         working-directory: java
-#        run: ./mvnw exec:java -e -pl e2e-tests -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps chromium" --no-transfer-progress
         run: ./mvnw exec:java -e -pl e2e-tests -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps" --no-transfer-progress
       - name: Execute E2E tests
         working-directory: java

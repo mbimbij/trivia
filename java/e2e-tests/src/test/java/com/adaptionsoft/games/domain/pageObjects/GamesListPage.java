@@ -62,14 +62,11 @@ public class GamesListPage extends PageWithStaticUrl {
 
     public void executeAndWaitForWebSocketMessages(Runnable runnable) {
         Collection<String> expectedMessages = getExpectedWebSocketMessages();
-        System.out.println("coucou backendWebsocketUrl " + backendWebsocketUrl);
-        System.out.println("coucou expecting the following WS messages: \n\t" + String.join("\n\t", expectedMessages));
         log.info("Navigating to %s".formatted(url));
         page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
             if (Objects.equals(backendWebsocketUrl, webSocket.url())) {
                 webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
                     String text = webSocketFrame.text();
-                    System.out.println("coucou received WS message: " + text);
                     expectedMessages.removeIf(text::contains);
                     return expectedMessages.isEmpty();
                 }), () -> {

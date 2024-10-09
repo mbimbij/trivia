@@ -27,16 +27,12 @@ public class AuthenticationPage extends PageWithStaticUrl {
         page.navigate(this.url);
         page.locator("css=" + EMAIL_PASSWORD_IDP_BUTTON).click();
         page.locator("css=" + EMAIL_INPUT).fill(email);
-        page.screenshot(new Page.ScreenshotOptions()
-                .setPath(Path.of("screenshots/screenshot_fill_email"))
-                .setFullPage(true)
-        );
+//        page.screenshot(new Page.ScreenshotOptions()
+//                .setPath(Path.of("screenshots/screenshot_fill_email"))
+//                .setFullPage(true)
+//        );
         page.locator("css=" + SUBMIT_BUTTON).click();
         Thread.sleep(2000);
-        page.screenshot(new Page.ScreenshotOptions()
-                .setPath(Path.of("screenshots/screenshot_submit_email"))
-                .setFullPage(true)
-        );
         page.locator("css=" + PASSWORD_INPUT).fill(password);
         gamesListPage.executeAndWaitForWebSocketMessages(() -> {
             page.locator("css=" + SUBMIT_BUTTON).click();

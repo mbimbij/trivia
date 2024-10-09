@@ -68,14 +68,13 @@ debug-backend-local-ide-embedded:
 -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$(PORT_LOCAL_IDE_EMBEDDED_DEBUG_BACKEND)"
 
 e2e-tests-local-ide:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-ide
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=local-ide -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
 
 e2e-tests-local-ide-embedded:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-ide-embedded
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=local-ide-embedded -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
 
 e2e-tests-local-docker:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-docker
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=local-docker -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
 
 e2e-tests-prod:
-	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=prod -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/games-list.feature:9
-	#./mvnw -pl e2e-tests clean test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=prod -Dcucumber.features=/home/joseph/workspace/trivia/java/e2e-tests/src/test/resources/features/game-list.feature:9
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=prod -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
