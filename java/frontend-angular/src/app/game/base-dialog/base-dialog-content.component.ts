@@ -1,7 +1,7 @@
 import {Component, Inject, Input} from '@angular/core';
 import {Identifiable} from "../../common/identifiable";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {BaseDialogData} from "./base-dialog.data";
 
 @Component({
@@ -34,14 +34,19 @@ export abstract class BaseDialogContentComponent<
     this.backendErrorMessage$.next(null)
   }
 
+  protected doOnFormSubmit() {
+    this.onFormSubmitFunction().subscribe({
+      next: this.handleBackendSuccess,
+      error: this.handleBackendError
+    })
+  }
+
+  protected abstract onFormSubmitFunction(): Observable<any>;
+
   protected doAdditionalActionsOnBackendSuccess(response: any) {}
 
   private handleBackendError = (err: any) => {
     this.backendErrorMessage$.next(err.message)
   }
 
-  protected handleBackendResponse = {
-    next: this.handleBackendSuccess,
-    error: this.handleBackendError
-  }
 }

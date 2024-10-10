@@ -37,7 +37,7 @@ export abstract class BaseOpenDialogComponent<
     }
   }
 
-  protected resetDataOnChanges() {
+  private resetDataOnChanges() {
     this.resetDefaultData();
     this.doAdditionalResetOnChanges();
   }
