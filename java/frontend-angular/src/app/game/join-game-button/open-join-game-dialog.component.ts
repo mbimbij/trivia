@@ -5,7 +5,7 @@ import {User} from "../../user/user";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {BaseOpenDialogComponent} from "../base-dialog/base-open-dialog.component";
 import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-content.component";
-import {BaseDialogData} from "../base-dialog/base-dialog.data";
+import {JoinDialogData} from "./join-dialog.data";
 
 @Component({
   selector: 'app-join-game-button',
@@ -67,6 +67,3 @@ export class OpenJoinGameDialogComponent extends BaseOpenDialogComponent<JoinDia
   protected readonly JoinDialogContentComponent = JoinDialogContentComponent;
 }
 
-export interface JoinDialogData extends BaseDialogData {
-  playerName: string;
-}

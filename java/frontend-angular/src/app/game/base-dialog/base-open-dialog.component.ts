@@ -26,30 +26,19 @@ export abstract class BaseOpenDialogComponent<
   protected constructor(private readonly dialog: MatDialog,
                         @Inject(HTML_ID_TOKEN) private readonly htmlId: string) {
     super()
-    this.htmlId = htmlId;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.changesRequireReset(changes)) {
-      this.resetDataOnChanges();
+      this.resetDefaultData();
+      this.doAdditionalResetOnChanges();
     }
   }
-
-  private resetDataOnChanges() {
-    this.resetDefaultData();
-    this.doAdditionalResetOnChanges();
-  }
-
   protected abstract changesRequireReset(changes: SimpleChanges): boolean
 
   ngOnInit(): void {
-    this.resetAllData()
-  }
-
-  private resetAllData() {
     this.resetDefaultData();
     this.resetData();
-    this.doAdditionalResetOnChanges();
   }
 
   protected doAdditionalResetOnChanges() {

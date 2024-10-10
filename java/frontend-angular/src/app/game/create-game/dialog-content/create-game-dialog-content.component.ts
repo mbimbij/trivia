@@ -13,7 +13,6 @@ import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {CreateGameDialogData} from "../open-create-game.component";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
@@ -22,6 +21,7 @@ import {ValidationErrorCodes} from "../../../common/validation/validation-error-
 import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
 import {Game} from "../../game";
 import { Observable } from 'rxjs';
+import {CreateGameDialogData} from "../create-game-dialog.data";
 
 @Component({
   selector: 'app-dialog-content',
@@ -58,7 +58,7 @@ export class CreateGameDialogContentComponent extends BaseDialogContentComponent
     super(matDialogRef, data)
   }
 
-  protected override onFormSubmitFunction(): Observable<any> {
+  protected override doCallBackendFunction(): Observable<any> {
     let creator = {name: this.data.content.creatorName, id: this.userId} as UserDto
     return this.gameService.create(this.data.content.gameName, creator)
   }

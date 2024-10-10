@@ -34,14 +34,14 @@ export abstract class BaseDialogContentComponent<
     this.backendErrorMessage$.next(null)
   }
 
-  protected doOnFormSubmit() {
-    this.onFormSubmitFunction().subscribe({
+  protected callBackendOnSubmit() {
+    this.doCallBackendFunction().subscribe({
       next: this.handleBackendSuccess,
       error: this.handleBackendError
     })
   }
 
-  protected abstract onFormSubmitFunction(): Observable<any>;
+  protected abstract doCallBackendFunction(): Observable<any>;
 
   protected doAdditionalActionsOnBackendSuccess(response: any) {}
 

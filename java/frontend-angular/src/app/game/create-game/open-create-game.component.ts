@@ -5,10 +5,8 @@ import {CreateGameDialogContentComponent} from "./dialog-content/create-game-dia
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 import {ids} from 'src/app/ids';
-import {BaseDialogContentComponent} from "../base-dialog/base-dialog-content.component";
 import {BaseOpenDialogComponent} from "../base-dialog/base-open-dialog.component";
-import {T} from "@angular/cdk/keycodes";
-import {BaseDialogData} from "../base-dialog/base-dialog.data";
+import {CreateGameDialogData} from "./create-game-dialog.data";
 
 @Component({
   selector: 'app-create-game',
@@ -58,7 +56,3 @@ export class OpenCreateGameComponent extends BaseOpenDialogComponent<CreateGameD
   protected readonly CreateGameDialogContentComponent = CreateGameDialogContentComponent;
 }
 
-export interface CreateGameDialogData extends BaseDialogData{
-  gameName: string;
-  creatorName: string;
-}

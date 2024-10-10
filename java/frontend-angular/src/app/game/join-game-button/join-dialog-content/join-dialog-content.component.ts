@@ -19,9 +19,9 @@ import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-v
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
-import {JoinDialogData} from "../open-join-game-dialog.component";
 import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
 import { Observable } from 'rxjs';
+import {JoinDialogData} from "../join-dialog.data";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -58,7 +58,7 @@ export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinD
     super(matDialogRef, data)
   }
 
-  protected override onFormSubmitFunction(): Observable<any> {
+  protected override doCallBackendFunction(): Observable<any> {
     let creator = {name: this.data.content.playerName, id: this.userId} as UserDto
     return this.gameService.join(this.gameId, creator);
   }
