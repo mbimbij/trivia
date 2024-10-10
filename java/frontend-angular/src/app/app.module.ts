@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
 import {GameServiceAbstract} from "./services/game-service-abstract";
 import {GameService} from "./game/game.service";
-import {CreateGameComponent} from "./game/create-game/create-game.component";
+import {OpenCreateGameComponent} from "./game/create-game/open-create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from './app-routing.module';
 import {GameListComponent} from "./game/game-list/game-list.component";
@@ -37,7 +37,7 @@ import {GameLogsService} from "./game/gamelogs.service";
     HttpClientModule,
     GameApiModule,
     GameLogsApiModule,
-    CreateGameComponent,
+    OpenCreateGameComponent,
     FormsModule,
     AppRoutingModule,
     GameListComponent,

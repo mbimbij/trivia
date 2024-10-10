@@ -4,7 +4,7 @@ import {GameListComponent} from './game-list.component';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {CreateGameComponent} from "../create-game/create-game.component";
+import {OpenCreateGameComponent} from "../create-game/open-create-game.component";
 import {FormsModule} from "@angular/forms";
 import {provideRouter} from "@angular/router";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
@@ -26,7 +26,7 @@ describe('GameListComponent', () => {
         {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
         provideRouter([])
       ],
-      imports: [HttpClientTestingModule, CreateGameComponent, FormsModule],
+      imports: [HttpClientTestingModule, OpenCreateGameComponent, FormsModule],
     })
       .compileComponents();
 

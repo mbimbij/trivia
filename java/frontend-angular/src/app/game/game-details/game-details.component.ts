@@ -13,13 +13,13 @@ import {ErrorDisplayComponent} from "../error-display/error-display.component";
 import {Identifiable} from "../../common/identifiable";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.component";
-import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
+import {OpenJoinGameDialogComponent} from "../join-game-button/open-join-game-dialog.component";
 
 @Component({
   selector: 'app-game',
   standalone: true,
   imports: [
-    JoinGameButtonComponent,
+    OpenJoinGameDialogComponent,
     NgForOf,
     NgIf,
     ObjectAttributePipe,
@@ -30,7 +30,7 @@ import {JoinGameButtonComponent} from "../join-game-button/join-game-button.comp
     ConsoleLogPipe,
     ErrorDisplayComponent,
     GoBackButtonComponent,
-    JoinGameButtonComponent
+    OpenJoinGameDialogComponent
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.css',

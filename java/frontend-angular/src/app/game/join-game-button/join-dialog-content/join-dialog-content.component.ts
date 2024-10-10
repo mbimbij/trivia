@@ -19,8 +19,8 @@ import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-v
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
-import {JoinDialogData} from "../join-game-button.component";
-import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
+import {JoinDialogData} from "../open-join-game-dialog.component";
+import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -44,7 +44,7 @@ import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/
     AsyncPipe
   ],
   templateUrl: './join-dialog-content.component.html',
-  styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
+  styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-open-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinDialogContentComponent, JoinDialogData> {

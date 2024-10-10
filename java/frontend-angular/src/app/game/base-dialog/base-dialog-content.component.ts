@@ -1,8 +1,8 @@
 import {Component, Inject, Input} from '@angular/core';
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../common/identifiable";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {BaseDialogData} from "../base-dialog.component";
 import {BehaviorSubject} from "rxjs";
+import {BaseDialogData} from "./base-dialog.data";
 
 @Component({
   selector: 'app-base-dialog-content',

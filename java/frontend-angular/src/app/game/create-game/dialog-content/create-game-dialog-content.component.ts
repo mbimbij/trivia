@@ -13,13 +13,13 @@ import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {UserDto} from "../../../openapi-generated/game";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {CreateGameDialogData} from "../create-game.component";
+import {CreateGameDialogData} from "../open-create-game.component";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
 import {ids} from 'src/app/ids';
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
-import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
+import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
 import {Game} from "../../game";
 
 @Component({
@@ -43,7 +43,7 @@ import {Game} from "../../game";
     AsyncPipe
   ],
   templateUrl: './create-game-dialog-content.component.html',
-  styleUrls: ['./create-game-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
+  styleUrls: ['./create-game-dialog-content.component.css', '../../base-dialog/base-open-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateGameDialogContentComponent extends BaseDialogContentComponent<

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {CreateGameComponent} from "../create-game/create-game.component";
+import {OpenCreateGameComponent} from "../create-game/open-create-game.component";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
@@ -14,19 +14,19 @@ import {Game} from "../game";
 import {Identifiable} from "../../common/identifiable";
 import {RenameUserComponent} from "../../user/rename-user/rename-user.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {JoinGameButtonComponent} from "../join-game-button/join-game-button.component";
+import {OpenJoinGameDialogComponent} from "../join-game-button/open-join-game-dialog.component";
 
 @Component({
   selector: 'app-game-list',
   standalone: true,
   imports: [
-    CreateGameComponent,
+    OpenCreateGameComponent,
     FormsModule,
     NgForOf,
     NgIf,
     ObjectAttributePipe,
     RouterLink,
-    JoinGameButtonComponent,
+    OpenJoinGameDialogComponent,
     GotoGameButtonComponent,
     StartGameButtonComponent,
     DeleteGameButtonComponent,
@@ -35,7 +35,7 @@ import {JoinGameButtonComponent} from "../join-game-button/join-game-button.comp
     AsyncPipe,
     NgClass,
     RenameUserComponent,
-    JoinGameButtonComponent,
+    OpenJoinGameDialogComponent,
   ],
   templateUrl: './game-list.component.html',
   styleUrl: './game-list.component.css',
