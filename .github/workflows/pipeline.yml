@@ -1,6 +1,11 @@
 name: CI/CD pipeline
 #run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+on:
+  push:
+    paths:
+      - 'java/backend/**'
+      - 'java/frontend-angular/**'
+      - 'java/workflows/**'
 
 jobs:
   Build:
