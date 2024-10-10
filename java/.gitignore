@@ -4,6 +4,7 @@ target/
 *.dtmp
 *.bkp
 e2e-tests/videos
+e2e-tests/screenshots
 **/.env
 **/creds
 ../../../.config/JetBrains/IntelliJIdea2024.2/scratches/test.html

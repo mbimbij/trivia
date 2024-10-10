@@ -7,6 +7,9 @@ prepare-frontend: generate-frontend-environment-files npm-install-frontend gener
 npm-install-frontend:
 	cd frontend-angular/ && npm install
 
+mvn-install:
+	./mvnw clean install -Dmaven.test.skip=true --no-transfer-progress  -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION)
+
 generate-openapi-from-backend:
 	./mvnw -pl backend -Dmaven.test.skip=true -Dserver.port=$(PORT_OPENAPI_MAVEN_GENERATION) verify
 
@@ -33,7 +36,7 @@ build-frontend-local-docker: generate-frontend-environment-files npm-install-fro
 	cd frontend-angular/ && ng build -c local-docker
 
 build-backend:
-	./mvnw -pl backend package -Dmaven.test.skip=true
+	./mvnw -pl backend package  -DskipTests -DskipITs
 	java -Djarmode=layertools -jar backend/target/*.jar extract --destination backend/target/extracted
 
 build-docker-local: build-frontend-local-docker build-backend
@@ -65,13 +68,13 @@ debug-backend-local-ide-embedded:
 -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$(PORT_LOCAL_IDE_EMBEDDED_DEBUG_BACKEND)"
 
 e2e-tests-local-ide:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-ide
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=local-ide -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
 
 e2e-tests-local-ide-embedded:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-ide-embedded
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=local-ide-embedded -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
 
 e2e-tests-local-docker:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=local-docker
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=local-docker -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/
 
 e2e-tests-prod:
-	./mvnw -pl e2e-tests test -Dtest="CucumberRunnerTest" -Dspring.profiles.include=prod
+	./mvnw -pl e2e-tests test -Dsurefire.includeJUnit5Engines=cucumber -Dspring.profiles.include=prod -Dcucumber.plugin=pretty -Dcucumber.features=src/test/resources/features/

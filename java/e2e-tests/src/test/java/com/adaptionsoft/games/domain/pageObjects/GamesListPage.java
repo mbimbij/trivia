@@ -64,11 +64,11 @@ public class GamesListPage extends PageWithStaticUrl {
         Collection<String> expectedMessages = getExpectedWebSocketMessages();
         log.info("Navigating to %s".formatted(url));
         page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
-            if(Objects.equals(backendWebsocketUrl,webSocket.url())){
+            if (Objects.equals(backendWebsocketUrl, webSocket.url())) {
                 webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
-                String text = webSocketFrame.text();
-                expectedMessages.removeIf(text::contains);
-                return expectedMessages.isEmpty();
+                    String text = webSocketFrame.text();
+                    expectedMessages.removeIf(text::contains);
+                    return expectedMessages.isEmpty();
                 }), () -> {
                     System.out.println(expectedMessages);
                 });
