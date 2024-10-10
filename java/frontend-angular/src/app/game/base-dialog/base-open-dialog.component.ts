@@ -18,16 +18,14 @@ export abstract class BaseOpenDialogComponent<
   T extends BaseDialogContentComponent<any, any>,
   U extends BaseDialogData
 > extends Identifiable {
-  protected htmlId: string
   protected data = {
     content: {} as U
   }
   protected defaultData!: U
-  readonly dialog!: MatDialog
 
-  protected constructor(dialog: MatDialog, @Inject(HTML_ID_TOKEN) htmlId: string) {
+  protected constructor(private readonly dialog: MatDialog,
+                        @Inject(HTML_ID_TOKEN) private readonly htmlId: string) {
     super()
-    this.dialog = dialog;
     this.htmlId = htmlId;
   }
 
