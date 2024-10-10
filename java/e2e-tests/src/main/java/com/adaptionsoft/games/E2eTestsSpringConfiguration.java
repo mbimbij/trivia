@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.file.Path;
-
 @ComponentScan
 @EnableConfigurationProperties(TestProperties.class)
 @Import(WebConfig.class)

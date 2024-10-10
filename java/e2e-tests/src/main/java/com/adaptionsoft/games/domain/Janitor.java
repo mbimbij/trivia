@@ -56,13 +56,13 @@ public class Janitor {
     @SneakyThrows
     public void setLoadedQuestionDeckForGame(int gameId) {
         Map<Category, Queue<Question>> loadedQuestionsDeck = new HashMap<>();
-        loadedQuestionsDeck.put(GEOGRAPHY, mapper.readValue(Paths.get("src/test/resources/questions-test/Geography.json").toFile(), new TypeReference<>() {
+        loadedQuestionsDeck.put(GEOGRAPHY, mapper.readValue(Paths.get("src/main/resources/questions-test/Geography.json").toFile(), new TypeReference<>() {
         }));
-        loadedQuestionsDeck.put(POP, mapper.readValue(Paths.get("src/test/resources/questions-test/Pop.json").toFile(), new TypeReference<>() {
+        loadedQuestionsDeck.put(POP, mapper.readValue(Paths.get("src/main/resources/questions-test/Pop.json").toFile(), new TypeReference<>() {
         }));
-        loadedQuestionsDeck.put(SPORTS, mapper.readValue(Paths.get("src/test/resources/questions-test/Sports.json").toFile(), new TypeReference<>() {
+        loadedQuestionsDeck.put(SPORTS, mapper.readValue(Paths.get("src/main/resources/questions-test/Sports.json").toFile(), new TypeReference<>() {
         }));
-        loadedQuestionsDeck.put(SCIENCE, mapper.readValue(Paths.get("src/test/resources/questions-test/Science.json").toFile(), new TypeReference<>() {
+        loadedQuestionsDeck.put(SCIENCE, mapper.readValue(Paths.get("src/main/resources/questions-test/Science.json").toFile(), new TypeReference<>() {
         }));
         restTemplate.put(backendUrlBase + "/testkit/games/{gameId}/questionDeck", loadedQuestionsDeck, gameId);
     }
