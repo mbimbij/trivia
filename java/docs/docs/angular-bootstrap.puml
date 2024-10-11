@@ -12,9 +12,10 @@ participant injector
 participant platformRef
 participant compileNgModuleFactory
 participant ngZone
+participant moduleFactory
 participant moduleRef
-'participant appRef
-'participant appComponent
+participant applicationRef
+participant appComponent
 
 main.ts -> angular ++: platformBrowserDynamic().bootstrapModule(AppModule)
 angular -> angular: resolve platformBrowserDynamic to createPlatformFactory

@@ -3,9 +3,28 @@
 
 autonumber
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+skinparam Sequence {
+ GroupBorderColor #3E730B
+ GroupHeaderFontColor #3E730B
+}
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+participant user
+participant openButton
+participant dialog
+participant matDialog
+participant matDialogRef
+participant data
+participant defaultData
+
+user -> openButton ++: click
+openButton -> matDialog ++: open(<font color=red>data</font>, <font color=red>htmlId</font>)
+matDialog -> matDialogRef **:
+return matDialogRef
+openButton -> matDialogRef: set testId with <font color=red>htmlId</font>
+openButton -> matDialogRef: set <font color=red>defaultData</font>
+group doAfterOpenDialog()
+openButton -> matDialogRef: set <font color=red>userId</font>
+end
+user -> openButton: oj
+
 @enduml
