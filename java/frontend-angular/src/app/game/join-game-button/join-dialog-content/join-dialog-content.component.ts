@@ -58,7 +58,7 @@ export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinD
     super(matDialogRef, data)
   }
 
-  protected override doCallBackendFunction(): Observable<any> {
+  protected override doCallBackend(): Observable<any> {
     let creator = {name: this.data.content.playerName, id: this.userId} as UserDto
     return this.gameService.join(this.gameId, creator);
   }

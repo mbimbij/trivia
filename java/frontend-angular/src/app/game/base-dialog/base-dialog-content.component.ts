@@ -22,11 +22,11 @@ export abstract class BaseDialogContentComponent<
     super()
   }
 
-  private handleBackendSuccess = (response: any) => {
+  private handleSuccess = (response: any) => {
     this.resetData()
     this.backendErrorMessage$.next(null)
     this.matDialogRef.close()
-    this.doAdditionalActionsOnBackendSuccess(response)
+    this.doAdditionalActionsOnSuccess(response)
   }
 
   protected resetData() {
@@ -35,17 +35,17 @@ export abstract class BaseDialogContentComponent<
   }
 
   protected callBackendOnSubmit() {
-    this.doCallBackendFunction().subscribe({
-      next: this.handleBackendSuccess,
-      error: this.handleBackendError
+    this.doCallBackend().subscribe({
+      next: this.handleSuccess,
+      error: this.handleError
     })
   }
 
-  protected abstract doCallBackendFunction(): Observable<any>;
+  protected abstract doCallBackend(): Observable<any>;
 
-  protected doAdditionalActionsOnBackendSuccess(response: any) {}
+  protected doAdditionalActionsOnSuccess(response: any) {}
 
-  private handleBackendError = (err: any) => {
+  private handleError = (err: any) => {
     this.backendErrorMessage$.next(err.message)
   }
 

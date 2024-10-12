@@ -37,10 +37,6 @@ export class OpenCreateGameComponent extends BaseOpenDialogComponent<CreateGameD
   }
 
   protected override doAdditionalResetOnChanges() {
-    this.resetCreatorName()
-  }
-
-  private resetCreatorName() {
     this.data.content.creatorName = this.defaultData.creatorName
   }
 

@@ -58,11 +58,11 @@ export class CreateGameDialogContentComponent extends BaseDialogContentComponent
     super(matDialogRef, data)
   }
 
-  protected override doCallBackendFunction(): Observable<any> {
+  protected override doCallBackend(): Observable<any> {
     let creator = {name: this.data.content.creatorName, id: this.userId} as UserDto
     return this.gameService.create(this.data.content.gameName, creator)
   }
-  protected override doAdditionalActionsOnBackendSuccess(response: any) {
+  protected override doAdditionalActionsOnSuccess(response: any) {
     let newGame = response as Game
     console.log(`created game: ${newGame.id}`)
   }
