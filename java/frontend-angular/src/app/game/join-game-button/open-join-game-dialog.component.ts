@@ -2,9 +2,10 @@ import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular
 import {MatButton} from "@angular/material/button";
 import {ids} from "../../ids";
 import {User} from "../../user/user";
-import {MatDialog} from "@angular/material/dialog";
-import {BaseDialogComponent, BaseDialogData} from "../base-dialog/base-dialog.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {BaseOpenDialogComponent} from "../base-dialog/base-open-dialog.component";
 import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-content.component";
+import {JoinDialogData} from "./join-dialog.data";
 
 @Component({
   selector: 'app-join-game-button',
@@ -28,10 +29,10 @@ import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-cont
       <span>{{ 'cannot join' }}</span>
     }
   `,
-  styleUrl: './join-game-button.component.css',
+  styleUrl: './open-join-game-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JoinGameButtonComponent extends BaseDialogComponent<JoinDialogContentComponent, JoinDialogData> {
+export class OpenJoinGameDialogComponent extends BaseOpenDialogComponent<JoinDialogContentComponent, JoinDialogData> {
   protected readonly ids = ids;
 
   @Input() user!: User
@@ -42,17 +43,21 @@ export class JoinGameButtonComponent extends BaseDialogComponent<JoinDialogConte
   @Input() isPlayerInGame!: boolean;
 
   constructor(dialog: MatDialog) {
-    super(dialog,ids.joinGame.DIALOG);
+    super(dialog, ids.joinGame.DIALOG);
   }
 
   protected override changesRequireReset(changes: SimpleChanges) {
     return !!changes['user'];
   }
 
-  protected override doAfterOpenDialog() {
-    this.dialogRef.componentRef?.setInput('userId', this.user.id)
-    this.dialogRef.componentRef?.setInput('gameId', this.gameId)
-    this.dialogRef.componentRef?.setInput('playersNames', this.playersNames)
+  protected override doAdditionalResetOnChanges() {
+    this.resetData()
+  }
+
+  protected override doAfterOpenDialog(dialogRef: MatDialogRef<JoinDialogContentComponent, any>): void {
+    dialogRef.componentRef?.setInput('userId', this.user.id)
+    dialogRef.componentRef?.setInput('gameId', this.gameId)
+    dialogRef.componentRef?.setInput('playersNames', this.playersNames)
   }
 
   protected override resetDefaultData(): void {
@@ -62,6 +67,3 @@ export class JoinGameButtonComponent extends BaseDialogComponent<JoinDialogConte
   protected readonly JoinDialogContentComponent = JoinDialogContentComponent;
 }
 
-export interface JoinDialogData extends BaseDialogData {
-  playerName: string;
-}

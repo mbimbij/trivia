@@ -19,8 +19,9 @@ import {NotBlankValidatorDirective} from "../../../common/validation/not-blank-v
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../../common/validation/validation-error-codes";
-import {JoinDialogData} from "../join-game-button.component";
-import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/base-dialog-content.component";
+import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
+import { Observable } from 'rxjs';
+import {JoinDialogData} from "../join-dialog.data";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -44,23 +45,22 @@ import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content/
     AsyncPipe
   ],
   templateUrl: './join-dialog-content.component.html',
-  styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-dialog.component.css'],
+  styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-open-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinDialogContentComponent, JoinDialogData> {
   @Input() userId!: string
   @Input() gameId!: number
   @Input() playersNames!: string[]
-
   constructor(protected override matDialogRef: MatDialogRef<JoinDialogContentComponent>,
               private gameService: GameServiceAbstract,
               @Inject(MAT_DIALOG_DATA) public override data: { content: JoinDialogData }) {
     super(matDialogRef, data)
   }
 
-  protected joinGame() {
+  protected override doCallBackend(): Observable<any> {
     let creator = {name: this.data.content.playerName, id: this.userId} as UserDto
-    this.gameService.join(this.gameId, creator).subscribe(this.handleBackendResponse)
+    return this.gameService.join(this.gameId, creator);
   }
 
   protected readonly ids = ids;

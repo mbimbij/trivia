@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+'skinparam Sequence {
+' GroupBorderColor #3E730B
+' GroupHeaderFontColor #3E730B
+'}
+
+participant user
+participant openCreateGameButton
+participant matDialog
+participant matDialogRef
+participant createGameDialog
+
+group#red #red 1. user clicks button
+user -> openCreateGameButton ++: click
+end
+
+group#green #green 2. open createGameDialog
+openCreateGameButton -> matDialog ++: open(<font color=red>data</font>, <font color=red>htmlId</font>)
+matDialog -> matDialogRef **: create
+matDialogRef -> createGameDialog **: create
+return matDialogRef
+openCreateGameButton -> document: set createGameDialog testId with <font color=red>htmlId</font>
+end
+
+group#lightBlue #lightBlue set defaultData
+openCreateGameButton -> createGameDialog: set <font color=red>defaultData</font>
+end
+group#yellow #yellow doAfterOpenDialog()
+openCreateGameButton -> createGameDialog: set <font color=red>userId</font>
+end
+
+@enduml

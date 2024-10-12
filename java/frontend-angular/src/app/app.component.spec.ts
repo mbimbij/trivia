@@ -3,7 +3,7 @@ import {AppComponent} from './app.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {GameServiceMock} from "./game/game-service-mock";
 import {GameServiceAbstract} from "./services/game-service-abstract";
-import {CreateGameComponent} from "./game/create-game/create-game.component";
+import {OpenCreateGameComponent} from "./game/create-game/open-create-game.component";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {NavbarComponent} from "./common/navbar/navbar.component";
@@ -19,7 +19,7 @@ describe('AppComponent', () => {
       {provide: AuthenticationServiceAbstract, useClass: AuthenticationServiceMock},
     ],
     declarations: [AppComponent],
-    imports: [ HttpClientTestingModule, CreateGameComponent, FormsModule, RouterModule, NavbarComponent ]
+    imports: [ HttpClientTestingModule, OpenCreateGameComponent, FormsModule, RouterModule, NavbarComponent ]
   }));
 
   it('should create the app', () => {

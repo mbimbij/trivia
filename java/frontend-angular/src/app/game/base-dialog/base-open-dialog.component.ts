@@ -2,7 +2,8 @@ import {Component, Inject, InjectionToken, SimpleChanges} from '@angular/core';
 import {Identifiable} from "../../common/identifiable";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ComponentType} from "@angular/cdk/overlay";
-import {BaseDialogContentComponent} from "./base-dialog-content/base-dialog-content.component";
+import {BaseDialogContentComponent} from "./base-dialog-content.component";
+import {BaseDialogData} from "./base-dialog.data";
 
 export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dialog');
 
@@ -11,9 +12,9 @@ export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dial
   standalone: true,
   imports: [],
   template: `<p>base-dialog works!</p>`,
-  styleUrl: './base-dialog.component.css'
+  styleUrl: './base-open-dialog.component.css'
 })
-export abstract class BaseDialogComponent<
+export abstract class BaseOpenDialogComponent<
   T extends BaseDialogContentComponent<any, any>,
   U extends BaseDialogData
 > extends Identifiable {
@@ -21,36 +22,26 @@ export abstract class BaseDialogComponent<
     content: {} as U
   }
   protected defaultData!: U
-  readonly dialog!: MatDialog
-  protected htmlId: string
 
-  protected dialogRef!: MatDialogRef<T>
-
-  protected constructor(dialog: MatDialog, @Inject(HTML_ID_TOKEN) htmlId: string) {
+  protected constructor(private readonly dialog: MatDialog,
+                        @Inject(HTML_ID_TOKEN) private readonly htmlId: string) {
     super()
-    this.dialog = dialog;
-    this.htmlId = htmlId;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.changesRequireReset(changes)) {
-      this.resetDataOnChanges();
+      this.resetDefaultData();
+      this.doAdditionalResetOnChanges();
     }
   }
-
-  protected resetDataOnChanges() {
-    this.resetAllData();
-  }
-
   protected abstract changesRequireReset(changes: SimpleChanges): boolean
 
   ngOnInit(): void {
-    this.resetAllData()
-  }
-
-  private resetAllData() {
     this.resetDefaultData();
     this.resetData();
+  }
+
+  protected doAdditionalResetOnChanges() {
   }
 
   protected abstract resetDefaultData(): void;
@@ -60,20 +51,18 @@ export abstract class BaseDialogComponent<
   }
 
   protected openDialog(componentType: ComponentType<T>) {
-    this.dialogRef = this.dialog.open<T>(
+    let dialogRef = this.dialog.open<T>(
       componentType,
       {data: this.data, id: this.htmlId, ariaLabelledBy: this.htmlId}
     );
-    this.dialogRef.afterOpened().subscribe(() => {
+    dialogRef.afterOpened().subscribe(() => {
       document.querySelector("mat-dialog-container")
         ?.setAttribute("data-testid", this.htmlId)
     })
-    this.dialogRef.componentRef?.setInput('defaultData', this.defaultData)
-    this.doAfterOpenDialog();
+    dialogRef.componentRef?.setInput('defaultData', this.defaultData)
+    this.doAfterOpenDialog(dialogRef);
   }
 
-  protected abstract doAfterOpenDialog(): void;
+  protected abstract doAfterOpenDialog(dialogRef: MatDialogRef<T, any>): void;
 }
 
-export interface BaseDialogData {
-}

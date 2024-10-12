@@ -58,7 +58,7 @@
     [id]="ids.createGame.VALIDATE"
     [attr.data-testid]="ids.createGame.VALIDATE"
     mat-raised-button color="primary"
-    [disabled]="(!!gameName.errors) || (!!creatorName.errors) "
-    mat-button (click)="createGame()">Create
+    [disabled]="(!!gameName.errors) || (!!creatorName.errors)"
+    mat-button (click)="callBackendOnSubmit()">Create
   </button>
 </mat-dialog-actions>

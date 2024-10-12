@@ -1,8 +1,8 @@
 import {Component, Inject, Input} from '@angular/core';
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../common/identifiable";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {BaseDialogData} from "../base-dialog.component";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+import {BaseDialogData} from "./base-dialog.data";
 
 @Component({
   selector: 'app-base-dialog-content',
@@ -22,11 +22,11 @@ export abstract class BaseDialogContentComponent<
     super()
   }
 
-  private handleBackendSuccess = (response: any) => {
+  private handleSuccess = (response: any) => {
     this.resetData()
     this.backendErrorMessage$.next(null)
     this.matDialogRef.close()
-    this.doAdditionalActionsOnBackendSuccess(response)
+    this.doAdditionalActionsOnSuccess(response)
   }
 
   protected resetData() {
@@ -34,14 +34,19 @@ export abstract class BaseDialogContentComponent<
     this.backendErrorMessage$.next(null)
   }
 
-  protected doAdditionalActionsOnBackendSuccess(response: any) {}
+  protected callBackendOnSubmit() {
+    this.doCallBackend().subscribe({
+      next: this.handleSuccess,
+      error: this.handleError
+    })
+  }
 
-  private handleBackendError = (err: any) => {
+  protected abstract doCallBackend(): Observable<any>;
+
+  protected doAdditionalActionsOnSuccess(response: any) {}
+
+  private handleError = (err: any) => {
     this.backendErrorMessage$.next(err.message)
   }
 
-  protected handleBackendResponse = {
-    next: this.handleBackendSuccess,
-    error: this.handleBackendError
-  }
 }

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="test-compile e2e-tests" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="compile e2e-tests" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -11,8 +11,7 @@
           </option>
           <option name="goals">
             <list>
-              <option value="compiler:testCompile" />
-              <option value="resources:testResources" />
+              <option value="compile" />
             </list>
           </option>
           <option name="multimoduleDir" />
