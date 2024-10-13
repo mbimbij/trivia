@@ -1,11 +1,12 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.WebSocket;
+import com.microsoft.playwright.WebSocketFrame;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -55,28 +56,39 @@ public class GamesListPage extends PageWithStaticUrl {
         return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button")).map(ElementHandle::isEnabled).orElse(null);
     }
 
+    @SneakyThrows
     @Override
     public void navigateTo() {
         executeAndWaitForWebSocketMessages(() -> page.navigate(url));
+        Thread.sleep(250);
     }
 
     public void executeAndWaitForWebSocketMessages(Runnable runnable) {
         Collection<String> expectedMessages = getExpectedWebSocketMessages();
         log.info("Navigating to %s".formatted(url));
         page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
-            if (Objects.equals(backendWebsocketUrl, webSocket.url())) {
-                webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
-                    String text = webSocketFrame.text();
-                    expectedMessages.removeIf(text::contains);
-                    return expectedMessages.isEmpty();
-                }), () -> {
-                    System.out.println(expectedMessages);
-                });
-                return true;
-            } else {
-                return false;
-            }
-        }), runnable);
+                    // other websocket communications occur
+                    if (isBackendWebsocket(webSocket)) {
+                        waitUntilExpectedWebsocketFramesSent(webSocket, expectedMessages);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }),
+                runnable);
+    }
+
+    private boolean isBackendWebsocket(WebSocket webSocket) {
+        return Objects.equals(backendWebsocketUrl, webSocket.url());
+    }
+
+    private static void waitUntilExpectedWebsocketFramesSent(WebSocket webSocket, Collection<String> expectedMessages) {
+        webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
+            String text = webSocketFrame.text();
+            expectedMessages.removeIf(text::contains);
+            return expectedMessages.isEmpty();
+        }), () -> {
+        });
     }
 
     private Collection<String> getExpectedWebSocketMessages() {
