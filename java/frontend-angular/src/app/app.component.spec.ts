@@ -6,7 +6,7 @@ import {GameServiceAbstract} from "./services/game-service-abstract";
 import {OpenCreateGameComponent} from "./game/create-game/open-create-game.component";
 import {FormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
-import {NavbarComponent} from "./common/navbar/navbar.component";
+import {NavbarComponent} from "./shared/navbar/navbar.component";
 import {UserServiceAbstract} from "./services/user-service.abstract";
 import {UserServiceMock} from "./adapters/user/user-service.mock";
 import {AuthenticationServiceAbstract, AuthenticationServiceMock} from "./services/authentication-service-abstract";

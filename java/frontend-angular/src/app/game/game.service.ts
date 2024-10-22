@@ -4,7 +4,7 @@ import {BehaviorSubject, map, Observable, of, ReplaySubject} from "rxjs";
 import {IMessage} from "@stomp/rx-stomp";
 import {RxStompService} from "../adapters/websockets/rx-stomp.service";
 import {User} from "../user/user";
-import {gameDtoToGame, userToUserDto} from "../common/helpers";
+import {gameDtoToGame, userToUserDto} from "../shared/helpers";
 import {Game} from "./game";
 import {
   AnswerCode,

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Identifiable} from "../common/identifiable";
+import {Identifiable} from "../shared/identifiable";
 
 @Component({
   selector: 'app-health',

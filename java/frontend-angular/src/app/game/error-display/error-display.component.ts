@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {Subject} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   selector: 'app-error-display',

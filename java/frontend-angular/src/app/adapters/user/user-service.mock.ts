@@ -1,7 +1,7 @@
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Observable, of} from "rxjs";
 import {User} from "src/app/user/user";
-import {getMockUser1} from "../../common/test-helpers";
+import {getMockUser1} from "../../shared/test-helpers";
 
 export class UserServiceMock extends UserServiceAbstract {
   user: User = getMockUser1();

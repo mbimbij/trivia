@@ -22,7 +22,7 @@ import {AuthenticationServiceAbstract} from "./services/authentication-service-a
 import {FirebaseAuthenticationService} from "./adapters/authentication/firebase-authentication.service";
 import {FirebaseUserService} from "./adapters/user/firebase-user.service";
 import {UserServiceAbstract} from "./services/user-service.abstract";
-import {NavbarComponent} from "./common/navbar/navbar.component";
+import {NavbarComponent} from "./shared/navbar/navbar.component";
 import {ApiModule as GameApiModule, BASE_PATH as GAME_API_BASE_PATH} from "./openapi-generated/game";
 import {ApiModule as GameLogsApiModule, BASE_PATH as GAMELOGS_API_BASE_PATH} from "./openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "./services/gamelogs-service-abstract";

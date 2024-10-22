@@ -1,7 +1,7 @@
 import {Directive, Input} from '@angular/core';
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from "@angular/forms";
-import {ValidationErrorCodes} from "../../common/validation/validation-error-codes";
+import {ValidationErrorCodes} from "../../shared/validation/validation-error-codes";
 
 @Directive({
   selector: 'input[notDuplicate]',

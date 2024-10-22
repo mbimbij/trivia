@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 import {AsyncPipe, NgIf} from "@angular/common";
 
 @Component({

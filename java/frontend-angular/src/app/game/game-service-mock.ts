@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {GameServiceAbstract} from "../services/game-service-abstract";
 import {BehaviorSubject, Observable, of} from "rxjs";
-import {getMockGame1, getMockGame2} from "../common/test-helpers";
+import {getMockGame1, getMockGame2} from "../shared/test-helpers";
 import {User} from "../user/user";
 import {Game} from "./game";
 import {AnswerCode, AnswerDto, QuestionDto, UserDto} from "../openapi-generated/game";

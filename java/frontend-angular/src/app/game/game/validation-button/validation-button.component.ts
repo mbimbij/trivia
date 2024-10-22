@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-validation-button',

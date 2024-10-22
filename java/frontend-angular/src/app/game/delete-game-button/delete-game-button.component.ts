@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Subscription} from "rxjs";
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 import {AsyncPipe} from "@angular/common";
 
 @Component({

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DrawQuestionComponent} from "../draw-question/draw-question.component";
 import {NgIf} from "@angular/common";
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-roll-dice-results-outside-penalty-box',

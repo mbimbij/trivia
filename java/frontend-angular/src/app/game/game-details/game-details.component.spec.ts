@@ -4,7 +4,7 @@ import {GameDetailsComponent} from './game-details.component';
 import {ActivatedRoute} from "@angular/router";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {GameServiceMock} from "../game-service-mock";
-import {MockActivatedRoute} from "../../common/test-helpers";
+import {MockActivatedRoute} from "../../shared/test-helpers";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {HttpClientTestingModule} from "@angular/common/http/testing";

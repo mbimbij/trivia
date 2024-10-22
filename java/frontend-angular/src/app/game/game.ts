@@ -1,5 +1,5 @@
 import {Player} from "../user/player";
-import {comparePlayers, compareUserAndPlayer} from "../common/helpers";
+import {comparePlayers, compareUserAndPlayer} from "../shared/helpers";
 import {AnswerDto, QuestionDto, State} from "../openapi-generated/game";
 import {User} from "../user/user";
 

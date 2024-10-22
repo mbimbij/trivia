@@ -1,5 +1,5 @@
 import {Component, Inject, Input} from '@angular/core';
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {BehaviorSubject, Observable} from "rxjs";
 import {BaseDialogData} from "./base-dialog.data";

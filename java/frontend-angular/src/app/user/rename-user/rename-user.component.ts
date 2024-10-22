@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Identifiable} from "../../common/identifiable";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {HelloDirectiveDirective} from "../../hello-directive.directive";
 import {User} from "../user";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   selector: 'app-rename-user',

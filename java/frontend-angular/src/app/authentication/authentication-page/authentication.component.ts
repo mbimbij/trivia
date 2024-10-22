@@ -6,11 +6,11 @@ import {
 } from "firebaseui-angular";
 import {Router} from "@angular/router";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {generateRandomString} from "../../common/helpers";
+import {generateRandomString} from "../../shared/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   selector: 'app-authentication',

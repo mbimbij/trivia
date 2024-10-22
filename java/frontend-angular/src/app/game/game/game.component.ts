@@ -1,7 +1,7 @@
 import {AfterViewChecked, ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {AsyncPipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {userToPlayer} from "../../common/helpers";
+import {userToPlayer} from "../../shared/helpers";
 import {Player} from "../../user/player";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {combineLatest, Observable, of, Subject, Subscription} from "rxjs";
@@ -24,11 +24,11 @@ import {
 import {
   AnswerQuestionResultsWrapperComponent
 } from "./answer-question-results-wrapper/answer-question-results-wrapper.component";
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 import {GameLog} from "../../openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
 import {MessageService} from "../../services/message.service";
-import {GoBackButtonComponent} from "../../common/go-back-button/go-back-button.component";
+import {GoBackButtonComponent} from "../../shared/go-back-button/go-back-button.component";
 
 @Component({
   selector: 'app-game',

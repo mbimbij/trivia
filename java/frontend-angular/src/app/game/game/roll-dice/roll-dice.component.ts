@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/cor
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Subscription} from "rxjs";
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-roll-dice',
