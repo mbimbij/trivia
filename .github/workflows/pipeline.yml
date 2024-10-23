@@ -53,6 +53,7 @@ jobs:
       - name: Build, tag, and push Docker image
         working-directory: java
         run: |
+          echo "docker image: ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}"
           artifactName=$(echo '${project.artifactId}-${project.version}.jar' | mvn -pl backend -q -DforceStdout help:evaluate)
           java -Djarmode=layertools -jar backend/target/$artifactName extract --destination backend/target/extracted
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} . --file pipeline.Dockerfile
