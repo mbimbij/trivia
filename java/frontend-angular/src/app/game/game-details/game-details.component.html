@@ -1,7 +1,7 @@
 <app-go-back-button></app-go-back-button>
 <ng-container *ngIf="(userService.getUser() | async) as user">
   <ng-container *ngIf="!(gameLoadingError$ | async)">
-    <table style="margin-top: 20px" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table style="margin-top: 20px" mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Id</th>
         <td mat-cell [class]="'id'" *matCellDef="let game">{{ game.id }}</td>
