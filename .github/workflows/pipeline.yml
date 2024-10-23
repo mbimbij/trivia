@@ -1,11 +1,12 @@
 name: CI/CD pipeline
 #run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'java/backend/**'
       - 'java/frontend-angular/**'
-      - 'java/workflows/**'
+      - 'java/.github/workflows/**'
 
 jobs:
   Build:
@@ -15,16 +16,6 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}' # Replace with the name of your GitHub Actions secret
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          version: '>= 480.0.0'
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -66,6 +57,19 @@ jobs:
           java -Djarmode=layertools -jar backend/target/$artifactName extract --destination backend/target/extracted
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} . --file pipeline.Dockerfile
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: Build
+    if: github.ref == 'refs/heads/main-web-version'
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}' # Replace with the name of your GitHub Actions secret
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 480.0.0'
       - name: Deploy new revision
         run: |
           gcloud run deploy trivia --image=${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} --region=europe-west9
