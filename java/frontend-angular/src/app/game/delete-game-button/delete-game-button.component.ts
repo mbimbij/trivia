@@ -3,17 +3,22 @@ import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Subscription} from "rxjs";
 import {Identifiable} from "../../shared/identifiable";
 import {AsyncPipe} from "@angular/common";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-delete-game-button',
   standalone: true,
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    MatButton
   ],
   template: `
-    <button [attr.data-testid]="'delete-button-'+gameId"
-            [disabled]="!canDelete"
-            (click)="deleteGame()">
+    <button
+      mat-stroked-button
+      class="rounded"
+      [attr.data-testid]="'delete-button-'+gameId"
+      [disabled]="!canDelete"
+      (click)="deleteGame()">
       delete
     </button>
     {{ checkRender() }}

@@ -16,9 +16,10 @@ import {JoinDialogData} from "./join-dialog.data";
   template: `
     @if (canJoin) {
       <button
-        [attr.data-testid]="ids.joinGame.openDialogButtonForGameId(gameId)"
+        mat-stroked-button
         class="rounded"
-        mat-stroked-button (click)="openDialog(JoinDialogContentComponent)"
+        [attr.data-testid]="ids.joinGame.openDialogButtonForGameId(gameId)"
+        (click)="openDialog(JoinDialogContentComponent)"
       >join
       </button>
     } @else if (isGameStarted) {

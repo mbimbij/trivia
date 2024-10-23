@@ -3,18 +3,23 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Subscription} from "rxjs";
 import {Identifiable} from "../../shared/identifiable";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   standalone: true,
   selector: 'app-start-game-button',
   imports: [
     NgIf,
-    AsyncPipe
+    AsyncPipe,
+    MatButton
   ],
   template: `
-    <button [attr.data-testid]="'start-button-'+gameId"
-            [disabled]="!canStart"
-            (click)="startGame()">
+    <button
+      mat-stroked-button
+      class="rounded"
+      [attr.data-testid]="'start-button-'+gameId"
+      [disabled]="!canStart"
+      (click)="startGame()">
       start
     </button>
     {{ checkRender() }}
