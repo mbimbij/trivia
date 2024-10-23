@@ -6,7 +6,7 @@ on:
     paths:
       - 'java/backend/**'
       - 'java/frontend-angular/**'
-      - 'java/.github/workflows/**'
+      - '.github/workflows/**'
 
 jobs:
   Build:
