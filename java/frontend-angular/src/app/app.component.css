@@ -5,5 +5,7 @@ table, th, td {
 
 #main-content{
   display: flex;
+  overflow: auto;
   justify-content: center;
+  padding-bottom: 32px;
 }
