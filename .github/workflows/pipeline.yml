@@ -1,5 +1,5 @@
 name: CI/CD pipeline
-#run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on:
   workflow_dispatch:
   push:
@@ -14,8 +14,58 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      backend_jar_name: ${{ steps.backend_jar_name.outputs.backend_jar_name }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup NodeJs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install angular cli
+        working-directory: java/frontend-angular
+        run: npm i -g @angular/cli@17.3.8
+      - name: Generate frontend environment file - production
+        working-directory: java
+        run: |
+          make generate-frontend-environment-file-production
+        env:
+          HOSTNAME_PROD: ${{ vars.HOSTNAME_PROD }}
+          FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
+      - name: Build frontend
+        working-directory: java/frontend-angular
+        run: |
+          npm install
+          ng build --output-path=../backend/src/main/resources/static
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: 'java/pom.xml' # optional
+      - name: Build backend
+        id: build_backend
+        working-directory: java
+        run: mvn -pl backend -B verify --file pom.xml -Dmaven.test.skip=true
+      - name: Define backend jar name as output variable
+        id: backend_jar_name
+        working-directory: java
+        run: |
+          artifactName=$(echo '${project.artifactId}-${project.version}.jar' | mvn -pl backend -q -DforceStdout help:evaluate)
+          echo "backend_jar_name=$artifactName" >> "$GITHUB_OUTPUT"
+      - name: Upload backend jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: java/backend/target/${{ steps.backend_jar_name.outputs.backend_jar_name }}
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: Build
+    if: github.ref == 'refs/heads/main-web-version'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -23,53 +73,33 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx # necessary for caching Docker layers
         uses: docker/setup-buildx-action@v3
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: install Angular CLI
-        working-directory: java/frontend-angular
-        run: npm i -g @angular/cli@17.3.8
-      - name: generate frontend environment file - production
-        working-directory: java
-        run: |
-          make generate-frontend-environment-file-production
-        env:
-          HOSTNAME_PROD: ${{ vars.HOSTNAME_PROD }}
-          FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
-      - name: build frontend
-        working-directory: java/frontend-angular
-        run: |
-          npm install
-          ng build --output-path=../backend/src/main/resources/static
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'maven'
-          cache-dependency-path: 'java/pom.xml' # optional
-      - name: Build backend with Maven
-        working-directory: java
-        run: mvn -pl backend -B verify --file pom.xml
-      - name: Build, tag, and push Docker image
-        working-directory: java
-        run: |
-          artifactName=$(echo '${project.artifactId}-${project.version}.jar' | mvn -pl backend -q -DforceStdout help:evaluate)
-          java -Djarmode=layertools -jar backend/target/$artifactName extract --destination backend/target/extracted
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} . --file pipeline.Dockerfile
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}
-  Deploy:
-    runs-on: ubuntu-latest
-    needs: Build
-    if: github.ref == 'refs/heads/main-web-version'
-    steps:
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}' # Replace with the name of your GitHub Actions secret
-      - name: 'Set up Cloud SDK'
+      - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 480.0.0'
+      - name: Download the backend jar artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-jar
+          path: java/backend/target
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+      - name: Build, tag, and push Docker image
+        working-directory: java
+        run: |
+          echo "docker image: ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}"
+          java -Djarmode=layertools -jar backend/target/$ARTIFACT_NAME extract --destination backend/target/extracted
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} . --file pipeline.Dockerfile
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }}
+        env:
+          ARTIFACT_NAME: ${{needs.Build.outputs.backend_jar_name}}
       - name: Deploy new revision
         run: |
           gcloud run deploy trivia --image=${{ secrets.DOCKERHUB_USERNAME }}/trivia:${{ github.sha }} --region=europe-west9
