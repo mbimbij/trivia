@@ -21,7 +21,6 @@
     </extension>
     <method v="2">
       <option name="Make" enabled="true" />
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="compile e2e-tests" run_configuration_type="MavenRunConfiguration" />
     </method>
   </configuration>
 </component>
