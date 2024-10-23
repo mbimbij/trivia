@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../../shared/identifiable";
 import {State} from "../../../openapi-generated/game";
 import {MessageService} from "../../../services/message.service";
 

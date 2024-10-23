@@ -1,46 +1,65 @@
 <app-go-back-button></app-go-back-button>
-<ng-container *ngIf="(game$ | async) as game; else loadingOrError">
-  <ng-container *ngIf="(userService.getUser() | async) as user">
+<ng-container *ngIf="(userService.getUser() | async) as user">
+  <ng-container *ngIf="!(gameLoadingError$ | async)">
+    <table style="margin-top: 20px" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <td mat-cell [class]="'id'" *matCellDef="let game">{{ game.id }}</td>
+      </ng-container>
 
-    <table>
-      <!--  TODO factoriser cette table avec celle de game-list en un seul composant-->
-      <tr>
-        <th>id</th>
-        <th>game</th>
-        <th>creator</th>
-        <th>players</th>
-        <th>status</th>
-        <th>join</th>
-        <th>start</th>
-        <th>go to</th>
-      </tr>
-      <tr [ngClass]="'game-row'">
-        <td class="id">{{ game.id }}</td>
-        <td class="name">{{ game.name }}</td>
-        <td class="creator-name">{{ game.creator.name }}</td>
-        <td class="players-names">{{ game.players | objectAttribute: 'name' }}</td>
-        <td class="state">{{ game.state }}</td>
-        <td class="join">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell [class]="'name'" *matCellDef="let game">
+          {{ game.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="creator">
+        <th mat-header-cell *matHeaderCellDef>Creator</th>
+        <td mat-cell [class]="'creator-name'" *matCellDef="let game">{{ game.creator.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="players">
+        <th mat-header-cell *matHeaderCellDef>Players</th>
+        <td mat-cell [class]="'players-names'" *matCellDef="let game">{{ game.players | objectAttribute: 'name' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>State</th>
+        <td mat-cell [class]="'state'" *matCellDef="let game">{{ game.state }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="join">
+        <th mat-header-cell *matHeaderCellDef>Join</th>
+        <td mat-cell [class]="'join'" *matCellDef="let game">
           <app-join-game-button [user]="user"
-                                  [gameId]="game.id"
-                                  [playersNames]="game.getPlayersNames()"
-                                  [canJoin]="game.canJoin(user)"
-                                  [isPlayerInGame]="game.isPlayer(user)"
-                                  [isGameStarted]="game.isStarted()"
+                                [gameId]="game.id"
+                                [playersNames]="game.getPlayersNames()"
+                                [canJoin]="game.canJoin(user)"
+                                [isPlayerInGame]="game.isPlayer(user)"
+                                [isGameStarted]="game.isStarted()"
           />
         </td>
-        <td class="start">
+      </ng-container>
+
+      <ng-container matColumnDef="start">
+        <th mat-header-cell *matHeaderCellDef>Start</th>
+        <td mat-cell [class]="'start'" *matCellDef="let game">
           <app-start-game-button [gameId]="game.id" [userId]="user.id" [canStart]="game.canStart(user)"/>
         </td>
-        <td class="goto">
-          <app-goto-game-button [gameId]="gameId" [userId]="user.id" [canGoto]="game.canGoto(user)"/>
+      </ng-container>
+
+      <ng-container matColumnDef="goto">
+        <th mat-header-cell *matHeaderCellDef>Goto</th>
+        <td mat-cell [class]="'goto'" *matCellDef="let game">
+          <app-goto-game-button [gameId]="game.id" [userId]="user.id" [canGoto]="game.canGoto(user)"/>
         </td>
-      </tr>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row [class]="'game-row'" *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </ng-container>
 </ng-container>
 
-<ng-template #loadingOrError>
-  <app-error-display [gameId]="gameId" [gameLoadingError$]="gameLoadingError$"></app-error-display>
-</ng-template>
-{{ checkRender() }}
+<app-error-display [gameId]="gameId" [gameLoadingError$]="gameLoadingError$"/>

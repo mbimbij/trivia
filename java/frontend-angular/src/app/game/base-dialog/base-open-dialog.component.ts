@@ -1,5 +1,5 @@
 import {Component, Inject, InjectionToken, SimpleChanges} from '@angular/core';
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ComponentType} from "@angular/cdk/overlay";
 import {BaseDialogContentComponent} from "./base-dialog-content.component";

@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy,} from '@angular/co
 import {AsyncPipe, NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Subscription} from "rxjs";
-import {Identifiable} from "../../common/identifiable";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   standalone: true,

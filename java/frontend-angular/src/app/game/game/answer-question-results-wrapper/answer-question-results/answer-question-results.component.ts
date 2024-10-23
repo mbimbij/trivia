@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ValidationButtonComponent} from "../../validation-button/validation-button.component";
 import {NgIf} from "@angular/common";
-import {Identifiable} from "../../../../common/identifiable";
+import {Identifiable} from "../../../../shared/identifiable";
 
 @Component({
   selector: 'app-answer-question-results',

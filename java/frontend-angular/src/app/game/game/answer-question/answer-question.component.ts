@@ -5,7 +5,7 @@ import {ValidationButtonComponent} from "../validation-button/validation-button.
 import {
   AnswerQuestionResultsComponent
 } from "../answer-question-results-wrapper/answer-question-results/answer-question-results.component";
-import {Identifiable} from "../../../common/identifiable";
+import {Identifiable} from "../../../shared/identifiable";
 import {AnswerCode, QuestionDto} from "../../../openapi-generated/game";
 
 @Component({

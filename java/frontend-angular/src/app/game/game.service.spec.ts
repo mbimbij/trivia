@@ -2,10 +2,10 @@ import {TestBed} from '@angular/core/testing';
 
 import {GameService} from './game.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {getMockGame1, getMockGame2} from "../common/test-helpers";
+import {getMockGame1, getMockGame2} from "../shared/test-helpers";
 import {Observable, of} from "rxjs";
 import {Game} from "./game";
-import {gameToGameDto} from "../common/helpers";
+import {gameToGameDto} from "../shared/helpers";
 import {GameControllerService, GameResponseDto} from "../openapi-generated/game";
 
 describe('GameService', () => {
