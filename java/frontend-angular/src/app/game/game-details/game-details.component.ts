@@ -63,7 +63,7 @@ export class GameDetailsComponent extends Identifiable implements OnDestroy{
   gameId!: number;
   game$!: Observable<Game>;
   private routeParamsSubscription?: Subscription;
-  protected gameLoadingError$= new Subject<HttpErrorResponse>();
+  public gameLoadingError$= new Subject<HttpErrorResponse>();
   protected displayedColumns = ['id', 'name', 'creator', 'players', 'state', 'join', 'start', 'goto']
   protected dataSource = new GameListDataSource();
 

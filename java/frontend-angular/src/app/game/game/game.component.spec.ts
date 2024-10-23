@@ -3,7 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GameComponent} from './game.component';
 import {ActivatedRoute} from "@angular/router";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {getMockGame1, getMockGame2, getMockPlayer1, getMockUser2, MockActivatedRoute} from "../../common/test-helpers";
+import {getMockGame1, getMockGame2, getMockPlayer1, getMockUser2, MockActivatedRoute} from "../../shared/test-helpers";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {UserServiceMock} from "../../adapters/user/user-service.mock";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
