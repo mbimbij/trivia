@@ -1,7 +1,6 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.Page;
@@ -43,16 +42,18 @@ public class GamesListPage extends PageWithStaticUrl {
                 elementHandle.querySelector(".creator-name").textContent().trim(),
                 elementHandle.querySelector(".players-names").textContent().trim(),
                 elementHandle.querySelector(".state").textContent().trim(),
-                getButtonState(elementHandle, "start"),
                 getButtonState(elementHandle, "join"),
                 elementHandle.querySelector(".join").textContent().trim(),
+                getButtonState(elementHandle, "start"),
                 getButtonState(elementHandle, "goto"),
                 getButtonState(elementHandle, "delete")
         );
     }
 
     public Boolean getButtonState(ElementHandle elementHandle, String buttonName) {
-        return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button")).map(ElementHandle::isEnabled).orElse(null);
+        return Optional.ofNullable(elementHandle.querySelector("." + buttonName + " button"))
+                .map(ElementHandle::isEnabled)
+                .orElse(null);
     }
 
     @Override

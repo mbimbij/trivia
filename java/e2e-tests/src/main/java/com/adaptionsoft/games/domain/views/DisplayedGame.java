@@ -5,9 +5,9 @@ public record DisplayedGame(
         String creator,
         String players,
         String state,
-        Boolean startEnabled,
         Boolean joinEnabled,
         String joinText,
+        Boolean startEnabled,
         Boolean gotoEnabled,
         Boolean deleteEnabled
 ) {
