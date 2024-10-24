@@ -1,6 +1,7 @@
 -include .env
 SHELL := /bin/bash
-.PHONY: *
+# "make -B real_target" to force rebuild a non-phony target
+.PHONY: $(filter-out real_target, $(MAKECMDGOALS))
 
 prepare-frontend: generate-frontend-environment-files npm-install-frontend generate-openapi-from-backend
 
