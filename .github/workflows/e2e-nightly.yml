@@ -28,22 +28,12 @@ jobs:
       - name: Ensure browsers are installed
         working-directory: java
         run: ./mvnw exec:java -e -pl e2e-tests -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps" --no-transfer-progress
-<<<<<<< Updated upstream
       - uses: nick-fields/retry@v3
         name: Execute E2E tests
         with:
           timeout_minutes: 40
           max_attempts: 3
           command: cd java && make e2e-tests-prod
-=======
-      - name: Execute E2E tests
-        uses: nick-fields/retry@v3
-        working-directory: java
-        with:
-          timeout_minutes: 30
-          max_attempts: 3
-          command: make e2e-tests-prod
->>>>>>> Stashed changes
         env:
           QA_USER_ID: ${{ secrets.QA_USER_ID }}
           QA_USER_EMAIL: ${{ secrets.QA_USER_EMAIL }}
