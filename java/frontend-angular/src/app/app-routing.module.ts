@@ -11,6 +11,7 @@ import {loginActivateGuard} from "./authentication/authentication-guard/login-ac
 import {emailVerifiedGuard} from "./authentication/authentication-guard/email-verified.guard";
 import {NotFoundComponent} from './shared/not-found/not-found.component';
 import {HealthComponent} from "./health/health.component";
+import {UserSettingsComponent} from "./user/user-settings/user-settings.component";
 
 const routes: Routes = [
   {path: "authentication", component: AuthenticationComponent},
@@ -26,6 +27,9 @@ const routes: Routes = [
   {path: "", redirectTo: "/games", pathMatch: "full"},
   {path: "games/:id/details", component: GameDetailsComponent, canActivate: [loginActivateGuard, emailVerifiedGuard]},
   {path: "games/:id", component: GameComponent
+    , canActivate: [loginActivateGuard, emailVerifiedGuard]
+  },
+  {path: "user-settings", component: UserSettingsComponent
     , canActivate: [loginActivateGuard, emailVerifiedGuard]
   },
   {path: 'not-found', component: NotFoundComponent},
