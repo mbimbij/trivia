@@ -24,7 +24,6 @@ public class CreateGameStepDefs {
     private final Janitor janitor;
     private final CreateGameDialog createGameDialog;
     private String createdGameName;
-    private final Navbar navbar;
     private final RenameUserStepdefs renameUserStepdefs;
 
     @When("qa-user creates a game named {string} from the frontend")
@@ -112,13 +111,6 @@ public class CreateGameStepDefs {
     @Then("the validate button is disabled")
     public void theValidateButtonIsDisabled() {
         createGameDialog.verifyButtonDisabledByTestId(VALIDATE);
-    }
-
-    @And("qa-user name was not changed")
-    public void qaUserNameWasNotChanged() {
-        if (!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)) {
-            renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
-        }
     }
 
     @When("qa-user presses the escape key on the create dialog")

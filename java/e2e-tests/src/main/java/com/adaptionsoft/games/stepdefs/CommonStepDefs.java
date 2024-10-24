@@ -1,16 +1,14 @@
 package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.*;
-import com.adaptionsoft.games.domain.pageObjects.AuthenticationPage;
-import com.adaptionsoft.games.domain.pageObjects.Backend;
-import com.adaptionsoft.games.domain.pageObjects.GameRowActions;
-import com.adaptionsoft.games.domain.pageObjects.GamesListPage;
+import com.adaptionsoft.games.domain.pageObjects.*;
 import com.adaptionsoft.games.domain.views.DisplayedGame;
 import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
 import com.adaptionsoft.games.utils.TestUtils;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -38,6 +36,8 @@ public class CommonStepDefs {
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;
+    private final RenameUserStepdefs renameUserStepdefs;
+    private final Navbar navbar;
     public static final String GO_BACK_BUTTON_TESTID = "go-back";
 
     @Given("2 existing games")
@@ -113,5 +113,12 @@ public class CommonStepDefs {
     @Given("an exception is thrown when calling getGameById")
     public void anExceptionIsThrownWhenCallingGetGameById() {
         janitor.throwExceptionWhenCallGetGameById();
+    }
+
+    @And("qa-user name was not changed")
+    public void qaUserNameWasNotChanged() {
+        if (!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)) {
+            renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
+        }
     }
 }
