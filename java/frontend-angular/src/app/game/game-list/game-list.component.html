@@ -1,80 +1,79 @@
 <ng-container *ngIf="(userService.getUser() | async) as user">
-  <app-rename-user [user]="user"></app-rename-user>
-  <br>
-  <div style="display: flex; justify-content: flex-end; padding-top:0.5rem; padding-bottom:0.5rem">
+  <!--  <app-rename-user [userName]="user.name"></app-rename-user>-->
+  <div style="display: flex; justify-content: flex-end; margin-top:1.5rem; padding-bottom:0.5rem">
     <app-create-game [user]="user"/>
   </div>
 
-    <table style="margin-top: 20px" mat-table [dataSource]="dataSource">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>Id</th>
-        <td mat-cell [class]="'id'" *matCellDef="let game">{{ game.id }}</td>
-      </ng-container>
+  <table style="margin-top: 1.5rem" mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>Id</th>
+      <td mat-cell [class]="'id'" *matCellDef="let game">{{ game.id }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell [class]="'name'" *matCellDef="let game">
-          <a
-            [attr.data-testid]="'game-details-'+game.id"
-            [routerLink]="['/games',game.id,'details']"
-          >
-            {{ game.name }}
-          </a>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell [class]="'name'" *matCellDef="let game">
+        <a
+          [attr.data-testid]="'game-details-'+game.id"
+          [routerLink]="['/games',game.id,'details']"
+        >
+          {{ game.name }}
+        </a>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="creator">
-        <th mat-header-cell *matHeaderCellDef>Creator</th>
-        <td mat-cell [class]="'creator-name'" *matCellDef="let game">{{ game.creator.name }}</td>
-      </ng-container>
+    <ng-container matColumnDef="creator">
+      <th mat-header-cell *matHeaderCellDef>Creator</th>
+      <td mat-cell [class]="'creator-name'" *matCellDef="let game">{{ game.creator.name }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="players">
-        <th mat-header-cell *matHeaderCellDef>Players</th>
-        <td mat-cell [class]="'players-names'" *matCellDef="let game">{{ game.players | objectAttribute: 'name' }}</td>
-      </ng-container>
+    <ng-container matColumnDef="players">
+      <th mat-header-cell *matHeaderCellDef>Players</th>
+      <td mat-cell [class]="'players-names'" *matCellDef="let game">{{ game.players | objectAttribute: 'name' }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="state">
-        <th mat-header-cell *matHeaderCellDef>State</th>
-        <td mat-cell [class]="'state'" *matCellDef="let game">{{ game.state }}</td>
-      </ng-container>
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef>State</th>
+      <td mat-cell [class]="'state'" *matCellDef="let game">{{ game.state }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="join">
-        <th mat-header-cell *matHeaderCellDef>Join</th>
-        <td mat-cell [class]="'join'" *matCellDef="let game">
-          <app-join-game-button [user]="user"
-                                [gameId]="game.id"
-                                [playersNames]="game.getPlayersNames()"
-                                [canJoin]="game.canJoin(user)"
-                                [isPlayerInGame]="game.isPlayer(user)"
-                                [isGameStarted]="game.isStarted()"
-          />
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="join">
+      <th mat-header-cell *matHeaderCellDef>Join</th>
+      <td mat-cell [class]="'join'" *matCellDef="let game">
+        <app-join-game-button [user]="user"
+                              [gameId]="game.id"
+                              [playersNames]="game.getPlayersNames()"
+                              [canJoin]="game.canJoin(user)"
+                              [isPlayerInGame]="game.isPlayer(user)"
+                              [isGameStarted]="game.isStarted()"
+        />
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="start">
-        <th mat-header-cell *matHeaderCellDef>Start</th>
-        <td mat-cell [class]="'start'" *matCellDef="let game">
-          <app-start-game-button [gameId]="game.id" [userId]="user.id" [canStart]="game.canStart(user)"/>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="start">
+      <th mat-header-cell *matHeaderCellDef>Start</th>
+      <td mat-cell [class]="'start'" *matCellDef="let game">
+        <app-start-game-button [gameId]="game.id" [userId]="user.id" [canStart]="game.canStart(user)"/>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="goto">
-        <th mat-header-cell *matHeaderCellDef>Goto</th>
-        <td mat-cell [class]="'goto'" *matCellDef="let game">
-          <app-goto-game-button [gameId]="game.id" [userId]="user.id" [canGoto]="game.canGoto(user)"/>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="goto">
+      <th mat-header-cell *matHeaderCellDef>Goto</th>
+      <td mat-cell [class]="'goto'" *matCellDef="let game">
+        <app-goto-game-button [gameId]="game.id" [userId]="user.id" [canGoto]="game.canGoto(user)"/>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete</th>
-        <td mat-cell [class]="'delete'" *matCellDef="let game">
-          <app-delete-game-button [gameId]="game.id" [userId]="user.id" [canDelete]="game.canDelete(user)"/>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell [class]="'delete'" *matCellDef="let game">
+        <app-delete-game-button [gameId]="game.id" [userId]="user.id" [canDelete]="game.canDelete(user)"/>
+      </td>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row [class]="'game-row'" *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row [class]="'game-row'" *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
 
 </ng-container>
 

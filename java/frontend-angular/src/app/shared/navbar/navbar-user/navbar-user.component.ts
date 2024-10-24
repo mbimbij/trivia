@@ -5,6 +5,8 @@ import {Identifiable} from "../../identifiable";
 import {UserServiceAbstract} from "../../../services/user-service.abstract";
 import {AuthenticationServiceAbstract} from "../../../services/authentication-service-abstract";
 import {NavbarLogoutButtonComponent} from "./navbar-logout-button/navbar-logout-button.component";
+import {Router} from "@angular/router";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-navbar-user',
@@ -13,7 +15,8 @@ import {NavbarLogoutButtonComponent} from "./navbar-logout-button/navbar-logout-
     AsyncPipe,
     NavbarLogoutButtonComponent,
     MatIcon,
-    NgIf
+    NgIf,
+    MatButton
   ],
   templateUrl: './navbar-user.component.html',
   styleUrl: './navbar-user.component.css',
@@ -22,7 +25,8 @@ import {NavbarLogoutButtonComponent} from "./navbar-logout-button/navbar-logout-
 export class NavbarUserComponent extends Identifiable {
 
   constructor(protected userService: UserServiceAbstract,
-              protected authenticationService: AuthenticationServiceAbstract) {
+              protected authenticationService: AuthenticationServiceAbstract,
+              protected router: Router) {
     super()
   }
 }

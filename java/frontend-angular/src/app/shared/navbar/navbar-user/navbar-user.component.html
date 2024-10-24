@@ -2,9 +2,12 @@
   <mat-icon id="anonymous-icon" *ngIf="user.isAnonymous" class="example-icon"
             aria-label="Example icon-button with share icon">no_accounts
   </mat-icon>
-  <span
+  <button mat-button
     [attr.data-testid]="'navbar-username'"
-  >{{ user.name }}</span>
+    style="cursor: pointer; color: white; font-size: 20px; font-family: Roboto, sans-serif"
+    class="rounded"
+    (click)="router.navigate(['user-settings'])"
+  >{{ user.name }}</button>
   <app-navbar-logout-button *ngIf="(authenticationService.isLoggedIn() | async)"></app-navbar-logout-button>
 </ng-container>
 {{ checkRender() }}
