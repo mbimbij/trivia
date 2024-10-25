@@ -1,4 +1,4 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable, NgZone, OnDestroy} from '@angular/core';
 import {Observable, ReplaySubject, Subscription} from "rxjs";
 import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
@@ -14,9 +14,11 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
   private firebaseUser: firebase.User | null = null;
   private subscription?: Subscription;
 
-  constructor(private afAuth: AngularFireAuth) {
+  constructor(private afAuth: AngularFireAuth, private ngZone: NgZone) {
     super();
     this.initService();
+    // exposing renameUser method in window for e2e tests - not a long term viable solution but good enough for now
+    (window as any).renameUser = (newName: string) => this.ngZone.run(() => this.renameUser(newName));
   }
 
   private initService() {
@@ -44,7 +46,6 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
     this.firebaseUser?.updateProfile({displayName: newUserName})
       .then(() => {
         this.user = {...this.user,name: newUserName}
-        // this.user.name = newUserName
         this.userSubject.next(this.user);
       })
   }

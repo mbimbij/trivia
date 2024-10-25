@@ -8,7 +8,6 @@ import {FirebaseuiAngularLibraryComponent} from "firebaseui-angular";
 import {GotoGameButtonComponent} from "../goto-game-button/goto-game-button.component";
 import {StartGameButtonComponent} from "../start-game-button/start-game-button.component";
 import {DeleteGameButtonComponent} from "../delete-game-button/delete-game-button.component";
-import {RenameUserComponent} from "../../user/rename-user/rename-user.component";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {OpenJoinGameDialogComponent} from "../join-game-button/open-join-game-dialog.component";
 import {
@@ -46,7 +45,6 @@ import {Identifiable} from "../../shared/identifiable";
     NavbarComponent,
     AsyncPipe,
     NgClass,
-    RenameUserComponent,
     OpenJoinGameDialogComponent,
     MatTable,
     MatColumnDef,

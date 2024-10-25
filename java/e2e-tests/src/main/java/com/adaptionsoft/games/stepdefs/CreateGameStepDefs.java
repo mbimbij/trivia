@@ -2,9 +2,7 @@ package com.adaptionsoft.games.stepdefs;
 
 import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.TestContext;
-import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.CreateGameDialog;
-import com.adaptionsoft.games.domain.pageObjects.Navbar;
 import com.adaptionsoft.games.utils.TestUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -12,8 +10,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Objects;
 
 import static com.adaptionsoft.games.domain.pageObjects.CreateGameDialog.*;
 
@@ -24,7 +20,7 @@ public class CreateGameStepDefs {
     private final Janitor janitor;
     private final CreateGameDialog createGameDialog;
     private String createdGameName;
-    private final RenameUserStepdefs renameUserStepdefs;
+    private final RenameUserInteraction renameUserInteraction;
 
     @When("qa-user creates a game named {string} from the frontend")
     public void qaUserCreatesAGameNamed(String gameName) {
@@ -120,7 +116,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user changes his name to {string} without navigation")
     public void qaUserChangesHisNameToWithoutNavigation(String newName) {
-        renameUserStepdefs.renameQaUserWithoutNavigation(newName);
+        renameUserInteraction.renameQaUser(newName);
     }
 
     @Given("an exception is thrown when calling createGame")

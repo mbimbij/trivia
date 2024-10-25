@@ -5,6 +5,7 @@ import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.*;
+import com.adaptionsoft.games.stepdefs.RenameUserInteraction;
 import com.adaptionsoft.games.trivia.game.web.WebConfig;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.fasterxml.jackson.databind.Module;
@@ -35,8 +36,8 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-//                .setHeadless(false)
-                .setHeadless(true)
+                .setHeadless(false)
+//                .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.chromium().launch(launchOptions);
@@ -112,18 +113,13 @@ public class E2eTestsSpringConfiguration {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = new ObjectMapper();
         converter.setObjectMapper(mapper.registerModule(stateDeserializer));
-        restTemplate.getMessageConverters().add(0, converter);
+        restTemplate.getMessageConverters().addFirst(converter);
         return restTemplate;
     }
 
     @Bean
     public Backend backend(RestTemplate restTemplate, TestProperties testProperties) {
         return new Backend(restTemplate, testProperties.getBackendUrlBase());
-    }
-
-    @Bean
-    public RenameUser renameUser(Page page) {
-        return new RenameUser(page);
     }
 
     @Bean

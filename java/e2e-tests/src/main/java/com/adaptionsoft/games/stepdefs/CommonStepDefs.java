@@ -36,7 +36,7 @@ public class CommonStepDefs {
     private final Backend backend;
     private final TestProperties testProperties;
     private final Page page;
-    private final RenameUserStepdefs renameUserStepdefs;
+    private final RenameUserInteraction renameUserInteraction;
     private final Navbar navbar;
     public static final String GO_BACK_BUTTON_TESTID = "go-back";
 
@@ -118,7 +118,7 @@ public class CommonStepDefs {
     @And("qa-user name was not changed")
     public void qaUserNameWasNotChanged() {
         if (!Objects.equals(navbar.getDisplayedUserName(), TestProperties.QA_FRONTEND_USER_NAME)) {
-            renameUserStepdefs.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
+            renameUserInteraction.renameQaUser(TestProperties.QA_FRONTEND_USER_NAME);
         }
     }
 }
