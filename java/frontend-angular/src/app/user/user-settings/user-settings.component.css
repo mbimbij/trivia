@@ -1,0 +1,12 @@
+.actions-section{
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-dialog-actions{
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  gap: 0.5rem;
+}
