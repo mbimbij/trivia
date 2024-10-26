@@ -22,7 +22,7 @@ import {CreateGameDialogData} from "./create-game-dialog.data";
       mat-raised-button color="primary" (click)="openDialog(CreateGameDialogContentComponent)"
     >
       <span class="material-icons md-24">add</span>
-      <span style="margin-left: 0.3rem">create game</span>
+      <span style="margin-left: 0.5rem">create game</span>
     </button>
   `,
   styleUrl: './open-create-game.component.css',
