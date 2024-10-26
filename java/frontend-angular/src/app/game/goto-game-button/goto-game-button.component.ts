@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
-import {Identifiable} from "../../shared/identifiable";
+import {IdentifiableImpl} from "../../shared/identifiableImpl";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 
@@ -29,7 +29,7 @@ import {MatButton} from "@angular/material/button";
   styleUrl: './goto-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GotoGameButtonComponent extends Identifiable {
+export class GotoGameButtonComponent extends IdentifiableImpl {
   @Input() gameId!: number
   @Input() userId!: string
   @Input() canGoto!: boolean;

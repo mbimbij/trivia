@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ValidationButtonComponent} from "../../validation-button/validation-button.component";
 import {NgIf} from "@angular/common";
-import {Identifiable} from "../../../../shared/identifiable";
+import {IdentifiableImpl} from "../../../../shared/identifiableImpl";
 
 @Component({
   selector: 'app-answer-question-results',
@@ -27,7 +27,7 @@ import {Identifiable} from "../../../../shared/identifiable";
   styleUrl: './answer-question-results.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionResultsComponent extends Identifiable{
+export class AnswerQuestionResultsComponent extends IdentifiableImpl{
   @Input() gameId!: number;
   @Input() playerId!: string;
   @Input() isAnswerCorrectPrompt!: string;

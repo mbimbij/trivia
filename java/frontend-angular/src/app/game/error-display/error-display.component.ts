@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {Subject} from "rxjs";
 import {HttpErrorResponse} from "@angular/common/http";
-import {Identifiable} from "../../shared/identifiable";
+import {IdentifiableImpl} from "../../shared/identifiableImpl";
 
 @Component({
   selector: 'app-error-display',
@@ -15,7 +15,7 @@ import {Identifiable} from "../../shared/identifiable";
   styleUrl: './error-display.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ErrorDisplayComponent extends Identifiable {
+export class ErrorDisplayComponent extends IdentifiableImpl {
   @Input() gameId!: number;
   @Input() gameLoadingError$= new Subject<HttpErrorResponse>();
 }

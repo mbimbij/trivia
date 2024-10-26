@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DrawQuestionComponent} from "../draw-question/draw-question.component";
 import {NgIf} from "@angular/common";
-import {Identifiable} from "../../../shared/identifiable";
+import {IdentifiableImpl} from "../../../shared/identifiableImpl";
 
 @Component({
   selector: 'app-roll-dice-results-outside-penalty-box',
@@ -14,7 +14,7 @@ import {Identifiable} from "../../../shared/identifiable";
   styleUrl: './roll-dice-results-outside-penalty-box.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceResultsOutsidePenaltyBoxComponent extends Identifiable{
+export class RollDiceResultsOutsidePenaltyBoxComponent extends IdentifiableImpl{
   @Input() gameId!: number;
   @Input() playerId!: string;
   @Input() displayMessage: string | undefined;

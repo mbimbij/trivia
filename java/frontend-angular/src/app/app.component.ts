@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {Identifiable} from "./shared/identifiable";
+import {IdentifiableImpl} from "./shared/identifiableImpl";
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,7 @@ import {Identifiable} from "./shared/identifiable";
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent extends Identifiable {
+export class AppComponent extends IdentifiableImpl {
   title: string = 'frontend-angular';
 
   override checkRender(): string {

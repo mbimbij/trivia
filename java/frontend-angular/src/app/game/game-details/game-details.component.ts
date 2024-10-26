@@ -10,7 +10,7 @@ import {Game} from "../game";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorDisplayComponent} from "../error-display/error-display.component";
-import {Identifiable} from "../../shared/identifiable";
+import {IdentifiableImpl} from "../../shared/identifiableImpl";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {GoBackButtonComponent} from "../../shared/go-back-button/go-back-button.component";
 import {OpenJoinGameDialogComponent} from "../join-game-button/open-join-game-dialog.component";
@@ -59,7 +59,7 @@ import {
   styleUrl: './game-details.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameDetailsComponent extends Identifiable implements OnDestroy{
+export class GameDetailsComponent extends IdentifiableImpl implements OnDestroy{
   gameId!: number;
   game$!: Observable<Game>;
   private routeParamsSubscription?: Subscription;

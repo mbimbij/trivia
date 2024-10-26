@@ -1,9 +1,10 @@
 import {Component, Inject, InjectionToken, SimpleChanges} from '@angular/core';
-import {Identifiable} from "../../shared/identifiable";
+import {IdentifiableImpl} from "../../shared/identifiableImpl";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ComponentType} from "@angular/cdk/overlay";
 import {BaseDialogContentComponent} from "./base-dialog-content.component";
-import {BaseDialogData} from "./base-dialog.data";
+import {BaseFormData} from "./base-form.data";
+import {ResettableForm} from "../base-resettable-form/resettable-form";
 
 export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dialog');
 
@@ -16,8 +17,8 @@ export const HTML_ID_TOKEN = new InjectionToken<string>('the html id of the dial
 })
 export abstract class BaseOpenDialogComponent<
   T extends BaseDialogContentComponent<any, any>,
-  U extends BaseDialogData
-> extends Identifiable {
+  U extends BaseFormData
+> extends IdentifiableImpl {
   protected data = {
     content: {} as U
   }
@@ -59,7 +60,8 @@ export abstract class BaseOpenDialogComponent<
       document.querySelector("mat-dialog-container")
         ?.setAttribute("data-testid", this.htmlId)
     })
-    dialogRef.componentRef?.setInput('defaultData', this.defaultData)
+    // dialogRef.componentRef?.setInput('defaultData', this.defaultData)
+    dialogRef.componentInstance.defaultData = this.defaultData
     this.doAfterOpenDialog(dialogRef);
   }
 

@@ -22,6 +22,7 @@ import {ValidationErrorCodes} from "../../../shared/validation/validation-error-
 import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
 import { Observable } from 'rxjs';
 import {JoinDialogData} from "../join-dialog.data";
+import {ResettableForm} from "../../base-resettable-form/resettable-form";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -54,7 +55,7 @@ export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinD
   @Input() playersNames!: string[]
   constructor(protected override matDialogRef: MatDialogRef<JoinDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public override data: { content: JoinDialogData }) {
+              @Inject(MAT_DIALOG_DATA) data: { content: JoinDialogData }) {
     super(matDialogRef, data)
   }
 

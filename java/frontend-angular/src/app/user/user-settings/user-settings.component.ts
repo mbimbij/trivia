@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {UserServiceAbstract} from "../../services/user-service.abstract";
-import {Identifiable} from "../../shared/identifiable";
+import {IdentifiableImpl} from "../../shared/identifiableImpl";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {ids} from "../../ids";
 import {MatError, MatFormField, MatInput, MatLabel} from "@angular/material/input";
@@ -29,7 +29,7 @@ import {MatButton} from "@angular/material/button";
   templateUrl: './user-settings.component.html',
   styleUrl: './user-settings.component.css'
 })
-export class UserSettingsComponent extends Identifiable{
+export class UserSettingsComponent extends IdentifiableImpl{
 
   constructor(protected userService: UserServiceAbstract) {
     super()

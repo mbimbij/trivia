@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {Identifiable} from "../identifiable";
+import {IdentifiableImpl} from "../identifiableImpl";
 import {MessageService} from "../../services/message.service";
 
 @Component({
@@ -16,7 +16,7 @@ import {MessageService} from "../../services/message.service";
   `,
   styleUrl: './go-back-button.component.css'
 })
-export class GoBackButtonComponent extends Identifiable implements OnInit {
+export class GoBackButtonComponent extends IdentifiableImpl implements OnInit {
   protected buttonText!: string;
 
   constructor(protected router: Router,

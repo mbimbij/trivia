@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Subscription} from "rxjs";
-import {Identifiable} from "../../shared/identifiable";
+import {IdentifiableImpl} from "../../shared/identifiableImpl";
 import {AsyncPipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 
@@ -26,7 +26,7 @@ import {MatButton} from "@angular/material/button";
   styleUrl: './delete-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DeleteGameButtonComponent extends Identifiable implements OnDestroy {
+export class DeleteGameButtonComponent extends IdentifiableImpl implements OnDestroy {
   @Input() gameId!: number;
   @Input() userId!: string;
   @Input() canDelete!: boolean;

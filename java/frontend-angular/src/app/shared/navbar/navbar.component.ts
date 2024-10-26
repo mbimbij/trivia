@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatToolbar} from "@angular/material/toolbar";
 import {Router} from "@angular/router";
-import {Identifiable} from "../identifiable";
+import {IdentifiableImpl} from "../identifiableImpl";
 import {NavbarUserComponent} from "./navbar-user/navbar-user.component";
 import {MatButton} from "@angular/material/button";
 
@@ -18,7 +18,7 @@ import {MatButton} from "@angular/material/button";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class NavbarComponent extends Identifiable {
+export class NavbarComponent extends IdentifiableImpl {
   constructor(protected router: Router) {
     super()
   }

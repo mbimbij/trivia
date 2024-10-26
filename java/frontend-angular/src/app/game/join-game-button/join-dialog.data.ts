@@ -1,5 +1,5 @@
-import {BaseDialogData} from "../base-dialog/base-dialog.data";
+import {BaseFormData} from "../base-dialog/base-form.data";
 
-export interface JoinDialogData extends BaseDialogData {
+export interface JoinDialogData extends BaseFormData {
   playerName: string;
 }

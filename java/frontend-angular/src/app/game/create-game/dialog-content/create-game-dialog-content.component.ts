@@ -20,8 +20,9 @@ import {ids} from 'src/app/ids';
 import {ValidationErrorCodes} from "../../../shared/validation/validation-error-codes";
 import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
 import {Game} from "../../game";
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {CreateGameDialogData} from "../create-game-dialog.data";
+import {IResettableForm, ResettableForm} from "../../base-resettable-form/resettable-form";
 
 @Component({
   selector: 'app-dialog-content',
@@ -52,9 +53,10 @@ export class CreateGameDialogContentComponent extends BaseDialogContentComponent
   CreateGameDialogData
 > {
   @Input() userId!: string
+
   constructor(protected override matDialogRef: MatDialogRef<CreateGameDialogContentComponent>,
               private gameService: GameServiceAbstract,
-              @Inject(MAT_DIALOG_DATA) public override data: { content: CreateGameDialogData }) {
+              @Inject(MAT_DIALOG_DATA) data: { content: CreateGameDialogData }) {
     super(matDialogRef, data)
   }
 
@@ -62,6 +64,7 @@ export class CreateGameDialogContentComponent extends BaseDialogContentComponent
     let creator = {name: this.data.content.creatorName, id: this.userId} as UserDto
     return this.gameService.create(this.data.content.gameName, creator)
   }
+
   protected override doAdditionalActionsOnSuccess(response: any) {
     let newGame = response as Game
     console.log(`created game: ${newGame.id}`)
