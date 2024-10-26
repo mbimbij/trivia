@@ -23,3 +23,15 @@ button.rounded {
 mat-form-field.ng-dirty .mdc-text-field {
   background-color: lightgoldenrodyellow;
 }
+
+.success-snackbar {
+  --mdc-snackbar-container-color: green;
+  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: var(--warn);
+  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+}
