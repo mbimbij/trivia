@@ -1,38 +1,38 @@
 <ng-container *ngIf="userService.getUser() | async as user">
-    <div class="actions-section">
-        <mat-form-field appearance="outline">
-            <mat-label>User Name</mat-label>
-            <input [id]="ids.userSettings.renameUser"
-                   [attr.data-testid]="ids.userSettings.renameUser"
-                   matInput
-                   [(ngModel)]="data.content.username"
-                   #userName="ngModel"
-                   notBlank
-            >
-            <mat-error *ngIf="userName.errors?.[ValidationErrorCodes.NOT_BLANK]">
-                game name cannot be empty
-            </mat-error>
-        </mat-form-field>
+  <div class="actions-section">
+    <mat-form-field appearance="outline">
+      <mat-label>User Name</mat-label>
+      <input [id]="ids.userSettings.renameUser"
+             [attr.data-testid]="ids.userSettings.renameUser"
+             matInput
+             [(ngModel)]="data.content.username"
+             #userName="ngModel"
+             notBlank
+      >
+      <mat-error *ngIf="userName.errors?.[ValidationErrorCodes.NOT_BLANK]">
+        game name cannot be empty
+      </mat-error>
+    </mat-form-field>
 
-        <mat-dialog-actions>
-            <button
-                    mat-stroked-button
-                    class="rounded tonal-button"
-                    [id]="ids.userSettings.RESET"
-                    [attr.data-testid]="ids.userSettings.RESET"
-                    (click)="resetData()"
-            >Reset
-            </button>
-            <button
-                    mat-raised-button
-                    class="rounded"
-                    [id]="ids.userSettings.SUBMIT"
-                    [attr.data-testid]="ids.userSettings.SUBMIT"
-                    color="primary"
-                    [disabled]="(!!userName.errors)"
-                    (click)="userService.renameUser(userName.value)">Apply
-            </button>
-        </mat-dialog-actions>
-    </div>
+    <mat-dialog-actions>
+      <button
+        mat-stroked-button
+        class="rounded tonal-button"
+        [id]="ids.userSettings.RESET"
+        [attr.data-testid]="ids.userSettings.RESET"
+        (click)="resetData()"
+      >Reset
+      </button>
+      <button
+        mat-raised-button
+        class="rounded"
+        [id]="ids.userSettings.SUBMIT"
+        [attr.data-testid]="ids.userSettings.SUBMIT"
+        color="primary"
+        [disabled]="(!!userName.errors)"
+        (click)="userService.renameUser(userName.value)">Apply
+      </button>
+    </mat-dialog-actions>
+  </div>
 </ng-container>
 {{ checkRender() }}

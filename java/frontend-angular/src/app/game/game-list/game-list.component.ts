@@ -25,7 +25,7 @@ import {
 import {GameListDataSource} from "../../shared/game-list-data.source";
 import {ObjectAttributePipe} from "../../shared/object-attribute.pipe";
 import {NavbarComponent} from "../../shared/navbar/navbar.component";
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   selector: 'app-game-list',
@@ -61,7 +61,7 @@ import {IdentifiableImpl} from "../../shared/identifiableImpl";
   styleUrl: './game-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameListComponent extends IdentifiableImpl {
+export class GameListComponent extends Identifiable {
 
   protected dataSource = new GameListDataSource();
   protected displayedColumns = ['id', 'name', 'creator', 'players', 'state', 'join', 'start', 'goto', 'delete']

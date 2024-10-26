@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {IdentifiableImpl} from "../../../shared/identifiableImpl";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-draw-question',
@@ -17,7 +17,7 @@ import {IdentifiableImpl} from "../../../shared/identifiableImpl";
   styleUrl: './draw-question.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DrawQuestionComponent extends IdentifiableImpl {
+export class DrawQuestionComponent extends Identifiable {
   @Input() gameId!: number;
   @Input() playerId!: string;
 

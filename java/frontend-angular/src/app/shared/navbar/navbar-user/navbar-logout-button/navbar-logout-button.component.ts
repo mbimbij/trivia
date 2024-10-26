@@ -3,7 +3,7 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {ConsoleLogPipe} from "../../../../console-log.pipe";
-import {IdentifiableImpl} from "../../../identifiableImpl";
+import {Identifiable} from "../../../identifiable";
 import {AuthenticationServiceAbstract} from "../../../../services/authentication-service-abstract";
 
 @Component({
@@ -24,7 +24,7 @@ import {AuthenticationServiceAbstract} from "../../../../services/authentication
   `,
   styleUrl: './navbar-logout-button.component.css'
 })
-export class NavbarLogoutButtonComponent extends IdentifiableImpl {
+export class NavbarLogoutButtonComponent extends Identifiable {
 
   constructor(protected authenticationService: AuthenticationServiceAbstract) {
     super()

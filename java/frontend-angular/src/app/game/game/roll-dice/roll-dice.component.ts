@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/cor
 import {NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
 import {Subscription} from "rxjs";
-import {IdentifiableImpl} from "../../../shared/identifiableImpl";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-roll-dice',
@@ -24,7 +24,7 @@ import {IdentifiableImpl} from "../../../shared/identifiableImpl";
   styleUrl: './roll-dice.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceComponent extends IdentifiableImpl implements OnDestroy {
+export class RollDiceComponent extends Identifiable implements OnDestroy {
   @Input() gameId!: number;
   @Input() userId!: string;
   private actionSubscription?: Subscription;

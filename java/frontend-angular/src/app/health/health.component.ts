@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IdentifiableImpl} from "../shared/identifiableImpl";
+import {Identifiable} from "../shared/identifiable";
 
 @Component({
   selector: 'app-health',
@@ -8,6 +8,6 @@ import {IdentifiableImpl} from "../shared/identifiableImpl";
   templateUrl: './health.component.html',
   styleUrl: './health.component.css'
 })
-export class HealthComponent extends IdentifiableImpl{
+export class HealthComponent extends Identifiable{
 
 }

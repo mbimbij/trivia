@@ -1,12 +1,6 @@
 import {generateRandomString} from "./helpers";
 
-export interface Identifiable {
-  readonly id: string;
-
-  checkRender(): string;
-}
-
-export class IdentifiableImpl implements Identifiable {
+export class Identifiable {
   private readonly _id: string;
 
   constructor() {

@@ -1,5 +1,5 @@
 import {Directive, Input} from '@angular/core';
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Identifiable} from "../../shared/identifiable";
 import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from "@angular/forms";
 import {ValidationErrorCodes} from "../../shared/validation/validation-error-codes";
 
@@ -14,7 +14,7 @@ import {ValidationErrorCodes} from "../../shared/validation/validation-error-cod
   ],
   standalone: true
 })
-export class NotDuplicateValidatorDirective extends IdentifiableImpl implements Validator {
+export class NotDuplicateValidatorDirective extends Identifiable implements Validator {
   @Input('notDuplicate') playersNames!: string[];
 
   constructor() {

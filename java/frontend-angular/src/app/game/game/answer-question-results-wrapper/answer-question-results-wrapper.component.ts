@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {AnswerQuestionResultsComponent} from "./answer-question-results/answer-question-results.component";
-import {IdentifiableImpl} from "../../../shared/identifiableImpl";
+import {Identifiable} from "../../../shared/identifiable";
 import {State} from "../../../openapi-generated/game";
 import {MessageService} from "../../../services/message.service";
 
@@ -14,7 +14,7 @@ import {MessageService} from "../../../services/message.service";
   styleUrl: './answer-question-results-wrapper.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionResultsWrapperComponent extends IdentifiableImpl {
+export class AnswerQuestionResultsWrapperComponent extends Identifiable {
   @Input() gameId!: number;
   @Input() playerId!: string;
   @Input() isWaitingToValidateCorrectAnswer!: boolean;

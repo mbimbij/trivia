@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {IdentifiableImpl} from "../identifiableImpl";
+import {Identifiable} from "../identifiable";
 
 @Component({
   selector: 'app-not-found',
@@ -12,6 +12,6 @@ import {IdentifiableImpl} from "../identifiableImpl";
   styleUrl: './not-found.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotFoundComponent extends IdentifiableImpl {
+export class NotFoundComponent extends Identifiable {
 
 }

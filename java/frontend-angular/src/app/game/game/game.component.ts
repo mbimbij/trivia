@@ -24,7 +24,7 @@ import {
 import {
   AnswerQuestionResultsWrapperComponent
 } from "./answer-question-results-wrapper/answer-question-results-wrapper.component";
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Identifiable} from "../../shared/identifiable";
 import {GameLog} from "../../openapi-generated/gamelogs";
 import {GameLogsServiceAbstract} from "../../services/gamelogs-service-abstract";
 import {MessageService} from "../../services/message.service";
@@ -52,7 +52,7 @@ import {GoBackButtonComponent} from "../../shared/go-back-button/go-back-button.
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameComponent extends IdentifiableImpl implements OnDestroy, AfterViewChecked {
+export class GameComponent extends Identifiable implements OnDestroy, AfterViewChecked {
   protected player!: Player;
   protected gameId!: number;
   game$!: Observable<Game>

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ValidationButtonComponent} from "../validation-button/validation-button.component";
 import {NgIf} from "@angular/common";
-import {IdentifiableImpl} from "../../../shared/identifiableImpl";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-roll-dice-results-inside-penalty-box',
@@ -14,7 +14,7 @@ import {IdentifiableImpl} from "../../../shared/identifiableImpl";
   styleUrl: './roll-dice-results-inside-penalty-box.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RollDiceResultsInsidePenaltyBoxComponent extends IdentifiableImpl {
+export class RollDiceResultsInsidePenaltyBoxComponent extends Identifiable {
   @Input() gameId!: number;
   @Input() playerId!: string;
   @Input() displayMessage: string | undefined;

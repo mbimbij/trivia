@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnDestroy,} from '@angular/co
 import {AsyncPipe, NgIf} from "@angular/common";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {Subscription} from "rxjs";
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Identifiable} from "../../shared/identifiable";
 import {MatButton} from "@angular/material/button";
 
 @Component({
@@ -27,7 +27,7 @@ import {MatButton} from "@angular/material/button";
   styleUrl: './start-game-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StartGameButtonComponent extends IdentifiableImpl implements OnDestroy {
+export class StartGameButtonComponent extends Identifiable implements OnDestroy {
 
   @Input() gameId!: number
   @Input() userId!: string;

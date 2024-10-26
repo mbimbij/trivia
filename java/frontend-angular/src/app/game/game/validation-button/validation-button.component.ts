@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {IdentifiableImpl} from "../../../shared/identifiableImpl";
+import {Identifiable} from "../../../shared/identifiable";
 
 @Component({
   selector: 'app-validation-button',
@@ -16,7 +16,7 @@ import {IdentifiableImpl} from "../../../shared/identifiableImpl";
   styleUrl: './validation-button.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ValidationButtonComponent extends IdentifiableImpl {
+export class ValidationButtonComponent extends Identifiable {
   @Input() gameId!: number;
   @Input() playerId!: string;
   @Input() buttonText: string | undefined;

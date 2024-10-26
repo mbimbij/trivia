@@ -10,7 +10,7 @@ import {generateRandomString} from "../../shared/helpers";
 import {ConsoleLogPipe} from "../../console-log.pipe";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {FirebaseAuthenticationService} from "../../adapters/authentication/firebase-authentication.service";
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   selector: 'app-authentication',
@@ -24,7 +24,7 @@ import {IdentifiableImpl} from "../../shared/identifiableImpl";
   templateUrl: './authentication.component.html',
   styleUrl: './authentication.component.css'
 })
-export class AuthenticationComponent extends IdentifiableImpl {
+export class AuthenticationComponent extends Identifiable {
 
   constructor(protected authenticationService: FirebaseAuthenticationService,
               protected userService: UserServiceAbstract,

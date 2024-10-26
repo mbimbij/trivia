@@ -5,7 +5,7 @@ import {ValidationButtonComponent} from "../validation-button/validation-button.
 import {
   AnswerQuestionResultsComponent
 } from "../answer-question-results-wrapper/answer-question-results/answer-question-results.component";
-import {IdentifiableImpl} from "../../../shared/identifiableImpl";
+import {Identifiable} from "../../../shared/identifiable";
 import {AnswerCode, QuestionDto} from "../../../openapi-generated/game";
 
 @Component({
@@ -20,7 +20,7 @@ import {AnswerCode, QuestionDto} from "../../../openapi-generated/game";
   styleUrl: './answer-question.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnswerQuestionComponent extends IdentifiableImpl {
+export class AnswerQuestionComponent extends Identifiable {
   @Input() question!: QuestionDto
   @Input() gameId!: number;
   @Input() playerId!: string;

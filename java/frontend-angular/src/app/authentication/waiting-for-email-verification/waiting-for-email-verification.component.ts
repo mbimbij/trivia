@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthenticationServiceAbstract} from "../../services/authentication-service-abstract";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Identifiable} from "../../shared/identifiable";
 
 @Component({
   selector: 'app-waiting-for-email-verification',
@@ -14,7 +14,7 @@ import {IdentifiableImpl} from "../../shared/identifiableImpl";
   templateUrl: './waiting-for-email-verification.component.html',
   styleUrl: './waiting-for-email-verification.component.css'
 })
-export class WaitingForEmailVerificationComponent extends IdentifiableImpl{
+export class WaitingForEmailVerificationComponent extends Identifiable{
 
   constructor(protected router: Router,
               protected authenticationService:AuthenticationServiceAbstract) {

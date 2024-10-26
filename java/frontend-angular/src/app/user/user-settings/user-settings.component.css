@@ -10,3 +10,7 @@ mat-dialog-actions{
   flex-direction: row;
   gap: 0.5rem;
 }
+
+/*::ng-deep .ng-dirty .mdc-text-field {*/
+/*  background-color: lightgoldenrodyellow;*/
+/*}*/

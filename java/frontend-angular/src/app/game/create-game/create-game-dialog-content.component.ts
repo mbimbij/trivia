@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, ViewChild} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -12,7 +12,7 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {GameServiceAbstract} from "../../services/game-service-abstract";
 import {UserDto} from "../../openapi-generated/game";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, NgModel, ReactiveFormsModule} from "@angular/forms";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../shared/validation/not-blank-validator.directive";
 import {MatDivider} from "@angular/material/divider";
@@ -22,7 +22,6 @@ import {BaseDialogContentComponent} from "../base-dialog/base-dialog-content.com
 import {Game} from "../game";
 import {Observable} from 'rxjs';
 import {CreateGameDialogData} from "./create-game-dialog.data";
-import {IResettableForm, ResettableForm} from "../base-resettable-form/resettable-form";
 
 @Component({
   selector: 'app-dialog-content',
@@ -45,7 +44,10 @@ import {IResettableForm, ResettableForm} from "../base-resettable-form/resettabl
     AsyncPipe
   ],
   templateUrl: './create-game-dialog-content.component.html',
-  styleUrls: ['./create-game-dialog-content.component.css', '../base-dialog/base-open-dialog.component.css'],
+  styleUrls: [
+    './create-game-dialog-content.component.css',
+    '../base-dialog/base-open-dialog.component.css'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateGameDialogContentComponent extends BaseDialogContentComponent<

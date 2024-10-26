@@ -1,6 +1,6 @@
 import {Directive} from '@angular/core';
 import {AbstractControl, NG_VALIDATORS, ValidationErrors, Validator} from "@angular/forms";
-import {IdentifiableImpl} from "../identifiableImpl";
+import {Identifiable} from "../identifiable";
 import {notBlankValidator} from "./validators";
 
 @Directive({
@@ -14,7 +14,7 @@ import {notBlankValidator} from "./validators";
   ],
   standalone: true
 })
-export class NotBlankValidatorDirective extends IdentifiableImpl implements Validator {
+export class NotBlankValidatorDirective extends Identifiable implements Validator {
 
   constructor() {
     super()

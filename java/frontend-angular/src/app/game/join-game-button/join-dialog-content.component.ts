@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, ViewChild} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -16,13 +16,12 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {NotBlankValidatorDirective} from "../../shared/validation/not-blank-validator.directive";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, NgModel, ReactiveFormsModule} from "@angular/forms";
 import {NotDuplicateValidatorDirective} from "./not-duplicate-validator.directive";
 import {ValidationErrorCodes} from "../../shared/validation/validation-error-codes";
 import {BaseDialogContentComponent} from "../base-dialog/base-dialog-content.component";
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {JoinDialogData} from "./join-dialog.data";
-import {ResettableForm} from "../base-resettable-form/resettable-form";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -46,13 +45,17 @@ import {ResettableForm} from "../base-resettable-form/resettable-form";
     AsyncPipe
   ],
   templateUrl: './join-dialog-content.component.html',
-  styleUrls: ['./join-dialog-content.component.css', '../base-dialog/base-open-dialog.component.css'],
+  styleUrls: [
+    './join-dialog-content.component.css',
+    '../base-dialog/base-open-dialog.component.css'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinDialogContentComponent, JoinDialogData> {
   @Input() userId!: string
   @Input() gameId!: number
   @Input() playersNames!: string[]
+
   constructor(protected override matDialogRef: MatDialogRef<JoinDialogContentComponent>,
               private gameService: GameServiceAbstract,
               @Inject(MAT_DIALOG_DATA) data: { content: JoinDialogData }) {

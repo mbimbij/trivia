@@ -1,20 +1,22 @@
-import {Component, Inject, Input, SimpleChanges} from '@angular/core';
-import {IdentifiableImpl} from "../../shared/identifiableImpl";
+import {Component, Inject, QueryList, SimpleChanges, ViewChildren} from '@angular/core';
+import {Identifiable} from "../../shared/identifiable";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {BehaviorSubject, Observable} from "rxjs";
 import {BaseFormData} from "./base-form.data";
-import {ResettableForm, IResettableForm} from "../base-resettable-form/resettable-form";
+import {IResettableForm, ResettableForm} from "../../shared/resettable-form/resettable-form";
+import {NgModel} from "@angular/forms";
 
 @Component({
   standalone: true,
   template: '<p>base-dialog-content works!</p>',
-  styleUrl: './base-dialog-content.component.css'
+  styleUrls: ['./base-dialog-content.component.css', '../../shared/resettable-form/resettable-form.css']
 })
 export abstract class BaseDialogContentComponent<
   T extends BaseDialogContentComponent<any, any>,
   U extends BaseFormData
-> extends IdentifiableImpl implements IResettableForm<U> {
+> extends Identifiable implements IResettableForm<U> {
   protected formData!: ResettableForm<U>
+  @ViewChildren(NgModel) formControls!: QueryList<NgModel>;
   protected backendErrorMessage$ = new BehaviorSubject<string | null>(null);
 
   protected constructor(protected matDialogRef: MatDialogRef<T>,
@@ -35,6 +37,10 @@ export abstract class BaseDialogContentComponent<
     if (changes['defaultData']) {
       this.formData.defaultData = changes['defaultData'].currentValue;
     }
+  }
+
+  ngAfterViewInit() {
+    this.formData.formControls = this.formControls;
   }
 
   get data(): { content: U } {
