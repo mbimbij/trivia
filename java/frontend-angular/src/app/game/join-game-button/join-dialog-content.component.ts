@@ -7,22 +7,22 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import {GameServiceAbstract} from "../../../services/game-service-abstract";
-import {UserDto} from "../../../openapi-generated/game";
+import {GameServiceAbstract} from "../../services/game-service-abstract";
+import {UserDto} from "../../openapi-generated/game";
 import {ids} from 'src/app/ids';
 import {MatButton} from "@angular/material/button";
 import {MatDivider} from "@angular/material/divider";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {NotBlankValidatorDirective} from "../../../shared/validation/not-blank-validator.directive";
+import {NotBlankValidatorDirective} from "../../shared/validation/not-blank-validator.directive";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NotDuplicateValidatorDirective} from "../not-duplicate-validator.directive";
-import {ValidationErrorCodes} from "../../../shared/validation/validation-error-codes";
-import {BaseDialogContentComponent} from "../../base-dialog/base-dialog-content.component";
+import {NotDuplicateValidatorDirective} from "./not-duplicate-validator.directive";
+import {ValidationErrorCodes} from "../../shared/validation/validation-error-codes";
+import {BaseDialogContentComponent} from "../base-dialog/base-dialog-content.component";
 import { Observable } from 'rxjs';
-import {JoinDialogData} from "../join-dialog.data";
-import {ResettableForm} from "../../base-resettable-form/resettable-form";
+import {JoinDialogData} from "./join-dialog.data";
+import {ResettableForm} from "../base-resettable-form/resettable-form";
 
 @Component({
   selector: 'app-join-dialog-content',
@@ -46,7 +46,7 @@ import {ResettableForm} from "../../base-resettable-form/resettable-form";
     AsyncPipe
   ],
   templateUrl: './join-dialog-content.component.html',
-  styleUrls: ['./join-dialog-content.component.css', '../../base-dialog/base-open-dialog.component.css'],
+  styleUrls: ['./join-dialog-content.component.css', '../base-dialog/base-open-dialog.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class JoinDialogContentComponent extends BaseDialogContentComponent<JoinDialogContentComponent, JoinDialogData> {

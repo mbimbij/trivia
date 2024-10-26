@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {CreateGameDialogContentComponent} from "./dialog-content/create-game-dialog-content.component";
+import {CreateGameDialogContentComponent} from "./create-game-dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 import {ids} from 'src/app/ids';

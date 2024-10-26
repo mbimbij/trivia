@@ -16,7 +16,12 @@ export class ResettableForm<
 
   constructor(_data: { content: U }, _defaultData?: U) {
     this._data = _data
-    this._defaultData = _defaultData
+
+    if(!!_defaultData){
+      this._defaultData = _defaultData
+    }else {
+      this._defaultData = {..._data.content}
+    }
   }
 
   get data(): { content: U } {

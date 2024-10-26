@@ -35,6 +35,7 @@ export abstract class BaseOpenDialogComponent<
       this.doAdditionalResetOnChanges();
     }
   }
+
   protected abstract changesRequireReset(changes: SimpleChanges): boolean
 
   ngOnInit(): void {
@@ -60,7 +61,6 @@ export abstract class BaseOpenDialogComponent<
       document.querySelector("mat-dialog-container")
         ?.setAttribute("data-testid", this.htmlId)
     })
-    // dialogRef.componentRef?.setInput('defaultData', this.defaultData)
     dialogRef.componentInstance.defaultData = this.defaultData
     this.doAfterOpenDialog(dialogRef);
   }
