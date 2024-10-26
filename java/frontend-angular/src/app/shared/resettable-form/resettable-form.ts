@@ -54,7 +54,10 @@ export class ResettableForm<
 
   resetData() {
     this._data.content = {...this._defaultData!}
-    this._formControls.forEach(item => item.control.markAsPristine())
+    this.markInputsAsPristine();
   }
 
+  markInputsAsPristine() {
+    this._formControls.forEach(item => item.control.markAsPristine())
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {ChangeDetectionStrategy, Component, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {UserServiceAbstract} from "../../services/user-service.abstract";
 import {Identifiable} from "../../shared/identifiable";
 import {AsyncPipe, NgIf} from "@angular/common";
@@ -28,7 +28,8 @@ import {IResettableForm, ResettableForm} from "../../shared/resettable-form/rese
         MatButton
     ],
     templateUrl: './user-settings.component.html',
-    styleUrls: ['./user-settings.component.css']
+    styleUrls: ['./user-settings.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserSettingsComponent extends Identifiable implements IResettableForm<any> {
     protected formData!: ResettableForm<any>
@@ -64,6 +65,11 @@ export class UserSettingsComponent extends Identifiable implements IResettableFo
 
     resetData(): void {
         this.formData.resetData()
+    }
+
+    submitForm(newUserName: string) {
+        this.userService.renameUser(newUserName)
+        this.formData.markInputsAsPristine()
     }
 
     protected readonly ids = ids;

@@ -30,7 +30,7 @@
         [attr.data-testid]="ids.userSettings.SUBMIT"
         color="primary"
         [disabled]="(!!userName.errors)"
-        (click)="userService.renameUser(userName.value)">Apply
+        (click)="submitForm(userName.value)">Apply
       </button>
     </mat-dialog-actions>
   </div>

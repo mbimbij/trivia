@@ -42,6 +42,7 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
     return this.userSubject.asObservable()
   }
 
+  //TODO TRIVIA-277 handle error and display user-friendly message
   override renameUser(newUserName: string): void {
     this.firebaseUser?.updateProfile({displayName: newUserName})
       .then(() => {
