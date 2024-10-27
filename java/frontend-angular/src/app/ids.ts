@@ -1,8 +1,12 @@
+const reset = {RESET: 'reset'};
+const submit = {SUBMIT: 'submit'};
+const validate = {VALIDATE: 'validate'};
+
 const commonDialogElements = {
-  RESET: 'reset',
   CANCEL: 'cancel',
-  VALIDATE: 'validate',
   BACKEND_ERROR_MESSAGE: 'backend-error-message',
+  ...reset,
+  ...validate
 }
 export const ids = {
   createGame: {
@@ -20,5 +24,10 @@ export const ids = {
     PLAYER_NAME: 'player-name',
     PLAYER_NAME_LABEL: 'player-name-label',
     ...commonDialogElements
+  },
+  userSettings: {
+    renameUser: 'userName',
+    ...submit,
+    ...reset
   }
 }

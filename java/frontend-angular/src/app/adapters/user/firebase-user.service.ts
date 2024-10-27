@@ -1,5 +1,5 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {Observable, ReplaySubject, Subscription} from "rxjs";
+import {Injectable, NgZone, OnDestroy} from '@angular/core';
+import {map, Observable, of, ReplaySubject, Subscription, throwError} from "rxjs";
 import {Nobody, User} from "../../user/user";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {UserServiceAbstract} from "../../services/user-service.abstract";
@@ -14,9 +14,11 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
   private firebaseUser: firebase.User | null = null;
   private subscription?: Subscription;
 
-  constructor(private afAuth: AngularFireAuth) {
+  constructor(private afAuth: AngularFireAuth, private ngZone: NgZone) {
     super();
     this.initService();
+    // TODO: TRIVIA-272 - come up with an appropriate long term solution
+    (window as any).renameUser = (newName: string) => this.ngZone.run(() => this.renameUser(newName).subscribe());
   }
 
   private initService() {
@@ -40,13 +42,14 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
     return this.userSubject.asObservable()
   }
 
-  override renameUser(newUserName: string): void {
-    this.firebaseUser?.updateProfile({displayName: newUserName})
-      .then(() => {
-        this.user = {...this.user,name: newUserName}
-        // this.user.name = newUserName
-        this.userSubject.next(this.user);
-      })
+  override renameUser(newUserName: string): Observable<void> {
+    return of(this.firebaseUser?.updateProfile({displayName: newUserName}))
+      .pipe(
+        map(_ => {
+          this.user = {...this.user, name: newUserName}
+          this.userSubject.next(this.user);
+        })
+      )
   }
 }
 

@@ -1,5 +1,9 @@
 <mat-toolbar class="navbar">
-  <span id="app-logo" (click)="router.navigate(['/games'])">Trivia Web</span>
+  <button
+    mat-button
+    id="app-logo"
+    class="rounded"
+    (click)="router.navigate(['/games'])">Trivia Web</button>
   <span class="example-spacer"></span>
   <app-navbar-user></app-navbar-user>
 </mat-toolbar>

@@ -4,7 +4,7 @@ import {ids} from "../../ids";
 import {User} from "../../user/user";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {BaseOpenDialogComponent} from "../base-dialog/base-open-dialog.component";
-import {JoinDialogContentComponent} from "./join-dialog-content/join-dialog-content.component";
+import {JoinDialogContentComponent} from "./join-dialog-content.component";
 import {JoinDialogData} from "./join-dialog.data";
 
 @Component({

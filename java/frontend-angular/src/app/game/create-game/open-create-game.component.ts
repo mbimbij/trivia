@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input, SimpleChanges} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {CreateGameDialogContentComponent} from "./dialog-content/create-game-dialog-content.component";
+import {CreateGameDialogContentComponent} from "./create-game-dialog-content.component";
 import {MatLabel} from "@angular/material/form-field";
 import {User} from "../../user/user";
 import {ids} from 'src/app/ids';
@@ -22,7 +22,7 @@ import {CreateGameDialogData} from "./create-game-dialog.data";
       mat-raised-button color="primary" (click)="openDialog(CreateGameDialogContentComponent)"
     >
       <span class="material-icons md-24">add</span>
-      <span style="margin-left: 0.3rem">create game</span>
+      <span style="margin-left: 0.5rem">create game</span>
     </button>
   `,
   styleUrl: './open-create-game.component.css',

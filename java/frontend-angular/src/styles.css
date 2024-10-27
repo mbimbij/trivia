@@ -1,15 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'firebaseui/dist/firebaseui.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
 
-button.rounded{
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+button.rounded {
   border-radius: 20px;
 }
 
 :root {
   --primary: #3f51b5; /* Default Primary Color */
-  --accent: #e91e63;  /* Default Accent Color */
-  --warn: #f44336;    /* Default Warn Color */
+  --accent: #e91e63; /* Default Accent Color */
+  --warn: #f44336; /* Default Warn Color */
+}
+
+mat-form-field.ng-dirty .mdc-text-field {
+  background-color: lightgoldenrodyellow;
+}
+
+.success-snackbar {
+  --mdc-snackbar-container-color: green;
+  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: var(--warn);
+  --mat-snack-bar-button-color: white;
+  --mdc-snackbar-supporting-text-color: white;
 }

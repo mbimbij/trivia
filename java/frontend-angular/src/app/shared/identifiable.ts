@@ -1,15 +1,19 @@
 import {generateRandomString} from "./helpers";
 
-export class Identifiable{
-    protected readonly id: string;
+export class Identifiable {
+  private readonly _id: string;
 
-    constructor() {
-        this.id = `${this.constructor.name} - ${generateRandomString(4)}`;
-    }
+  constructor() {
+    this._id = `${this.constructor.name} - ${generateRandomString(4)}`;
+  }
 
-    checkRender(){
-      let message = `${this.id} - view refresh`;
-      console.log(message)
-      return ''
-    }
+  get id(): string {
+    return this._id;
+  }
+
+  checkRender() {
+    let message = `${this.id} - view refresh`;
+    console.log(message)
+    return ''
+  }
 }

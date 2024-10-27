@@ -1,25 +1,50 @@
-import {Component, Inject, Input} from '@angular/core';
+import {Component, Inject, QueryList, SimpleChanges, ViewChildren} from '@angular/core';
 import {Identifiable} from "../../shared/identifiable";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {BehaviorSubject, Observable} from "rxjs";
-import {BaseDialogData} from "./base-dialog.data";
+import {BaseFormData} from "./base-form.data";
+import {IResettableForm, ResettableForm} from "../../shared/resettable-form/resettable-form";
+import {NgModel} from "@angular/forms";
 
 @Component({
-  selector: 'app-base-dialog-content',
   standalone: true,
   template: '<p>base-dialog-content works!</p>',
-  styleUrl: './base-dialog-content.component.css'
+  styleUrls: ['./base-dialog-content.component.css', '../../shared/resettable-form/resettable-form.css']
 })
 export abstract class BaseDialogContentComponent<
   T extends BaseDialogContentComponent<any, any>,
-  U extends BaseDialogData
-> extends Identifiable {
-  @Input() defaultData!: U
+  U extends BaseFormData
+> extends Identifiable implements IResettableForm<U> {
+  protected formData!: ResettableForm<U>
+  @ViewChildren(NgModel) formControls!: QueryList<NgModel>;
   protected backendErrorMessage$ = new BehaviorSubject<string | null>(null);
 
   protected constructor(protected matDialogRef: MatDialogRef<T>,
-                        @Inject(MAT_DIALOG_DATA) public data: { content: U }) {
+                        @Inject(MAT_DIALOG_DATA) data: { content: U }) {
     super()
+    this.formData = new ResettableForm(data);
+  }
+
+  get defaultData(): U {
+    return this.formData.defaultData;
+  }
+
+  set defaultData(value: U) {
+    this.formData.defaultData = value;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['defaultData']) {
+      this.formData.defaultData = changes['defaultData'].currentValue;
+    }
+  }
+
+  ngAfterViewInit() {
+    this.formData.formControls = this.formControls;
+  }
+
+  get data(): { content: U } {
+    return this.formData.data;
   }
 
   private handleSuccess = (response: any) => {
@@ -29,8 +54,8 @@ export abstract class BaseDialogContentComponent<
     this.doAdditionalActionsOnSuccess(response)
   }
 
-  protected resetData() {
-    this.data.content = {...this.defaultData}
+  resetData() {
+    this.formData.resetData()
     this.backendErrorMessage$.next(null)
   }
 
@@ -43,7 +68,8 @@ export abstract class BaseDialogContentComponent<
 
   protected abstract doCallBackend(): Observable<any>;
 
-  protected doAdditionalActionsOnSuccess(response: any) {}
+  protected doAdditionalActionsOnSuccess(response: any) {
+  }
 
   private handleError = (err: any) => {
     this.backendErrorMessage$.next(err.message)

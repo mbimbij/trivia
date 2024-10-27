@@ -47,7 +47,8 @@ export class AuthenticationComponent extends Identifiable {
     function generateNameIfUndefined(this: AuthenticationComponent) {
       let userName = user.displayName ?? generateName(user.isAnonymous);
       if (user.displayName == null) {
-        this.userService.renameUser(userName)
+        //TODO TRIVIA-277 handle error and display user-friendly message
+        this.userService.renameUser(userName).subscribe()
       }
     }
 
