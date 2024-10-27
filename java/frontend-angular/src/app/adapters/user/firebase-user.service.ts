@@ -43,10 +43,11 @@ export class FirebaseUserService extends UserServiceAbstract implements OnDestro
   }
 
   override renameUser(newUserName: string): Observable<void> {
-    return of(this.firebaseUser?.updateProfile({displayName: newUserName}))
+    let trimmedNewUserName = newUserName.trim();
+    return of(this.firebaseUser?.updateProfile({displayName: trimmedNewUserName}))
       .pipe(
         map(_ => {
-          this.user = {...this.user, name: newUserName}
+          this.user = {...this.user, name: trimmedNewUserName}
           this.userSubject.next(this.user);
         })
       )

@@ -158,7 +158,7 @@ public class GameController {
     public GameResponseDto joinGame(@PathVariable("gameId") Integer gameIdInt,
                                     @PathVariable("playerId") String playerId,
                                     @RequestBody PlayerDto playerDto) {
-        JoinGameRequestDto requestDto = new JoinGameRequestDto(gameIdInt, playerId, playerDto);
+        JoinGameRequestDto requestDto = new JoinGameRequestDto(gameIdInt, playerId, playerDto.withTrimmedName());
         return joinGameImplementation.apply(requestDto);
     }
 
@@ -167,7 +167,7 @@ public class GameController {
         Integer pathVariableGameId = joinGameRequestDto.pathVariableGameId();
         PlayerDto dto = joinGameRequestDto.playerDto();
 
-        if(!Objects.equals(pathVariablePlayerId, dto.id())){
+        if (!Objects.equals(pathVariablePlayerId, dto.id())) {
             throw new PlayerIdMismatchException(pathVariablePlayerId, dto.id());
         }
 
@@ -234,7 +234,7 @@ public class GameController {
     @PostMapping("/{gameId}/players/{playerId}/validate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void validate(@PathVariable("gameId") Integer gameIdInt,
-                                  @PathVariable("playerId") String playerIdString) {
+                         @PathVariable("playerId") String playerIdString) {
         Game game = findGameOrThrow(new GameId(gameIdInt));
         Player player = findPlayerOrThrow(game, new UserId(playerIdString));
         game.validate(player);
