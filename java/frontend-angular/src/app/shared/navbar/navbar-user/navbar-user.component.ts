@@ -7,6 +7,7 @@ import {AuthenticationServiceAbstract} from "../../../services/authentication-se
 import {NavbarLogoutButtonComponent} from "./navbar-logout-button/navbar-logout-button.component";
 import {Router} from "@angular/router";
 import {MatButton} from "@angular/material/button";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-navbar-user',
@@ -16,7 +17,10 @@ import {MatButton} from "@angular/material/button";
     NavbarLogoutButtonComponent,
     MatIcon,
     NgIf,
-    MatButton
+    MatButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
   ],
   templateUrl: './navbar-user.component.html',
   styleUrl: './navbar-user.component.css',
