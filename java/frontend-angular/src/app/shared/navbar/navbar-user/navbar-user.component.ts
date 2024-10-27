@@ -4,8 +4,9 @@ import {MatIcon} from "@angular/material/icon";
 import {Identifiable} from "../../identifiable";
 import {UserServiceAbstract} from "../../../services/user-service.abstract";
 import {AuthenticationServiceAbstract} from "../../../services/authentication-service-abstract";
+import {NavbarLogoutButtonComponent} from "./navbar-logout-button/navbar-logout-button.component";
 import {Router} from "@angular/router";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton} from "@angular/material/button";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
@@ -13,13 +14,13 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
   standalone: true,
   imports: [
     AsyncPipe,
+    NavbarLogoutButtonComponent,
     MatIcon,
     NgIf,
     MatButton,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger,
-    MatIconButton
+    MatMenuTrigger
   ],
   templateUrl: './navbar-user.component.html',
   styleUrl: './navbar-user.component.css',
