@@ -1,26 +1,28 @@
-<ng-container *ngIf="(userService.getUser() | async) as user">
+<ng-container *ngIf="(authenticationService.isLoggedIn() | async)">
+  <ng-container *ngIf="(userService.getUser() | async) as user">
 
-  <button mat-button
-          class="rounded"
-          [matMenuTriggerFor]="menu"
-          style="color: white; font-size: 20px; letter-spacing: normal"
-  >
-    <mat-icon id="anonymous-icon" *ngIf="user.isAnonymous"
-              style="color: white; font-size: 1.5rem;height: 1.5rem; width: 1.5rem"
-              aria-label="Example icon-button with share icon">no_accounts
-    </mat-icon>
-    {{ user.name }}
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item
-            [attr.data-testid]="'navbar-username'"
-            class="rounded"
-            (click)="router.navigate(['user-settings'])"
-    >Settings
+    <button mat-button
+            [matMenuTriggerFor]="menu"
+            style="color: white; font-size: 20px; letter-spacing: normal"
+    >
+      <mat-icon id="anonymous-icon" *ngIf="user.isAnonymous"
+                aria-label="Example icon-button with share icon">no_accounts
+      </mat-icon>
+      {{ user.name }}
     </button>
-    <button mat-menu-item>logout</button>
-  </mat-menu>
-
-  <app-navbar-logout-button *ngIf="(authenticationService.isLoggedIn() | async)"></app-navbar-logout-button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item
+              [attr.data-testid]="'navbar-username'"
+              (click)="router.navigate(['user-settings'])"
+      >
+        <mat-icon>settings</mat-icon>
+        Settings
+      </button>
+      <button mat-menu-item (click)="authenticationService.logout()">
+        <mat-icon>logout</mat-icon>
+        logout
+      </button>
+    </mat-menu>
+  </ng-container>
 </ng-container>
 {{ checkRender() }}
