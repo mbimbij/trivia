@@ -8,4 +8,7 @@ public record CreateGameRequestDto(
         @NotBlank
         UserDto creator
 ) {
+    public CreateGameRequestDto withTrimmedInputs() {
+        return new CreateGameRequestDto(gameName.trim(), creator.withTrimmedName());
+    }
 }

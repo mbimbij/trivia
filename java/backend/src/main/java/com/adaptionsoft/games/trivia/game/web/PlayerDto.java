@@ -29,5 +29,7 @@ public record PlayerDto(
                 player.getLocation(),
                 player.isGotOutOfPenaltyBox());
     }
-
+    public PlayerDto withTrimmedName(){
+        return this.withName(name.trim());
+    }
 }
