@@ -144,8 +144,9 @@ public class GameController {
     }
 
     public GameResponseDto createGameDefaultImplementation(CreateGameRequestDto requestDto) {
-        Player creator = playerFactory.fromDto(requestDto.creator());
-        Game game = gameFactory.create(requestDto.gameName(), creator);
+        var trimmedRequestDto = requestDto.withTrimmedInputs();
+        Player creator = playerFactory.fromDto(trimmedRequestDto.creator());
+        Game game = gameFactory.create(trimmedRequestDto.gameName(), creator);
         gameRepository.save(game);
         game.flush();
         template.convertAndSend("/topic/games/created", GameResponseDto.from(game));

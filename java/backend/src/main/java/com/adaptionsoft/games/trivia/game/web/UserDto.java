@@ -8,4 +8,7 @@ public record UserDto(
         @NotBlank
         String name
 ) {
+    public UserDto withTrimmedName() {
+        return new UserDto(id, name.trim());
+    }
 }
