@@ -35,3 +35,15 @@ mat-form-field.ng-dirty .mdc-text-field {
   --mat-snack-bar-button-color: white;
   --mdc-snackbar-supporting-text-color: white;
 }
+
+.mat-mdc-menu-panel{
+  --mat-menu-container-color: #606FC7;
+}
+
+.mat-mdc-menu-item{
+  --mat-menu-item-label-text-color: white;
+}
+
+.mat-mdc-menu-item mat-icon{
+  --mat-menu-item-icon-color: white;
+}
