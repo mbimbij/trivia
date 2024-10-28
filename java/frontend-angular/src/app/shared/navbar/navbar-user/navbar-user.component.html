@@ -8,11 +8,12 @@
       <mat-icon id="anonymous-icon" *ngIf="user.isAnonymous"
                 aria-label="Example icon-button with share icon">no_accounts
       </mat-icon>
-      {{ user.name }}
+      <span [attr.data-testid]="'navbar-username'">
+        {{ user.name }}
+      </span>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              [attr.data-testid]="'navbar-username'"
               (click)="router.navigate(['user-settings'])"
       >
         <mat-icon>settings</mat-icon>
