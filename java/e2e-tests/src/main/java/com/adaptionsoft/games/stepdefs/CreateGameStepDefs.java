@@ -100,7 +100,7 @@ public class CreateGameStepDefs {
 
     @When("qa-user clicks on the create-game.validation button and saves the game id")
     public void qaUserClicksOnTheCreateGameValidationButtonAndSavesTheGameId() {
-        int gameId = createGameDialog.clickValidateAndGetGameIdFromConsoleLogs();
+        int gameId = createGameDialog.clickValidateAndGetGameIdBack();
         testContext.putGameId(createdGameName, gameId);
     }
 
