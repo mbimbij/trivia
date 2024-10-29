@@ -65,7 +65,7 @@ public class GamesListPage extends PageWithStaticUrl {
         log.info("Navigating to %s".formatted(url));
         WebSocket backendWebSocket = waitOnBackendWebsocketConnection(runnable);
         waitOnInitialMessages(backendWebSocket);
-        testContext.setWs(backendWebSocket);
+        testContext.setGameListPageWebSocket(backendWebSocket);
     }
 
     private WebSocket waitOnBackendWebsocketConnection(Runnable runnable) {

@@ -35,8 +35,8 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Page page(Playwright playwright) {
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
-                .setHeadless(false)
-//                .setHeadless(true)
+//                .setHeadless(false)
+                .setHeadless(true)
 //                .setSlowMo(1000)
                 ;
         Browser browser = playwright.chromium().launch(launchOptions);
@@ -97,8 +97,11 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public CreateGameDialog createGameUiElement(Page page, TestProperties testProperties, TestContext testContext) {
-        return new CreateGameDialog(page, testProperties.getBackendWebsocketUrl(), testContext);
+    public CreateGameDialog createGameUiElement(Page page,
+                                                TestProperties testProperties,
+                                                TestContext testContext,
+                                                ObjectMapper objectMapper) {
+        return new CreateGameDialog(page, testProperties.getBackendWebsocketUrl(), testContext, objectMapper);
     }
 
     @Bean
@@ -107,11 +110,10 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(@Qualifier("stateDeserializer") Module stateDeserializer) {
+    public RestTemplate restTemplate(ObjectMapper mapper,@Qualifier("stateDeserializer") Module stateDeserializer) {
         RestTemplate restTemplate = new RestTemplate();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper mapper = new ObjectMapper();
-        converter.setObjectMapper(mapper.registerModule(stateDeserializer));
+        converter.setObjectMapper(mapper);
         restTemplate.getMessageConverters().addFirst(converter);
         return restTemplate;
     }
@@ -124,5 +126,10 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Navbar navbar(Page page) {
         return new Navbar(page);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(@Qualifier("stateDeserializer") Module stateDeserializer) {
+        return new ObjectMapper().registerModule(stateDeserializer);
     }
 }

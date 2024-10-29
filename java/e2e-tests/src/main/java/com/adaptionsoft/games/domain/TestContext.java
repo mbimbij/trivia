@@ -1,8 +1,9 @@
 package com.adaptionsoft.games.domain;
 
-import com.adaptionsoft.games.domain.pageObjects.GamesListPage;
 import com.microsoft.playwright.WebSocket;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,8 +14,9 @@ public class TestContext {
 
     private final Map<String, Integer> gameIdByName = new HashMap<>();
 
-    private WebSocket ws;
-
+    @Setter
+    @Getter
+    private WebSocket gameListPageWebSocket;
 
     public Integer getGameIdForName(String gameName) {
         return gameIdByName.get(gameName);
@@ -36,7 +38,4 @@ public class TestContext {
         gameIdByName.clear();
     }
 
-    public void setWs(WebSocket ws) {
-        this.ws = ws;
-    }
 }

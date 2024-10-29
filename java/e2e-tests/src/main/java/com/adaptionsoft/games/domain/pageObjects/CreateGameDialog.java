@@ -1,11 +1,15 @@
 package com.adaptionsoft.games.domain.pageObjects;
 
 import com.adaptionsoft.games.domain.TestContext;
+import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.WebSocket;
 import lombok.SneakyThrows;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CreateGameDialog extends Dialog {
@@ -15,11 +19,13 @@ public class CreateGameDialog extends Dialog {
     public static final String CREATOR_NAME = "creator-name";
     private final String backendWebsocketUrl;
     private final TestContext testContext;
+    private final ObjectMapper objectMapper;
 
-    public CreateGameDialog(Page page, String backendWebsocketUrl, TestContext testContext) {
+    public CreateGameDialog(Page page, String backendWebsocketUrl, TestContext testContext, ObjectMapper objectMapper) {
         super(page, DIALOG);
         this.backendWebsocketUrl = backendWebsocketUrl;
         this.testContext = testContext;
+        this.objectMapper = objectMapper;
     }
 
     @SneakyThrows
@@ -34,49 +40,27 @@ public class CreateGameDialog extends Dialog {
     }
 
     public int clickValidateAndGetGameIdBack() {
-        AtomicReference<String> logText = new AtomicReference<>();
-        page.waitForConsoleMessage(new Page.WaitForConsoleMessageOptions().setPredicate(
-                        consoleMessage -> {
-                            String text = consoleMessage.text();
-                            logText.set(text);
-                            return text.startsWith("created game: ");
-                        }),
-                () -> this.clickButtonByTestId(VALIDATE));
+        AtomicInteger gameIdAtomicInt = new AtomicInteger();
+        WebSocket webSocket = testContext.getGameListPageWebSocket();
 
-//        page.onWebSocket(webSocket -> {
-//            System.out.println("coucou"+webSocket.url());
-//            webSocket.onFrameReceived(webSocketFrame -> {
-//                System.out.println("toto\n"+webSocket.url());
-//                System.out.println("toto\n"+webSocketFrame.text());
-//            });
-//        });
-//        page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
-//                    String url = webSocket.url();
-//                    webSocket.waitForFrameReceived(new WebSocket.WaitForFrameReceivedOptions().setPredicate(webSocketFrame -> {
-//                                String text = webSocketFrame.text();
-//                                return true;
-//                            }),
-//                            () -> {
-//                            }
-//                    );
-//                    return true;
-////            if (Objects.equals(backendWebsocketUrl, webSocket.url())) {
-////                webSocket.waitForFrameReceived(new WebSocket.WaitForFrameReceivedOptions().setPredicate(webSocketFrame -> {
-////                            String text = webSocketFrame.text();
-////                            return false;
-////                        }),
-////                        () -> {
-////                        }
-////                );
-////                return false;
-////            } else {
-////                return false;
-////            }
-//                }), () ->
-//                        this.clickButtonByTestId(VALIDATE)
-////                {}
-//        );
-        return Integer.parseInt(logText.get().split("created game: ")[1]);
+        webSocket.waitForFrameReceived(new WebSocket.WaitForFrameReceivedOptions().setPredicate(webSocketFrame -> {
+                    String text = webSocketFrame.text();
+                    if (text.contains("destination:/topic/games/created")) {
+                        try {
+                            String gameString = text.split("\n\n")[1];
+                            GameResponseDto gameResponseDto = objectMapper.readValue(gameString, GameResponseDto.class);
+                            gameIdAtomicInt.set(gameResponseDto.id());
+                            return true;
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    return false;
+                }),
+                () -> this.clickButtonByTestId(VALIDATE)
+        );
+
+        return gameIdAtomicInt.get();
     }
 
     // TODO ajouter un test de création de partie depuis le frontend
