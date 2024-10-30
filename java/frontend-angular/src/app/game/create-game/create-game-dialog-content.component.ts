@@ -67,11 +67,6 @@ export class CreateGameDialogContentComponent extends BaseDialogContentComponent
     return this.gameService.create(this.data.content.gameName, creator)
   }
 
-  protected override doAdditionalActionsOnSuccess(response: any) {
-    let newGame = response as Game
-    console.log(`created game: ${newGame.id}`)
-  }
-
   protected readonly ids = ids;
   protected readonly ValidationErrorCodes = ValidationErrorCodes;
 }

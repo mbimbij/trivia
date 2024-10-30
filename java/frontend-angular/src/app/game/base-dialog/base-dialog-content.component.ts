@@ -33,12 +33,6 @@ export abstract class BaseDialogContentComponent<
     this.formData.defaultData = value;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['defaultData']) {
-      this.formData.defaultData = changes['defaultData'].currentValue;
-    }
-  }
-
   ngAfterViewInit() {
     this.formData.formControls = this.formControls;
   }
@@ -51,7 +45,6 @@ export abstract class BaseDialogContentComponent<
     this.resetData()
     this.backendErrorMessage$.next(null)
     this.matDialogRef.close()
-    this.doAdditionalActionsOnSuccess(response)
   }
 
   resetData() {
@@ -67,9 +60,6 @@ export abstract class BaseDialogContentComponent<
   }
 
   protected abstract doCallBackend(): Observable<any>;
-
-  protected doAdditionalActionsOnSuccess(response: any) {
-  }
 
   private handleError = (err: any) => {
     this.backendErrorMessage$.next(err.message)

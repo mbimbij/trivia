@@ -5,7 +5,6 @@ import com.adaptionsoft.games.domain.Janitor;
 import com.adaptionsoft.games.domain.TestContext;
 import com.adaptionsoft.games.domain.TestProperties;
 import com.adaptionsoft.games.domain.pageObjects.*;
-import com.adaptionsoft.games.stepdefs.RenameUserInteraction;
 import com.adaptionsoft.games.trivia.game.web.WebConfig;
 import com.adaptionsoft.games.utils.PlaywrightSingleton;
 import com.fasterxml.jackson.databind.Module;
@@ -98,8 +97,11 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public CreateGameDialog createGameUiElement(Page page) {
-        return new CreateGameDialog(page);
+    public CreateGameDialog createGameUiElement(Page page,
+                                                TestProperties testProperties,
+                                                TestContext testContext,
+                                                ObjectMapper objectMapper) {
+        return new CreateGameDialog(page, testProperties.getBackendWebsocketUrl(), testContext, objectMapper);
     }
 
     @Bean
@@ -108,11 +110,10 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(@Qualifier("stateDeserializer") Module stateDeserializer) {
+    public RestTemplate restTemplate(ObjectMapper mapper,@Qualifier("stateDeserializer") Module stateDeserializer) {
         RestTemplate restTemplate = new RestTemplate();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper mapper = new ObjectMapper();
-        converter.setObjectMapper(mapper.registerModule(stateDeserializer));
+        converter.setObjectMapper(mapper);
         restTemplate.getMessageConverters().addFirst(converter);
         return restTemplate;
     }
@@ -125,5 +126,10 @@ public class E2eTestsSpringConfiguration {
     @Bean
     public Navbar navbar(Page page) {
         return new Navbar(page);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(@Qualifier("stateDeserializer") Module stateDeserializer) {
+        return new ObjectMapper().registerModule(stateDeserializer);
     }
 }

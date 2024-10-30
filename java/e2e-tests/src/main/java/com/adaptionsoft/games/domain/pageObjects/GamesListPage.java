@@ -62,22 +62,27 @@ public class GamesListPage extends PageWithStaticUrl {
     }
 
     public void executeAndWaitForWebSocketMessages(Runnable runnable) {
-        Collection<String> expectedMessages = getExpectedWebSocketMessages();
         log.info("Navigating to %s".formatted(url));
-        page.waitForWebSocket(new Page.WaitForWebSocketOptions().setPredicate(webSocket -> {
-            if (Objects.equals(backendWebsocketUrl, webSocket.url())) {
-                webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
-                    String text = webSocketFrame.text();
-                    expectedMessages.removeIf(text::contains);
-                    return expectedMessages.isEmpty();
-                }), () -> {
-                    System.out.println(expectedMessages);
-                });
-                return true;
-            } else {
-                return false;
-            }
-        }), runnable);
+        WebSocket backendWebSocket = waitOnBackendWebsocketConnection(runnable);
+        waitOnInitialMessages(backendWebSocket);
+        testContext.setGameListPageWebSocket(backendWebSocket);
+    }
+
+    private WebSocket waitOnBackendWebsocketConnection(Runnable runnable) {
+        Predicate<WebSocket> predicate = webSocket -> Objects.equals(backendWebsocketUrl, webSocket.url());
+        return page.waitForWebSocket(
+                new Page.WaitForWebSocketOptions().setPredicate(predicate),
+                runnable);
+    }
+
+    private void waitOnInitialMessages(WebSocket webSocket) {
+        Collection<String> expectedMessages = getExpectedWebSocketMessages();
+        webSocket.waitForFrameSent(new WebSocket.WaitForFrameSentOptions().setPredicate(webSocketFrame -> {
+            String text = webSocketFrame.text();
+            expectedMessages.removeIf(text::contains);
+            return expectedMessages.isEmpty();
+        }), () -> {
+        });
     }
 
     private Collection<String> getExpectedWebSocketMessages() {
