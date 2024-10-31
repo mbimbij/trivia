@@ -76,7 +76,7 @@ Feature: Game Creation
       And the displayed value for creator name is "qa-user"
     Scenario: Renaming the user reset the creator name field but preserves the game name
       When qa-user presses the escape key on the create dialog
-      When qa-user changes his name to "other name" without navigation
+      When qa-user changes his name to "other name"
       Given qa-user clicks on create game button
       Then the displayed value for game name is "newGame"
       And the displayed value for creator name is "other name"

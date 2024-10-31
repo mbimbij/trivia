@@ -18,7 +18,7 @@ Feature: Game Details Page
     Scenario: Display error message when backend exception
       Given an exception is thrown when calling getGameById
       And qa-user directly access the game-details page for game id = -1
-      Then ok section is not visible
+      Then ok section is not visible 
       And loading section is not visible
       And error section is visible
       And error section text contains "Error loading game with id"

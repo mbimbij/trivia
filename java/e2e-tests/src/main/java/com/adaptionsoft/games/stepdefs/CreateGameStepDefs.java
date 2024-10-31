@@ -114,11 +114,6 @@ public class CreateGameStepDefs {
         createGameDialog.pressEscape();
     }
 
-    @When("qa-user changes his name to {string} without navigation")
-    public void qaUserChangesHisNameToWithoutNavigation(String newName) {
-        renameUserInteraction.renameQaUser(newName);
-    }
-
     @Given("an exception is thrown when calling createGame")
     public void anExceptionIsThrownWhenCallingCreateGame() {
         janitor.throwExceptionWhenCallCreateGame();
