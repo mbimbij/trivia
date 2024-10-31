@@ -1,5 +1,40 @@
-Trivia Remix
+Trivia "Remix"
 ======
+
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Repository structure](#repository-structure)
+- [Prerequisites](#prerequisites)
+  * [Tools](#tools)
+  * [Configure .env file](#configure-env-file)
+  * [Verify run configurations and makefile targets](#verify-run-configurations-and-makefile-targets)
+  * [Frontend dependencies](#frontend-dependencies)
+  * [Backend dependencies](#backend-dependencies)
+- [Run the app locally](#run-the-app-locally)
+  * [Profile "local-ide" - default & preferred](#profile-local-ide-default-preferred)
+    + [Run the frontend](#run-the-frontend)
+    + [Run the backend](#run-the-backend)
+    + [Access the app via the browser](#access-the-app-via-the-browser)
+  * [Profile "local-ide-embedded"](#profile-local-ide-embedded)
+    + [Build the frontend](#build-the-frontend)
+    + [Run the backend](#run-the-backend-1)
+    + [Access the app via the browser](#access-the-app-via-the-browser-1)
+  * [Profile "local-docker"](#profile-local-docker)
+    + [Build the Docker image](#build-the-docker-image)
+    + [Run the Docker image](#run-the-docker-image)
+    + [Access the app via the browser](#access-the-app-via-the-browser-2)
+- [Run the unit tests](#run-the-unit-tests)
+  * [Run the frontend tests](#run-the-frontend-tests)
+  * [Run the backend tests](#run-the-backend-tests)
+- [Run the e2e tests](#run-the-e2e-tests)
+  * [Prerequisites](#prerequisites-1)
+  * [Profile "local-ide"](#profile-local-ide)
+  * [Profile "local-ide-embedded"](#profile-local-ide-embedded-1)
+  * [Profile "local-docker"](#profile-local-docker-1)
+  * [Profile "prod"](#profile-prod)
+- [Update the README](#update-the-readme)
+- [Wiki and other documentation resources](#wiki-and-other-documentation-resources)
 
 # Introduction
 
