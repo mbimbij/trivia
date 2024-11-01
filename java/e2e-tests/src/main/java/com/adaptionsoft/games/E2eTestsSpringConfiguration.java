@@ -110,7 +110,7 @@ public class E2eTestsSpringConfiguration {
     }
 
     @Bean
-    public RestTemplate restTemplate(ObjectMapper mapper,@Qualifier("stateDeserializer") Module stateDeserializer) {
+    public RestTemplate restTemplate(ObjectMapper mapper) {
         RestTemplate restTemplate = new RestTemplate();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(mapper);
