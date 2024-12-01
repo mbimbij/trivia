@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia.game.domain.exception;
 
 import com.adaptionsoft.games.trivia.game.domain.GameId;
-import com.adaptionsoft.games.trivia.game.domain.Players;
+import com.adaptionsoft.games.trivia.game.domain.players.Players;
 import com.adaptionsoft.games.trivia.game.domain.UserId;
 
 public class StartException extends GameException {

@@ -4,6 +4,14 @@ import com.adaptionsoft.games.trivia.game.domain.event.*;
 import com.adaptionsoft.games.trivia.game.domain.exception.CannotAnswerQuestionBeforeDrawingOneException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayTurnException;
 import com.adaptionsoft.games.trivia.game.domain.exception.StartException;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Players;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayersShuffler;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerAction;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerState;
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsShuffler;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Entity;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;
 import com.adaptionsoft.games.trivia.shared.statemachine.CannotExecuteAction;
@@ -20,7 +28,7 @@ import java.util.Optional;
 import static com.adaptionsoft.games.trivia.game.domain.GameAction.END_GAME;
 import static com.adaptionsoft.games.trivia.game.domain.GameAction.*;
 import static com.adaptionsoft.games.trivia.game.domain.GameState.*;
-import static com.adaptionsoft.games.trivia.game.domain.PlayerAction.*;
+import static com.adaptionsoft.games.trivia.game.domain.players.PlayerAction.*;
 
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Setter // for testing purposes only
@@ -150,7 +158,9 @@ public class Game extends Entity<GameId> {
         try {
             stateManager.validateState(STARTED);
         } catch (AssertionError e) {
-            throw new CannotExecuteAction(stateManager.getEntityIdentifier(), playerAction, stateManager.getCurrentState());
+            throw new CannotExecuteAction(stateManager.getEntityIdentifier(),
+                    playerAction,
+                    stateManager.getCurrentState());
         }
     }
 
@@ -256,7 +266,8 @@ public class Game extends Entity<GameId> {
                 updateCurrentPlayerLocation();
             }
             default ->
-                    throw new IllegalStateException("invalidate state for VALIDATE action: %s".formatted(player.getState()));
+                    throw new IllegalStateException("invalidate state for VALIDATE action: %s"
+                            .formatted(player.getState()));
         }
     }
 

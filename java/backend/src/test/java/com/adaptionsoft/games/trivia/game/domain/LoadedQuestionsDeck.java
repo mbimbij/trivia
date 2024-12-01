@@ -1,5 +1,8 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
+
 import java.util.Collections;
 
 public class LoadedQuestionsDeck extends QuestionsDeck {
@@ -16,7 +19,7 @@ public class LoadedQuestionsDeck extends QuestionsDeck {
     }
 
     @Override
-    Question drawQuestion(int playerLocation) {
+    public Question drawQuestion(int playerLocation) {
         return question;
     }
 }

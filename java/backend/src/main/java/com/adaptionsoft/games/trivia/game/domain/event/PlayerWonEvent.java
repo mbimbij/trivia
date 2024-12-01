@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia.game.domain.event;
 
 import com.adaptionsoft.games.trivia.game.domain.GameId;
-import com.adaptionsoft.games.trivia.game.domain.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 
 public class PlayerWonEvent extends PlayerEvent {
     public PlayerWonEvent(GameId gameId, Player player, int turn) {

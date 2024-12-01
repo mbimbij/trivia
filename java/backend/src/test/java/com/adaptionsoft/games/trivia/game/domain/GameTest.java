@@ -3,6 +3,14 @@ package com.adaptionsoft.games.trivia.game.domain;
 
 import com.adaptionsoft.games.trivia.game.domain.event.*;
 import com.adaptionsoft.games.trivia.game.domain.exception.*;
+import com.adaptionsoft.games.trivia.game.domain.players.DoNothingPlayersShuffler;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerFactory;
+import com.adaptionsoft.games.trivia.game.domain.players.Players;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerState;
+import com.adaptionsoft.games.trivia.game.domain.questions.DoNothingQuestionsShuffler;
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsRepositoryJson;
 import com.adaptionsoft.games.trivia.game.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Event;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;

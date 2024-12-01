@@ -3,6 +3,8 @@ package com.adaptionsoft.games.trivia.game.web;
 import com.adaptionsoft.games.trivia.game.domain.*;
 import com.adaptionsoft.games.trivia.game.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayerNotFoundInGameException;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerFactory;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Id;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

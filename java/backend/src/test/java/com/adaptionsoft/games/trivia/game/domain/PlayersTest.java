@@ -1,5 +1,8 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
+import com.adaptionsoft.games.trivia.game.domain.players.DoNothingPlayersShuffler;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Players;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

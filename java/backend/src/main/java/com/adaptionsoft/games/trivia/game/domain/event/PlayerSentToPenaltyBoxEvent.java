@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.trivia.game.domain.event;
 
-import com.adaptionsoft.games.trivia.game.domain.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 
 public class PlayerSentToPenaltyBoxEvent extends PlayerEvent {
     public PlayerSentToPenaltyBoxEvent(Player player, int turn) {

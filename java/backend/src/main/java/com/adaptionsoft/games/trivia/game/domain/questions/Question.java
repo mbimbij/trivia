@@ -1,5 +1,7 @@
-package com.adaptionsoft.games.trivia.game.domain;
+package com.adaptionsoft.games.trivia.game.domain.questions;
 
+import com.adaptionsoft.games.trivia.game.domain.AnswerCode;
+import com.adaptionsoft.games.trivia.game.domain.AvailableAswers;
 import jakarta.validation.constraints.NotNull;
 
 public record Question(
@@ -14,7 +16,7 @@ public record Question(
 //        @NotNull
         String explanations
 ) {
-    boolean isCorrect(AnswerCode answerCode) {
+    public boolean isCorrect(AnswerCode answerCode) {
         return correctAnswer() == answerCode;
     }
 }

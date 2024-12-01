@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.trivia.game.domain.exception;
 
-import com.adaptionsoft.games.trivia.game.domain.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.adaptionsoft.games.trivia.game.web;
 
+import com.adaptionsoft.games.trivia.TestDataFactory;
 import com.adaptionsoft.games.trivia.game.domain.Game;
 import com.adaptionsoft.games.trivia.game.domain.GameFactory;
 import com.adaptionsoft.games.trivia.game.domain.GameRepository;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.adaptionsoft.games.trivia.TestDataFactory.aMockPlayerDto;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -36,9 +38,12 @@ class GameControllerTest {
     void given_game_not_found__should_thrown_exception() {
         Mockito.doReturn(Optional.empty()).when(gameRepository).findById(any());
         assertSoftly(softAssertions -> {
-            softAssertions.assertThatThrownBy(() -> controller.joinGame(-1, null, Mockito.mock(PlayerDto.class)))
+            PlayerDto playerDto = aMockPlayerDto();
+            softAssertions.assertThatThrownBy(() ->
+                            controller.joinGame(-1, null, playerDto))
                     .isInstanceOf(GameNotFoundException.class);
-            softAssertions.assertThatThrownBy(() -> controller.startGame(-1, "notExistingPlayer"))
+            softAssertions.assertThatThrownBy(() ->
+                            controller.startGame(-1, "notExistingPlayer"))
                     .isInstanceOf(GameNotFoundException.class);
         });
     }
@@ -49,7 +54,8 @@ class GameControllerTest {
         Mockito.doReturn(Optional.empty()).when(game).findPlayerById(any());
         Mockito.doReturn(Optional.of(game)).when(gameRepository).findById(any());
         assertSoftly(softAssertions -> {
-            softAssertions.assertThatThrownBy(() -> controller.startGame(-1, "notExistingPlayer"))
+            softAssertions.assertThatThrownBy(() ->
+                            controller.startGame(-1, "notExistingPlayer"))
                     .isInstanceOf(PlayerNotFoundInGameException.class);
         });
     }

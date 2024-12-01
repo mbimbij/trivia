@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia.game.web;
 
 import com.adaptionsoft.games.trivia.game.domain.AvailableAswers;
-import com.adaptionsoft.games.trivia.game.domain.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
 import jakarta.validation.constraints.NotNull;
 
 public record QuestionDto(

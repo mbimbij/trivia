@@ -1,6 +1,12 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
 import com.adaptionsoft.games.trivia.game.domain.event.MockEventPublisher;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerFactory;
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsRepository;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsRepositoryJson;
 import com.adaptionsoft.games.trivia.game.infra.EventConsoleLogger;
 import com.adaptionsoft.games.trivia.game.web.UserDto;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.IdGenerator;

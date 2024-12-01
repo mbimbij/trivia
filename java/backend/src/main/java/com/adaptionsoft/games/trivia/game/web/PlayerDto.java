@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.trivia.game.web;
 
-import com.adaptionsoft.games.trivia.game.domain.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 import com.adaptionsoft.games.trivia.shared.statemachine.State;
 import jakarta.validation.constraints.NotBlank;
 import lombok.With;

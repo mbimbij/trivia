@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia.game.domain;
+package com.adaptionsoft.games.trivia.game.domain.players;
 
 import com.adaptionsoft.games.trivia.game.domain.exception.DuplicatePlayerNameException;
 import com.adaptionsoft.games.trivia.game.domain.exception.InvalidNumberOfPlayersException;

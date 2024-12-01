@@ -2,6 +2,9 @@ package com.adaptionsoft.games.trivia;
 
 import com.adaptionsoft.games.trivia.game.domain.*;
 import com.adaptionsoft.games.trivia.game.domain.event.ObserverBasedEventPublisher;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerFactory;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsRepository;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsRepositoryJson;
 import com.adaptionsoft.games.trivia.game.infra.GameRepositoryInMemory;
 import com.adaptionsoft.games.trivia.gamelogs.GameLogsPersister;
 import com.adaptionsoft.games.trivia.gamelogs.GameLogsRepository;

@@ -2,7 +2,7 @@ package com.adaptionsoft.games.trivia.game.web;
 
 import com.adaptionsoft.games.trivia.game.domain.Dice;
 import com.adaptionsoft.games.trivia.game.domain.Game;
-import com.adaptionsoft.games.trivia.game.domain.QuestionsDeck;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
 import com.adaptionsoft.games.trivia.shared.statemachine.State;
 import jakarta.validation.constraints.NotBlank;
 import lombok.With;

@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia.game.domain.exception;
 
 import com.adaptionsoft.games.trivia.game.domain.GameId;
-import com.adaptionsoft.games.trivia.game.domain.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

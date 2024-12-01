@@ -1,6 +1,7 @@
 package com.adaptionsoft.games.trivia.game.application;
 
 import com.adaptionsoft.games.trivia.game.domain.*;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 import com.adaptionsoft.games.trivia.game.web.CreateGameRequestDto;
 import com.adaptionsoft.games.trivia.game.web.GameController;
 import com.adaptionsoft.games.trivia.game.web.UserDto;

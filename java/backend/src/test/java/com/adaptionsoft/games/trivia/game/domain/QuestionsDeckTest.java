@@ -1,11 +1,14 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
+import com.adaptionsoft.games.trivia.game.domain.questions.DoNothingQuestionsShuffler;
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.adaptionsoft.games.trivia.game.domain.QuestionsDeck.Category.POP;
-import static com.adaptionsoft.games.trivia.game.domain.QuestionsDeck.Category.SCIENCE;
+import static com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck.Category.POP;
+import static com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck.Category.SCIENCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class QuestionsDeckTest {

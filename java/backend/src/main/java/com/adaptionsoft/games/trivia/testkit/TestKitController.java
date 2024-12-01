@@ -1,9 +1,15 @@
 package com.adaptionsoft.games.trivia.testkit;
 
 import com.adaptionsoft.games.trivia.game.domain.*;
-import com.adaptionsoft.games.trivia.game.domain.QuestionsDeck.Category;
+import com.adaptionsoft.games.trivia.game.domain.questions.DoNothingQuestionsShuffler;
+import com.adaptionsoft.games.trivia.game.domain.questions.Question;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck.Category;
 import com.adaptionsoft.games.trivia.game.domain.exception.GameNotFoundException;
 import com.adaptionsoft.games.trivia.game.domain.exception.PlayerNotFoundInGameException;
+import com.adaptionsoft.games.trivia.game.domain.players.DoNothingPlayersShuffler;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerState;
 import com.adaptionsoft.games.trivia.game.web.GameController;
 import com.adaptionsoft.games.trivia.game.web.GameResponseDto;
 import lombok.RequiredArgsConstructor;

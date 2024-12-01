@@ -1,7 +1,7 @@
 package com.adaptionsoft.games.trivia.game.web;
 
 import com.adaptionsoft.games.trivia.game.domain.GameState;
-import com.adaptionsoft.games.trivia.game.domain.PlayerState;
+import com.adaptionsoft.games.trivia.game.domain.players.PlayerState;
 import com.adaptionsoft.games.trivia.shared.statemachine.State;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;

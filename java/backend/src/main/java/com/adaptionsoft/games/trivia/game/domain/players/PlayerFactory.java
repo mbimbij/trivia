@@ -1,5 +1,6 @@
-package com.adaptionsoft.games.trivia.game.domain;
+package com.adaptionsoft.games.trivia.game.domain.players;
 
+import com.adaptionsoft.games.trivia.game.domain.UserId;
 import com.adaptionsoft.games.trivia.game.web.PlayerDto;
 import com.adaptionsoft.games.trivia.game.web.UserDto;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.EventPublisher;

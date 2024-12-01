@@ -14,7 +14,7 @@ public class Dice {
     }
 
     public record Roll(int value) {
-        boolean isPair() {
+        public boolean isPair() {
             return value() % 2 == 0;
         }
     }

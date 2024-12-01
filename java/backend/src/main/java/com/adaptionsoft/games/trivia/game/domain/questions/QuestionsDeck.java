@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia.game.domain;
+package com.adaptionsoft.games.trivia.game.domain.questions;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class QuestionsDeck {
         this.questionsByCategory = new HashMap<>(questionsByCategory);
     }
 
-    Question drawQuestion(int playerLocation) {
+    public Question drawQuestion(int playerLocation) {
         Category category = Category.getQuestionCategory(playerLocation);
         return questionsByCategory.get(category).remove();
     }

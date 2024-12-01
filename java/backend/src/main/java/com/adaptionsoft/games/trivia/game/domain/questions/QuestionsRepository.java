@@ -1,4 +1,4 @@
-package com.adaptionsoft.games.trivia.game.domain;
+package com.adaptionsoft.games.trivia.game.domain.questions;
 
 import lombok.SneakyThrows;
 

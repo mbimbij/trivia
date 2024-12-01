@@ -1,5 +1,7 @@
 package com.adaptionsoft.games.trivia.game.domain;
 
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
+
 public class Board {
     final int squaresCount;
 

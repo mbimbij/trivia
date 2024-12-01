@@ -1,6 +1,6 @@
 package com.adaptionsoft.games.trivia.game.domain.event;
 
-import com.adaptionsoft.games.trivia.game.domain.Player;
+import com.adaptionsoft.games.trivia.game.domain.players.Player;
 import com.adaptionsoft.games.trivia.game.domain.UserId;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Event;
 import lombok.EqualsAndHashCode;

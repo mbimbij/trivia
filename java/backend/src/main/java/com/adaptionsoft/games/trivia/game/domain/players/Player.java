@@ -1,5 +1,9 @@
-package com.adaptionsoft.games.trivia.game.domain;
+package com.adaptionsoft.games.trivia.game.domain.players;
 
+import com.adaptionsoft.games.trivia.game.domain.Dice;
+import com.adaptionsoft.games.trivia.game.domain.GameId;
+import com.adaptionsoft.games.trivia.game.domain.questions.QuestionsDeck;
+import com.adaptionsoft.games.trivia.game.domain.UserId;
 import com.adaptionsoft.games.trivia.game.domain.event.*;
 import com.adaptionsoft.games.trivia.game.domain.exception.CannotUpdateLocationFromPenaltyBoxException;
 import com.adaptionsoft.games.trivia.shared.microarchitecture.Entity;
@@ -9,8 +13,8 @@ import com.adaptionsoft.games.trivia.shared.statemachine.StateManager;
 import com.adaptionsoft.games.trivia.shared.statemachine.Transition;
 import lombok.*;
 
-import static com.adaptionsoft.games.trivia.game.domain.PlayerAction.*;
-import static com.adaptionsoft.games.trivia.game.domain.PlayerState.*;
+import static com.adaptionsoft.games.trivia.game.domain.players.PlayerAction.*;
+import static com.adaptionsoft.games.trivia.game.domain.players.PlayerState.*;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
@@ -95,7 +99,7 @@ public class Player extends Entity<UserId> {
         }
     }
 
-    boolean isWinning() {
+    public boolean isWinning() {
         return (coinCount >= 6);
     }
 
@@ -103,7 +107,7 @@ public class Player extends Entity<UserId> {
      * Used externally by tests ONLY
      */
     // TODO déplacer vers Game ?
-    void answerCorrectly() {
+    public void answerCorrectly() {
         stateManager.validateAction(ANSWER_CORRECTLY);
         if (isOnAStreak()) {
             addCoin();
@@ -121,7 +125,7 @@ public class Player extends Entity<UserId> {
     /**
      * Used externally by tests ONLY
      */
-    boolean isOnAStreak() {
+    public boolean isOnAStreak() {
         return consecutiveCorrectAnswersCount >= 3;
     }
 
@@ -133,7 +137,7 @@ public class Player extends Entity<UserId> {
      * Used externally by tests ONLY
      */
     // TODO déplacer vers Game ?
-    void answerIncorrectly() {
+    public void answerIncorrectly() {
         stateManager.validateAction(ANSWER_INCORRECTLY);
         raise(new PlayerAnsweredIncorrectlyEvent(this, this.getTurn()));
         stateManager.applyAction(ANSWER_INCORRECTLY);
@@ -149,7 +153,7 @@ public class Player extends Entity<UserId> {
         raise(new PlayerSentToPenaltyBoxEvent(this, this.getTurn()));
     }
 
-    void updateLocation(int newLocation) {
+    public void updateLocation(int newLocation) {
         if (isInPenaltyBox) {
             throw new CannotUpdateLocationFromPenaltyBoxException(gameId, id);
         }
@@ -184,7 +188,7 @@ public class Player extends Entity<UserId> {
         stateManager.setCurrentState(playerState);
     }
 
-    State getState() {
+    public State getState() {
         return getStateManager().getCurrentState();
     }
 
@@ -198,7 +202,7 @@ public class Player extends Entity<UserId> {
         }
     }
 
-    void applyDiceRoll(Dice.Roll currentRoll, int newLocation) {
+    public void applyDiceRoll(Dice.Roll currentRoll, int newLocation) {
         this.validateAction(ROLL_DICE);
         this.applyAction(ROLL_DICE);
         raise(new PlayerRolledDiceEvent(this, currentRoll, this.getTurn()));
@@ -210,7 +214,7 @@ public class Player extends Entity<UserId> {
         }
     }
 
-    void startTurn() {
+    public void startTurn() {
         raise(new PlayerTurnStartedEvent(this, this.getTurn()));
     }
 }
